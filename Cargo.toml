@@ -1,0 +1,21 @@
+[package]
+name = "acadsharp-rs-tests"
+version = "0.1.0"
+edition = "2024"
+authors = ["Roman Goldmann <roman@devshell.org>"]
+license = "MIT"
+description = "Test suite and fixtures for acadsharp-rs"
+repository = "https://github.com/libviprs/acadsharp-rs-tests"
+publish = false
+# Matches the floor the rest of the org declares. The `msrv` job pins this
+# exact toolchain and fails if this line, the toolchain it installs and the
+# README ever disagree.
+rust-version = "1.97"
+
+[lints.rust]
+deprecated = "deny"
+
+[lints.clippy]
+incompatible_msrv = "warn"
+
+[dependencies]
