@@ -466,38 +466,57 @@ fn the_expected_sha_env_var_decides_what_verify_accepts() {
 
 #[test]
 fn verify_fails_rather_than_skips_when_it_cannot_tell() {
-    // A checkout with no git metadata at all. CI never produces this (the clone
-    // action leaves a real detached HEAD), so under VIPRS_REQUIRE_COUNTERPART
-    // it means something went wrong upstream of here, and a check that cannot
-    // tell is the same colour as one that passed.
-    let dir = scratch("sibling-opaque");
+    // Two ways to be unreadable, and the second one CI found for me on this
+    // branch's first run. `CARGO_TARGET_TMPDIR` sits inside this repository on
+    // a runner, and `git rev-parse HEAD` answers from anywhere inside a
+    // checkout, so the empty directory below was told this suite's own branch
+    // head and the pin check reported the sibling as being at a commit of the
+    // wrong project. A directory that merely sits inside a repository is not a
+    // checkout of it, and the script now says so.
+    let bare = scratch("sibling-opaque");
 
-    run(
-        &["verify", dir.to_str().unwrap()],
-        &[
-            ("VIPRS_REQUIRE_COUNTERPART", Some("1")),
-            ("VIPRS_COUNTERPART_EXPECTED_SHA", None),
-        ],
-    )
-    .expect_refused("an unreadable sibling with the check demanded")
-    .mentions("VIPRS_REQUIRE_COUNTERPART");
-
-    let lenient = run(
-        &["verify", dir.to_str().unwrap()],
-        &[
-            ("VIPRS_REQUIRE_COUNTERPART", None),
-            ("VIPRS_COUNTERPART_EXPECTED_SHA", None),
-        ],
-    );
-    lenient.expect_ok("an unreadable sibling on a developer's machine");
-    // The printed reason has to say what went unchecked and how to make it
-    // fatal, otherwise it is noise somebody scrolls past.
-    lenient.mentions("VIPRS_REQUIRE_COUNTERPART");
+    let outer = scratch("sibling-nested");
+    let status = Command::new("git")
+        .args(["init", "-q"])
+        .arg(&outer)
+        .status()
+        .expect("I could not run git init");
     assert!(
-        lenient.said().contains("did not check"),
-        "the reason must say what it skipped, and it said:\n{}",
-        lenient.said()
+        status.success(),
+        "git init failed, and this case needs a real repository"
     );
+    let nested = outer.join("sibling");
+    fs::create_dir_all(&nested).expect("I could not make the nested directory");
+
+    for dir in [bare, nested] {
+        let shown = dir.display().to_string();
+        run(
+            &["verify", &shown],
+            &[
+                ("VIPRS_REQUIRE_COUNTERPART", Some("1")),
+                ("VIPRS_COUNTERPART_EXPECTED_SHA", None),
+            ],
+        )
+        .expect_refused("an unreadable sibling with the check demanded")
+        .mentions("VIPRS_REQUIRE_COUNTERPART");
+
+        let lenient = run(
+            &["verify", &shown],
+            &[
+                ("VIPRS_REQUIRE_COUNTERPART", None),
+                ("VIPRS_COUNTERPART_EXPECTED_SHA", None),
+            ],
+        );
+        lenient.expect_ok("an unreadable sibling on a developer's machine");
+        // The printed reason has to say what went unchecked and how to make it
+        // fatal, otherwise it is noise somebody scrolls past.
+        lenient.mentions("VIPRS_REQUIRE_COUNTERPART");
+        assert!(
+            lenient.said().contains("did not check"),
+            "the reason must say what it skipped, and it said:\n{}",
+            lenient.said()
+        );
+    }
 }
 
 #[test]

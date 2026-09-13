@@ -176,7 +176,22 @@ resolve_head() {
   fi
 
   if command -v git > /dev/null 2>&1; then
-    local out
+    local out top here
+    # git answers from anywhere inside a repository, including a directory that
+    # merely sits inside one, so ask whether this IS the top of a checkout
+    # before believing what it says. Without this, an empty sibling slot inside
+    # some other repository reports that repository's head, and the mechanism
+    # then tells you the sibling is at a commit of the wrong project. CI caught
+    # this one for me on the first run: `CARGO_TARGET_TMPDIR` is inside this
+    # repository on a runner, so the test that fabricates an unreadable
+    # checkout got told this suite's own branch head instead.
+    if top="$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null)"; then
+      here="$(cd -- "$dir" && pwd -P)"
+      if [ "$top" != "$here" ]; then
+        HEAD_REASON="$dir is not the top of a git checkout: git answers for $top, which is above it, so its HEAD is some other project's"
+        return 1
+      fi
+    fi
     if out="$(git -C "$dir" rev-parse HEAD 2>&1)"; then
       if [ "${#out}" -eq 40 ]; then
         case "$out" in
