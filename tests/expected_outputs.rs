@@ -625,7 +625,11 @@ fn nothing_under_reference_reaches_for_the_production_stack() {
         ("MapLibre", "the renderer"),
     ];
 
-    let root = repo_root().join("reference");
+    // Scoped to the oracle project, not to all of `reference/`. The oracle is
+    // the thing that has to be independent; its test project legitimately names
+    // every one of these, because asserting the same property from inside the
+    // .NET build is part of what it is for.
+    let root = reference_project();
     let mut offences = Vec::new();
     let mut scanned = 0usize;
     for path in files_under(&root, &|p| {
@@ -653,7 +657,8 @@ fn nothing_under_reference_reaches_for_the_production_stack() {
     // over an empty set, which is how a guard quietly stops guarding.
     assert!(
         scanned >= 10,
-        "only scanned {scanned} files under reference/, which is fewer than the project has"
+        "only scanned {scanned} files under {}, which is fewer than the project has",
+        root.display()
     );
     assert!(
         offences.is_empty(),
@@ -699,9 +704,11 @@ fn strip_xml_comments(text: &str) -> String {
 
 #[test]
 fn no_workflow_can_accept_a_regeneration() {
-    // `--accept` overwrites the checked-in baseline. CI must never be able to
-    // do that, or an ACadSharp bump would rewrite the expectations it was
-    // supposed to be checked against and go green.
+    // Both accept gates: `--accept` on the regeneration tool, and the
+    // environment variable the .NET self-test's expectation writer needs. CI
+    // must never be able to use either, or an ACadSharp bump would rewrite the
+    // expectations it was supposed to be caught by and go green.
+    const GATES: &[&str] = &["--accept", "ACADSHARP_REFERENCE_ACCEPT_SELFTEST"];
     let workflows = repo_root().join(".github").join("workflows");
     let mut offences = Vec::new();
     let mut scanned = 0usize;
@@ -712,10 +719,12 @@ fn no_workflow_can_accept_a_regeneration() {
         let text = std::fs::read_to_string(&path).expect("workflow readable");
         let relative = path.strip_prefix(repo_root()).unwrap_or(&path);
         for line in text.lines() {
-            // The comment that explains the rule is allowed to quote the flag.
+            // The comment that explains the rule is allowed to quote the gate.
             let code = line.split('#').next().unwrap_or("");
-            if code.contains("--accept") {
-                offences.push(format!("{}: {}", relative.display(), line.trim()));
+            for gate in GATES {
+                if code.contains(gate) {
+                    offences.push(format!("{}: {}", relative.display(), line.trim()));
+                }
             }
         }
     }
@@ -726,8 +735,8 @@ fn no_workflow_can_accept_a_regeneration() {
     );
     assert!(
         offences.is_empty(),
-        "these workflow lines pass --accept: {offences:?}. Regeneration is a human decision \
-         with a diff attached, never something a job does on its own."
+        "these workflow lines open an accept gate: {offences:?}. Regeneration is a human \
+         decision with a diff attached, never something a job does on its own."
     );
 }
 

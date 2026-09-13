@@ -48,7 +48,14 @@ public sealed class BlockResolver(WarningCollector warnings, int maxDepth = Bloc
     public const int MaxArrayCopies = 1024;
 
     private readonly WarningCollector _warnings = warnings;
-    private readonly HashSet<ulong> _active = [];
+
+    // Keyed on the block record itself, not on its handle. A document built in
+    // memory has not been assigned handles yet, so every one of its blocks
+    // would answer zero and the first nested block would read as a cycle.
+    // Identity is also what "already on the path being expanded" actually
+    // means, so this is the narrower claim as well as the safer one.
+    private readonly HashSet<BlockRecord> _active =
+        new(ReferenceEqualityComparer.Instance);
 
     /// <summary>How deep nesting may go.</summary>
     public int MaxDepth { get; } = maxDepth;
@@ -76,7 +83,7 @@ public sealed class BlockResolver(WarningCollector warnings, int maxDepth = Bloc
             return false;
         }
 
-        if (!_active.Add(block.Handle))
+        if (!_active.Add(block))
         {
             // Self-reference and longer cycles look the same from here: the
             // block is already on the path being expanded.
@@ -92,7 +99,7 @@ public sealed class BlockResolver(WarningCollector warnings, int maxDepth = Bloc
     public void Leave(BlockRecord block)
     {
         ArgumentNullException.ThrowIfNull(block);
-        _active.Remove(block.Handle);
+        _active.Remove(block);
     }
 
     /// <summary>
