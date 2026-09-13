@@ -13,6 +13,11 @@ Cargo.lock
 *.exe
 *.pdb
 
+# Python tooling. tools/ carries the fixture fetch/verify script and its
+# stdlib-unittest suite, and running either leaves bytecode behind.
+__pycache__/
+*.py[cod]
+
 # Editor / IDE
 .vscode/
 .idea/

@@ -152,3 +152,10 @@ jobs:
       # manifest whose pin has stopped being a pin. Offline by construction.
       - name: Fixture corpus matches the manifest
         run: python3 tools/fetch_acadsharp_fixtures.py verify
+      # The refusals that tool has to make, driven through a local stub server
+      # rather than a mocked urlopen: the interesting behaviour is how urllib
+      # follows redirects and how much of a body it reads, and a mock would
+      # only be asserting my own idea of that. Stdlib unittest, so there is
+      # nothing to install.
+      - name: The fetch tool refuses what it should
+        run: python3 -m unittest discover -s tools/tests -v

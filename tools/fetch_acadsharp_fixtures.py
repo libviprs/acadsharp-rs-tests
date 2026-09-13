@@ -90,16 +90,46 @@ def verify_bytes(fx: dict, data: bytes) -> list[str]:
     return problems
 
 
-def download(url: str) -> bytes:
+def download(url: str, *, allowed_host: str = ALLOWED_HOST, max_bytes: int = MAX_BYTES) -> bytes:
+    """Bytes from `url`, refusing an off-host redirect or an oversized body.
+
+    `allowed_host` and `max_bytes` default to the production values and are
+    parameters only so `tools/tests/` can drive the same code against a local
+    stub server. Nothing in this file passes anything else.
+    """
     req = urllib.request.Request(url, headers={"User-Agent": "acadsharp-rs-tests-fixtures"})
     with urllib.request.urlopen(req, timeout=120) as resp:
+        # Checked after the redirect chain has been followed, not before: the
+        # allowlist is about where the bytes actually came from.
         final_host = urllib.parse.urlsplit(resp.geturl()).hostname
-        if final_host != ALLOWED_HOST:
+        if final_host != allowed_host:
             raise RuntimeError(f"redirected to unexpected host {final_host!r}")
-        data = resp.read(MAX_BYTES + 1)
-    if len(data) > MAX_BYTES:
-        raise RuntimeError(f"response exceeds the {MAX_BYTES} byte cap")
+        # One byte past the cap, so a body sitting exactly on it is still
+        # distinguishable from one that ran over.
+        data = resp.read(max_bytes + 1)
+    if len(data) > max_bytes:
+        raise RuntimeError(f"response exceeds the {max_bytes} byte cap")
     return data
+
+
+def fetch_one(fx: dict, dest: pathlib.Path, *, allowed_host: str = ALLOWED_HOST,
+              max_bytes: int = MAX_BYTES) -> list[str]:
+    """Download one fixture and write it only if it verifies.
+
+    The ordering is the point. Verifying after the write leaves a corrupt file
+    on disk for the next run to trip over, and a fetch that half-succeeded is
+    harder to reason about than one that did nothing.
+    """
+    try:
+        data = download(fx["source_url"], allowed_host=allowed_host, max_bytes=max_bytes)
+    except (urllib.error.URLError, RuntimeError, OSError) as exc:
+        return [f"{fx['id']}: download failed: {exc}"]
+    problems = verify_bytes(fx, data)
+    if problems:
+        return problems
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(data)
+    return []
 
 
 def main() -> int:
@@ -125,20 +155,12 @@ def main() -> int:
         path = ROOT / "fixtures" / fx["file"]
 
         if args.command == "fetch":
-            try:
-                data = download(fx["source_url"])
-            except (urllib.error.URLError, RuntimeError) as exc:
-                print(f"error: {fx['id']}: download failed: {exc}", file=sys.stderr)
-                return 1
-            # Verify before writing, so a bad download never lands on disk.
-            found = verify_bytes(fx, data)
+            found = fetch_one(fx, path)
             if found:
                 for p in found:
                     print(f"error: {p}", file=sys.stderr)
                 return 1
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
-            print(f"fetched  {fx['file']}  {len(data):,} bytes")
+            print(f"fetched  {fx['file']}  {fx['bytes']:,} bytes")
             continue
 
         if not path.exists():
@@ -156,6 +178,22 @@ def main() -> int:
             return 1
         seen_sha[fx["sha256"]] = fx["id"]
         print(f"ok       {fx['file']}  {fx['bytes']:,} bytes  {fx['acad_version']}")
+
+    if args.command == "verify":
+        # The check from the other direction. Everything above asks whether each
+        # manifest entry has its file; this asks whether each file has an entry.
+        # A DWG sitting in the tree with no entry has no provenance, no licence
+        # and no hash, which means nobody reviewed it.
+        claimed = {(ROOT / "fixtures" / fx["file"]).resolve() for fx in fixtures}
+        orphans = sorted(
+            str(p.relative_to(ROOT))
+            for p in (ROOT / "fixtures").rglob("*.dwg")
+            if p.resolve() not in claimed
+        )
+        if orphans:
+            print(f"error: not in the manifest, so never vetted: {', '.join(orphans)}",
+                  file=sys.stderr)
+            return 1
 
     print(f"\n{len(fixtures)} fixtures, pinned to {manifest['upstream']['commit']}")
     return 0

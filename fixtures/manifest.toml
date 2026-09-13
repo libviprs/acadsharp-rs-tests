@@ -25,6 +25,8 @@ acad_version = "AC1014"
 autocad_generation = "AutoCAD R14"
 source_path = "samples/sample_AC1014.dwg"
 source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1014.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1312281
 sha256 = "d1ec4519be14ac49ecab5ec024ad951271e00261a1851f623a784a97ba6ede73"
 
@@ -35,6 +37,8 @@ acad_version = "AC1015"
 autocad_generation = "AutoCAD 2000/2000i/2002"
 source_path = "samples/sample_AC1015.dwg"
 source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1015.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1297511
 sha256 = "8ffbdc713f5838cbbb1596a8422e2b607e5c9e79921e852cbb5abee4af76ea4e"
 
@@ -45,6 +49,8 @@ acad_version = "AC1018"
 autocad_generation = "AutoCAD 2004/2005/2006"
 source_path = "samples/sample_AC1018.dwg"
 source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1018.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1097214
 sha256 = "7d26f908516ec5fb89cc8054af33aff233b68a7b63208bbc5b7f9f4d9bff9866"
 
@@ -55,6 +61,8 @@ acad_version = "AC1021"
 autocad_generation = "AutoCAD 2007/2008/2009"
 source_path = "samples/sample_AC1021.dwg"
 source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1021.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1063168
 sha256 = "70b5efec9a3c230a9892e810154a760fe72311b1e730fb582f22950135da770a"
 
@@ -65,6 +73,8 @@ acad_version = "AC1024"
 autocad_generation = "AutoCAD 2010/2011/2012"
 source_path = "samples/sample_AC1024.dwg"
 source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1024.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1122389
 sha256 = "53ecc28e54ff0bbfb022989c47fd1cb16eb07a98825309b66cdf316d900fe4ce"
 
@@ -75,6 +85,8 @@ acad_version = "AC1027"
 autocad_generation = "AutoCAD 2013-2017"
 source_path = "samples/sample_AC1027.dwg"
 source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1027.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1091959
 sha256 = "4c63508dd794d5cdfb56c60aded47928999b02619ea8c2ef435a4b74e60d24d6"
 
@@ -85,5 +97,7 @@ acad_version = "AC1032"
 autocad_generation = "AutoCAD 2018+"
 source_path = "samples/sample_AC1032.dwg"
 source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1032.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1081979
 sha256 = "0e8faaca949c9429c92240082d9ea4d3524aca5baf7c7815ec439245c321b528"

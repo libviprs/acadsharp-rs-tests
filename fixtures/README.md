@@ -75,15 +75,87 @@ no network and no .NET, in `tests/fixture_integrity.rs`.
 
 ## Using the corpus
 
+`fixtures::load` is the only door. It checks size, the DWG signature and the
+sha256 before it returns a single byte:
+
 ```rust
-for fixture in acadsharp_rs_tests::fixtures::all() {
-    let bytes = fixture.read()?;
+use acadsharp_rs_tests::fixtures;
+
+let bytes = fixtures::load("acadsharp-ac1018")?;
+
+for fixture in fixtures::all() {
+    let bytes = fixture.load()?;
     // fixture.id, .acad_version, .sha256, .path()
 }
 ```
 
+That ordering matters more than it looks. A fixture whose bytes drifted should
+fail while it is being read, naming itself, rather than surfacing three layers
+later as an unexplained difference in a decode comparison that everyone then
+debugs as a decoder bug.
+
+There is a `read_unverified` for the one caller that has to compare the hashes
+itself to report both sides, and `tests/fixture_integrity.rs` enforces that
+nothing else in the suite uses it, hardcodes a path into `dwg/`, or reaches for
+`include_bytes!`.
+
 The fixture layer knows about files on disk and nothing about decoding, so the
 same list drives both the .NET reference oracle and `acadsharp-rs`.
+
+## Nothing gets in without being vetted
+
+Two rules, both enforced rather than written down and hoped for:
+
+- every file in `dwg/` has a manifest entry (`nothing_sits_in_the_corpus_without_a_manifest_entry`)
+- every manifest entry has a file matching its size, signature and hash
+
+A DWG sitting in the tree with no entry has no provenance, no licence and no
+hash, which means nobody reviewed it. Dropping one in turns the suite red.
+
+## Provenance review, for a fixture from anywhere else
+
+All seven of the current files are ACadSharp's own samples under MIT, so the
+review was short. Anything from elsewhere needs all of this before it lands:
+
+1. **Redistribution rights.** A licence that actually permits it, recorded in
+   the entry's `license`, with `license_evidence` pointing at the licence text
+   at a pinned revision. Not the project's home page: the file, at a commit.
+2. **A stable pinned URL.** Same rule as everything else here, a commit and not
+   a branch. If upstream only offers a moving target, mirror it somewhere that
+   does not move and say so.
+3. **Its sha256 and size**, obtained from the bytes you are committing, not
+   copied from an upstream checksum file.
+4. **A written reason the ACadSharp samples would not do.** The corpus is
+   deliberately small and the samples are what the reference implementation is
+   itself tested against, so a new source needs to be buying something.
+
+Autodesk sample files and anything extracted from a customer drawing do not
+clear step 1. Do not add them.
+
+## Tier two, not yet in
+
+Reviewed as candidates, deliberately left out of the first pass so the corpus
+stays one file per generation. Each is an ACadSharp sample at the same commit:
+
+| upstream path | what it adds |
+|---|---|
+| `samples/sample_base/sample_base.dwg` | a minimal drawing, useful as a control |
+| `samples/dynamic-blocks/BLOCKROTATIONPARAMETER.dwg` | dynamic blocks and block parameters |
+| `samples/aec_objects/AecObjects.dwg` | AEC custom objects, the unsupported-entity path |
+| `samples/geolocation/geoloc.dwg` | geodata, which is where libviprs georeferencing will land |
+
+These come in when there is something that decodes them. Adding them now would
+mean seven megabytes of files nothing reads.
+
+## Size, and when this moves to LFS
+
+Seven files, about 7.7 MB. Plain git handles that fine, and LFS would buy
+nothing but a second thing to configure in CI and a second way for a checkout
+to arrive without its fixtures.
+
+**The threshold is 50 MB total.** Past that, move `dwg/` to git LFS rather than
+letting clone times creep. Writing the number down here so nobody has to
+rediscover it by arguing about it: below 50 MB, plain git, no discussion.
 
 ## Adding or changing a fixture
 
@@ -94,6 +166,11 @@ same list drives both the .NET reference oracle and `acadsharp-rs`.
    expectation, and the suite would stay green on a shrunken corpus.
 3. Run `verify`, then `cargo test`.
 
-A fixture from anywhere other than ACadSharp needs redistribution rights, a
-stable pinned URL, its licence, its sha256, and a written reason why the
-upstream sample would not do. None of the current seven is in that position.
+`manifest.toml` reaches Rust through `include_str!`, and cargo decides whether
+to rebuild from the file's mtime. Rewrite the manifest within the same second
+as the last build and cargo will happily re-run the old one, which looks
+exactly like a test that ignored your edit. `touch fixtures/manifest.toml` if a
+change seems to have had no effect.
+
+If the fixture is not an ACadSharp sample, it goes through the provenance
+review above first.

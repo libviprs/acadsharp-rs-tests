@@ -12,6 +12,7 @@
 //! `fixtures/dwg/` read as a healthy corpus.
 
 use std::collections::{BTreeMap, BTreeSet};
+use std::path::PathBuf;
 
 use acadsharp_rs_tests::fixtures;
 use sha2::{Digest, Sha256};
@@ -103,7 +104,9 @@ fn every_fixture_is_the_file_the_manifest_describes() {
 
     for fx in fixtures::all() {
         let path = fx.path();
-        let bytes = fx.read().unwrap_or_else(|e| {
+        // The one place `read_unverified` is legitimate: this test has to do
+        // the comparison itself so a failure can print both hashes.
+        let bytes = fx.read_unverified().unwrap_or_else(|e| {
             panic!(
                 "{}: cannot read {}: {e}. Run `python3 tools/fetch_acadsharp_fixtures.py fetch` \
                  to restore it from the pinned commit.",
@@ -177,4 +180,179 @@ fn the_upstream_licence_travels_with_the_fixtures() {
         path.display()
     );
     assert_eq!(up.license, "MIT");
+}
+
+#[test]
+fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
+    let root = fixtures::fixture_root();
+    let claimed: BTreeSet<PathBuf> = fixtures::all().iter().map(|f| f.path()).collect();
+
+    let mut orphans = Vec::new();
+    let mut found = 0usize;
+    for path in dwg_files_under(&root) {
+        found += 1;
+        if !claimed.contains(&path) {
+            orphans.push(
+                path.strip_prefix(&root)
+                    .unwrap_or(&path)
+                    .display()
+                    .to_string(),
+            );
+        }
+    }
+
+    // Positive control. Without it a typo in the walker that returned nothing
+    // would make the orphan check pass by never looking at anything.
+    assert_eq!(
+        found,
+        fixtures::all().len(),
+        "walked {} DWG files under {} but the manifest lists {}",
+        found,
+        root.display(),
+        fixtures::all().len()
+    );
+    assert!(
+        orphans.is_empty(),
+        "these DWG files are in the tree but not in fixtures/manifest.toml: {orphans:?}. \
+         A fixture nobody added to the manifest is a fixture nobody vetted: no provenance, \
+         no licence, no hash. Add an entry or delete the file."
+    );
+}
+
+#[test]
+fn every_fixture_carries_its_own_licence_evidence() {
+    let up = fixtures::upstream();
+    for fx in fixtures::all() {
+        assert!(
+            !fx.license.trim().is_empty(),
+            "{}: no licence recorded, so there is nothing saying these bytes may be \
+             redistributed",
+            fx.id
+        );
+        assert!(
+            fx.license_evidence.starts_with("https://"),
+            "{}: license_evidence is {:?}, which is not a URL anyone can check",
+            fx.id,
+            fx.license_evidence
+        );
+        // Pinned for the same reason the fixture URLs are: a licence read off
+        // a branch is a licence that can change after the fact.
+        assert!(
+            fx.license_evidence.contains(&up.commit),
+            "{}: license_evidence is not pinned to the upstream commit: {}",
+            fx.id,
+            fx.license_evidence
+        );
+    }
+}
+
+#[test]
+fn load_refuses_bytes_that_are_not_the_fixture() {
+    let fx = fixtures::by_version("AC1018").expect("AC1018 is in the corpus");
+
+    // Proves the verifier is doing something. Without a case like this, `load`
+    // could return early on every input and every other test here would still
+    // be green, because they all read the real, correct files.
+    let mut damaged = fx.load().expect("the committed fixture is intact");
+    damaged[fx.bytes as usize / 2] ^= 0xff;
+    let err = fx
+        .verify(&damaged)
+        .expect_err("a flipped byte must not verify");
+    let msg = err.to_string();
+    assert!(
+        msg.contains(&fx.id),
+        "the error should name the fixture: {msg}"
+    );
+    assert!(
+        msg.contains("sha256"),
+        "the error should say what disagreed: {msg}"
+    );
+
+    let truncated = &fx.load().expect("intact")[..512];
+    assert!(
+        fx.verify(truncated).is_err(),
+        "a truncated fixture must not verify"
+    );
+
+    let err = fixtures::load("no-such-fixture").expect_err("unknown ids must not resolve");
+    assert!(
+        err.to_string().contains("no-such-fixture"),
+        "the error should name the id it was given: {err}"
+    );
+}
+
+#[test]
+fn no_test_reads_the_corpus_behind_the_loaders_back() {
+    // `fixtures::load` verifies before returning. That guarantee is worth
+    // exactly as much as the number of callers who use it, so the two ways
+    // around it are checked here rather than left to review.
+    const BYPASSES: &[(&str, &str)] = &[
+        ("fixtures/dwg", "a hardcoded path into the corpus"),
+        ("include_bytes!", "a fixture embedded at compile time"),
+        ("read_unverified", "the documented escape hatch"),
+    ];
+    // `fixtures.rs` defines them and this file has to use one to compare
+    // hashes. Everything else goes through `load`.
+    const ALLOWED: &[&str] = &["src/fixtures.rs", "tests/fixture_integrity.rs"];
+
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+    let mut offences = Vec::new();
+    let mut scanned = 0usize;
+    for dir in ["src", "tests"] {
+        for path in rust_files_under(&root.join(dir)) {
+            let rel = path
+                .strip_prefix(root)
+                .unwrap_or(&path)
+                .display()
+                .to_string();
+            let rel = rel.replace('\\', "/");
+            if ALLOWED.contains(&rel.as_str()) {
+                continue;
+            }
+            scanned += 1;
+            let text = std::fs::read_to_string(&path).expect("source file readable");
+            for (needle, what) in BYPASSES {
+                if text.contains(needle) {
+                    offences.push(format!("{rel}: {what} ({needle})"));
+                }
+            }
+        }
+    }
+
+    assert!(
+        offences.is_empty(),
+        "these read the corpus without verifying it: {offences:?}. Use \
+         `fixtures::load(id)`, which checks size, signature and sha256 first. If a case \
+         genuinely needs raw bytes, add the file to ALLOWED here with a reason.\n\
+         (scanned {scanned} files)"
+    );
+}
+
+/// Every `.dwg` under `dir`, recursively.
+fn dwg_files_under(dir: &std::path::Path) -> Vec<PathBuf> {
+    files_under(dir, &|p| {
+        p.extension().is_some_and(|e| e.eq_ignore_ascii_case("dwg"))
+    })
+}
+
+/// Every `.rs` under `dir`, recursively.
+fn rust_files_under(dir: &std::path::Path) -> Vec<PathBuf> {
+    files_under(dir, &|p| p.extension().is_some_and(|e| e == "rs"))
+}
+
+fn files_under(dir: &std::path::Path, keep: &dyn Fn(&std::path::Path) -> bool) -> Vec<PathBuf> {
+    let mut out = Vec::new();
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return out;
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.is_dir() {
+            out.extend(files_under(&path, keep));
+        } else if keep(&path) {
+            out.push(path);
+        }
+    }
+    out.sort();
+    out
 }

@@ -23,7 +23,6 @@ incompatible_msrv = "warn"
 # corpus. The loader below is the only thing that reads it from Rust.
 toml = "0.9"
 serde = { version = "1", features = ["derive"] }
-
-[dev-dependencies]
-# Only the integrity test hashes bytes; nothing in the library needs to.
+# `fixtures::load` verifies a fixture's sha256 before handing back its bytes, so
+# hashing is part of the library rather than something each test remembers to do.
 sha2 = "0.10"
