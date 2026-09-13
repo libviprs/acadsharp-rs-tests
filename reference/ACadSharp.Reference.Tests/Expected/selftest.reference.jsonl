@@ -1,0 +1,11 @@
+{"schema":1,"record":"document","format":"dwg","acad_version":"AC1032","maintenance_version":228}
+{"schema":1,"record":"view","index":0,"name":"Model","kind":"model"}
+{"schema":1,"record":"view","index":1,"name":"Layout1","kind":"layout"}
+{"schema":1,"record":"line","view":0,"x1":0.0,"y1":0.0,"z1":0.0,"x2":100.0,"y2":0.0,"z2":0.0}
+{"schema":1,"record":"arc","view":0,"cx":50.0,"cy":50.0,"cz":0.0,"radius":25.0,"start":0.0,"end":1.5707963267948966,"nx":0.0,"ny":0.0,"nz":1.0}
+{"schema":1,"record":"text","view":0,"x":20.0,"y":30.0,"z":0.0,"height":2.5,"rotation":0.0,"width_factor":1.0,"halign":"left","valign":"baseline","style":"Standard","text":"ROOM 101"}
+{"schema":1,"record":"warning","category":"missing_reference","entity_type":"TextStyle","detail":"table_reference_not_found"}
+{"schema":1,"record":"warning","category":"missing_reference","entity_type":"TextStyle","detail":"table_reference_not_found"}
+{"schema":1,"record":"warning","category":"missing_reference","entity_type":"TextStyle","detail":"table_reference_not_found"}
+{"schema":1,"record":"warning","category":"missing_reference","entity_type":"TextStyle","detail":"table_reference_not_found"}
+{"schema":1,"record":"warning","category":"unsupported_entity","entity_type":"Viewport","detail":"no_canonical_mapping"}

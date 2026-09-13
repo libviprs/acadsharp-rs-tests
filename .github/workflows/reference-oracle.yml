@@ -1,0 +1,150 @@
+name: Reference oracle
+
+# The .NET side. Deliberately a separate workflow from ci.yml rather than two
+# more jobs in it, because a `paths` filter in GitHub Actions applies to the
+# whole workflow and not to individual jobs: putting these in ci.yml would mean
+# either running the .NET toolchain on every Rust-only PR, or filtering the Rust
+# jobs out along with them. Section 31 asks for the first thing not to happen.
+#
+# The consequence to know about: a workflow with a `paths` filter does not run
+# at all on a PR that touches nothing it lists, so neither job below can be a
+# required check on `main` without blocking every unrelated PR forever. Nothing
+# is required on this repository yet; when something is, these two are not
+# candidates as written.
+#
+# Job names carry no version and no tool list, for the same reason the Rust
+# workflow's do not: a version in a required check's name means the next bump
+# renames the context and every PR blocks until somebody edits branch
+# protection (libviprs#1011, libviprs-cli#57).
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'reference/**'
+      - 'fixtures/manifest.toml'
+      - 'fixtures/dwg/**'
+      - 'fixtures/expected/**'
+      - 'tools/regenerate_reference.py'
+      - '.github/workflows/reference-oracle.yml'
+
+  # `synchronize` is absent for the same reason as in ci.yml: a push to a branch
+  # here is already covered above. What is left is the transitions no push
+  # accompanies, which is also what covers a PR opened from a fork.
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+    paths:
+      - 'reference/**'
+      - 'fixtures/manifest.toml'
+      - 'fixtures/dwg/**'
+      - 'fixtures/expected/**'
+      - 'tools/regenerate_reference.py'
+      - '.github/workflows/reference-oracle.yml'
+
+  workflow_dispatch:
+
+  # The scheduled run is the one that catches a NuGet package or an SDK image
+  # changing under a version that was supposed to be pinned. Nothing here
+  # depends on it having run.
+  schedule:
+    - cron: '17 4 * * 1'
+
+# Keyed by event as well as branch. Without the event in the key, the push run
+# and the pull_request run for the same branch share a group, the newer cancels
+# the older, and the cancelled check lands on the same head sha as the
+# successful ones where branch protection counts it.
+concurrency:
+  group: oracle-${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ (github.head_ref || github.ref_name) != 'main' }}
+
+env:
+  DOTNET_NOLOGO: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+
+jobs:
+  oracle:
+    name: Oracle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # global.json pins the SDK feature band, so this installs the version the
+      # manifest rows say produced the reference artefacts rather than whichever
+      # SDK the runner image happens to ship this week.
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: reference/global.json
+
+      - name: The pinned SDK is the one that is installed
+        run: |
+          pinned=$(python3 -c "import json;print(json.load(open('reference/global.json'))['sdk']['version'])")
+          installed=$(dotnet --version)
+          echo "pinned (global.json): $pinned"
+          echo "installed:            $installed"
+          # Feature band, not exact patch: global.json rolls forward inside the
+          # band on purpose, so requiring the patch to match would break on a
+          # runner image update while changing nothing about the output.
+          [ "${pinned%.*}" = "${installed%.*}" ] || {
+            echo "::error::global.json pins the ${pinned%.*}xx band but ${installed} is installed"
+            exit 1
+          }
+
+      # Locked mode, so a package that moved is a red job rather than a silent
+      # substitution. This is also the step that fails if packages.lock.json and
+      # the csproj disagree about the ACadSharp version.
+      - name: Restore in locked mode
+        run: dotnet restore reference/ACadSharp.Reference.sln --locked-mode
+
+      - name: Build the oracle
+        run: dotnet build reference/ACadSharp.Reference.sln -c Release --no-restore
+
+      # xunit.v3 test projects are self-hosting executables. `dotnet test` on the
+      # .NET 10 SDK needs a separate opt-in to reach them and gives nothing back
+      # for it, so the assembly is run directly.
+      #
+      # This is the self-test: it generates its own DWG with ACadSharp's writer,
+      # reads it back and compares against a committed expectation, so it needs
+      # no corpus. ACADSHARP_REFERENCE_ACCEPT_SELFTEST is deliberately not set,
+      # and a Rust test asserts no workflow sets it.
+      - name: The oracle's own tests
+        run: dotnet run --project reference/ACadSharp.Reference.Tests -c Release --no-build --no-restore
+
+  reference-outputs:
+    name: Reference outputs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: reference/global.json
+
+      # 3.14 for compression.zstd. The regeneration tool refuses to run on
+      # anything older rather than reaching for a second zstd implementation,
+      # because two code paths would produce two different files.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      # Regenerates into a temporary directory and compares. Without --accept it
+      # writes nothing and exits non-zero on any difference, which is the whole
+      # review gate: an ACadSharp upgrade arrives as a diff a person read.
+      - name: Regenerate into a staging directory and compare
+        run: python3 tools/regenerate_reference.py regenerate --runner dotnet
+
+      # Belt and braces, and the part that runs without a toolchain at all: the
+      # committed artefacts still match the hashes, versions and schema the
+      # manifest claims.
+      - name: The committed artefacts match the manifest
+        run: python3 tools/regenerate_reference.py verify
+
+      # Nothing above may have changed a checked-in file. The tool is built not
+      # to, and this is the check that the tool is right about that.
+      - name: The working tree is untouched
+        run: |
+          if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
+            echo "::error::a CI run modified the working tree; regeneration must never write unless a person explicitly accepted it"
+            git status --porcelain
+            git diff
+            exit 1
+          fi

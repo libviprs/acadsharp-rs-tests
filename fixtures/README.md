@@ -50,6 +50,29 @@ both the Python tool and `tests/fixture_integrity.rs` fail if a URL ever carries
 upstream URL for every fixture. Nothing else records them: not the README, not
 the Rust code, not CI. There is deliberately no second copy to drift.
 
+It also holds the **reference** side: the paths and hashes of the frozen output
+the .NET oracle produced for each input, the ACadSharp version and upstream
+commit that produced it, the exact .NET SDK the accepted run used, and the schema
+versions of both artefacts. Same file, same reason.
+
+## What lives under `expected/`
+
+Two artefacts per fixture, written by `tools/regenerate_reference.py --accept`:
+
+- `<id>.reference.jsonl.zst`, the authoritative semantic reference, and
+- `<id>.reference.svg`, a secondary visual one.
+
+Plus `SUMMARY.md`, a committed census of record counts so a reviewer of a later
+change sees what moved without decompressing anything.
+
+The sha256 the manifest pins for the JSONL is of the **uncompressed** stream.
+Zstandard frames are reproducible for one library version and one set of frame
+parameters, and the tool pins both, but they are not a cross-implementation
+guarantee; the uncompressed bytes are. See
+[`../docs/CANONICAL_SCHEMA.md`](../docs/CANONICAL_SCHEMA.md).
+
+Nothing here is a DWG, so the orphan check below only ever walks `dwg/`.
+
 ## Checking the corpus
 
 Offline, and what CI runs:
@@ -72,6 +95,18 @@ supply-chain event into an invisible diff.
 
 The same properties are enforced from Rust under an ordinary `cargo test`, with
 no network and no .NET, in `tests/fixture_integrity.rs`.
+
+## Regenerating the reference outputs
+
+```bash
+python3 tools/regenerate_reference.py regenerate            # compares, writes nothing
+python3 tools/regenerate_reference.py regenerate --accept   # writes, after you read the diff
+python3 tools/regenerate_reference.py verify                # offline, no .NET at all
+```
+
+The same rule as the fetch tool, for the same reason: without an explicit
+acceptance nothing checked in is rewritten, so an ACadSharp upgrade is a diff a
+person read rather than something a tool resolved.
 
 ## Using the corpus
 

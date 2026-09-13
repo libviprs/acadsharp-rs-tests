@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The oracle's own tests. This project may have the dependencies a test
+    project needs; the oracle itself may not, and a test in here asserts that.
+
+    InvariantGlobalization is deliberately NOT set here. The oracle sets it,
+    which is most of the point of it, but if the test process were invariant too
+    then `new CultureInfo("de-DE")` would quietly resolve to the invariant
+    culture and the test that proves a German locale changes nothing would be
+    proving nothing. It carries its own positive control for the same reason.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- xunit.v3 test projects are executables that host Microsoft.Testing.Platform.
+         The .NET 10 SDK no longer runs the old VSTest path from `dotnet test`, so
+         the opt-in below is what makes `dotnet test` work at all here. -->
+    <OutputType>Exe</OutputType>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ACadSharp.Reference.Tests</RootNamespace>
+    <AssemblyName>ACadSharp.Reference.Tests</AssemblyName>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisMode>Recommended</AnalysisMode>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- xunit.v3 does not add this itself under ImplicitUsings, and a file-by-file
+         `using Xunit;` is one more thing to forget in a new test file. -->
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ACadSharp.Reference\ACadSharp.Reference.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The self-test's committed expectation. Copied rather than located by
+         walking up from the assembly, so a test run in an unexpected working
+         directory fails on a missing file rather than on a stale one. -->
+    <None Include="Expected\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

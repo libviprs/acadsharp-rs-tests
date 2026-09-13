@@ -26,3 +26,14 @@ serde = { version = "1", features = ["derive"] }
 # `fixtures::load` verifies a fixture's sha256 before handing back its bytes, so
 # hashing is part of the library rather than something each test remembers to do.
 sha2 = "0.10"
+# Decompressing the frozen reference outputs, which are stored as zstd. Pure
+# Rust and decode-only: a C libzstd binding would put a compiler toolchain in
+# the way of `cargo test`, and nothing in this crate ever compresses.
+ruzstd = "0.9"
+
+[dev-dependencies]
+# Reading the frozen reference records back structurally. The suite asserts
+# properties of the canonical stream (first record, schema version, at least one
+# primitive), and doing that with string matching would pass on a file that is
+# not JSON at all.
+serde_json = "1"

@@ -29,6 +29,15 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1312281
 sha256 = "d1ec4519be14ac49ecab5ec024ad951271e00261a1851f623a784a97ba6ede73"
+reference_jsonl = "expected/acadsharp-ac1014.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c4b0c373bd727a279d61f572a617a6bad4dd235e30921e943feebebc6e91a30a"
+reference_svg = "expected/acadsharp-ac1014.reference.svg"
+reference_svg_sha256 = "51bdf3b965de50ee48d5e0362b67e32b0bfed087a111daa70ecb6ab6a72db25e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
 
 [[fixture]]
 id = "acadsharp-ac1015"
@@ -41,6 +50,15 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1297511
 sha256 = "8ffbdc713f5838cbbb1596a8422e2b607e5c9e79921e852cbb5abee4af76ea4e"
+reference_jsonl = "expected/acadsharp-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "90dafe905d358404d2da6db83f25f7635403c590e394648372b69a6ed9fc6799"
+reference_svg = "expected/acadsharp-ac1015.reference.svg"
+reference_svg_sha256 = "cf2c4b0f9820c2b24bf8bf958f1512bd3c05dd0cacceb7e931d8b2d2c6cfb65e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
 
 [[fixture]]
 id = "acadsharp-ac1018"
@@ -53,6 +71,15 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1097214
 sha256 = "7d26f908516ec5fb89cc8054af33aff233b68a7b63208bbc5b7f9f4d9bff9866"
+reference_jsonl = "expected/acadsharp-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "baf61bcdad3fe5bc835619f83a9e1809a9872f725a2acf540a7a58c16b9f7395"
+reference_svg = "expected/acadsharp-ac1018.reference.svg"
+reference_svg_sha256 = "605c97fec8099e3ce3f0d989518f9366905d60f7d858180682770f379db4aba5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
 
 [[fixture]]
 id = "acadsharp-ac1021"
@@ -65,6 +92,15 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1063168
 sha256 = "70b5efec9a3c230a9892e810154a760fe72311b1e730fb582f22950135da770a"
+reference_jsonl = "expected/acadsharp-ac1021.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d6096706f6c94df36dd0a7fd085fd698b837d6176d1eb341a9db35f23eeb8d18"
+reference_svg = "expected/acadsharp-ac1021.reference.svg"
+reference_svg_sha256 = "2f9c03d36f0c51da121bcbab80e1d1d33d676f2c9e143eac7dce37eec8886545"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
 
 [[fixture]]
 id = "acadsharp-ac1024"
@@ -77,6 +113,15 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1122389
 sha256 = "53ecc28e54ff0bbfb022989c47fd1cb16eb07a98825309b66cdf316d900fe4ce"
+reference_jsonl = "expected/acadsharp-ac1024.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "395b4ac0054cc888ed05cc1cf811c0664a9243c17a204f33da13021d5937c94b"
+reference_svg = "expected/acadsharp-ac1024.reference.svg"
+reference_svg_sha256 = "2f9c03d36f0c51da121bcbab80e1d1d33d676f2c9e143eac7dce37eec8886545"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
 
 [[fixture]]
 id = "acadsharp-ac1027"
@@ -89,6 +134,15 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1091959
 sha256 = "4c63508dd794d5cdfb56c60aded47928999b02619ea8c2ef435a4b74e60d24d6"
+reference_jsonl = "expected/acadsharp-ac1027.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "93c53da4d467f51a34b4cd273b0ef637e5a168156f4c656d5af136db49602739"
+reference_svg = "expected/acadsharp-ac1027.reference.svg"
+reference_svg_sha256 = "f6e84c47fc60ddb4e85f604669597056b175bc1d940e4c844bcb3b33500206d7"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
 
 [[fixture]]
 id = "acadsharp-ac1032"
@@ -101,3 +155,12 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 1081979
 sha256 = "0e8faaca949c9429c92240082d9ea4d3524aca5baf7c7815ec439245c321b528"
+reference_jsonl = "expected/acadsharp-ac1032.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "a19a3a0f7644ac86aee9514adb5748d8736c00b286608359919a2971d9e3736b"
+reference_svg = "expected/acadsharp-ac1032.reference.svg"
+reference_svg_sha256 = "25e37db69adeb6f0290b4f608f5c17b5f923bc2cc43b151ae3b1194834163dc0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1

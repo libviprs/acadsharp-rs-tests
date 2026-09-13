@@ -15,11 +15,60 @@ pinned commit and verified on every `cargo test`. See
 [`fixtures/README.md`](fixtures/README.md) for provenance, licensing and how to
 add one.
 
-Nothing decodes them yet; that is the next phase.
+The reference side is in too: a .NET JIT oracle that reads each fixture through
+ACadSharp and writes the canonical records the Rust side will later be compared
+against, plus frozen expected outputs for all seven versions. Nothing in this
+repository decodes a DWG in Rust yet; that is the next phase.
+
+## The reference oracle
+
+```
+              same DWG input
+                     |
+      +--------------+--------------+
+      |                             |
+      v                             v
+ACadSharp .NET (JIT)           acadsharp-rs
+      |                        (not here yet)
+      v                             v
+canonical JSONL + SVG          actual output
+      |                             |
+      +----------- compare ---------+
+```
+
+`reference/ACadSharp.Reference` is an ordinary JIT console app with exactly one
+dependency, ACadSharp, restored in locked mode. It shares no code with the
+production NativeAOT shim or with any Rust: two implementations that share code
+can share a bug and still agree, which is the one outcome a differential test
+must not be able to produce.
+
+- [`docs/CANONICAL_SCHEMA.md`](docs/CANONICAL_SCHEMA.md) is the format, field by
+  field, with the ordering, float and escaping rules.
+- [`reference/ACadSharp.Reference/README.md`](reference/ACadSharp.Reference/README.md)
+  is how to run it and how to upgrade ACadSharp.
+- `fixtures/expected/` holds the frozen artefacts, hashed into
+  `fixtures/manifest.toml` alongside the input hashes.
+
+Regenerating them:
+
+```bash
+python3 tools/regenerate_reference.py regenerate           # compares, writes nothing
+python3 tools/regenerate_reference.py regenerate --accept   # writes, after you read the diff
+python3 tools/regenerate_reference.py verify                # offline, no .NET
+```
+
+Without `--accept` nothing checked in is touched, and a test asserts no workflow
+passes it. An ACadSharp upgrade therefore arrives as a diff somebody read.
+
+**An ordinary `cargo test` needs none of this.** No .NET, no network, no
+ACadSharp: the frozen artefacts are committed and the Rust suite checks them
+against the manifest offline.
 
 ## Requirements
 
 - **Rust 1.97+** (edition 2024)
+- For the reference oracle only: the .NET SDK `reference/global.json` pins, and
+  Python 3.14+ for `compression.zstd`. Neither is needed to run the Rust suite.
 
 ## Open question this repo does not answer yet
 
