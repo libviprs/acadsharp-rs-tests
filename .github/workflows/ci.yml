@@ -159,3 +159,9 @@ jobs:
       # nothing to install.
       - name: The fetch tool refuses what it should
         run: python3 -m unittest discover -s tools/tests -v
+      # Every ACadSharp test file has a row, and every row has a file. Offline
+      # against the committed snapshot, so an upstream outage cannot red this.
+      # A bump that adds or renames a test file fails here until somebody
+      # decides what it means, which is the whole point of the manifest.
+      - name: Upstream test parity is classified
+        run: python3 tools/parity_inventory.py
