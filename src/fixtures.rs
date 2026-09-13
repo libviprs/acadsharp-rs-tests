@@ -25,6 +25,14 @@
 //! test, which has to compare the hashes itself to report both sides. Anything
 //! else reaching for it is skipping the check.
 //!
+//! # The reference side
+//!
+//! Each row also records the frozen output of the .NET reference oracle for
+//! that input: [`DwgFixture::load_reference_jsonl`] and
+//! [`DwgFixture::load_reference_svg`] verify those the same way, against the
+//! hashes in the same manifest. The JSONL hash is of the **uncompressed**
+//! stream; see `docs/CANONICAL_SCHEMA.md` for why.
+//!
 //! Deliberately decoupled from any FFI: this layer knows about files on disk
 //! and nothing about how they are decoded, so the differential harness can
 //! drive both the .NET reference and `acadsharp-rs` from the same list.
@@ -86,25 +94,46 @@ pub struct DwgFixture {
     pub bytes: u64,
     pub sha256: String,
 
-    /// Canonical output of the .NET reference for this input, relative to
-    /// `fixtures/`. Filled by H2.4 (libviprs/acadsharp-rs-tests#6); `None`
-    /// until then.
+    /// The compressed canonical reference output, relative to `fixtures/`.
     ///
     /// Optional rather than an empty string on purpose: an empty string is a
     /// value that every check has to remember to special-case, and one of them
-    /// eventually will not.
+    /// eventually will not. A fixture with no reference is a fixture the
+    /// differential cannot use, and `tests/expected_outputs.rs` refuses one.
     #[serde(default)]
-    pub reference_output: Option<String>,
-    /// sha256 of [`Self::reference_output`], on the same terms.
+    pub reference_jsonl: Option<String>,
+    /// sha256 of the reference JSONL **before** compression.
+    ///
+    /// Deliberately not the hash of the `.zst`. Zstandard frames are
+    /// reproducible for one library version and one set of frame parameters,
+    /// and `tools/regenerate_reference.py` pins both, but they are not a
+    /// cross-implementation guarantee. The uncompressed bytes are, so the
+    /// contract lives there and the compression is storage.
     #[serde(default)]
-    pub reference_sha256: Option<String>,
+    pub reference_jsonl_uncompressed_sha256: Option<String>,
+    /// The visual reference, relative to `fixtures/`.
+    #[serde(default)]
+    pub reference_svg: Option<String>,
+    /// sha256 of the visual reference, which needs no such caveat.
+    #[serde(default)]
+    pub reference_svg_sha256: Option<String>,
     /// Which ACadSharp version produced the reference output.
     #[serde(default)]
     pub acadsharp_reference_version: Option<String>,
-    /// Schema version of the exporter that wrote it, so a reference generated
-    /// by an older exporter is recognisable rather than silently compared.
+    /// The upstream ACadSharp commit that version was tagged at.
     #[serde(default)]
-    pub reference_exporter_schema: Option<String>,
+    pub acadsharp_reference_commit: Option<String>,
+    /// The exact .NET SDK the accepted regeneration ran on.
+    #[serde(default)]
+    pub dotnet_sdk: Option<String>,
+    /// Canonical schema version of the records in the reference output, so a
+    /// reference written by an older exporter is recognisable rather than
+    /// silently compared against a newer reader.
+    #[serde(default)]
+    pub reference_schema: Option<u32>,
+    /// Schema version of the SVG dialect, on the same terms.
+    #[serde(default)]
+    pub svg_schema: Option<u32>,
 }
 
 /// What can be wrong with a fixture on disk.
@@ -123,6 +152,8 @@ pub enum FixtureError {
     },
     /// The bytes are not the bytes the manifest froze.
     Corrupt { id: String, detail: String },
+    /// The fixture has no frozen reference output recorded.
+    NoReference { id: String, what: String },
 }
 
 impl fmt::Display for FixtureError {
@@ -141,6 +172,11 @@ impl fmt::Display for FixtureError {
                 path.display()
             ),
             Self::Corrupt { id, detail } => write!(f, "{id}: {detail}"),
+            Self::NoReference { id, what } => write!(
+                f,
+                "{id}: fixtures/manifest.toml records no {what}. Run \
+                 `python3 tools/regenerate_reference.py regenerate --accept` to produce one."
+            ),
         }
     }
 }
@@ -229,6 +265,111 @@ impl DwgFixture {
             )));
         }
         Ok(())
+    }
+}
+
+impl DwgFixture {
+    /// Absolute path of the compressed canonical reference output.
+    ///
+    /// The manifest owns the path. Nothing else in the suite builds one, so a
+    /// fixture whose artefacts move needs one line changed rather than a grep.
+    pub fn reference_jsonl_path(&self) -> Option<PathBuf> {
+        self.reference_jsonl
+            .as_ref()
+            .map(|relative| fixture_root().join(relative))
+    }
+
+    /// Absolute path of the visual reference.
+    pub fn reference_svg_path(&self) -> Option<PathBuf> {
+        self.reference_svg
+            .as_ref()
+            .map(|relative| fixture_root().join(relative))
+    }
+
+    /// The uncompressed canonical reference output, verified against the manifest.
+    ///
+    /// Decompresses the committed `.zst` and checks the sha256 of what came out
+    /// against [`Self::reference_jsonl_uncompressed_sha256`] before returning a
+    /// byte. That ordering is the point: the hash is a claim about the
+    /// uncompressed stream, so checking the compressed file instead would tie
+    /// the suite to one zstd implementation for no gain.
+    pub fn load_reference_jsonl(&self) -> Result<Vec<u8>, FixtureError> {
+        let path = self
+            .reference_jsonl_path()
+            .ok_or_else(|| FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "reference_jsonl".to_string(),
+            })?;
+        let want = self
+            .reference_jsonl_uncompressed_sha256
+            .as_ref()
+            .ok_or_else(|| FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "reference_jsonl_uncompressed_sha256".to_string(),
+            })?;
+
+        let compressed = std::fs::read(&path).map_err(|source| FixtureError::Unreadable {
+            id: self.id.clone(),
+            path: path.clone(),
+            source,
+        })?;
+
+        let mut decoder =
+            ruzstd::decoding::StreamingDecoder::new(compressed.as_slice()).map_err(|e| {
+                FixtureError::Corrupt {
+                    id: self.id.clone(),
+                    detail: format!("{} is not a zstd frame: {e}", path.display()),
+                }
+            })?;
+        let mut data = Vec::new();
+        std::io::Read::read_to_end(&mut decoder, &mut data).map_err(|e| FixtureError::Corrupt {
+            id: self.id.clone(),
+            detail: format!("{} did not decompress: {e}", path.display()),
+        })?;
+
+        let got = format!("{:x}", Sha256::digest(&data));
+        if &got != want {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!(
+                    "uncompressed reference sha256 is {got}, manifest froze {want}. The \
+                     expected output is not the one the manifest describes, so every \
+                     comparison against it would be against an unknown baseline."
+                ),
+            });
+        }
+        Ok(data)
+    }
+
+    /// The visual reference, verified against the manifest.
+    pub fn load_reference_svg(&self) -> Result<Vec<u8>, FixtureError> {
+        let path = self
+            .reference_svg_path()
+            .ok_or_else(|| FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "reference_svg".to_string(),
+            })?;
+        let want = self
+            .reference_svg_sha256
+            .as_ref()
+            .ok_or_else(|| FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "reference_svg_sha256".to_string(),
+            })?;
+
+        let data = std::fs::read(&path).map_err(|source| FixtureError::Unreadable {
+            id: self.id.clone(),
+            path: path.clone(),
+            source,
+        })?;
+        let got = format!("{:x}", Sha256::digest(&data));
+        if &got != want {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!("reference SVG sha256 is {got}, manifest froze {want}"),
+            });
+        }
+        Ok(data)
     }
 }
 
