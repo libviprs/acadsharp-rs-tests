@@ -13,6 +13,13 @@ Cargo.lock
 *.exe
 *.pdb
 
+# .NET. The reference oracle under reference/ is a JIT console app built with
+# the pinned SDK; its intermediate and output directories are per-architecture
+# and must never be committed. packages.lock.json is NOT here: it is the pin.
+[Bb]in/
+[Oo]bj/
+*.user
+
 # Python tooling. tools/ carries the fixture fetch/verify script and its
 # stdlib-unittest suite, and running either leaves bytecode behind.
 __pycache__/

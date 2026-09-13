@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The .NET JIT reference oracle. An ordinary console app on purpose: the
+    system under test is NativeAOT + C ABI + Rust, so if the oracle went
+    through the same normalization path the differential would compare a bug
+    against itself and still pass.
+
+    Exactly one PackageReference, and no ProjectReference, ever. A test in
+    ACadSharp.Reference.Tests asserts that, because "independent oracle" is a
+    property of the dependency graph rather than an intention.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ACadSharp.Reference</RootNamespace>
+    <AssemblyName>ACadSharp.Reference</AssemblyName>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisMode>Recommended</AnalysisMode>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
+
+    <!--
+      The strongest available form of section 13. Every number this tool writes
+      also goes through CultureInfo.InvariantCulture explicitly, but a missed
+      call site would then format a double with a comma on somebody's de-DE
+      machine and turn the whole corpus into noise, quietly, somewhere that is
+      not CI. This makes the invariant a property of the process.
+    -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <!-- Locked restore, so an ACadSharp bump is a diff in packages.lock.json
+         rather than something that happens on whichever machine restores next. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
+    <!-- Nothing here is NativeAOT, and that is the point of the whole project.
+         Spelled out so a later "let's just AOT it for speed" has to delete a
+         line that says why not. -->
+    <PublishAot>false</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ACadSharp" Version="3.7.1" />
+  </ItemGroup>
+
+</Project>
