@@ -1,0 +1,33 @@
+# The revision of libviprs/acadsharp-rs that this suite is tested against.
+#
+# `Cargo.toml` depends on that crate as `{ path = "../acadsharp-rs" }`, so CI has
+# to lay a checkout down beside this one, and this file says which commit it
+# gets. `.github/actions/clone-counterpart` fetches exactly this sha, as a sha,
+# and then checks that the checkout really landed on it. There is no branch
+# name, no repository variable and no fallback: `libviprs-org` resolved an unset
+# repository variable to the empty string, which `actions/checkout` reads as
+# "the default branch", and its gate then compared against whatever moved that
+# morning, and `libviprs`' integration job clones a same-named counterpart
+# branch, so a stale branch that shares a name builds against the wrong tree
+# (libviprs#1013).
+#
+# The merged-only rule: this may only name a commit that is on `acadsharp-rs`'
+# `main`. The action checks it through the compare API and accepts `identical`
+# or `behind`, because a pin naming an older commit that is still an ancestor of
+# `main` is merged. `ahead` or `diverged` is refused. A pin has to name
+# something that will still be there tomorrow, and a PR head can be force-pushed
+# or closed.
+#
+# The first line below that is neither blank nor a comment is the pin, it is the
+# whole line, and it is 40 lowercase hex characters. A sha written inside one of
+# these comments is prose: `tools/counterpart.sh rev` reads the payload line,
+# not the first 40-hex run in the file, which is what `libviprs-tests` does and
+# is a real way to lose a pin inside a bump note.
+#
+# To bump it: put an `acadsharp-rs` `main` commit here, run the suite against a
+# sibling checkout at that commit, and say below what moved.
+88d34a0f7a085de92477fcebee0a98cfc7d5624a
+# acadsharp-rs main @ 2026-09-13, which is the CI gate plus the crate
+# scaffolding, and everything that repository's main carries today. Nothing in
+# this suite consumes the crate's API yet, so this pin is not waiting on any
+# crate change, and moving it is a one-line PR rather than a two-repo dance.
