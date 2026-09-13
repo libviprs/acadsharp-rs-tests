@@ -586,6 +586,38 @@ fn cargo_metadata_resolves_acadsharp_rs_inside_the_sibling_checkout() {
         "acadsharp-rs has to resolve to the checkout beside this one, which is the one \
          COUNTERPART_REV pins and the one the crate's Suite job lays down"
     );
+
+    // `packages` lists everything in the graph, so an entry there survives the
+    // dependency being optional-and-off or sitting under `[dev-dependencies]`,
+    // and both of those still satisfy the crate job's grep while changing what
+    // an ordinary build links. So ask the resolver what this package actually
+    // depends on, as a normal dependency.
+    let root = meta["resolve"]["root"]
+        .as_str()
+        .expect("metadata has no resolve root");
+    let node = meta["resolve"]["nodes"]
+        .as_array()
+        .expect("metadata has no resolve nodes")
+        .iter()
+        .find(|node| node["id"].as_str() == Some(root))
+        .expect("the resolve graph has no node for this package");
+    let wired = node["deps"]
+        .as_array()
+        .expect("the root node has no deps")
+        .iter()
+        .find(|dep| dep["name"].as_str() == Some("acadsharp_rs"))
+        .unwrap_or_else(|| {
+            panic!("cargo resolved acadsharp-rs but this package does not depend on it")
+        });
+    assert!(
+        wired["dep_kinds"]
+            .as_array()
+            .expect("no dep_kinds")
+            .iter()
+            .any(|kind| kind["kind"].is_null()),
+        "acadsharp-rs has to be a normal dependency, and cargo says it is {}",
+        wired["dep_kinds"]
+    );
 }
 
 // ---------------------------------------------------------------------------
