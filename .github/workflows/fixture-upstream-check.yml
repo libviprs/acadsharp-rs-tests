@@ -1,0 +1,42 @@
+name: fixture-upstream-check
+
+# Asks whether ACadSharp's bytes at the pinned commit still match what this
+# repo committed. It is deliberately manual and deliberately read-only.
+#
+# It will never update a sha256. If upstream's bytes change under a pinned
+# commit, that is a supply-chain event and it should arrive as a red run with a
+# visible diff, not as a quiet commit. `git diff --exit-code` is what makes the
+# difference visible rather than absorbed.
+#
+# A separate file rather than a job in ci.yml because it needs the network,
+# while PR CI is required to work without it.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Monthly is enough. The commit is pinned, so this is watching for the rare
+    # case of history being rewritten upstream, not for ordinary churn.
+    - cron: '23 5 1 * *'
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    name: Upstream bytes still match the manifest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Re-download from the pinned commit and diff
+        run: |
+          set -euo pipefail
+          python3 tools/fetch_acadsharp_fixtures.py fetch
+          # fetch verifies sha256 before writing, so it has already failed if a
+          # byte moved. This is the belt-and-braces half: if anything on disk
+          # differs from what is committed, show it rather than absorbing it.
+          git diff --exit-code -- fixtures/dwg/ || {
+            echo "::error::upstream bytes at the pinned commit differ from what is committed. Do not update the manifest without understanding why." >&2
+            exit 1
+          }
+          echo "upstream matches the committed corpus"
