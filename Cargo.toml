@@ -32,6 +32,13 @@ sha2 = "0.10"
 ruzstd = "0.9"
 
 [dev-dependencies]
+# Parsing `.github/workflows/ci.yml` and the clone action as YAML rather than as
+# text. `tests/counterpart_pin.rs` asserts things about jobs, steps and step
+# order, and a regex over YAML answers a different question than the parser the
+# runner uses: an assertion that a job "contains" a string passes on a string
+# inside a comment, and fails on a perfectly good step written with different
+# quoting.
+yaml-rust2 = "0.10"
 # Reading the frozen reference records back structurally. The suite asserts
 # properties of the canonical stream (first record, schema version, at least one
 # primitive), and doing that with string matching would pass on a file that is
