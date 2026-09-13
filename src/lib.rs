@@ -7,6 +7,15 @@
 //! [`acadsharp-rs`]: https://github.com/libviprs/acadsharp-rs
 #![forbid(unsafe_op_in_unsafe_fn)]
 
+// The suite depends on `acadsharp-rs` by path so CI builds it against the
+// sibling checkout `COUNTERPART_REV` pins, but nothing in here decodes a DWG in
+// Rust yet, so no module has a reason to name the crate. This is that reason.
+// It keeps the dependency used for `unused_crate_dependencies`, which is off
+// today and would otherwise become a hard error the moment somebody switches it
+// on, because CI builds with `-Dwarnings`. Delete it when the first real `use`
+// lands.
+use acadsharp_rs as _;
+
 pub mod fixtures;
 pub mod parity;
 

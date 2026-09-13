@@ -70,16 +70,63 @@ against the manifest offline.
 - For the reference oracle only: the .NET SDK `reference/global.json` pins, and
   Python 3.14+ for `compression.zstd`. Neither is needed to run the Rust suite.
 
-## Open question this repo does not answer yet
+## How `acadsharp-rs` gets beside this one
 
-How `acadsharp-rs` gets laid down beside this one so the suite can build
-against it. That is a design decision for the epic rather than something to
-default into, and the org has two scars from getting it wrong: a sync gate that
-resolved an unset repository variable to "the default branch" and compared
-against whatever moved that morning, and an integration job that could clone a
-stale same-named counterpart branch and build against the wrong tree. Whatever
-lands should be a committed pin rather than a repository variable, and should
-fail rather than quietly fall back.
+`Cargo.toml` depends on the crate as `{ path = "../acadsharp-rs" }`, so a
+checkout of it has to sit next to this one. `COUNTERPART_REV` says which commit
+that is, and `.github/actions/clone-counterpart` puts it there:
+
+```
+COUNTERPART_REV          one 40-hex sha under a block of comments
+  |
+  v
+clone-counterpart        git fetch --depth 1 origin <that sha>
+  |                      checkout FETCH_HEAD, then check HEAD is that sha
+  |                      compare/main...<sha> must say identical or behind
+  v
+../acadsharp-rs          the crate every job here builds against
+```
+
+A branch name is never allowed in that file, and neither is a repository
+variable. Both shortcuts have already cost this org a wrong answer: a sync gate
+resolved an unset repository variable to the empty string, which
+`actions/checkout` reads as "the default branch", and compared against whatever
+moved that morning; and an integration job clones a same-named counterpart
+branch, so a stale branch that shares a name builds against the wrong tree
+(libviprs#1013). A missing sha, an unfetchable one, or a checkout that lands
+somewhere else all fail the job. There is no fallback.
+
+**The merged-only rule**: `COUNTERPART_REV` may only name a commit that is on
+`acadsharp-rs`' `main`. The action checks that through the compare API and
+accepts `identical` or `behind`, because a pin naming an older commit that is
+still an ancestor of `main` is merged and that is what every pin becomes as soon
+as the next crate PR lands. `ahead` or `diverged` means the pin names something
+that is not on `main`, and it is refused: a pin has to name something that will
+still be there tomorrow, and a PR head can be force-pushed or closed.
+
+Bumping the pin is a one-line PR. Everything the mechanism does lives in
+`tools/counterpart.sh`, which CI calls and `tests/counterpart_pin.rs` drives, so
+there is one implementation of each rule rather than a shell copy and a Rust
+copy that drift.
+
+### A change that needs both repos
+
+The crate pins this suite the other way, with a `SUITE_REV` and a
+`Suite (acadsharp-rs-tests)` job, and there an unmerged pin is allowed on a PR
+branch. That is what makes a breaking change landable. Order it like this, and
+expect the first two steps to be red:
+
+1. Open the suite PR here. It stays red, because `COUNTERPART_REV` cannot point
+   at a crate change that has not merged yet.
+2. Open the crate PR with `SUITE_REV` at this PR's head. Its `Suite` job prints
+   a `::notice` that the pin is not on the suite's `main` yet, and stays green.
+3. The crate PR goes green and merges.
+4. This PR bumps `COUNTERPART_REV` to the crate's merge commit, goes green and
+   merges.
+5. A one-line crate PR moves `SUITE_REV` onto this PR's merge commit.
+
+A change that touches only one repo needs none of that, and most do not. Both
+pins stay on `main` commits, and each side moves on its own.
 
 ## Licence
 
