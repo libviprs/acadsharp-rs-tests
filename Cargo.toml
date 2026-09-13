@@ -19,3 +19,11 @@ deprecated = "deny"
 incompatible_msrv = "warn"
 
 [dependencies]
+# Parsing fixtures/manifest.toml, which is the single source of truth for the
+# corpus. The loader below is the only thing that reads it from Rust.
+toml = "0.9"
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+# Only the integrity test hashes bytes; nothing in the library needs to.
+sha2 = "0.10"

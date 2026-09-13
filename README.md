@@ -9,7 +9,13 @@ same split `libviprs` and `libviprs-tests` already use.
 
 ## Status
 
-Scaffolding. The crate compiles and the CI gate runs, and that is all so far.
+The DWG fixture corpus is in. Seven files, one per generation ACadSharp's
+`DwgReader` documents as readable, taken from ACadSharp's own `samples/` at a
+pinned commit and verified on every `cargo test`. See
+[`fixtures/README.md`](fixtures/README.md) for provenance, licensing and how to
+add one.
+
+Nothing decodes them yet; that is the next phase.
 
 ## Requirements
 
