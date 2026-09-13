@@ -140,7 +140,22 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+      # tests/fixture_integrity.rs runs here, so the DWG corpus is checked by an
+      # already-required context rather than by an advisory job nobody reads.
+      # It needs no network, no .NET and no download: the committed corpus is
+      # authoritative and CI never refreshes it.
       - run: cargo test --all-targets
       # `--all-targets` skips doctests, so they need their own line or the
       # examples in the public API documentation are compiled by nothing.
       - run: cargo test --doc
+      # The same properties from the other side, and the one that catches a
+      # manifest whose pin has stopped being a pin. Offline by construction.
+      - name: Fixture corpus matches the manifest
+        run: python3 tools/fetch_acadsharp_fixtures.py verify
+      # The refusals that tool has to make, driven through a local stub server
+      # rather than a mocked urlopen: the interesting behaviour is how urllib
+      # follows redirects and how much of a body it reads, and a mock would
+      # only be asserting my own idea of that. Stdlib unittest, so there is
+      # nothing to install.
+      - name: The fetch tool refuses what it should
+        run: python3 -m unittest discover -s tools/tests -v
