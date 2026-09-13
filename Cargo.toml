@@ -19,6 +19,23 @@ deprecated = "deny"
 incompatible_msrv = "warn"
 
 [dependencies]
+# The crate this suite exists to test. CI lays it down beside this checkout at
+# exactly the sha in COUNTERPART_REV, through
+# `.github/actions/clone-counterpart`, so `..` is not a guess about anyone's
+# directory layout.
+#
+# By path rather than by git: a git dependency would pin the crate a second
+# time, in Cargo.lock, and two pins for one thing drift. The crate's own
+# `Suite (acadsharp-rs-tests)` job greps this exact line to check that the suite
+# it was handed points back at the crate under test, so keep the spelling on one
+# line.
+#
+# Nothing consumes it yet, because the crate is still scaffolding and no Rust
+# here decodes a DWG. `src/lib.rs` carries a `use acadsharp_rs as _;` so that
+# stays true without `unused_crate_dependencies` having anything to say about
+# it, today or on the day somebody turns that lint on under `-Dwarnings`.
+acadsharp-rs = { path = "../acadsharp-rs" }
+
 # Parsing fixtures/manifest.toml, which is the single source of truth for the
 # corpus. The loader below is the only thing that reads it from Rust.
 toml = "0.9"

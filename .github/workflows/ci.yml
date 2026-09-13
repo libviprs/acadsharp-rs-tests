@@ -3,15 +3,28 @@ name: CI
 # The Rust gate for this repo, the same four jobs and the same conventions as
 # `acadsharp-rs`, which is the crate this suite exercises.
 #
-# What is deliberately NOT here yet: any mechanism for laying `acadsharp-rs`
-# down beside this repo so the suite can build against it. That is a real
-# design decision rather than boilerplate, and the org has got it wrong before:
-# `libviprs-org` resolved an unset repository variable to "the default branch"
-# and silently compared against whatever moved that morning, and `libviprs`'
-# integration job could clone a stale same-named counterpart branch and build
-# against the wrong tree (libviprs#1013). Whatever lands here should be a
-# committed pin rather than a repository variable, and should fail rather than
-# fall back. The epic decides it; this file stays honest until then.
+# Every job here lays `acadsharp-rs` down beside the workspace before it runs
+# anything, through `./.github/actions/clone-counterpart`. That is not optional
+# and not an optimisation: `Cargo.toml` depends on the crate as
+# `{ path = "../acadsharp-rs" }`, so with no sibling cargo dies at manifest load
+# and nothing at all compiles, `cargo fmt` aside. The action fetches exactly the
+# sha in `COUNTERPART_REV`, as a sha, verifies the checkout landed on it, and
+# refuses a pin that is not on the crate's `main`.
+#
+# It is a committed pin and not a repository variable, and it fails rather than
+# falling back, because the org has paid for both shortcuts. `libviprs-org`
+# resolved an unset repository variable to the empty string, which
+# `actions/checkout` reads as "the default branch", so its gate compared against
+# whatever moved that morning. `libviprs`' integration job clones a same-named
+# counterpart branch, so a stale branch that shares a name builds against the
+# wrong tree (libviprs#1013).
+#
+# `VIPRS_REQUIRE_COUNTERPART: 1` in each job is the other half: it turns "I
+# cannot tell which acadsharp-rs this is" from a printed reason into a failure,
+# so a sibling that arrived some other way cannot pass for the pinned one.
+# `tests/counterpart_pin.rs` walks every job in this file and fails if one of
+# them is missing either piece, so a job added later cannot quietly run without
+# the counterpart.
 #
 # Jobs, all intended to be required checks on `main` once there is something to
 # require them against:
@@ -80,8 +93,14 @@ jobs:
   check:
     name: Check & Lint
     runs-on: ubuntu-latest
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
     steps:
       - uses: actions/checkout@v4
+      # Right after checkout, because the pin file and `tools/counterpart.sh`
+      # both come out of the checkout, and because nothing below this line can
+      # even load the manifest without the sibling.
+      - uses: ./.github/actions/clone-counterpart
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
@@ -100,8 +119,14 @@ jobs:
     # (libviprs#1011, libviprs-cli#57).
     name: MSRV
     runs-on: ubuntu-latest
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
     steps:
       - uses: actions/checkout@v4
+      # Right after checkout, because the pin file and `tools/counterpart.sh`
+      # both come out of the checkout, and because nothing below this line can
+      # even load the manifest without the sibling.
+      - uses: ./.github/actions/clone-counterpart
       - uses: dtolnay/rust-toolchain@1.97
       - uses: Swatinem/rust-cache@v2
       # The floor is written in three places and nothing else compares them, so
@@ -142,8 +167,13 @@ jobs:
       # drops a link and renders inert bracketed text on docs.rs while the job
       # stays green (libviprs#697, #795).
       RUSTDOCFLAGS: -D rustdoc::broken_intra_doc_links -D rustdoc::private_intra_doc_links -D rustdoc::redundant_explicit_links
+      VIPRS_REQUIRE_COUNTERPART: 1
     steps:
       - uses: actions/checkout@v4
+      # Right after checkout, because the pin file and `tools/counterpart.sh`
+      # both come out of the checkout, and because nothing below this line can
+      # even load the manifest without the sibling.
+      - uses: ./.github/actions/clone-counterpart
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       # All features, so a gated surface resolves instead of reading as broken
@@ -153,8 +183,14 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
     steps:
       - uses: actions/checkout@v4
+      # Right after checkout, because the pin file and `tools/counterpart.sh`
+      # both come out of the checkout, and because nothing below this line can
+      # even load the manifest without the sibling.
+      - uses: ./.github/actions/clone-counterpart
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       # `tools/regenerate_reference.py` imports `compression.zstd`, which is

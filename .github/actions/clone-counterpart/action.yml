@@ -1,0 +1,51 @@
+name: Clone the pinned acadsharp-rs
+description: >
+  Lay libviprs/acadsharp-rs down beside this checkout at exactly the commit in
+  COUNTERPART_REV, and refuse everything else. There is no branch-name guessing,
+  no repository variable and no fallback to the default branch, so a run here is
+  always about the revision this repository declares. The rule itself lives in
+  tools/counterpart.sh, which tests/counterpart_pin.rs also drives, so CI and
+  cargo test cannot drift apart about it. Check this repository out first
+  (actions/checkout@v4): both the pin file and that script come from the
+  checkout.
+
+inputs:
+  token:
+    description: >
+      Token for the compare call that enforces the merged-only rule. `gh api`
+      wants one even for a public repository. There is deliberately no input for
+      the revision: the pin comes from the committed file, and letting a caller
+      pass one is the repository-variable failure with extra steps.
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Lay acadsharp-rs down at exactly COUNTERPART_REV
+      shell: bash
+      env:
+        COUNTERPART_REPO: ${{ github.repository_owner }}/acadsharp-rs
+      # The parent of the workspace is the directory that has to hold
+      # `acadsharp-rs/`, because the dependency is `../acadsharp-rs` relative to
+      # this checkout. The script refuses a destination that already has
+      # something in it rather than fetching over somebody's tree.
+      run: '"$GITHUB_WORKSPACE/tools/counterpart.sh" clone "$GITHUB_WORKSPACE/../acadsharp-rs"'
+
+    - name: COUNTERPART_REV names a commit on acadsharp-rs main
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        COUNTERPART_REPO: ${{ github.repository_owner }}/acadsharp-rs
+      run: |
+        set -euo pipefail
+        rev="$("$GITHUB_WORKSPACE/tools/counterpart.sh" rev)"
+        # An `if` rather than a swallowed error, so a failed compare call says
+        # so in the log instead of arriving here as an empty string with no
+        # explanation. Either way the rule below refuses a status it does not
+        # recognise rather than reading silence as consent.
+        if ! status="$(gh api "repos/${COUNTERPART_REPO}/compare/main...${rev}" --jq .status)"; then
+          echo "the compare call for main...${rev} failed, so I have no status to judge"
+          status=""
+        fi
+        "$GITHUB_WORKSPACE/tools/counterpart.sh" merged-only "$status" "$rev"

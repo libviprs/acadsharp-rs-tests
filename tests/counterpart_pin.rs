@@ -676,19 +676,26 @@ fn the_script_fetches_exactly_one_sha_and_never_a_branch() {
     let fetches: Vec<&str> = body
         .lines()
         .map(str::trim)
-        .filter(|line| !line.starts_with('#') && line.contains(" fetch "))
+        .filter(|line| !line.starts_with('#') && line.contains("git ") && line.contains("fetch"))
         .collect();
     assert_eq!(
         fetches.len(),
         1,
-        "there should be exactly one fetch in the pin mechanism, and I found {}: {fetches:?}",
+        "there should be exactly one git fetch in the pin mechanism, and I found {}: {fetches:?}",
         fetches.len()
     );
     assert!(
-        fetches[0].ends_with("\"$REV\"") || fetches[0].ends_with("\"$REV\";"),
+        fetches[0].contains("origin \"$REV\""),
         "the fetch must name the validated sha and nothing else, and it reads: {}",
         fetches[0]
     );
+    for forbidden in ["origin/", "refs/heads", "--tags", "main"] {
+        assert!(
+            !fetches[0].contains(forbidden),
+            "the fetch must not mention {forbidden:?}, and it reads: {}",
+            fetches[0]
+        );
+    }
 
     #[cfg(unix)]
     {
