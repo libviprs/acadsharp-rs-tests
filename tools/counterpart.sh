@@ -312,7 +312,9 @@ main() {
       cmd_head "$1"
       ;;
     verify)
-      [ $# -ge 1 ] && [ $# -le 2 ] || misuse "verify takes a checkout directory and an optional pin file"
+      if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+        misuse "verify takes a checkout directory and an optional pin file"
+      fi
       cmd_verify "$1" "${2:-$DEFAULT_REV_FILE}"
       ;;
     merged-only)
@@ -320,7 +322,9 @@ main() {
       cmd_merged_only "$1" "$2"
       ;;
     clone)
-      [ $# -ge 1 ] && [ $# -le 2 ] || misuse "clone takes a destination directory and an optional pin file"
+      if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+        misuse "clone takes a destination directory and an optional pin file"
+      fi
       cmd_clone "$1" "${2:-$DEFAULT_REV_FILE}"
       ;;
     -h | --help | help)

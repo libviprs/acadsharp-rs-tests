@@ -107,6 +107,12 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo fmt -- --check
       - run: cargo clippy --all-targets -- -D warnings -W clippy::incompatible_msrv -W deprecated
+      # `tools/counterpart.sh` is the whole cross-repo pin, every job here runs
+      # it before anything else, and until this line nothing checked it. It is a
+      # step in an existing job rather than a job of its own on purpose: a new
+      # job is a new context name, and a context name that is not required is a
+      # check nobody has to pass. `shellcheck` ships on the runner image.
+      - run: shellcheck tools/counterpart.sh
       # This crate has no features yet. When it grows one, add a clippy cell for
       # it here rather than assuming the default pass covers it: feature-gated
       # code is invisible to the default cell, and in the core repo that hole
