@@ -128,6 +128,37 @@ expect the first two steps to be red:
 A change that touches only one repo needs none of that, and most do not. Both
 pins stay on `main` commits, and each side moves on its own.
 
+### The second sibling: acadrust
+
+`ACADRUST_REV` pins libviprs/acadrust, the fork (never hakanaktt/acadrust, which
+is at 0.6.4 against the fork's 0.5.5 and moves its entity API in ordinary
+commits), by the same script and the same action as `COUNTERPART_REV`:
+`COUNTERPART_NAME=acadrust` in `tools/counterpart.sh`, and `pin: ACADRUST_REV`
+on `clone-counterpart`. It is one committed sha, fetched as a sha, verified
+after checkout, and refused unless `git merge-base --is-ancestor` finds it on
+the fork's `main`. `ACADRUST_REQUIRE=1` makes "I cannot tell which acadrust is
+beside this suite" a failure, and CI sets it.
+
+`Cargo.toml` depends on it as `{ path = "../acadrust", optional = true }` behind
+the `acadrust` feature, so a default `cargo test` compiles nothing from it. Cargo
+still reads the manifest of every path dependency at resolve time, optional or
+not (rust-lang/cargo#4544), so `../acadrust` has to exist for any cargo command
+to work here, exactly as `../acadsharp-rs` does. On a laptop that means the fork
+beside this checkout under the name `acadrust`: the local clone is called
+`acadrust-fork` today, so symlink or rename it.
+
+The suite's `Cargo.lock` is committed and CI builds with `--locked`: the
+emitters are built by this suite, so this lock, and not the fork's, decides
+which dependency versions a parity run resolves.
+
+Landing order for a paired acadrust and suite change is the one above with the
+fork in the crate's place: the suite PR waits, because `ACADRUST_REV` cannot
+point at a fork change that has not merged, and once the fork PR merges a
+one-line suite PR moves the pin. A sync of the fork from upstream is the same
+thing: the sync merges into the fork's `main` first, and moving `ACADRUST_REV`
+past it is its own one-line change, so a fork sync and a pin bump are one
+change in two steps, never a pin that runs ahead of `main`.
+
 ## Licence
 
 MIT.

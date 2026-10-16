@@ -1,0 +1,29 @@
+# The revision of libviprs/acadrust (the fork, never hakanaktt/acadrust) that
+# this suite's second emitter is built and tested against.
+#
+# `Cargo.toml` depends on it as `{ path = "../acadrust", optional = true }`
+# behind the `acadrust` feature, so CI lays a checkout down beside this one, and
+# this file says which commit it gets. It is the same mechanism and the same
+# rules as COUNTERPART_REV, from the same script (`tools/counterpart.sh`, with
+# `COUNTERPART_NAME=acadrust`): one committed sha, fetched as a sha, verified
+# after checkout, no branch name, no repository variable, no fallback.
+#
+# The merged-only rule, with reachability: this may only name a commit that
+# `git merge-base --is-ancestor` finds on the fork's `main`. A commit that
+# shares no history with `main` (a rewrite of main from the root) and a commit
+# on a branch that has not merged are both refused, on every ref.
+#
+# The fork and not upstream, because upstream is at 0.6.4 against the fork's
+# 0.5.5 and moves its entity API in ordinary commits. The emitter is written
+# against the fork, so a fork sync and a pin bump are one change.
+#
+# The first line below that is neither blank nor a comment is the pin, and it is
+# the whole line. A sha written inside one of these comments is prose.
+#
+# To bump it: put a libviprs/acadrust `main` commit here, run the suite with the
+# `acadrust` feature against a sibling checkout at that commit, and say below
+# what moved.
+39a11909acf56747f22c7309a0681bef8e6b61b8
+# libviprs/acadrust main @ 2026-10-16, after the hygiene work (committed lock,
+# private-file tests ignored with their reason) merged. Nothing in this suite
+# consumes the fork's API yet; the emitter that does is R3.2.

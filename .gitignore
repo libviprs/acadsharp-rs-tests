@@ -1,7 +1,8 @@
 # Rust / Cargo
 /target/
 **/*.rs.bk
-Cargo.lock
+# Cargo.lock is committed. The emitters are built by this suite, so this lock,
+# and not the fork's, decides which dependency versions a parity run resolves.
 
 # Build artifacts
 *.o

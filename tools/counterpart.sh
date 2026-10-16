@@ -19,6 +19,16 @@
 # drives it. That is deliberate: a rule written once in shell and again in Rust
 # is two rules, and the test can then only prove the copy.
 #
+# One script serves both pins. `COUNTERPART_NAME` selects which: unset or
+# `acadsharp-rs` is `COUNTERPART_REV` (the crate under test), `acadrust` is
+# `ACADRUST_REV` (the fork the second emitter is built from). Everything else
+# follows from the name, so the same rules and the same tests cover both by
+# table and not by copy.
+#
+# `COUNTERPART_URL_BASE` replaces `https://github.com` and exists for the tests:
+# a fixture repository rewritten from the root is the only way to reproduce
+# "fetchable by sha and reached by no branch" without the network.
+#
 # Exit codes are split three ways, because they mean different things to whoever
 # reads the red:
 #   0  allowed
@@ -30,8 +40,28 @@ set -euo pipefail
 PROG="$(basename "$0")"
 SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
 REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
-DEFAULT_REV_FILE="$REPO_ROOT/COUNTERPART_REV"
-COUNTERPART_REPO="${COUNTERPART_REPO:-libviprs/acadsharp-rs}"
+COUNTERPART_NAME="${COUNTERPART_NAME:-acadsharp-rs}"
+COUNTERPART_URL_BASE="${COUNTERPART_URL_BASE:-https://github.com}"
+
+# Everything that differs between the two pins, in one place.
+case "$COUNTERPART_NAME" in
+  acadsharp-rs)
+    PIN_FILE="COUNTERPART_REV"
+    REQUIRE_VAR="VIPRS_REQUIRE_COUNTERPART"
+    EXPECTED_VAR="VIPRS_COUNTERPART_EXPECTED_SHA"
+    ;;
+  acadrust)
+    PIN_FILE="ACADRUST_REV"
+    REQUIRE_VAR="ACADRUST_REQUIRE"
+    EXPECTED_VAR="ACADRUST_EXPECTED_SHA"
+    ;;
+  *)
+    printf '%s: COUNTERPART_NAME is %q, and the pins I know are acadsharp-rs and acadrust\n' "$(basename "$0")" "$COUNTERPART_NAME" >&2
+    exit 2
+    ;;
+esac
+DEFAULT_REV_FILE="$REPO_ROOT/$PIN_FILE"
+COUNTERPART_REPO="${COUNTERPART_REPO:-libviprs/$COUNTERPART_NAME}"
 
 # Set by parse_rev, expected_sha and resolve_head. Bash functions return an exit
 # status, not a value, and a command substitution would swallow the annotations
@@ -46,13 +76,14 @@ usage() {
   cat <<'EOF'
 usage: counterpart.sh <command> [args]
 
-  rev [rev-file]                    print the pinned acadsharp-rs sha
+  rev [rev-file]                    print the pinned sha
   expect [rev-file]                 print the sha the sibling must be at
   head <checkout-dir>               print the sha a sibling checkout is at
   verify <checkout-dir> [rev-file]  check the sibling is the commit we expect
   merged-only <status> <sha>        apply the merged-only rule to a compare status
-  clone <dest-dir> [rev-file]       fetch acadsharp-rs at exactly the pin
+  clone <dest-dir> [rev-file]       fetch the counterpart at exactly the pin
 
+COUNTERPART_NAME=acadsharp-rs|acadrust picks the pin (COUNTERPART_REV or ACADRUST_REV).
 exit codes: 0 allowed, 1 refused, 2 called wrong.
 EOF
 }
@@ -61,7 +92,7 @@ EOF
 # off stdout. It is also perfectly readable prose on a laptop, so there is one
 # message rather than two.
 refuse() {
-  printf '::error file=COUNTERPART_REV::%s\n' "$1"
+  printf '::error file=%s::%s\n' "$PIN_FILE" "$1"
   exit 1
 }
 
@@ -132,17 +163,18 @@ parse_rev() {
 # deliberately the crate PR under test rather than the commit this repo pins.
 expected_sha() {
   local file="$1"
-  if [ -n "${VIPRS_COUNTERPART_EXPECTED_SHA:-}" ]; then
+  local override="${!EXPECTED_VAR:-}"
+  if [ -n "$override" ]; then
     # Refused rather than ignored. Ignoring a malformed override would fall
     # back to the committed pin, and a silent fallback is the entire family of
     # bug this file exists to prevent.
-    validate_sha "$VIPRS_COUNTERPART_EXPECTED_SHA" "VIPRS_COUNTERPART_EXPECTED_SHA"
-    EXPECTED="$VIPRS_COUNTERPART_EXPECTED_SHA"
-    EXPECTED_FROM="the sha VIPRS_COUNTERPART_EXPECTED_SHA names"
+    validate_sha "$override" "$EXPECTED_VAR"
+    EXPECTED="$override"
+    EXPECTED_FROM="the sha $EXPECTED_VAR names"
   else
     parse_rev "$file"
     EXPECTED="$REV"
-    EXPECTED_FROM="the sha COUNTERPART_REV pins"
+    EXPECTED_FROM="the sha $PIN_FILE pins"
   fi
 }
 
@@ -237,21 +269,21 @@ cmd_verify() {
 
   if resolve_head "$dir"; then
     if [ "$HEAD_SHA" = "$EXPECTED" ]; then
-      printf 'The acadsharp-rs beside this suite is %s, which is %s.\n' "$HEAD_SHA" "$EXPECTED_FROM"
+      printf 'The %s beside this suite is %s, which is %s.\n' "$COUNTERPART_NAME" "$HEAD_SHA" "$EXPECTED_FROM"
       return 0
     fi
-    refuse "the acadsharp-rs beside this suite is at $HEAD_SHA and I expected $EXPECTED ($EXPECTED_FROM). Running the suite against a different crate than the one it pins is exactly the outcome this mechanism exists to prevent, so this is a failure and not a warning."
+    refuse "the $COUNTERPART_NAME beside this suite is at $HEAD_SHA and I expected $EXPECTED ($EXPECTED_FROM). Running the suite against a different crate than the one it pins is exactly the outcome this mechanism exists to prevent, so this is a failure and not a warning."
   fi
 
   # A wrong sibling is wrong either way; this branch is only about not knowing.
-  if [ "${VIPRS_REQUIRE_COUNTERPART:-}" = "1" ]; then
-    fail "VIPRS_REQUIRE_COUNTERPART=1 and I could not tell which acadsharp-rs is beside this suite: $HEAD_REASON. The clone action always leaves a real detached HEAD, so in CI this means something went wrong before this point. It fails rather than skips because a check that cannot tell is the same colour as one that passed."
+  if [ "${!REQUIRE_VAR:-}" = "1" ]; then
+    fail "$REQUIRE_VAR=1 and I could not tell which $COUNTERPART_NAME is beside this suite: $HEAD_REASON. The clone action always leaves a real detached HEAD, so in CI this means something went wrong before this point. It fails rather than skips because a check that cannot tell is the same colour as one that passed."
   fi
 
   # There is deliberately no "the sibling is missing" branch anywhere in here.
   # With a hard path dependency and no sibling, cargo dies at manifest load and
   # no test binary is ever built, so nothing would be left to print it.
-  printf 'counterpart_pin: I did not check which acadsharp-rs is beside this suite, because %s. Set VIPRS_REQUIRE_COUNTERPART=1 to make that a failure, which is what CI does.\n' "$HEAD_REASON"
+  printf 'counterpart_pin: I did not check which %s is beside this suite, because %s. Set %s=1 to make that a failure, which is what CI does.\n' "$COUNTERPART_NAME" "$HEAD_REASON" "$REQUIRE_VAR"
 }
 
 # The merged-only rule. `identical` and `behind` both mean the pin is on the
@@ -262,10 +294,10 @@ cmd_merged_only() {
   local status="$1" rev="$2"
   case "$status" in
     identical | behind)
-      printf 'acadsharp-rs %s is on main (compare says %s), so the pin is merged.\n' "$rev" "$status"
+      printf '%s %s is on main (compare says %s), so the pin is merged.\n' "$COUNTERPART_NAME" "$rev" "$status"
       ;;
     ahead | diverged)
-      refuse "refusing to pin an unmerged acadsharp-rs commit: compare/main...$rev says '$status', so $rev is not on that repository's main. A pin has to name something that will still be there tomorrow, and a PR head can be force-pushed or closed."
+      refuse "refusing to pin an unmerged $COUNTERPART_NAME commit: compare/main...$rev says '$status', so $rev is not on that repository's main. A pin has to name something that will still be there tomorrow, and a PR head can be force-pushed or closed."
       ;;
     *)
       refuse "I do not recognise the compare status '$status' for main...$rev, so I am refusing rather than reading it as merged. An empty value here means the compare call itself failed, and a value you do not expect means the API changed shape; neither of those is evidence that the pin is on main."
@@ -287,7 +319,7 @@ cmd_clone() {
 
   mkdir -p "$dest"
   git -C "$dest" init -q
-  git -C "$dest" remote add origin "https://github.com/${COUNTERPART_REPO}.git"
+  git -C "$dest" remote add origin "${COUNTERPART_URL_BASE}/${COUNTERPART_REPO}.git"
 
   # One sha, fetched as a sha. There is no refspec naming a branch anywhere in
   # the pin's own fetch, so there is nothing for a fallback to fall back to.
@@ -326,7 +358,7 @@ cmd_clone() {
   if [ "$HEAD_SHA" != "$REV" ]; then
     refuse "I asked for $REV and $dest is at $HEAD_SHA"
   fi
-  printf 'Checked out %s at %s, which is the sha COUNTERPART_REV pins.\n' "$COUNTERPART_REPO" "$HEAD_SHA"
+  printf 'Checked out %s at %s, which is the sha %s pins.\n' "$COUNTERPART_REPO" "$HEAD_SHA" "$PIN_FILE"
 }
 
 main() {

@@ -18,6 +18,10 @@ deprecated = "deny"
 [lints.clippy]
 incompatible_msrv = "warn"
 
+[features]
+# Off by default. `emit-acadrust` (R3.2) is the only thing that will use it.
+acadrust = ["dep:acadrust"]
+
 [dependencies]
 # The crate this suite exists to test. CI lays it down beside this checkout at
 # exactly the sha in COUNTERPART_REV, through
@@ -35,6 +39,16 @@ incompatible_msrv = "warn"
 # stays true without `unused_crate_dependencies` having anything to say about
 # it, today or on the day somebody turns that lint on under `-Dwarnings`.
 acadsharp-rs = { path = "../acadsharp-rs" }
+
+# The second engine, the fork the parity run's `emit-acadrust` is written
+# against. Optional, so a default `cargo test` does not build it, but cargo
+# reads the manifest of every path dependency at resolve time, optional or not
+# (rust-lang/cargo#4544): `../acadrust` has to be on disk for `cargo metadata`
+# to succeed at all, exactly as `../acadsharp-rs` already does. CI lays it down
+# at `ACADRUST_REV` through the same action, and `README.md` says what a laptop
+# checkout needs. A git dependency would pin it a second time, in a second
+# mechanism, and the fork's own Suite job needs a path to test its PR head.
+acadrust = { path = "../acadrust", optional = true }
 
 # Parsing fixtures/manifest.toml, which is the single source of truth for the
 # corpus. The loader below is the only thing that reads it from Rust.
