@@ -64,7 +64,12 @@ ruzstd = "0.9"
 
 # Reading canonical schema 1 (src/canonical.rs). A dependency now, not a dev one:
 # the parser and the comparator are library code, and both emitters link them.
-serde_json = "1"
+#
+# `float_roundtrip` is not optional. serde_json's default float parser is fast
+# and not correctly rounded: it reads `5.684341886080802E-16` one ulp away from
+# the double the oracle wrote, so a stream would not survive a parse, a render
+# and a parse. The strict reader has to give back the double that was written.
+serde_json = { version = "1", features = ["float_roundtrip"] }
 
 [dev-dependencies]
 # Parsing `.github/workflows/ci.yml` and the clone action as YAML rather than as
@@ -74,3 +79,11 @@ serde_json = "1"
 # inside a comment, and fails on a perfectly good step written with different
 # quoting.
 yaml-rust2 = "0.10"
+
+# The adapter binaries. Each is a process, so a reader that aborts on a
+# malformed file takes only its own row down. `emit-acadrust` needs the
+# `acadrust` feature, because acadrust is optional where acadsharp-rs is not.
+[[bin]]
+name = "emit-acadrust"
+path = "src/bin/emit-acadrust.rs"
+required-features = ["acadrust"]

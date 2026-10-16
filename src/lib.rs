@@ -16,8 +16,11 @@
 // lands.
 use acadsharp_rs as _;
 
+#[cfg(feature = "acadrust")]
+pub mod acadrust_emit;
 pub mod canonical;
 pub mod compare;
+pub mod emit;
 pub mod fixtures;
 pub mod parity;
 

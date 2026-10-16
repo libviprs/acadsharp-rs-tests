@@ -755,6 +755,10 @@ pub struct SidecarEntry {
     pub record_type: Option<String>,
     /// acadsharp-rs's partial sidecars mark an entity that came from an insert.
     pub from_insert: Option<bool>,
+    /// The leaf entity's DXF name (`LWPOLYLINE`), when the engine writes it
+    /// (`d`). `t` is the schema 1 record type and must agree with the record;
+    /// this is the other thing a diff wants to say about the entity.
+    pub dxf_name: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -846,7 +850,7 @@ impl Sidecar {
             };
             if map
                 .keys()
-                .any(|k| !matches!(k.as_str(), "i" | "h" | "t" | "x"))
+                .any(|k| !matches!(k.as_str(), "i" | "h" | "t" | "x" | "d"))
             {
                 return Err(fail(line, SidecarErrorKind::UnknownField));
             }
@@ -909,11 +913,17 @@ impl Sidecar {
                     },
                 ));
             }
+            let dxf_name = match map.get("d") {
+                None => None,
+                Some(Value::String(d)) => Some(d.clone()),
+                Some(_) => return Err(fail(line, SidecarErrorKind::WrongType("a string"))),
+            };
             entries.push(SidecarEntry {
                 index: n,
                 handles,
                 record_type,
                 from_insert,
+                dxf_name,
             });
         }
         if entries.len() != records.len() {
@@ -931,4 +941,291 @@ impl Sidecar {
     pub fn handles(&self, index: usize) -> Option<&[String]> {
         self.entries.get(index).map(|e| e.handles.as_slice())
     }
+}
+
+// ---- the writer -----------------------------------------------------------------
+
+/// Why a record could not be written.
+#[derive(Debug, Clone, PartialEq)]
+pub enum WriteError {
+    /// NaN or an infinity. A canonical record cannot carry one, and a NaN
+    /// coordinate is a real finding about the reader rather than a formatting
+    /// problem, so the write fails and names the value.
+    NonFinite { field: &'static str, value: f64 },
+}
+
+impl fmt::Display for WriteError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::NonFinite { field, value } => write!(
+                f,
+                "refusing to encode the non-finite value {value:?} in `{field}`; a canonical \
+                 record cannot carry NaN or an infinity"
+            ),
+        }
+    }
+}
+
+impl std::error::Error for WriteError {}
+
+/// A double the way the schema spells one: shortest round-trip, a `.0` when the
+/// shortest form has no `.` or exponent, and negative zero written as zero.
+pub fn format_real(value: f64) -> Result<String, WriteError> {
+    real("value", value)
+}
+
+fn real(field: &'static str, value: f64) -> Result<String, WriteError> {
+    if !value.is_finite() {
+        return Err(WriteError::NonFinite { field, value });
+    }
+    // -0.0 and 0.0 are the same number and print differently. Two engines that
+    // both round-trip IEEE-754 correctly can disagree about which one the same
+    // geometry produces, so the format only ever has one of them.
+    if value == 0.0 {
+        return Ok("0.0".to_string());
+    }
+    // Rust's Debug for f64 is the shortest string that reads back as the same
+    // double. It already spells an integral value `100.0`; a form past 1e16
+    // comes out with an exponent, which is a visible double as well.
+    let text = format!("{value:?}");
+    if text.contains(['.', 'e', 'E']) {
+        Ok(text)
+    } else {
+        Ok(format!("{text}.0"))
+    }
+}
+
+/// A JSON string the way schema 1 spells one: only `"`, `\` and the C0
+/// controls are escaped, and everything else, non-ASCII included, is UTF-8.
+/// A default JSON encoder would escape the non-ASCII, which is why the schema
+/// hand-writes the policy instead of inheriting one that can change.
+pub fn quote(value: &str) -> String {
+    use fmt::Write as _;
+    let mut out = String::with_capacity(value.len() + 2);
+    out.push('"');
+    for c in value.chars() {
+        match c {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\u{8}' => out.push_str("\\b"),
+            '\u{c}' => out.push_str("\\f"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c if (c as u32) < 0x20 => {
+                let _ = write!(out, "\\u{:04x}", c as u32);
+            }
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+    out
+}
+
+struct JsonLine {
+    out: String,
+}
+
+impl JsonLine {
+    fn new(record: &str) -> Self {
+        Self {
+            out: format!("{{\"schema\":{SCHEMA},\"record\":\"{record}\""),
+        }
+    }
+
+    fn key(&mut self, name: &str) {
+        self.out.push_str(",\"");
+        self.out.push_str(name);
+        self.out.push_str("\":");
+    }
+
+    fn uint(&mut self, name: &str, v: u64) {
+        self.key(name);
+        self.out.push_str(&v.to_string());
+    }
+
+    fn boolean(&mut self, name: &str, v: bool) {
+        self.key(name);
+        self.out.push_str(if v { "true" } else { "false" });
+    }
+
+    fn string(&mut self, name: &str, v: &str) {
+        self.key(name);
+        self.out.push_str(&quote(v));
+    }
+
+    fn float(&mut self, name: &'static str, v: f64) -> Result<(), WriteError> {
+        self.key(name);
+        self.out.push_str(&real(name, v)?);
+        Ok(())
+    }
+
+    fn triple(&mut self, names: [&'static str; 3], v: &Vec3) -> Result<(), WriteError> {
+        for (n, x) in names.into_iter().zip(v) {
+            self.float(n, *x)?;
+        }
+        Ok(())
+    }
+
+    fn points(&mut self, name: &'static str, points: &[Vec3]) -> Result<(), WriteError> {
+        self.key(name);
+        self.out.push('[');
+        for (i, p) in points.iter().enumerate() {
+            if i > 0 {
+                self.out.push(',');
+            }
+            self.out.push('[');
+            for (j, x) in p.iter().enumerate() {
+                if j > 0 {
+                    self.out.push(',');
+                }
+                self.out.push_str(&real(name, *x)?);
+            }
+            self.out.push(']');
+        }
+        self.out.push(']');
+        Ok(())
+    }
+
+    fn floats(&mut self, name: &'static str, values: &[f64]) -> Result<(), WriteError> {
+        self.key(name);
+        self.out.push('[');
+        for (i, x) in values.iter().enumerate() {
+            if i > 0 {
+                self.out.push(',');
+            }
+            self.out.push_str(&real(name, *x)?);
+        }
+        self.out.push(']');
+        Ok(())
+    }
+
+    fn done(mut self) -> String {
+        self.out.push('}');
+        self.out
+    }
+}
+
+/// One record as one line, without its newline, fields in the schema's order.
+pub fn render_record(record: &Record) -> Result<String, WriteError> {
+    let mut l = JsonLine::new(record.kind());
+    match record {
+        Record::Document(d) => {
+            l.string("format", &d.format);
+            l.string("acad_version", &d.acad_version);
+            l.uint("maintenance_version", d.maintenance_version);
+        }
+        Record::View(v) => {
+            l.uint("index", v.index);
+            l.string("name", &v.name);
+            l.string("kind", &v.kind);
+        }
+        Record::Line(r) => {
+            l.uint("view", r.view);
+            l.triple(["x1", "y1", "z1"], &r.a)?;
+            l.triple(["x2", "y2", "z2"], &r.b)?;
+        }
+        Record::Polyline(r) => {
+            l.uint("view", r.view);
+            l.boolean("closed", r.closed);
+            l.triple(["nx", "ny", "nz"], &r.normal)?;
+            l.points("points", &r.points)?;
+            l.floats("bulges", &r.bulges)?;
+        }
+        Record::Circle(r) => {
+            l.uint("view", r.view);
+            l.triple(["cx", "cy", "cz"], &r.center)?;
+            l.float("radius", r.radius)?;
+            l.triple(["nx", "ny", "nz"], &r.normal)?;
+        }
+        Record::Arc(r) => {
+            l.uint("view", r.view);
+            l.triple(["cx", "cy", "cz"], &r.center)?;
+            l.float("radius", r.radius)?;
+            l.float("start", r.start)?;
+            l.float("end", r.end)?;
+            l.triple(["nx", "ny", "nz"], &r.normal)?;
+        }
+        Record::Ellipse(r) => {
+            l.uint("view", r.view);
+            l.triple(["cx", "cy", "cz"], &r.center)?;
+            l.triple(["mx", "my", "mz"], &r.major)?;
+            l.float("ratio", r.ratio)?;
+            l.float("start", r.start)?;
+            l.float("end", r.end)?;
+            l.triple(["nx", "ny", "nz"], &r.normal)?;
+        }
+        Record::Spline(r) => {
+            l.uint("view", r.view);
+            l.uint("degree", r.degree);
+            l.boolean("closed", r.closed);
+            l.boolean("periodic", r.periodic);
+            l.points("control_points", &r.control_points)?;
+            l.floats("knots", &r.knots)?;
+            l.floats("weights", &r.weights)?;
+            l.points("fit_points", &r.fit_points)?;
+        }
+        Record::Polygon(r) => {
+            l.uint("view", r.view);
+            l.points("points", &r.points)?;
+        }
+        Record::Point(r) => {
+            l.uint("view", r.view);
+            l.triple(["x", "y", "z"], &r.at)?;
+        }
+        Record::Text(r) => {
+            l.uint("view", r.view);
+            l.triple(["x", "y", "z"], &r.at)?;
+            l.float("height", r.height)?;
+            l.float("rotation", r.rotation)?;
+            l.float("width_factor", r.width_factor)?;
+            l.string("halign", &r.halign);
+            l.string("valign", &r.valign);
+            l.string("style", &r.style);
+            l.string("text", &r.text);
+        }
+        Record::Warning(r) => {
+            l.string("category", &r.category);
+            l.string("entity_type", &r.entity_type);
+            l.string("detail", &r.detail);
+        }
+    }
+    Ok(l.done())
+}
+
+/// A whole stream: one record per line, LF, and a final newline.
+pub fn render_stream(records: &[Record]) -> Result<String, WriteError> {
+    let mut out = String::new();
+    for record in records {
+        out.push_str(&render_record(record)?);
+        out.push('\n');
+    }
+    Ok(out)
+}
+
+/// A sidecar, one line per entry: `{"i":..,"h":[..],"t":".."}`, with `x` and
+/// `d` when the engine has them.
+pub fn render_sidecar(entries: &[SidecarEntry]) -> String {
+    let mut out = String::new();
+    for e in entries {
+        out.push_str(&format!("{{\"i\":{},\"h\":[", e.index));
+        for (i, h) in e.handles.iter().enumerate() {
+            if i > 0 {
+                out.push(',');
+            }
+            out.push_str(&quote(h));
+        }
+        out.push(']');
+        if let Some(t) = &e.record_type {
+            out.push_str(&format!(",\"t\":{}", quote(t)));
+        }
+        if let Some(x) = e.from_insert {
+            out.push_str(&format!(",\"x\":{x}"));
+        }
+        if let Some(d) = &e.dxf_name {
+            out.push_str(&format!(",\"d\":{}", quote(d)));
+        }
+        out.push_str("}\n");
+    }
+    out
 }
