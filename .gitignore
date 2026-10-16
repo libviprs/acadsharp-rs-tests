@@ -17,8 +17,10 @@
 # .NET. The reference oracle under reference/ is a JIT console app built with
 # the pinned SDK; its intermediate and output directories are per-architecture
 # and must never be committed. packages.lock.json is NOT here: it is the pin.
-[Bb]in/
-[Oo]bj/
+# Scoped to reference/: `src/bin/` is where the emitter binaries live, and an
+# unscoped `bin/` pattern kept them out of git without a word.
+reference/**/[Bb]in/
+reference/**/[Oo]bj/
 *.user
 
 # Python tooling. tools/ carries the fixture fetch/verify script and its

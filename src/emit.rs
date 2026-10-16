@@ -33,8 +33,24 @@ pub struct EmitArgs {
 impl EmitArgs {
     /// `--fixture <id> --out <dir>`, in either order.
     pub fn parse<I: IntoIterator<Item = String>>(args: I) -> Result<Self, String> {
-        let _ = args;
-        todo!("R3.2")
+        let mut fixture = None;
+        let mut out = None;
+        let mut it = args.into_iter();
+        while let Some(arg) = it.next() {
+            match arg.as_str() {
+                "--fixture" => {
+                    fixture = Some(it.next().ok_or("--fixture needs a fixture id")?);
+                }
+                "--out" => {
+                    out = Some(PathBuf::from(it.next().ok_or("--out needs a directory")?));
+                }
+                other => return Err(format!("I do not know the argument {other:?}")),
+            }
+        }
+        Ok(Self {
+            fixture: fixture.ok_or("--fixture <id> is required")?,
+            out: out.ok_or("--out <dir> is required")?,
+        })
     }
 }
 
@@ -56,14 +72,75 @@ pub struct RunInfo {
 
 impl RunInfo {
     pub fn to_json(&self) -> String {
-        todo!("R3.2")
+        // Keys sort, so the file is a function of the run and nothing else.
+        let value = serde_json::json!({
+            "engine": self.engine,
+            "engine_pin": self.engine_pin,
+            "engine_head": self.engine_head,
+            "fixture": self.fixture,
+            "fixture_sha256": self.fixture_sha256,
+            "target": self.target,
+            "rayon_num_threads": self.rayon_num_threads,
+        });
+        let mut text = serde_json::to_string_pretty(&value).unwrap_or_default();
+        text.push('\n');
+        text
+    }
+
+    /// This run, for `fixture`: the target triple's pieces and the thread count
+    /// as the process sees them.
+    pub fn for_run(
+        engine: &str,
+        engine_pin: &str,
+        engine_head: Option<String>,
+        fixture: &crate::fixtures::DwgFixture,
+    ) -> Self {
+        Self {
+            engine: engine.to_string(),
+            engine_pin: engine_pin.to_string(),
+            engine_head,
+            fixture: fixture.id.clone(),
+            fixture_sha256: fixture.sha256.clone(),
+            target: format!("{}-{}", std::env::consts::ARCH, std::env::consts::OS),
+            rayon_num_threads: std::env::var("RAYON_NUM_THREADS").ok(),
+        }
     }
 }
 
 /// Where the three files for `fixture` and `engine` go under `out`.
 pub fn output_paths(out: &Path, fixture: &str, engine: &str) -> [PathBuf; 3] {
-    let _ = (out, fixture, engine);
-    todo!("R3.2")
+    [
+        out.join(format!("{fixture}.{engine}.jsonl")),
+        out.join(format!("{fixture}.{engine}.src.jsonl")),
+        out.join(format!("{fixture}.{engine}.run.json")),
+    ]
+}
+
+/// The commit a checkout is at, read off `.git/HEAD` without running git: a
+/// detached sha directly, or a branch followed through its ref file or
+/// `packed-refs`. `None` when the directory is not a checkout this can read.
+pub fn checkout_head(dir: &Path) -> Option<String> {
+    let git = dir.join(".git");
+    let head = std::fs::read_to_string(git.join("HEAD")).ok()?;
+    let head = head.trim();
+    let is_sha = |s: &str| {
+        s.len() == 40
+            && s.bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+    };
+    if is_sha(head) {
+        return Some(head.to_string());
+    }
+    let reference = head.strip_prefix("ref: ")?;
+    if let Ok(sha) = std::fs::read_to_string(git.join(reference)) {
+        let sha = sha.trim();
+        return is_sha(sha).then(|| sha.to_string());
+    }
+    let packed = std::fs::read_to_string(git.join("packed-refs")).ok()?;
+    packed.lines().find_map(|l| {
+        let (sha, name) = l.split_once(' ')?;
+        (name == reference && is_sha(sha)).then(|| sha.to_string())
+    })
 }
 
 /// Write `<id>.<engine>.jsonl`, `<id>.<engine>.src.jsonl` and
@@ -73,6 +150,14 @@ pub fn write_emission(
     run: &RunInfo,
     emission: &Emission,
 ) -> Result<[PathBuf; 3], String> {
-    let _ = (out, run, emission);
-    todo!("R3.2")
+    // Everything is rendered before anything is written, so a record that
+    // cannot be encoded leaves no half-written run behind.
+    let jsonl = crate::canonical::render_stream(&emission.records).map_err(|e| e.to_string())?;
+    let sidecar = crate::canonical::render_sidecar(&emission.sidecar);
+    let paths = output_paths(out, &run.fixture, &run.engine);
+    std::fs::create_dir_all(out).map_err(|e| format!("{}: {e}", out.display()))?;
+    for (path, text) in paths.iter().zip([jsonl, sidecar, run.to_json()]) {
+        std::fs::write(path, text).map_err(|e| format!("{}: {e}", path.display()))?;
+    }
+    Ok(paths)
 }

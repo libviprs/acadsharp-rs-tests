@@ -34,7 +34,7 @@ fn a_double_is_shortest_round_trip_with_a_visible_fraction() {
         (0.1, "0.1"),
         (1.0000000000000002, "1.0000000000000002"),
         (std::f64::consts::PI, "3.141592653589793"),
-        (1.5707963267948966, "1.5707963267948966"),
+        (std::f64::consts::FRAC_PI_2, "1.5707963267948966"),
     ] {
         assert_eq!(format_real(value).unwrap(), want);
     }
@@ -96,7 +96,10 @@ fn only_what_json_forbids_bare_is_escaped() {
     // Everything else, non-ASCII included, is UTF-8. A default JSON encoder
     // would escape these, which is why the schema hand-writes the policy.
     assert_eq!(quote("\u{c4}\u{d6}\u{dc}"), "\"\u{c4}\u{d6}\u{dc}\"");
-    assert_eq!(quote("\u{2205}45,6 \u{1f600}"), "\"\u{2205}45,6 \u{1f600}\"");
+    assert_eq!(
+        quote("\u{2205}45,6 \u{1f600}"),
+        "\"\u{2205}45,6 \u{1f600}\""
+    );
     assert_eq!(quote("a/b\u{7f}"), "\"a/b\u{7f}\"");
 }
 
@@ -120,7 +123,16 @@ fn every_frozen_stream_survives_a_parse_a_render_and_a_parse() {
             .unwrap_or_else(|e| panic!("{}: {e}", fixture.id));
         let text = render_stream(&original).unwrap_or_else(|e| panic!("{}: {e}", fixture.id));
         let again = parse_stream(&text).unwrap_or_else(|e| panic!("{}: {e}", fixture.id));
-        assert_eq!(again, original, "{}: the writer changed a value", fixture.id);
+        for (n, (a, b)) in original.iter().zip(&again).enumerate() {
+            assert_eq!(
+                a,
+                b,
+                "{}: the writer changed record {n}; it was written as {}",
+                fixture.id,
+                render_record(a).unwrap()
+            );
+        }
+        assert_eq!(again.len(), original.len(), "{}", fixture.id);
         // And the writer is a function of the records alone.
         assert_eq!(render_stream(&again).unwrap(), text, "{}", fixture.id);
         checked += 1;

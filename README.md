@@ -128,6 +128,15 @@ expect the first two steps to be red:
 A change that touches only one repo needs none of that, and most do not. Both
 pins stay on `main` commits, and each side moves on its own.
 
+### Emitters
+
+Each engine is driven through its own emitter binary, which writes a schema 1
+stream, a sidecar naming each record's entity, and a `run.json` with the engine
+commit, the thread count and the fixture's sha. `emit-acadrust` (the `acadrust`
+feature) is the first; `docs/EMITTERS.md` says what it writes and where it
+differs from the oracle, and `src/emit.rs` and `src/canonical.rs` are the harness
+and the writer the others will go through.
+
 ### The second sibling: acadrust
 
 `ACADRUST_REV` pins libviprs/acadrust, the fork (never hakanaktt/acadrust, which

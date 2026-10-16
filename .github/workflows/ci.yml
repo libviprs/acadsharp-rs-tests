@@ -116,6 +116,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo fmt -- --check
       - run: cargo clippy --locked --all-targets -- -D warnings -W clippy::incompatible_msrv -W deprecated
+      # The acadrust emitter is behind a feature the default cell never compiles, so
+      # it gets its own: feature-gated code is invisible to the default pass.
+      - run: cargo clippy --locked --all-targets --features acadrust -- -D warnings
       # `tools/counterpart.sh` is the whole cross-repo pin, every job here runs
       # it before anything else, and until this line nothing checked it. It is a
       # step in an existing job rather than a job of its own on purpose: a new
@@ -251,6 +254,11 @@ jobs:
       # `--all-targets` skips doctests, so they need their own line or the
       # examples in the public API documentation are compiled by nothing.
       - run: cargo test --locked --doc
+      # `emit-acadrust` and its tests, behind the `acadrust` feature, which needs
+      # `../acadrust` (laid down above) and builds it. Deterministic output, one
+      # thread against the default, the per-row mapping tests, and the comparison
+      # with the oracle.
+      - run: cargo test --locked --features acadrust --test emit_acadrust --test canonical_writer
       # The same properties from the other side, and the one that catches a
       # manifest whose pin has stopped being a pin. Offline by construction.
       - name: Fixture corpus matches the manifest
