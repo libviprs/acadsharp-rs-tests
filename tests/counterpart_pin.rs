@@ -42,7 +42,7 @@ use yaml_rust2::{Yaml, YamlLoader};
 /// should name. Written out rather than read from the pin file: reading it from
 /// the file would make this test agree with any value the file happens to hold,
 /// which is the shape of assertion that pins a constant to itself.
-const PINNED_TODAY: &str = "88d34a0f7a085de92477fcebee0a98cfc7d5624a";
+const PINNED_TODAY: &str = "ae89e80977561bfe98c12660bbf47963d7c87206";
 
 /// A sha that exists nowhere, for the shapes that must not resolve.
 const OTHER_SHA: &str = "0123456789abcdef0123456789abcdef01234567";
@@ -720,7 +720,7 @@ fn the_action_parses_and_has_no_way_to_fall_back_to_a_branch() {
 }
 
 #[test]
-fn the_script_fetches_exactly_one_sha_and_never_a_branch() {
+fn the_script_checks_out_only_the_pinned_sha_and_fetches_main_only_to_ask() {
     let path = script_path();
     let body = read(&path);
 
@@ -729,24 +729,51 @@ fn the_script_fetches_exactly_one_sha_and_never_a_branch() {
         .map(str::trim)
         .filter(|line| !line.starts_with('#') && line.contains("git ") && line.contains("fetch"))
         .collect();
+    // Two, and only these two (#18): the pin, fetched as a sha, and `main`,
+    // fetched blob-less so the pin can be asked whether `main` reaches it. The
+    // second is not a way to pick the commit: nothing is ever checked out from
+    // it, which the `checkout` assertion below holds.
     assert_eq!(
         fetches.len(),
-        1,
-        "there should be exactly one git fetch in the pin mechanism, and I found {}: {fetches:?}",
+        2,
+        "there should be exactly two git fetches in the pin mechanism (the sha, then main for \
+         the ancestry check), and I found {}: {fetches:?}",
         fetches.len()
     );
     assert!(
         fetches[0].contains("origin \"$REV\""),
-        "the fetch must name the validated sha and nothing else, and it reads: {}",
+        "the first fetch must name the validated sha and nothing else, and it reads: {}",
         fetches[0]
     );
     for forbidden in ["origin/", "refs/heads", "--tags", "main"] {
         assert!(
             !fetches[0].contains(forbidden),
-            "the fetch must not mention {forbidden:?}, and it reads: {}",
+            "the pin fetch must not mention {forbidden:?}, and it reads: {}",
             fetches[0]
         );
     }
+    assert!(
+        fetches[1].contains("refs/heads/main:refs/remotes/origin/main")
+            && !fetches[1].contains("--tags"),
+        "the second fetch has to be main into a remote-tracking ref and nothing else, and it \
+         reads: {}",
+        fetches[1]
+    );
+    let checkouts: Vec<&str> = body
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.starts_with('#') && line.contains("checkout -q"))
+        .collect();
+    assert_eq!(
+        checkouts.len(),
+        1,
+        "exactly one checkout, and it must be of the pin: {checkouts:?}"
+    );
+    assert!(
+        checkouts[0].ends_with("\"$REV\""),
+        "the checkout must name $REV, not FETCH_HEAD (which the main fetch overwrites): {}",
+        checkouts[0]
+    );
 
     #[cfg(unix)]
     {
