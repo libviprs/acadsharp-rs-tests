@@ -66,7 +66,7 @@ against the manifest offline.
 
 ## Requirements
 
-- **Rust 1.97+** (edition 2024)
+- **Rust 1.99+** (edition 2024)
 - For the reference oracle only: the .NET SDK `reference/global.json` pins, and
   Python 3.14+ for `compression.zstd`. Neither is needed to run the Rust suite.
 
