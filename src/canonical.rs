@@ -755,6 +755,10 @@ pub struct SidecarEntry {
     pub record_type: Option<String>,
     /// acadsharp-rs's partial sidecars mark an entity that came from an insert.
     pub from_insert: Option<bool>,
+    /// The leaf entity's DXF name (`LWPOLYLINE`), when the engine writes it
+    /// (`d`). `t` is the schema 1 record type and must agree with the record;
+    /// this is the other thing a diff wants to say about the entity.
+    pub dxf_name: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -909,11 +913,17 @@ impl Sidecar {
                     },
                 ));
             }
+            let dxf_name = match map.get("d") {
+                None => None,
+                Some(Value::String(d)) => Some(d.clone()),
+                Some(_) => return Err(fail(line, SidecarErrorKind::WrongType("a string"))),
+            };
             entries.push(SidecarEntry {
                 index: n,
                 handles,
                 record_type,
                 from_insert,
+                dxf_name,
             });
         }
         if entries.len() != records.len() {
@@ -931,4 +941,61 @@ impl Sidecar {
     pub fn handles(&self, index: usize) -> Option<&[String]> {
         self.entries.get(index).map(|e| e.handles.as_slice())
     }
+}
+
+// ---- the writer -----------------------------------------------------------------
+
+/// Why a record could not be written.
+#[derive(Debug, Clone, PartialEq)]
+pub enum WriteError {
+    /// NaN or an infinity. A canonical record cannot carry one, and a NaN
+    /// coordinate is a real finding about the reader rather than a formatting
+    /// problem, so the write fails and names the value.
+    NonFinite { field: &'static str, value: f64 },
+}
+
+impl fmt::Display for WriteError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::NonFinite { field, value } => write!(
+                f,
+                "refusing to encode the non-finite value {value:?} in `{field}`; a canonical \
+                 record cannot carry NaN or an infinity"
+            ),
+        }
+    }
+}
+
+impl std::error::Error for WriteError {}
+
+/// A double the way the schema spells one: shortest round-trip, a `.0` when the
+/// shortest form has no `.` or exponent, and negative zero written as zero.
+pub fn format_real(value: f64) -> Result<String, WriteError> {
+    let _ = value;
+    todo!("R3.2")
+}
+
+/// A JSON string the way schema 1 spells one: only `"`, `\\` and the C0
+/// controls are escaped, and everything else, non-ASCII included, is UTF-8.
+pub fn quote(value: &str) -> String {
+    let _ = value;
+    todo!("R3.2")
+}
+
+/// One record as one line, without its newline, fields in the schema's order.
+pub fn render_record(record: &Record) -> Result<String, WriteError> {
+    let _ = record;
+    todo!("R3.2")
+}
+
+/// A whole stream: one record per line, LF, and a final newline.
+pub fn render_stream(records: &[Record]) -> Result<String, WriteError> {
+    let _ = records;
+    todo!("R3.2")
+}
+
+/// A sidecar, one line per entry.
+pub fn render_sidecar(entries: &[SidecarEntry]) -> String {
+    let _ = entries;
+    todo!("R3.2")
 }

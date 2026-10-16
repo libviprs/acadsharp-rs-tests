@@ -74,3 +74,11 @@ serde_json = "1"
 # inside a comment, and fails on a perfectly good step written with different
 # quoting.
 yaml-rust2 = "0.10"
+
+# The adapter binaries. Each is a process, so a reader that aborts on a
+# malformed file takes only its own row down. `emit-acadrust` needs the
+# `acadrust` feature, because acadrust is optional where acadsharp-rs is not.
+[[bin]]
+name = "emit-acadrust"
+path = "src/bin/emit-acadrust.rs"
+required-features = ["acadrust"]
