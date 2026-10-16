@@ -709,7 +709,7 @@ macro_rules! pin_matrix {
         let (got, dest) = clone_from(&fx, &fx.orphan, "clone-orphan");
         got.expect_refused("a pin on a history main does not share")
             .mentions(&format!("::error file={PIN_FILE}::"))
-            .mentions(&fx.orphan)
+            .mentions(&format!("{} is not on", fx.orphan))
             .mentions(&fx.twin_on_main);
         assert!(
             nothing_checked_out(&dest),
@@ -727,7 +727,7 @@ macro_rules! pin_matrix {
         let (got, dest) = clone_from(&fx, &fx.unmerged, "clone-unmerged");
         got.expect_refused("a pin on a branch main has not merged")
             .mentions(&format!("::error file={PIN_FILE}::"))
-            .mentions(&fx.unmerged);
+            .mentions(&format!("{} is not on", fx.unmerged));
         assert!(nothing_checked_out(&dest));
     }
         }
@@ -1340,5 +1340,10 @@ fn clone_with_the_committed_acadrust_pin_succeeds() {
     assert_eq!(
         fs::read_to_string(dest.join(".git/HEAD")).unwrap().trim(),
         pin.stdout.trim()
+    );
+    let config = fs::read_to_string(dest.join(".git/config")).unwrap();
+    assert!(
+        config.contains("libviprs/acadrust.git"),
+        "the clone has to come from the fork, and its remote says:\n{config}"
     );
 }
