@@ -12,7 +12,7 @@
 # share a name builds against the wrong tree (libviprs#1013).
 #
 # So: one committed sha, fetched as a sha, verified after checkout, and refused
-# unless it is on the crate's `main`. No branch name, no repository variable, no
+# unless it is on the crate's `main` (`clone` checks ancestry itself). No branch name, no repository variable, no
 # fallback, and nothing swallowed with `|| true`.
 #
 # `.github/actions/clone-counterpart` calls this and `tests/counterpart_pin.rs`
@@ -290,12 +290,33 @@ cmd_clone() {
   git -C "$dest" remote add origin "https://github.com/${COUNTERPART_REPO}.git"
 
   # One sha, fetched as a sha. There is no refspec naming a branch anywhere in
-  # this file, so there is nothing for a fallback to fall back to.
+  # the pin's own fetch, so there is nothing for a fallback to fall back to.
   if ! git -C "$dest" fetch --quiet --depth 1 origin "$REV"; then
-    refuse "could not fetch $COUNTERPART_REPO at $REV. Either that sha does not exist there, or no ref reaches it (a fetch by sha needs the commit to be reachable from a ref). There is no fallback branch here on purpose."
+    refuse "could not fetch $COUNTERPART_REPO at $REV. Either that sha does not exist there, or it has been collected. There is no fallback branch here on purpose."
   fi
 
-  git -C "$dest" checkout -q FETCH_HEAD
+  # A fetch by sha succeeds for a commit no branch reaches, for as long as the
+  # host keeps the object (#18), so the fetch above says nothing about whether
+  # the pin is merged. Ask the question itself: fetch `main` blob-less into the
+  # same checkout and require the pin to be an ancestor of it. Plain ancestry,
+  # with no PR-ref arm, because this pin never names an unmerged commit. This
+  # runs before the checkout, so a refusal leaves no working tree behind.
+  if ! git -C "$dest" fetch --quiet --filter=blob:none origin "+refs/heads/main:refs/remotes/origin/main"; then
+    fail "could not fetch $COUNTERPART_REPO's main to check that $REV is on it, and a check that cannot tell is not a pass"
+  fi
+  if ! git -C "$dest" merge-base --is-ancestor "$REV" refs/remotes/origin/main; then
+    local tree twin hint=""
+    tree="$(git -C "$dest" rev-parse "$REV^{tree}" 2> /dev/null || true)"
+    if [ -n "$tree" ]; then
+      twin="$(git -C "$dest" log --format='%H %T' refs/remotes/origin/main | awk -v t="$tree" '$2 == t { print $1; exit }')"
+      if [ -n "$twin" ]; then
+        hint=" The commit on main with the same tree is $twin, which is what a rewrite of main looks like: move the pin there."
+      fi
+    fi
+    refuse "$REV is not on $COUNTERPART_REPO's main: no branch reaches it, so it is only fetchable until the host collects it.$hint"
+  fi
+
+  git -C "$dest" checkout -q --detach "$REV"
 
   # Verified, not announced. The org's action ends by echoing whatever
   # `rev-parse` returns, which reports a mismatch in the same voice as a match.

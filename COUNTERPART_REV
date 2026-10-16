@@ -26,8 +26,9 @@
 #
 # To bump it: put an `acadsharp-rs` `main` commit here, run the suite against a
 # sibling checkout at that commit, and say below what moved.
-88d34a0f7a085de92477fcebee0a98cfc7d5624a
-# acadsharp-rs main @ 2026-09-13, which is the CI gate plus the crate
+ae89e80977561bfe98c12660bbf47963d7c87206
+# Moved from 88d34a0f (main was rewritten with identical trees; ae89e80 is the
+# same tree on main, #18). Was: acadsharp-rs main @ 2026-09-13, which is the CI gate plus the crate
 # scaffolding, and everything that repository's main carries today. Nothing in
 # this suite consumes the crate's API yet, so this pin is not waiting on any
 # crate change, and moving it is a one-line PR rather than a two-repo dance.
