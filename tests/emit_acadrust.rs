@@ -15,7 +15,6 @@
 mod support;
 
 use std::collections::BTreeMap;
-use std::io::Cursor;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
@@ -24,7 +23,6 @@ use acadrust::entities::{
     Arc as ArcEntity, AttributeDefinition, AttributeEntity, Circle, EntityType, Face3D, Insert,
     Line, LwPolyline, MText, Solid, Text, Viewport,
 };
-use acadrust::io::dwg::DwgReader;
 use acadrust::tables::BlockRecord;
 use acadrust::types::{DxfVersion, Handle, Vector2, Vector3};
 use acadsharp_rs_tests::acadrust_emit::{extract, extract_bytes};
@@ -37,13 +35,6 @@ use acadsharp_rs_tests::fixtures;
 fn emit_fixture(id: &str) -> Emission {
     let bytes = fixtures::load(id).unwrap_or_else(|e| panic!("{e}"));
     extract_bytes(&bytes).unwrap_or_else(|e| panic!("{id}: {e}"))
-}
-
-fn open(id: &str) -> CadDocument {
-    let bytes = fixtures::load(id).unwrap_or_else(|e| panic!("{e}"));
-    DwgReader::from_stream(Cursor::new(bytes))
-        .read()
-        .unwrap_or_else(|e| panic!("{id}: {e}"))
 }
 
 /// Entity record kinds and how many of each, leaving out the framing records.
