@@ -94,6 +94,26 @@ pub struct DwgFixture {
     pub bytes: u64,
     pub sha256: String,
 
+    /// Which `[sources.*]` table this row's pin comes from. Every row names one.
+    #[serde(default)]
+    pub source: Option<String>,
+    /// `A` (AutoCAD-authored, decision grade), `B` (regression grade) or `C`
+    /// (stress: both engines open it and agree on counts). Single-valued.
+    #[serde(default)]
+    pub tier: Option<String>,
+    /// Set, with a reason, on a drawing that is meant to hold no geometry: an
+    /// empty drawing, or a refused-entity fixture whose stream is the warnings
+    /// that say so. A reference with no primitives is otherwise refused, since a
+    /// differential over nothing cannot fail; this is the explicit, reasoned
+    /// exemption, and it is checked from both sides (a row that claims it while
+    /// the stream holds primitives is refused too).
+    #[serde(default)]
+    pub no_primitives: Option<String>,
+    /// Where the provenance of a file that is not ACadSharp's own is written
+    /// down, pinned to a commit.
+    #[serde(default)]
+    pub provenance_evidence: Option<String>,
+
     /// The compressed canonical reference output, relative to `fixtures/`.
     ///
     /// Optional rather than an empty string on purpose: an empty string is a
@@ -373,11 +393,200 @@ impl DwgFixture {
     }
 }
 
+/// A source the corpus is taken from, pinned to one commit.
+///
+/// `[upstream]` is the original ACadSharp pin and the reference oracle's; this
+/// table is the per-source version of it, so a row cannot borrow another
+/// source's commit or host.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Source {
+    pub repository: String,
+    /// A full 40-character commit sha.
+    pub commit: String,
+    /// Every `source_url` of a row from this source starts with this and then
+    /// carries `commit`.
+    pub url_prefix: String,
+    pub license: String,
+    /// The licence text, relative to `fixtures/`.
+    pub license_file: String,
+}
+
+/// A row that is a file but not a drawing the oracle reads.
+///
+/// `[[fixture]]` stays what it always was, a DWG the oracle reads, because four
+/// things iterate that table and expect a drawing. The other roles get sibling
+/// tables, each with the provenance every row has.
+pub trait ManifestFile {
+    fn id(&self) -> &str;
+    /// Path relative to `fixtures/`.
+    fn file(&self) -> &str;
+    fn bytes(&self) -> u64;
+    fn sha256(&self) -> &str;
+    fn source(&self) -> &str;
+    fn source_url(&self) -> &str;
+
+    fn path(&self) -> PathBuf {
+        fixture_root().join(self.file())
+    }
+
+    /// The bytes, verified against the manifest (size, then sha256) first.
+    fn load(&self) -> Result<Vec<u8>, FixtureError> {
+        let data = std::fs::read(self.path()).map_err(|source| FixtureError::Unreadable {
+            id: self.id().to_string(),
+            path: self.path(),
+            source,
+        })?;
+        let corrupt = |detail: String| FixtureError::Corrupt {
+            id: self.id().to_string(),
+            detail,
+        };
+        if data.len() as u64 != self.bytes() {
+            return Err(corrupt(format!(
+                "{} bytes on disk, manifest says {}",
+                data.len(),
+                self.bytes()
+            )));
+        }
+        let got = format!("{:x}", Sha256::digest(&data));
+        if got != self.sha256() {
+            return Err(corrupt(format!(
+                "sha256 is {got}, manifest froze {}. These are not the same bytes.",
+                self.sha256()
+            )));
+        }
+        Ok(data)
+    }
+}
+
+macro_rules! manifest_file {
+    ($ty:ty) => {
+        impl ManifestFile for $ty {
+            fn id(&self) -> &str {
+                &self.id
+            }
+            fn file(&self) -> &str {
+                &self.file
+            }
+            fn bytes(&self) -> u64 {
+                self.bytes
+            }
+            fn sha256(&self) -> &str {
+                &self.sha256
+            }
+            fn source(&self) -> &str {
+                &self.source
+            }
+            fn source_url(&self) -> &str {
+                &self.source_url
+            }
+        }
+    };
+}
+
+/// A libviprs-dep recording of one drawing: the six-decimal `.txt` the fork's
+/// harness compares against.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Recording {
+    pub id: String,
+    pub file: String,
+    /// The `[[fixture]]` or `[[refusal]]` row this is a recording of.
+    pub drawing: String,
+    pub source: String,
+    pub source_path: String,
+    pub source_url: String,
+    pub license: String,
+    pub license_evidence: String,
+    pub provenance_evidence: String,
+    pub bytes: u64,
+    pub sha256: String,
+}
+manifest_file!(Recording);
+
+/// A file the oracle's inputs are adjudicated against: AutoCAD's own DXF twins.
+#[derive(Debug, Clone, Deserialize)]
+pub struct OracleInput {
+    pub id: String,
+    pub file: String,
+    pub source: String,
+    #[serde(default)]
+    pub acad_version: Option<String>,
+    /// `ascii` or `binary`, when the file name says.
+    #[serde(default)]
+    pub encoding: Option<String>,
+    /// The drawing this is the DXF twin of, when there is one.
+    #[serde(default)]
+    pub for_fixture: Option<String>,
+    pub source_path: String,
+    pub source_url: String,
+    pub license: String,
+    pub license_evidence: String,
+    pub bytes: u64,
+    pub sha256: String,
+}
+manifest_file!(OracleInput);
+
+/// AutoCAD's own object census, recorded by upstream.
+///
+/// One row per distinct blob. Upstream stores the same bytes under several
+/// names (five of the seven `sample_AC10xx_tree.json` are identical), and a
+/// corpus that stores one blob twice has two rows to keep honest, so the extra
+/// upstream locations are `also_source_*` on the one row and the fetch tool
+/// checks that each of them serves the same bytes.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Census {
+    pub id: String,
+    pub file: String,
+    pub source: String,
+    pub for_fixtures: Vec<String>,
+    #[serde(default)]
+    pub also_source_paths: Vec<String>,
+    #[serde(default)]
+    pub also_source_urls: Vec<String>,
+    pub source_path: String,
+    pub source_url: String,
+    pub license: String,
+    pub license_evidence: String,
+    pub bytes: u64,
+    pub sha256: String,
+}
+manifest_file!(Census);
+
+/// A drawing the oracle refuses, with the exit code it is expected to refuse
+/// it with.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Refusal {
+    pub id: String,
+    pub file: String,
+    pub source: String,
+    pub acad_version: String,
+    /// The oracle's `ExitCode` name, for example `UnsupportedVersion`.
+    pub oracle_exit: String,
+    pub oracle_exit_code: u32,
+    pub source_path: String,
+    pub source_url: String,
+    pub license: String,
+    pub license_evidence: String,
+    pub provenance_evidence: String,
+    pub bytes: u64,
+    pub sha256: String,
+}
+manifest_file!(Refusal);
+
 #[derive(Debug, Deserialize)]
 struct Manifest {
     upstream: Upstream,
+    #[serde(default)]
+    sources: std::collections::BTreeMap<String, Source>,
     #[serde(default, rename = "fixture")]
     fixtures: Vec<DwgFixture>,
+    #[serde(default, rename = "recording")]
+    recordings: Vec<Recording>,
+    #[serde(default, rename = "oracle_input")]
+    oracle_inputs: Vec<OracleInput>,
+    #[serde(default, rename = "census")]
+    censuses: Vec<Census>,
+    #[serde(default, rename = "refusal")]
+    refusals: Vec<Refusal>,
 }
 
 fn manifest() -> &'static Manifest {
@@ -388,6 +597,39 @@ fn manifest() -> &'static Manifest {
 /// Every fixture in the corpus, in manifest order.
 pub fn all() -> &'static [DwgFixture] {
     &manifest().fixtures
+}
+
+/// Every `[sources.*]` table, by name.
+pub fn sources() -> &'static std::collections::BTreeMap<String, Source> {
+    &manifest().sources
+}
+
+/// The libviprs-dep recordings.
+pub fn recordings() -> &'static [Recording] {
+    &manifest().recordings
+}
+
+/// The DXF twins and other inputs the oracle's output is adjudicated against.
+pub fn oracle_inputs() -> &'static [OracleInput] {
+    &manifest().oracle_inputs
+}
+
+/// AutoCAD's recorded object census files.
+pub fn censuses() -> &'static [Census] {
+    &manifest().censuses
+}
+
+/// Drawings the oracle is expected to refuse.
+pub fn refusals() -> &'static [Refusal] {
+    &manifest().refusals
+}
+
+/// The drawings of one tier, in manifest order.
+pub fn by_tier(tier: &str) -> Vec<&'static DwgFixture> {
+    all()
+        .iter()
+        .filter(|f| f.tier.as_deref() == Some(tier))
+        .collect()
 }
 
 /// The upstream revision the corpus was taken from.

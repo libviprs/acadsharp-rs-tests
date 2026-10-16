@@ -31,11 +31,12 @@ jobs:
       - name: Re-download from the pinned commit and diff
         run: |
           set -euo pipefail
+          # Every row of every table, from its own source's pinned commit.
           python3 tools/fetch_acadsharp_fixtures.py fetch
           # fetch verifies sha256 before writing, so it has already failed if a
           # byte moved. This is the belt-and-braces half: if anything on disk
           # differs from what is committed, show it rather than absorbing it.
-          git diff --exit-code -- fixtures/dwg/ || {
+          git diff --exit-code -- fixtures ':!fixtures/expected' || {
             echo "::error::upstream bytes at the pinned commit differ from what is committed. Do not update the manifest without understanding why." >&2
             exit 1
           }

@@ -205,13 +205,37 @@ fn the_canonical_stream_says_what_it_should() {
             .iter()
             .filter(|r| PRIMITIVE_RECORDS.contains(&record_name(r)))
             .count();
-        assert!(
-            primitives > 0,
-            "{}: the reference holds no primitive records. A differential over an empty \
-             stream compares two absences and passes, so an empty reference is refused \
-             rather than frozen.",
-            fixture.id
-        );
+        match fixture.no_primitives.as_deref() {
+            // A drawing meant to hold no geometry says so, with a reason, in
+            // its row, and then it has to hold warnings: the stream is what
+            // says why nothing was drawn, and it is what gets compared.
+            Some(reason) => {
+                assert!(
+                    !reason.trim().is_empty(),
+                    "{}: no_primitives has no reason",
+                    fixture.id
+                );
+                assert_eq!(
+                    primitives, 0,
+                    "{}: the row says it holds no primitives ({reason:?}) and the stream holds \
+                     {primitives}. Remove `no_primitives` from the row.",
+                    fixture.id
+                );
+                assert!(
+                    rows.iter().any(|r| record_name(r) == "warning"),
+                    "{}: no primitives and no warnings, so nothing is left to compare",
+                    fixture.id
+                );
+            }
+            None => assert!(
+                primitives > 0,
+                "{}: the reference holds no primitive records. A differential over an empty \
+                 stream compares two absences and passes, so an empty reference is refused \
+                 rather than frozen. A drawing meant to hold none says so with \
+                 `no_primitives = \"<reason>\"` in its manifest row.",
+                fixture.id
+            ),
+        }
     }
 }
 
@@ -317,8 +341,14 @@ fn curve_records_stay_curves() {
                 "ellipse" => {
                     *totals.entry("ellipse").or_default() += 1;
                     let ratio = row.get("ratio").and_then(Value::as_f64).unwrap();
+                    // The schema says (0, 1]. The oracle's singular value
+                    // decomposition hands back 1.0000000000000002 for a circle
+                    // under a rotated, mirrored block (`g13_ocs_plane`), one ulp
+                    // of noise on a ratio that is 1 in exact arithmetic. It is
+                    // frozen as it is, so the check allows exactly that much
+                    // and not a hundredth more.
                     assert!(
-                        ratio > 0.0 && ratio <= 1.0,
+                        ratio > 0.0 && ratio <= 1.0 + 4.0 * f64::EPSILON,
                         "{}: ellipse ratio {ratio} is not in (0, 1]",
                         fixture.id
                     );
@@ -479,12 +509,16 @@ fn the_svg_is_the_reference_viewer_styling() {
             "{}: the SVG does not ask for hairlines, so stroke width would scale with zoom",
             fixture.id
         );
-        assert!(
-            text.contains("font-family=\"sans-serif\""),
-            "{}: the SVG does not use the generic font family, so it would depend on a local \
-             AutoCAD or SHX font being installed",
-            fixture.id
-        );
+        // Only a drawing with text has a font to name. Most of the corpus draws
+        // none, and an empty `<g>` is a complete reference for it.
+        if text.contains("<text") {
+            assert!(
+                text.contains("font-family=\"sans-serif\""),
+                "{}: the SVG draws text but does not use the generic font family, so it would \
+                 depend on a local AutoCAD or SHX font being installed",
+                fixture.id
+            );
+        }
         assert!(
             !text.contains(".shx") && !text.to_ascii_lowercase().contains(".ttf"),
             "{}: the SVG names a font file, which makes the visual reference depend on the \

@@ -1,8 +1,10 @@
 # DWG fixture corpus
 
-Seven DWG files, one per generation ACadSharp's `DwgReader` documents as
-readable, and the baseline every differential test in this suite compares
-against.
+One corpus for every engine that reads it: the seven AutoCAD saves (one DWG
+per generation ACadSharp's `DwgReader` documents as readable), fifteen more
+AutoCAD-authored drawings, AutoCAD's own DXF twins and object census, and
+libviprs-dep's synthetic drawings with their recordings. The baseline every
+differential test in this suite compares against.
 
 ```
 same DWG input
@@ -19,9 +21,45 @@ canonical expected output      actual output
    +------------ compare ----------+
 ```
 
+## Tiers and tables
+
+`manifest.toml` has one table per role. A `[[fixture]]` row is a DWG the oracle
+reads and freezes, and has exactly one `tier`:
+
+| tier | what | rows | source |
+|---|---|---|---|
+| A | decision grade, AutoCAD-authored: the seven saves, `sample_base`, `empty`, the ten `dynamic-blocks/BLOCK*`, `AecObjects`, `geoloc`, `export_sample` | 22 | ACadSharp `samples/` |
+| B | regression grade: libviprs-dep's synthetics, written by ACadSharp's own `DwgWriter` | 41 | libviprs-dep |
+| C | stress: `g13_many_inserts`, `g13_dimension_deep`, `g13_scale_4x`, `g13_scale_16x`, `g13_wide_polyline`, `g13_wide_spline`, `g13_xref_long`. Both engines open them and agree on counts; timing them is libviprs-bench's job | 7 | libviprs-dep |
+
+The other tables have the same provenance fields: `[[refusal]]` (2 drawings the
+oracle refuses, `g13_ac1009` with `UnsupportedVersion` and `g13_nan_bulge` with
+`CanonicalSerializationFailure`, each with the exit code it is run against),
+`[[recording]]` (45 libviprs-dep `.txt` recordings, each naming the drawing it
+records), `[[oracle_input]]` (26 DXF files: AutoCAD's own twins of the saves and
+of the dynamic blocks and geolocation) and `[[census]]` (4 distinct blobs of
+AutoCAD's recorded document trees; five of the seven per-generation trees are
+the same bytes, so one row lists the other upstream names as `also_source_*`
+and `fetch` checks each serves the same bytes).
+
+libviprs-dep's `real_AC1018` and `real_AC1032` are byte for byte `sample_AC1018`
+and `sample_AC1032`. They are not rows of their own: the two recordings of them
+point at the Tier A rows, so nothing is stored twice.
+
+A drawing that is meant to hold no geometry (an empty drawing, a fixture whose
+only entity is a kind schema 1 has no record for) carries
+`no_primitives = "<reason>"`. Without it a reference holding no primitive record
+is refused, because a differential over nothing cannot fail; with it the stream
+must still hold a warning, and the row is refused if the stream turns out to hold
+geometry after all.
+
+Every row names its `source`; `[sources.acadsharp]` and
+`[sources.libviprs_dep]` each pin one commit and one URL prefix, and a row
+cannot borrow the other's.
+
 ## Where they come from
 
-All seven are ACadSharp's own `samples/*.dwg`, taken from
+The seven saves are ACadSharp's own `samples/*.dwg`, and so is Tier A, taken from
 
 - repository: <https://github.com/DomCR/ACadSharp>
 - version: **v3.7.1**
@@ -71,7 +109,8 @@ parameters, and the tool pins both, but they are not a cross-implementation
 guarantee; the uncompressed bytes are. See
 [`../docs/CANONICAL_SCHEMA.md`](../docs/CANONICAL_SCHEMA.md).
 
-Nothing here is a DWG, so the orphan check below only ever walks `dwg/`.
+`expected/` is owned by `tools/regenerate_reference.py`; every other file under
+`fixtures/` has to be a row.
 
 ## Checking the corpus
 
@@ -81,10 +120,19 @@ Offline, and what CI runs:
 python3 tools/fetch_acadsharp_fixtures.py verify
 ```
 
-Restoring a missing or damaged fixture from the pinned commit:
+`verify` covers every row of every table. Restoring a missing or damaged file
+from the pinned commit:
 
 ```bash
 python3 tools/fetch_acadsharp_fixtures.py fetch
+```
+
+The tree acadrust's conformance harness reads (`fixtures/<stem>.dwg` beside
+`expectations/<stem>.txt`, symlinks into this corpus, nothing copied twice):
+
+```bash
+python3 tools/fetch_acadsharp_fixtures.py view /tmp/corpus --source libviprs_dep
+ACADSHARP_CORPUS=/tmp/corpus  # in the fork
 ```
 
 `fetch` verifies the signature, size and sha256 **before** writing anything, so a
@@ -141,15 +189,20 @@ same list drives both the .NET reference oracle and `acadsharp-rs`.
 
 Two rules, both enforced rather than written down and hoped for:
 
-- every file in `dwg/` has a manifest entry (`nothing_sits_in_the_corpus_without_a_manifest_entry`)
-- every manifest entry has a file matching its size, signature and hash
+- every file under `fixtures/` (any extension, any directory) has a manifest
+  row (`nothing_sits_in_the_corpus_without_a_manifest_entry`)
+- every manifest row has a file matching its size, signature (for a drawing)
+  and hash
 
-A DWG sitting in the tree with no entry has no provenance, no licence and no
-hash, which means nobody reviewed it. Dropping one in turns the suite red.
+A file sitting in the tree with no row has no provenance, no licence and no
+hash, which means nobody reviewed it. Dropping one in turns the suite red, and so
+does deleting any one of the files a row names. The expected row count per table
+and per tier is written out by hand in `tests/fixture_integrity.rs`, so a
+shrinking manifest is red too.
 
 ## Provenance review, for a fixture from anywhere else
 
-All seven of the current files are ACadSharp's own samples under MIT, so the
+The ACadSharp samples are all under MIT, so the
 review was short. Anything from elsewhere needs all of this before it lands:
 
 1. **Redistribution rights.** A licence that actually permits it, recorded in
@@ -167,36 +220,26 @@ review was short. Anything from elsewhere needs all of this before it lands:
 Autodesk sample files and anything extracted from a customer drawing do not
 clear step 1. Do not add them.
 
-## Tier two, not yet in
-
-Reviewed as candidates, deliberately left out of the first pass so the corpus
-stays one file per generation. Each is an ACadSharp sample at the same commit:
-
-| upstream path | what it adds |
-|---|---|
-| `samples/sample_base/sample_base.dwg` | a minimal drawing, useful as a control |
-| `samples/dynamic-blocks/BLOCKROTATIONPARAMETER.dwg` | dynamic blocks and block parameters |
-| `samples/aec_objects/AecObjects.dwg` | AEC custom objects, the unsupported-entity path |
-| `samples/geolocation/geoloc.dwg` | geodata, which is where libviprs georeferencing will land |
-
-These come in when there is something that decodes them. Adding them now would
-mean seven megabytes of files nothing reads.
-
 ## Size, and when this moves to LFS
 
-Seven files, about 7.7 MB. Plain git handles that fine, and LFS would buy
-nothing but a second thing to configure in CI and a second way for a checkout
-to arrive without its fixtures.
+About 42 MB in all: the 26 DXF twins are 25 MB of it, the drawings 12 MB, the
+census files 1.2 MB, the references under `expected/` 3 MB. Plain git handles
+that, and LFS would buy nothing but a second thing to configure in CI and a
+second way for a checkout to arrive without its fixtures. Vendoring all of it is
+what keeps `fixture_integrity.rs` from needing the network or skipping.
 
-**The threshold is 50 MB total.** Past that, move `dwg/` to git LFS rather than
-letting clone times creep. Writing the number down here so nobody has to
+**The threshold is 50 MB total.** Past that, move the drawings to git LFS rather
+than letting clone times creep, and ask first whether the DXF twins need to be
+vendored at all. Writing the number down here so nobody has to
 rediscover it by arguing about it: below 50 MB, plain git, no discussion.
 
 ## Adding or changing a fixture
 
-1. Add a `[[fixture]]` row to `manifest.toml` with its real sha256 and size.
+1. Add a row to the right table of `manifest.toml` with its real sha256 and
+   size, its `source` and (for a drawing) its `tier`.
 2. If it is a new DWG generation, add it to `EXPECTED_VERSIONS` in
-   `tests/fixture_integrity.rs`. That list is written out by hand on purpose:
+   `tests/fixture_integrity.rs`, and move the expected count for its table or
+   tier there. That list is written out by hand on purpose:
    deriving it from the manifest would mean deleting a fixture also deletes the
    expectation, and the suite would stay green on a shrunken corpus.
 3. Run `verify`, then `cargo test`.

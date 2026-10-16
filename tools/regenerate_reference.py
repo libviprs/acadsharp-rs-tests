@@ -418,6 +418,26 @@ def command_regenerate(args: argparse.Namespace) -> int:
                       "--output", staging_arg],
             what="the reference oracle")
 
+        # The drawings the oracle is expected to refuse. Run one at a time,
+        # because `--all` would stop at the first, and each must exit with the
+        # code its row names: a refusal row nobody ran is a claim, not a fact.
+        for refusal in manifest.get("refusal", []):
+            source = f"fixtures/{refusal['file']}"
+            command = dotnet + ["run", "--no-build", "--no-restore", "-c", "Release",
+                                "--project", "reference/ACadSharp.Reference", "--", source,
+                                "--jsonl", f"{staging_arg}/refusal-{refusal['id']}.jsonl"]
+            print(f"$ {' '.join(command)}")
+            got = subprocess.run(command, cwd=ROOT, check=False).returncode
+            if got != refusal["oracle_exit_code"]:
+                print(
+                    f"error: {refusal['id']}: the oracle exited {got}, the manifest row expects "
+                    f"{refusal['oracle_exit_code']} ({refusal['oracle_exit']})",
+                    file=sys.stderr,
+                )
+                return 1
+            print(f"  {refusal['id']}: refused with {refusal['oracle_exit']} "
+                  f"({refusal['oracle_exit_code']}), as the row says")
+
         entries = []
         changed = []
         per_fixture: dict[str, dict[str, object]] = {}
@@ -434,11 +454,30 @@ def command_regenerate(args: argparse.Namespace) -> int:
             svg = svg_path.read_bytes()
             counts = record_census(jsonl)
             primitives = sum(counts.get(name, 0) for name in PRIMITIVE_RECORDS)
-            if primitives == 0:
+            warnings = counts.get("warning", 0)
+            exemption = (fixture.get("no_primitives") or "").strip()
+            if primitives == 0 and not exemption:
                 print(
                     f"error: {fixture_id}: the reference holds no primitive records. "
                     "A differential over an empty stream cannot fail, so this is refused "
-                    "rather than frozen.",
+                    "rather than frozen. A drawing that is meant to hold none (an empty "
+                    "drawing, a refused-entity fixture) says so in its manifest row with "
+                    "`no_primitives = \"<reason>\"`.",
+                    file=sys.stderr,
+                )
+                return 1
+            if primitives > 0 and exemption:
+                print(
+                    f"error: {fixture_id}: the manifest row says it holds no primitives "
+                    f"({exemption!r}) but the reference holds {primitives}. Tighten the row: "
+                    "remove `no_primitives`.",
+                    file=sys.stderr,
+                )
+                return 1
+            if primitives == 0 and warnings == 0:
+                print(
+                    f"error: {fixture_id}: the reference holds neither a primitive nor a "
+                    "warning, so there is nothing in it to compare.",
                     file=sys.stderr,
                 )
                 return 1
@@ -674,10 +713,23 @@ def check_stream(fixture_id: str, fixture: dict, jsonl: bytes) -> list[str]:
         problems.append(f"{fixture_id}: not every record carries schema {REFERENCE_SCHEMA}")
     if not any(record.get("record") == "view" for record in records):
         problems.append(f"{fixture_id}: no view record")
-    if not any(record.get("record") in PRIMITIVE_RECORDS for record in records):
+    primitives = sum(1 for record in records if record.get("record") in PRIMITIVE_RECORDS)
+    warnings = sum(1 for record in records if record.get("record") == "warning")
+    exemption = (fixture.get("no_primitives") or "").strip()
+    if primitives == 0 and not exemption:
         problems.append(
             f"{fixture_id}: no primitive records. A differential over a stream with no "
-            "geometry compares two empty sets and passes."
+            "geometry compares two empty sets and passes. A drawing meant to hold none "
+            "says so with `no_primitives = \"<reason>\"` in its manifest row."
+        )
+    if primitives > 0 and exemption:
+        problems.append(
+            f"{fixture_id}: the row says it holds no primitives ({exemption!r}) and the stream "
+            f"holds {primitives}. Remove `no_primitives`."
+        )
+    if primitives == 0 and exemption and warnings == 0:
+        problems.append(
+            f"{fixture_id}: no primitives and no warnings either, so nothing is left to compare."
         )
     return problems
 

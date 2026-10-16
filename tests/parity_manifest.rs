@@ -161,6 +161,32 @@ fn the_baselines_are_recorded_with_their_reason() {
     }
 }
 
+#[test]
+fn every_baseline_file_is_a_census_row_of_the_one_corpus_manifest() {
+    // The baseline list used to be a second list of the same files. The corpus
+    // manifest owns them now (with provenance and a hash), and this list points
+    // at its rows rather than being another one. Upstream stores five of the
+    // seven trees under several names with identical bytes, so a baseline file
+    // is found by its primary or one of its `also_source_paths`.
+    let m = parity::manifest();
+    let mut resolved = 0usize;
+    for b in m.baselines.iter().filter(|b| b.kind == "document_tree") {
+        for file in &b.files {
+            let upstream_path = format!("src/ACadSharp.Tests/{file}");
+            let row = acadsharp_rs_tests::fixtures::censuses().iter().find(|c| {
+                c.source_path == upstream_path || c.also_source_paths.contains(&upstream_path)
+            });
+            assert!(
+                row.is_some(),
+                "baseline file {file} is not a [[census]] row of fixtures/manifest.toml, so it \
+                 has no provenance and no hash"
+            );
+            resolved += 1;
+        }
+    }
+    assert_eq!(resolved, 7, "the seven per-generation document trees");
+}
+
 // ---------------------------------------------------------------------------
 // The same checks, against manifests built to fail them. Without these, every
 // assertion above is a claim that the real manifest happens to be fine, not a
