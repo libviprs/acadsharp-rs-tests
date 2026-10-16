@@ -10,7 +10,7 @@ publish = false
 # Matches the floor the rest of the org declares. The `msrv` job pins this
 # exact toolchain and fails if this line, the toolchain it installs and the
 # README ever disagree.
-rust-version = "1.97"
+rust-version = "1.99"
 
 [lints.rust]
 deprecated = "deny"
