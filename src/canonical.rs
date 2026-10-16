@@ -18,7 +18,10 @@
 //! The sidecar (`<id>.<engine>.src.jsonl`) is read here too, by
 //! [`Sidecar::parse`].
 
+use std::collections::BTreeSet;
 use std::fmt;
+
+use serde_json::{Map, Number, Value};
 
 /// The only schema this reader knows.
 pub const SCHEMA: u64 = 1;
@@ -149,19 +152,93 @@ pub enum Record {
 impl Record {
     /// The schema's name for this record: the value of its `record` field.
     pub fn kind(&self) -> &'static str {
-        todo!("R2.1")
+        match self {
+            Self::Document(_) => "document",
+            Self::View(_) => "view",
+            Self::Line(_) => "line",
+            Self::Polyline(_) => "polyline",
+            Self::Circle(_) => "circle",
+            Self::Arc(_) => "arc",
+            Self::Ellipse(_) => "ellipse",
+            Self::Spline(_) => "spline",
+            Self::Polygon(_) => "polygon",
+            Self::Point(_) => "point",
+            Self::Text(_) => "text",
+            Self::Warning(_) => "warning",
+        }
     }
 
     /// The view an entity record belongs to. `None` for `document`, `view` and
     /// `warning`.
     pub fn view(&self) -> Option<u64> {
-        todo!("R2.1")
+        match self {
+            Self::Document(_) | Self::View(_) | Self::Warning(_) => None,
+            Self::Line(r) => Some(r.view),
+            Self::Polyline(r) => Some(r.view),
+            Self::Circle(r) => Some(r.view),
+            Self::Arc(r) => Some(r.view),
+            Self::Ellipse(r) => Some(r.view),
+            Self::Spline(r) => Some(r.view),
+            Self::Polygon(r) => Some(r.view),
+            Self::Point(r) => Some(r.view),
+            Self::Text(r) => Some(r.view),
+        }
     }
 
     /// Every float in the record, in schema order, mutably. The perturbation
     /// sweep walks this, and so does nothing else.
     pub fn floats_mut(&mut self) -> Vec<&mut f64> {
-        todo!("R2.1")
+        fn v3<'a>(out: &mut Vec<&'a mut f64>, v: &'a mut Vec3) {
+            out.extend(v.iter_mut());
+        }
+        let mut out: Vec<&mut f64> = Vec::new();
+        match self {
+            Self::Document(_) | Self::View(_) | Self::Warning(_) => {}
+            Self::Line(r) => {
+                v3(&mut out, &mut r.a);
+                v3(&mut out, &mut r.b);
+            }
+            Self::Polyline(r) => {
+                v3(&mut out, &mut r.normal);
+                r.points.iter_mut().for_each(|p| v3(&mut out, p));
+                out.extend(r.bulges.iter_mut());
+            }
+            Self::Circle(r) => {
+                v3(&mut out, &mut r.center);
+                out.push(&mut r.radius);
+                v3(&mut out, &mut r.normal);
+            }
+            Self::Arc(r) => {
+                v3(&mut out, &mut r.center);
+                out.push(&mut r.radius);
+                out.push(&mut r.start);
+                out.push(&mut r.end);
+                v3(&mut out, &mut r.normal);
+            }
+            Self::Ellipse(r) => {
+                v3(&mut out, &mut r.center);
+                v3(&mut out, &mut r.major);
+                out.push(&mut r.ratio);
+                out.push(&mut r.start);
+                out.push(&mut r.end);
+                v3(&mut out, &mut r.normal);
+            }
+            Self::Spline(r) => {
+                r.control_points.iter_mut().for_each(|p| v3(&mut out, p));
+                out.extend(r.knots.iter_mut());
+                out.extend(r.weights.iter_mut());
+                r.fit_points.iter_mut().for_each(|p| v3(&mut out, p));
+            }
+            Self::Polygon(r) => r.points.iter_mut().for_each(|p| v3(&mut out, p)),
+            Self::Point(r) => v3(&mut out, &mut r.at),
+            Self::Text(r) => {
+                v3(&mut out, &mut r.at);
+                out.push(&mut r.height);
+                out.push(&mut r.rotation);
+                out.push(&mut r.width_factor);
+            }
+        }
+        out
     }
 }
 
@@ -190,7 +267,10 @@ pub enum ParseErrorKind {
         found: String,
     },
     /// `points` and `bulges` of a polyline differ in length.
-    LengthMismatch { points: usize, bulges: usize },
+    LengthMismatch {
+        points: usize,
+        bulges: usize,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -203,7 +283,37 @@ pub struct ParseError {
 
 impl fmt::Display for ParseError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!("R2.1")
+        write!(f, "line {}", self.line)?;
+        if let Some(field) = &self.field {
+            write!(f, ", field `{field}`")?;
+        }
+        write!(f, ": ")?;
+        match &self.kind {
+            ParseErrorKind::NotJson(m) => write!(f, "not JSON ({m})"),
+            ParseErrorKind::NotAnObject => write!(f, "a record is a JSON object"),
+            ParseErrorKind::EmptyLine => write!(f, "blank line; the format has none"),
+            ParseErrorKind::MissingFinalNewline => write!(f, "the stream has no final newline"),
+            ParseErrorKind::CarriageReturn => {
+                write!(f, "carriage return; the format is LF only, in text as well")
+            }
+            ParseErrorKind::NonFinite(m) => write!(f, "{m} is not a finite double"),
+            ParseErrorKind::NegativeZero => {
+                write!(f, "-0.0; the schema normalises negative zero away")
+            }
+            ParseErrorKind::SchemaVersion(v) => {
+                write!(f, "schema {v}; this reader knows schema {SCHEMA} only")
+            }
+            ParseErrorKind::UnknownRecord(r) => write!(f, "unknown record type `{r}`"),
+            ParseErrorKind::UnknownField => write!(f, "unknown field"),
+            ParseErrorKind::MissingField => write!(f, "missing field"),
+            ParseErrorKind::WrongType { expected, found } => {
+                write!(f, "expected {expected}, found {found}")
+            }
+            ParseErrorKind::LengthMismatch { points, bulges } => write!(
+                f,
+                "{points} points but {bulges} bulges; the schema says one bulge per vertex"
+            ),
+        }
     }
 }
 
@@ -211,14 +321,428 @@ impl std::error::Error for ParseError {}
 
 /// Parse a whole canonical stream.
 pub fn parse_stream(text: &str) -> Result<Vec<Record>, ParseError> {
-    let _ = text;
-    todo!("R2.1")
+    if text.is_empty() {
+        return Ok(Vec::new());
+    }
+    let mut records = Vec::new();
+    let mut rest = text;
+    let mut number = 0usize;
+    while !rest.is_empty() {
+        number += 1;
+        let Some(end) = rest.find('\n') else {
+            // A CR on the unterminated tail is the more useful thing to say.
+            if rest.contains('\r') {
+                return Err(ParseError {
+                    line: number,
+                    field: None,
+                    kind: ParseErrorKind::CarriageReturn,
+                });
+            }
+            return Err(ParseError {
+                line: number,
+                field: None,
+                kind: ParseErrorKind::MissingFinalNewline,
+            });
+        };
+        records.push(parse_line(&rest[..end], number)?);
+        rest = &rest[end + 1..];
+    }
+    Ok(records)
+}
+
+fn err(line: usize, field: Option<&str>, kind: ParseErrorKind) -> ParseError {
+    ParseError {
+        line,
+        field: field.map(str::to_string),
+        kind,
+    }
 }
 
 /// Parse one line (without its newline). `line` is only used in errors.
 pub fn parse_line(text: &str, line: usize) -> Result<Record, ParseError> {
-    let _ = (text, line);
-    todo!("R2.1")
+    if text.contains('\r') {
+        return Err(err(line, None, ParseErrorKind::CarriageReturn));
+    }
+    if text.is_empty() {
+        return Err(err(line, None, ParseErrorKind::EmptyLine));
+    }
+    let value: Value = match serde_json::from_str(text) {
+        Ok(v) => v,
+        Err(e) => return Err(json_error(text, line, &e)),
+    };
+    let Value::Object(map) = value else {
+        return Err(err(line, None, ParseErrorKind::NotAnObject));
+    };
+    let mut o = Obj::new(&map, line);
+
+    match map.get("schema") {
+        None => return Err(err(line, Some("schema"), ParseErrorKind::MissingField)),
+        Some(Value::Number(n)) if n.as_u64() == Some(SCHEMA) => {}
+        Some(other) => {
+            return Err(err(
+                line,
+                Some("schema"),
+                ParseErrorKind::SchemaVersion(other.to_string()),
+            ));
+        }
+    }
+    o.seen.insert("schema");
+    let name = match map.get("record") {
+        None => return Err(err(line, Some("record"), ParseErrorKind::MissingField)),
+        Some(Value::String(s)) => s.as_str(),
+        Some(other) => return Err(o.wrong("record", "string", other)),
+    };
+    o.seen.insert("record");
+
+    let record = match name {
+        "document" => Record::Document(Document {
+            format: o.string("format")?,
+            acad_version: o.string("acad_version")?,
+            maintenance_version: o.uint("maintenance_version")?,
+        }),
+        "view" => Record::View(View {
+            index: o.uint("index")?,
+            name: o.string("name")?,
+            kind: o.string("kind")?,
+        }),
+        "line" => Record::Line(Line {
+            view: o.uint("view")?,
+            a: [o.float("x1")?, o.float("y1")?, o.float("z1")?],
+            b: [o.float("x2")?, o.float("y2")?, o.float("z2")?],
+        }),
+        "polyline" => {
+            let view = o.uint("view")?;
+            let closed = o.boolean("closed")?;
+            let normal = o.triple("nx", "ny", "nz")?;
+            let points = o.points("points")?;
+            let bulges = o.floats("bulges")?;
+            if points.len() != bulges.len() {
+                return Err(err(
+                    line,
+                    Some("bulges"),
+                    ParseErrorKind::LengthMismatch {
+                        points: points.len(),
+                        bulges: bulges.len(),
+                    },
+                ));
+            }
+            Record::Polyline(Polyline {
+                view,
+                closed,
+                normal,
+                points,
+                bulges,
+            })
+        }
+        "circle" => Record::Circle(Circle {
+            view: o.uint("view")?,
+            center: o.triple("cx", "cy", "cz")?,
+            radius: o.float("radius")?,
+            normal: o.triple("nx", "ny", "nz")?,
+        }),
+        "arc" => Record::Arc(Arc {
+            view: o.uint("view")?,
+            center: o.triple("cx", "cy", "cz")?,
+            radius: o.float("radius")?,
+            start: o.float("start")?,
+            end: o.float("end")?,
+            normal: o.triple("nx", "ny", "nz")?,
+        }),
+        "ellipse" => Record::Ellipse(Ellipse {
+            view: o.uint("view")?,
+            center: o.triple("cx", "cy", "cz")?,
+            major: o.triple("mx", "my", "mz")?,
+            ratio: o.float("ratio")?,
+            start: o.float("start")?,
+            end: o.float("end")?,
+            normal: o.triple("nx", "ny", "nz")?,
+        }),
+        "spline" => Record::Spline(Spline {
+            view: o.uint("view")?,
+            degree: o.uint("degree")?,
+            closed: o.boolean("closed")?,
+            periodic: o.boolean("periodic")?,
+            control_points: o.points("control_points")?,
+            knots: o.floats("knots")?,
+            weights: o.floats("weights")?,
+            fit_points: o.points("fit_points")?,
+        }),
+        "polygon" => Record::Polygon(Polygon {
+            view: o.uint("view")?,
+            points: o.points("points")?,
+        }),
+        "point" => Record::Point(Point {
+            view: o.uint("view")?,
+            at: o.triple("x", "y", "z")?,
+        }),
+        "text" => Record::Text(Text {
+            view: o.uint("view")?,
+            at: o.triple("x", "y", "z")?,
+            height: o.float("height")?,
+            rotation: o.float("rotation")?,
+            width_factor: o.float("width_factor")?,
+            halign: o.string("halign")?,
+            valign: o.string("valign")?,
+            style: o.string("style")?,
+            text: o.string("text")?,
+        }),
+        "warning" => Record::Warning(Warning {
+            category: o.string("category")?,
+            entity_type: o.string("entity_type")?,
+            detail: o.string("detail")?,
+        }),
+        other => {
+            return Err(err(
+                line,
+                Some("record"),
+                ParseErrorKind::UnknownRecord(other.to_string()),
+            ));
+        }
+    };
+
+    // Anything the record did not ask for is a field the schema does not have.
+    // Map iteration is sorted, so which one is named is stable.
+    for key in map.keys() {
+        if !o.seen.contains(key.as_str()) {
+            return Err(err(line, Some(key), ParseErrorKind::UnknownField));
+        }
+    }
+    Ok(record)
+}
+
+/// Turn serde_json's failure into ours. The two numbers it refuses are the two
+/// the schema forbids, and they get a kind of their own with the nearest field
+/// name, which is the one thing serde_json cannot tell us.
+fn json_error(text: &str, line: usize, e: &serde_json::Error) -> ParseError {
+    let message = e.to_string();
+    let col = e.column().min(text.len());
+    if message.contains("number out of range") {
+        let field = field_before(text, col);
+        return ParseError {
+            line,
+            field,
+            kind: ParseErrorKind::NonFinite("a number outside the range of a double".to_string()),
+        };
+    }
+    if let Some((token, at)) = bare_nonfinite(text) {
+        return ParseError {
+            line,
+            field: field_before(text, at),
+            kind: ParseErrorKind::NonFinite(token.to_string()),
+        };
+    }
+    ParseError {
+        line,
+        field: None,
+        kind: ParseErrorKind::NotJson(message),
+    }
+}
+
+/// The key of the last `"key":` that starts before byte `at`.
+fn field_before(text: &str, at: usize) -> Option<String> {
+    let head = text.get(..at.min(text.len()))?;
+    let colon = head.rfind("\":")?;
+    let open = head[..colon].rfind('"')?;
+    Some(head[open + 1..colon].to_string())
+}
+
+/// `NaN`, `Infinity` or `-Infinity` outside a string, and where it starts.
+fn bare_nonfinite(text: &str) -> Option<(&'static str, usize)> {
+    let bytes = text.as_bytes();
+    let mut in_string = false;
+    let mut escaped = false;
+    for (i, &b) in bytes.iter().enumerate() {
+        if in_string {
+            if escaped {
+                escaped = false;
+            } else if b == b'\\' {
+                escaped = true;
+            } else if b == b'"' {
+                in_string = false;
+            }
+            continue;
+        }
+        match b {
+            b'"' => in_string = true,
+            b'N' if text[i..].starts_with("NaN") => return Some(("NaN", i)),
+            b'I' if text[i..].starts_with("Infinity") => {
+                let minus = i > 0 && bytes[i - 1] == b'-';
+                return Some((if minus { "-Infinity" } else { "Infinity" }, i));
+            }
+            _ => {}
+        }
+    }
+    None
+}
+
+struct Obj<'a> {
+    map: &'a Map<String, Value>,
+    line: usize,
+    seen: BTreeSet<&'a str>,
+}
+
+fn describe(v: &Value) -> String {
+    match v {
+        Value::Null => "null".to_string(),
+        Value::Bool(b) => format!("boolean {b}"),
+        Value::Number(n) if n.is_f64() => format!("double {n}"),
+        Value::Number(n) => format!("integer {n}"),
+        Value::String(_) => "a string".to_string(),
+        Value::Array(_) => "an array".to_string(),
+        Value::Object(_) => "an object".to_string(),
+    }
+}
+
+impl<'a> Obj<'a> {
+    fn new(map: &'a Map<String, Value>, line: usize) -> Self {
+        Self {
+            map,
+            line,
+            seen: BTreeSet::new(),
+        }
+    }
+
+    fn wrong(&self, field: &str, expected: &'static str, found: &Value) -> ParseError {
+        err(
+            self.line,
+            Some(field),
+            ParseErrorKind::WrongType {
+                expected,
+                found: describe(found),
+            },
+        )
+    }
+
+    fn get(&mut self, key: &'static str) -> Result<&'a Value, ParseError> {
+        self.seen.insert(key);
+        self.map
+            .get(key)
+            .ok_or_else(|| err(self.line, Some(key), ParseErrorKind::MissingField))
+    }
+
+    fn string(&mut self, key: &'static str) -> Result<String, ParseError> {
+        let v = self.get(key)?;
+        self.string_value(key, v)
+    }
+
+    fn string_value(&self, field: &str, v: &Value) -> Result<String, ParseError> {
+        match v {
+            Value::String(s) => {
+                if s.contains('\r') {
+                    return Err(err(self.line, Some(field), ParseErrorKind::CarriageReturn));
+                }
+                Ok(s.clone())
+            }
+            other => Err(self.wrong(field, "a string", other)),
+        }
+    }
+
+    fn uint(&mut self, key: &'static str) -> Result<u64, ParseError> {
+        let v = self.get(key)?;
+        match v {
+            Value::Number(n) if n.is_u64() => Ok(n.as_u64().unwrap_or(0)),
+            other => Err(self.wrong(key, "an integer", other)),
+        }
+    }
+
+    fn boolean(&mut self, key: &'static str) -> Result<bool, ParseError> {
+        let v = self.get(key)?;
+        match v {
+            Value::Bool(b) => Ok(*b),
+            other => Err(self.wrong(key, "a boolean", other)),
+        }
+    }
+
+    fn double(&self, field: &str, v: &Value) -> Result<f64, ParseError> {
+        match v {
+            Value::Number(n) => self.number(field, n),
+            other => Err(self.wrong(field, "a double", other)),
+        }
+    }
+
+    fn number(&self, field: &str, n: &Number) -> Result<f64, ParseError> {
+        if !n.is_f64() {
+            return Err(err(
+                self.line,
+                Some(field),
+                ParseErrorKind::WrongType {
+                    expected: "a double (written with a fractional part or an exponent)",
+                    found: format!("integer {n}"),
+                },
+            ));
+        }
+        let x = n.as_f64().unwrap_or(f64::NAN);
+        if !x.is_finite() {
+            return Err(err(
+                self.line,
+                Some(field),
+                ParseErrorKind::NonFinite(n.to_string()),
+            ));
+        }
+        if x == 0.0 && x.is_sign_negative() {
+            return Err(err(self.line, Some(field), ParseErrorKind::NegativeZero));
+        }
+        Ok(x)
+    }
+
+    fn float(&mut self, key: &'static str) -> Result<f64, ParseError> {
+        let v = self.get(key)?;
+        self.double(key, v)
+    }
+
+    fn triple(
+        &mut self,
+        x: &'static str,
+        y: &'static str,
+        z: &'static str,
+    ) -> Result<Vec3, ParseError> {
+        Ok([self.float(x)?, self.float(y)?, self.float(z)?])
+    }
+
+    fn array(&mut self, key: &'static str) -> Result<&'a Vec<Value>, ParseError> {
+        let v = self.get(key)?;
+        match v {
+            Value::Array(a) => Ok(a),
+            other => Err(self.wrong(key, "an array", other)),
+        }
+    }
+
+    fn floats(&mut self, key: &'static str) -> Result<Vec<f64>, ParseError> {
+        let items = self.array(key)?;
+        items
+            .iter()
+            .enumerate()
+            .map(|(i, v)| self.double(&format!("{key}[{i}]"), v))
+            .collect()
+    }
+
+    fn points(&mut self, key: &'static str) -> Result<Vec<Vec3>, ParseError> {
+        let items = self.array(key)?;
+        items
+            .iter()
+            .enumerate()
+            .map(|(i, v)| {
+                let Value::Array(p) = v else {
+                    return Err(self.wrong(&format!("{key}[{i}]"), "an [x, y, z] array", v));
+                };
+                if p.len() != 3 {
+                    return Err(err(
+                        self.line,
+                        Some(&format!("{key}[{i}]")),
+                        ParseErrorKind::WrongType {
+                            expected: "an [x, y, z] array",
+                            found: format!("an array of {}", p.len()),
+                        },
+                    ));
+                }
+                let mut out = [0.0; 3];
+                for (j, c) in p.iter().enumerate() {
+                    out[j] = self.double(&format!("{key}[{i}][{j}]"), c)?;
+                }
+                Ok(out)
+            })
+            .collect()
+    }
 }
 
 /// One line of a sidecar.
@@ -241,11 +765,20 @@ pub enum SidecarErrorKind {
     MissingField,
     WrongType(&'static str),
     /// `i` is not the gapless run from zero.
-    IndexGap { expected: usize, found: u64 },
+    IndexGap {
+        expected: usize,
+        found: u64,
+    },
     /// Not one line per record.
-    CountMismatch { lines: usize, records: usize },
+    CountMismatch {
+        lines: usize,
+        records: usize,
+    },
     /// `t` names a different record type than the record at that index.
-    TypeDisagrees { sidecar: String, record: String },
+    TypeDisagrees {
+        sidecar: String,
+        record: String,
+    },
     /// Not uppercase hex without a prefix.
     BadHandle(String),
     EmptyHandlePath,
@@ -260,7 +793,34 @@ pub struct SidecarError {
 
 impl fmt::Display for SidecarError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!("R2.1")
+        if self.line > 0 {
+            write!(f, "sidecar line {}: ", self.line)?;
+        } else {
+            write!(f, "sidecar: ")?;
+        }
+        match &self.kind {
+            SidecarErrorKind::NotJson(m) => write!(f, "not JSON ({m})"),
+            SidecarErrorKind::NotAnObject => write!(f, "a line is a JSON object"),
+            SidecarErrorKind::UnknownField => write!(f, "unknown field"),
+            SidecarErrorKind::MissingField => write!(f, "missing field"),
+            SidecarErrorKind::WrongType(t) => write!(f, "wrong type, expected {t}"),
+            SidecarErrorKind::IndexGap { expected, found } => write!(
+                f,
+                "`i` is {found} where the gapless run from zero says {expected}"
+            ),
+            SidecarErrorKind::CountMismatch { lines, records } => write!(
+                f,
+                "{lines} lines for {records} records; there is one line per record"
+            ),
+            SidecarErrorKind::TypeDisagrees { sidecar, record } => write!(
+                f,
+                "`t` says `{sidecar}` but the record at that index is a `{record}`"
+            ),
+            SidecarErrorKind::BadHandle(h) => {
+                write!(f, "handle {h:?} is not uppercase hex without a prefix")
+            }
+            SidecarErrorKind::EmptyHandlePath => write!(f, "`h` is empty"),
+        }
     }
 }
 
@@ -275,8 +835,97 @@ pub struct Sidecar {
 impl Sidecar {
     /// Parse a sidecar and check it against the records it describes.
     pub fn parse(text: &str, records: &[Record]) -> Result<Self, SidecarError> {
-        let _ = (text, records);
-        todo!("R2.1")
+        let fail = |line: usize, kind: SidecarErrorKind| SidecarError { line, kind };
+        let mut entries = Vec::new();
+        for (n, raw) in text.lines().enumerate() {
+            let line = n + 1;
+            let value: Value = serde_json::from_str(raw)
+                .map_err(|e| fail(line, SidecarErrorKind::NotJson(e.to_string())))?;
+            let Value::Object(map) = value else {
+                return Err(fail(line, SidecarErrorKind::NotAnObject));
+            };
+            if map
+                .keys()
+                .any(|k| !matches!(k.as_str(), "i" | "h" | "t" | "x"))
+            {
+                return Err(fail(line, SidecarErrorKind::UnknownField));
+            }
+            let i = match map.get("i") {
+                None => return Err(fail(line, SidecarErrorKind::MissingField)),
+                Some(Value::Number(n)) if n.is_u64() => n.as_u64().unwrap_or(0),
+                Some(_) => return Err(fail(line, SidecarErrorKind::WrongType("an integer"))),
+            };
+            if i != n as u64 {
+                return Err(fail(
+                    line,
+                    SidecarErrorKind::IndexGap {
+                        expected: n,
+                        found: i,
+                    },
+                ));
+            }
+            let handles = match map.get("h") {
+                None => return Err(fail(line, SidecarErrorKind::MissingField)),
+                Some(Value::Array(a)) => {
+                    let mut out = Vec::new();
+                    for h in a {
+                        let Value::String(h) = h else {
+                            return Err(fail(line, SidecarErrorKind::WrongType("a string")));
+                        };
+                        if h.is_empty()
+                            || !h
+                                .bytes()
+                                .all(|b| b.is_ascii_digit() || (b'A'..=b'F').contains(&b))
+                        {
+                            return Err(fail(line, SidecarErrorKind::BadHandle(h.clone())));
+                        }
+                        out.push(h.clone());
+                    }
+                    if out.is_empty() {
+                        return Err(fail(line, SidecarErrorKind::EmptyHandlePath));
+                    }
+                    out
+                }
+                Some(_) => return Err(fail(line, SidecarErrorKind::WrongType("an array"))),
+            };
+            let record_type = match map.get("t") {
+                None => None,
+                Some(Value::String(t)) => Some(t.clone()),
+                Some(_) => return Err(fail(line, SidecarErrorKind::WrongType("a string"))),
+            };
+            let from_insert = match map.get("x") {
+                None => None,
+                Some(Value::Bool(b)) => Some(*b),
+                Some(_) => return Err(fail(line, SidecarErrorKind::WrongType("a boolean"))),
+            };
+            if let (Some(t), Some(record)) = (&record_type, records.get(n))
+                && t != record.kind()
+            {
+                return Err(fail(
+                    line,
+                    SidecarErrorKind::TypeDisagrees {
+                        sidecar: t.clone(),
+                        record: record.kind().to_string(),
+                    },
+                ));
+            }
+            entries.push(SidecarEntry {
+                index: n,
+                handles,
+                record_type,
+                from_insert,
+            });
+        }
+        if entries.len() != records.len() {
+            return Err(fail(
+                0,
+                SidecarErrorKind::CountMismatch {
+                    lines: entries.len(),
+                    records: records.len(),
+                },
+            ));
+        }
+        Ok(Self { entries })
     }
 
     pub fn handles(&self, index: usize) -> Option<&[String]> {

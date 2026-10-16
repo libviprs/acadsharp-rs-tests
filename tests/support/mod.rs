@@ -8,13 +8,13 @@
 #![allow(dead_code)]
 
 use acadsharp_rs_tests::canonical::{self, Record};
-use acadsharp_rs_tests::compare::{
-    ClassTable, Engine, Pair, Report, Stream, WarningRow, compare,
-};
+use acadsharp_rs_tests::compare::{ClassTable, Engine, Pair, Report, Stream, WarningRow, compare};
 
 pub const DOCUMENT: &str = r#"{"schema":1,"record":"document","format":"dwg","acad_version":"AC1032","maintenance_version":228}"#;
-pub const VIEW_MODEL: &str = r#"{"schema":1,"record":"view","index":0,"name":"Model","kind":"model"}"#;
-pub const VIEW_LAYOUT: &str = r#"{"schema":1,"record":"view","index":1,"name":"Layout1","kind":"layout"}"#;
+pub const VIEW_MODEL: &str =
+    r#"{"schema":1,"record":"view","index":0,"name":"Model","kind":"model"}"#;
+pub const VIEW_LAYOUT: &str =
+    r#"{"schema":1,"record":"view","index":1,"name":"Layout1","kind":"layout"}"#;
 pub const LINE: &str = r#"{"schema":1,"record":"line","view":0,"x1":0.0,"y1":0.0,"z1":0.0,"x2":100.0,"y2":0.0,"z2":0.0}"#;
 pub const CIRCLE: &str = r#"{"schema":1,"record":"circle","view":0,"cx":10.0,"cy":20.0,"cz":0.0,"radius":5.0,"nx":0.0,"ny":0.0,"nz":1.0}"#;
 pub const ARC: &str = r#"{"schema":1,"record":"arc","view":0,"cx":50.0,"cy":50.0,"cz":0.0,"radius":25.0,"start":0.5,"end":1.5,"nx":0.0,"ny":0.0,"nz":1.0}"#;
@@ -25,7 +25,8 @@ pub const SPLINE: &str = r#"{"schema":1,"record":"spline","view":1,"degree":3,"c
 pub const POLYGON: &str = r#"{"schema":1,"record":"polygon","view":1,"points":[[0.0,0.0,0.0],[1.0,0.0,0.0],[1.0,1.0,0.0]]}"#;
 pub const ELLIPSE: &str = r#"{"schema":1,"record":"ellipse","view":0,"cx":0.0,"cy":0.0,"cz":0.0,"mx":4.0,"my":0.0,"mz":0.0,"ratio":0.25,"start":0.0,"end":3.0,"nx":0.0,"ny":0.0,"nz":1.0}"#;
 pub const WARN_A: &str = r#"{"schema":1,"record":"warning","category":"unsupported_entity","entity_type":"MultiLeader","detail":"no_canonical_mapping"}"#;
-pub const WARN_B: &str = r#"{"schema":1,"record":"warning","category":"missing_font","entity_type":"","detail":""}"#;
+pub const WARN_B: &str =
+    r#"{"schema":1,"record":"warning","category":"missing_font","entity_type":"","detail":""}"#;
 
 /// Twelve records, two views, one of each kind the matrix needs.
 pub fn base() -> Vec<String> {

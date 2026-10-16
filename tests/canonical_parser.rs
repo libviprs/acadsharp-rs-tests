@@ -27,17 +27,7 @@ fn refuse_line(json: &str) -> ParseError {
 #[test]
 fn every_record_type_parses_into_its_typed_form() {
     let kinds: Vec<&str> = [
-        DOCUMENT,
-        VIEW_MODEL,
-        LINE,
-        POLYLINE,
-        CIRCLE,
-        ARC,
-        ELLIPSE,
-        SPLINE,
-        POLYGON,
-        POINT,
-        TEXT,
+        DOCUMENT, VIEW_MODEL, LINE, POLYLINE, CIRCLE, ARC, ELLIPSE, SPLINE, POLYGON, POINT, TEXT,
         WARN_A,
     ]
     .iter()
@@ -308,9 +298,12 @@ fn three_records() -> Vec<Record> {
 }
 
 fn good_sidecar() -> String {
-    format!(
-        "{{\"i\":0,\"h\":[\"1A0\"],\"t\":\"document\"}}\n{{\"i\":1,\"h\":[\"2B\",\"1A1\"],\"t\":\"line\"}}\n{{\"i\":2,\"h\":[\"1A2\"],\"t\":\"circle\"}}\n"
+    concat!(
+        "{\"i\":0,\"h\":[\"1A0\"],\"t\":\"document\"}\n",
+        "{\"i\":1,\"h\":[\"2B\",\"1A1\"],\"t\":\"line\"}\n",
+        "{\"i\":2,\"h\":[\"1A2\"],\"t\":\"circle\"}\n",
     )
+    .to_string()
 }
 
 #[test]
@@ -337,7 +330,11 @@ fn a_gap_in_the_sidecar_index_is_refused_by_name() {
 
 #[test]
 fn a_sidecar_with_the_wrong_line_count_is_refused_by_name() {
-    let short: String = good_sidecar().lines().take(2).map(|l| format!("{l}\n")).collect();
+    let short: String = good_sidecar()
+        .lines()
+        .take(2)
+        .map(|l| format!("{l}\n"))
+        .collect();
     let e = Sidecar::parse(&short, &three_records()).expect_err("short");
     assert_eq!(
         e.kind,

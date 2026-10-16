@@ -7,12 +7,12 @@
 
 mod support;
 
+use acadsharp_rs_tests::canonical::Sidecar;
 use acadsharp_rs_tests::compare::{
     BOUNDED, BOUNDED_TIGHT, Class, ClassTable, Disposition, DualOracle, Engine, Exclusion,
     FieldKind, FindingKind, KnownDivergence, Pair, RecordKey, Scope, TableError, Val, WarningRow,
     compare,
 };
-use acadsharp_rs_tests::canonical::Sidecar;
 use support::*;
 
 fn only(report: &acadsharp_rs_tests::compare::Report) -> &acadsharp_rs_tests::compare::Finding {
@@ -172,11 +172,19 @@ fn a_different_view_count_is_one_finding() {
 #[test]
 fn one_integer_field_is_one_finding() {
     let mut b = base();
-    set(&mut b, 0, "\"maintenance_version\":228", "\"maintenance_version\":229");
+    set(
+        &mut b,
+        0,
+        "\"maintenance_version\":228",
+        "\"maintenance_version\":229",
+    );
     let report = diff(&base(), &b);
     let f = only(&report);
     assert_eq!(f.field, "maintenance_version");
-    assert_eq!((f.a.clone(), f.b.clone()), (Some(Val::Int(228)), Some(Val::Int(229))));
+    assert_eq!(
+        (f.a.clone(), f.b.clone()),
+        (Some(Val::Int(228)), Some(Val::Int(229)))
+    );
     assert_eq!(f.class, Class::Exact);
 }
 
@@ -186,7 +194,10 @@ fn one_flag_is_one_finding() {
     set(&mut b, 6, "\"closed\":false", "\"closed\":true");
     let report = diff(&base(), &b);
     let f = only(&report);
-    assert_eq!((f.record_type.as_str(), f.field.as_str()), ("polyline", "closed"));
+    assert_eq!(
+        (f.record_type.as_str(), f.field.as_str()),
+        ("polyline", "closed")
+    );
     assert_eq!(f.a, Some(Val::Bool(false)));
 }
 
@@ -225,11 +236,22 @@ fn a_trailing_space_is_a_finding() {
 #[test]
 fn a_knots_array_one_element_shorter_is_one_finding_about_its_length() {
     let mut b = base();
-    set(&mut b, 8, "[0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0]", "[0.0,0.0,0.0,0.0,1.0,1.0,1.0]");
+    set(
+        &mut b,
+        8,
+        "[0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0]",
+        "[0.0,0.0,0.0,0.0,1.0,1.0,1.0]",
+    );
     let report = diff(&base(), &b);
     let f = only(&report);
-    assert_eq!((f.record_type.as_str(), f.field.as_str()), ("spline", "knots.len"));
-    assert_eq!((f.a.clone(), f.b.clone()), (Some(Val::Int(8)), Some(Val::Int(7))));
+    assert_eq!(
+        (f.record_type.as_str(), f.field.as_str()),
+        ("spline", "knots.len")
+    );
+    assert_eq!(
+        (f.a.clone(), f.b.clone()),
+        (Some(Val::Int(8)), Some(Val::Int(7)))
+    );
 }
 
 #[test]
@@ -238,7 +260,10 @@ fn a_points_array_one_element_shorter_is_one_finding_about_its_length() {
     set(&mut b, 9, ",[1.0,1.0,0.0]]", "]");
     let report = diff(&base(), &b);
     let f = only(&report);
-    assert_eq!((f.record_type.as_str(), f.field.as_str()), ("polygon", "points.len"));
+    assert_eq!(
+        (f.record_type.as_str(), f.field.as_str()),
+        ("polygon", "points.len")
+    );
 }
 
 // ---- floats: inside, just outside absolute, just outside relative -------------
@@ -307,6 +332,28 @@ fn the_rounding_boundary_is_a_match_under_both_bounded_classes() {
 }
 
 #[test]
+fn under_bounded_a_small_value_just_outside_the_absolute_bound_is_one_finding() {
+    let mut b = base();
+    set(&mut b, 3, "\"x1\":0.0", "\"x1\":2e-9");
+    let report = diff_loose(&base(), &b);
+    let f = only(&report);
+    assert_eq!((f.field.as_str(), f.class), ("x1", Class::Bounded));
+}
+
+#[test]
+fn under_bounded_a_large_value_just_outside_the_relative_bound_is_one_finding() {
+    let mut a = base();
+    let mut b = base();
+    set(&mut a, 3, "\"x2\":100.0", "\"x2\":1000000.0");
+    set(&mut b, 3, "\"x2\":100.0", "\"x2\":1000002.0");
+    let report = diff_loose(&a, &b);
+    assert_eq!(only(&report).field, "x2");
+    // And 0.5 on a million is inside 1e-6.
+    set(&mut b, 3, "\"x2\":1000002.0", "\"x2\":1000000.5");
+    assert!(diff_loose(&a, &b).findings.is_empty());
+}
+
+#[test]
 fn the_loose_class_accepts_what_the_tight_class_refuses() {
     let mut a = base();
     let mut b = base();
@@ -334,7 +381,10 @@ fn the_pairs_get_the_classes_the_issue_names() {
         assert_eq!(t.class, Class::Bounded, "{a:?} against {b:?}");
         assert_eq!(t.tolerance, BOUNDED, "{a:?} against {b:?}");
     }
-    let self_pair = ClassTable::for_pair(Pair::new(Engine::Acadsharp, Engine::Acadsharp), WarningRow::Compare);
+    let self_pair = ClassTable::for_pair(
+        Pair::new(Engine::Acadsharp, Engine::Acadsharp),
+        WarningRow::Compare,
+    );
     assert_eq!(self_pair.class, Class::BoundedTight);
 }
 
@@ -350,7 +400,12 @@ fn the_bound_is_symmetric_and_two_zeros_are_equal() {
 
 fn arc_with(start: &str, end: &str) -> Vec<String> {
     let mut v = base();
-    set(&mut v, 5, "\"start\":0.5,\"end\":1.5", &format!("\"start\":{start},\"end\":{end}"));
+    set(
+        &mut v,
+        5,
+        "\"start\":0.5,\"end\":1.5",
+        &format!("\"start\":{start},\"end\":{end}"),
+    );
     v
 }
 
@@ -359,7 +414,10 @@ fn a_start_just_below_two_pi_matches_one_just_above_zero() {
     // The same angle, written either side of the wrap. The end moves with it,
     // since the schema spells it start + sweep.
     let tau = std::f64::consts::TAU;
-    let a = arc_with(&format!("{:?}", tau - 1e-10), &format!("{:?}", tau - 1e-10 + 1.0));
+    let a = arc_with(
+        &format!("{:?}", tau - 1e-10),
+        &format!("{:?}", tau - 1e-10 + 1.0),
+    );
     let b = arc_with("1e-10", &format!("{:?}", 1e-10 + 1.0));
     let report = diff(&a, &b);
     assert!(report.findings.is_empty(), "{:?}", report.findings);
@@ -393,7 +451,12 @@ fn a_text_rotation_is_wrapped() {
     let tau = std::f64::consts::TAU;
     let mut a = base();
     let mut b = base();
-    set(&mut a, 7, "\"rotation\":0.0", &format!("\"rotation\":{:?}", tau - 1e-10));
+    set(
+        &mut a,
+        7,
+        "\"rotation\":0.0",
+        &format!("\"rotation\":{:?}", tau - 1e-10),
+    );
     set(&mut b, 7, "\"rotation\":0.0", "\"rotation\":1e-10");
     assert!(diff(&a, &b).findings.is_empty());
 }
@@ -406,7 +469,10 @@ fn a_different_warning_category_is_one_finding() {
     set(&mut b, 10, "unsupported_entity", "invalid_entity");
     let report = diff(&base(), &b);
     let f = only(&report);
-    assert_eq!((f.record_type.as_str(), f.field.as_str()), ("warning", "category"));
+    assert_eq!(
+        (f.record_type.as_str(), f.field.as_str()),
+        ("warning", "category")
+    );
 }
 
 #[test]
@@ -475,14 +541,28 @@ fn one_dropped_record_in_a_300_record_stream_is_one_finding_and_the_rest_compare
     assert_eq!(report.aligned.len(), 299);
     assert!(report.aligned.contains(&(151, 150)), "the rest realigned");
     // Every aligned pair was compared, not just the first 150.
-    assert!(report.floats_compared >= 297 * 6, "{}", report.floats_compared);
+    assert!(
+        report.floats_compared >= 297 * 6,
+        "{}",
+        report.floats_compared
+    );
 }
 
 fn sidecar_text(records: usize) -> String {
-    (0..records).map(|i| {
-        let t = match i { 0 => "document", 1 => "view", _ => "line" };
-        format!("{{\"i\":{i},\"h\":[\"{:X}\",\"{:X}\"],\"t\":\"{t}\"}}\n", 0x100 + i, 0x900 + i)
-    }).collect()
+    (0..records)
+        .map(|i| {
+            let t = match i {
+                0 => "document",
+                1 => "view",
+                _ => "line",
+            };
+            format!(
+                "{{\"i\":{i},\"h\":[\"{:X}\",\"{:X}\"],\"t\":\"{t}\"}}\n",
+                0x100 + i,
+                0x900 + i
+            )
+        })
+        .collect()
 }
 
 #[test]
@@ -492,10 +572,16 @@ fn with_a_sidecar_the_finding_names_the_handle() {
     b.remove(150);
     let sa = stream(&a);
     let sidecar = Sidecar::parse(&sidecar_text(300), &sa.records).expect("sidecar");
-    let sa = acadsharp_rs_tests::compare::Stream { sidecar: Some(sidecar), ..sa };
+    let sa = acadsharp_rs_tests::compare::Stream {
+        sidecar: Some(sidecar),
+        ..sa
+    };
     let report = compare("fixture", &sa, &stream(&b), &tight()).unwrap();
     let f = only(&report);
-    assert_eq!(f.handles_a.as_deref(), Some(&["196".to_string(), "996".to_string()][..]));
+    assert_eq!(
+        f.handles_a.as_deref(),
+        Some(&["196".to_string(), "996".to_string()][..])
+    );
     assert!(f.render().contains("196/996"), "{}", f.render());
 }
 
@@ -525,14 +611,25 @@ fn a_finding_names_everything_somebody_will_ask() {
     assert_eq!((f.index_a, f.index_b), (Some(4), Some(4)));
     assert_eq!(f.record_type, "circle");
     assert_eq!(f.field, "radius");
-    assert_eq!((f.a.clone(), f.b.clone()), (Some(Val::Float(5.0)), Some(Val::Float(5.5))));
+    assert_eq!(
+        (f.a.clone(), f.b.clone()),
+        (Some(Val::Float(5.0)), Some(Val::Float(5.5)))
+    );
     assert_eq!(f.abs_error, Some(0.5));
     assert!((f.rel_error.unwrap() - 0.5 / 5.5).abs() < 1e-15);
     assert_eq!(f.class, Class::BoundedTight);
 
     let line = f.render();
     for needle in [
-        "fixture", "oracle-acadsharp", "view 0", "#4", "circle", "radius", "5.0", "5.5", "BOUNDED_TIGHT",
+        "fixture",
+        "oracle-acadsharp",
+        "view 0",
+        "#4",
+        "circle",
+        "radius",
+        "5.0",
+        "5.5",
+        "BOUNDED_TIGHT",
     ] {
         assert!(line.contains(needle), "{needle:?} missing from {line:?}");
     }
@@ -584,17 +681,34 @@ fn with_known(k: KnownDivergence) -> ClassTable {
 #[test]
 fn a_known_divergence_that_still_diverges_exactly_as_listed_is_not_red() {
     let (a, b) = radius_differs();
-    let report = compare("fixture", &stream(&a), &stream(&b), &with_known(known(5.0, 5.5))).unwrap();
+    let report = compare(
+        "fixture",
+        &stream(&a),
+        &stream(&b),
+        &with_known(known(5.0, 5.5)),
+    )
+    .unwrap();
     let f = only(&report);
     assert_eq!(f.class, Class::KnownDivergence);
-    assert_eq!(f.disposition, Disposition::Known { issue: "libviprs/acadrust#99".into() });
+    assert_eq!(
+        f.disposition,
+        Disposition::Known {
+            issue: "libviprs/acadrust#99".into()
+        }
+    );
     assert!(!f.is_red());
     assert!(report.is_match());
 }
 
 #[test]
 fn a_known_divergence_that_no_longer_diverges_is_red_and_asks_for_the_row_to_be_tightened() {
-    let report = compare("fixture", &stream(&base()), &stream(&base()), &with_known(known(5.0, 5.5))).unwrap();
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&base()),
+        &with_known(known(5.0, 5.5)),
+    )
+    .unwrap();
     let f = only(&report);
     assert_eq!(f.disposition, Disposition::KnownVanished);
     assert!(f.is_red());
@@ -605,7 +719,13 @@ fn a_known_divergence_that_no_longer_diverges_is_red_and_asks_for_the_row_to_be_
 #[test]
 fn a_known_divergence_whose_values_moved_is_red_and_asks_to_be_re_argued() {
     let (a, b) = radius_differs();
-    let report = compare("fixture", &stream(&a), &stream(&b), &with_known(known(5.0, 6.0))).unwrap();
+    let report = compare(
+        "fixture",
+        &stream(&a),
+        &stream(&b),
+        &with_known(known(5.0, 6.0)),
+    )
+    .unwrap();
     let f = only(&report);
     assert_eq!(f.disposition, Disposition::KnownMoved);
     assert!(f.is_red());
@@ -616,14 +736,24 @@ fn a_known_divergence_whose_values_moved_is_red_and_asks_to_be_re_argued() {
 fn a_known_divergence_is_found_by_handle_path_when_there_is_no_oracle_index() {
     let (a, b) = radius_differs();
     let mut sb = stream(&b);
-    let text: String = (0..12).map(|i| format!("{{\"i\":{i},\"h\":[\"{:X}\"]}}\n", 0x40 + i)).collect();
+    let text: String = (0..12)
+        .map(|i| format!("{{\"i\":{i},\"h\":[\"{:X}\"]}}\n", 0x40 + i))
+        .collect();
     sb.sidecar = Some(Sidecar::parse(&text, &sb.records).unwrap());
     let mut k = known(5.0, 5.5);
     k.record = RecordKey::Handles(vec!["44".into()]);
-    let mut t = ClassTable::for_pair(Pair::new(Engine::Acadsharp, Engine::Acadrust), WarningRow::Compare);
+    let mut t = ClassTable::for_pair(
+        Pair::new(Engine::Acadsharp, Engine::Acadrust),
+        WarningRow::Compare,
+    );
     t.known.push(k);
     let report = compare("fixture", &stream(&a), &sb, &t).unwrap();
-    assert_eq!(only(&report).disposition, Disposition::Known { issue: "libviprs/acadrust#99".into() });
+    assert_eq!(
+        only(&report).disposition,
+        Disposition::Known {
+            issue: "libviprs/acadrust#99".into()
+        }
+    );
 }
 
 #[test]
@@ -638,7 +768,11 @@ fn a_known_divergence_for_another_fixture_is_ignored() {
 // ---- EXCLUDED, DUAL_ORACLE, and rows without a reason --------------------------
 
 fn exclusion(scope: Scope, reason: &str, issue: &str) -> Exclusion {
-    Exclusion { scope, reason: reason.into(), issue: issue.into() }
+    Exclusion {
+        scope,
+        reason: reason.into(),
+        issue: issue.into(),
+    }
 }
 
 #[test]
@@ -649,7 +783,11 @@ fn an_excluded_record_kind_is_dropped_from_both_sides_and_counted() {
     b.insert(5, POINT.replace("\"x\":1.0", "\"x\":9.0"));
     b.insert(6, POINT.to_string());
     let mut t = loose();
-    t.excluded.push(exclusion(Scope::Record("point".into()), "acadsharp-rs has no point until wire 3", "libviprs/libviprs-dep#83"));
+    t.excluded.push(exclusion(
+        Scope::Record("point".into()),
+        "acadsharp-rs has no point until wire 3",
+        "libviprs/libviprs-dep#83",
+    ));
     let report = compare("fixture", &stream(&a), &stream(&b), &t).unwrap();
     assert!(report.findings.is_empty(), "{:?}", report.findings);
     assert_eq!(report.excluded_records["point"], (1, 2));
@@ -658,10 +796,18 @@ fn an_excluded_record_kind_is_dropped_from_both_sides_and_counted() {
 #[test]
 fn an_excluded_field_is_skipped_and_counted() {
     let mut b = base();
-    set(&mut b, 0, "\"acad_version\":\"AC1032\"", "\"acad_version\":\"AC1027\"");
+    set(
+        &mut b,
+        0,
+        "\"acad_version\":\"AC1032\"",
+        "\"acad_version\":\"AC1027\"",
+    );
     let mut t = loose();
     t.excluded.push(exclusion(
-        Scope::Field { record: "document".into(), field: "acad_version".into() },
+        Scope::Field {
+            record: "document".into(),
+            field: "acad_version".into(),
+        },
         "the cross-save pair differs by design",
         "acadsharp-rs-tests#19",
     ));
@@ -673,10 +819,18 @@ fn an_excluded_field_is_skipped_and_counted() {
 #[test]
 fn an_excluded_array_field_excludes_its_length_and_elements() {
     let mut b = base();
-    set(&mut b, 8, "[0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0]", "[0.0,0.0,0.0,0.0,1.0,1.0,1.0]");
+    set(
+        &mut b,
+        8,
+        "[0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0]",
+        "[0.0,0.0,0.0,0.0,1.0,1.0,1.0]",
+    );
     let mut t = loose();
     t.excluded.push(exclusion(
-        Scope::Field { record: "spline".into(), field: "knots".into() },
+        Scope::Field {
+            record: "spline".into(),
+            field: "knots".into(),
+        },
         "a reason",
         "an issue",
     ));
@@ -687,7 +841,8 @@ fn an_excluded_array_field_excludes_its_length_and_elements() {
 #[test]
 fn an_excluded_row_with_no_reason_is_red() {
     let mut t = loose();
-    t.excluded.push(exclusion(Scope::Record("point".into()), "", "an issue"));
+    t.excluded
+        .push(exclusion(Scope::Record("point".into()), "", "an issue"));
     assert!(matches!(t.validate(), Err(TableError::NoReason(_))));
     assert!(compare("f", &stream(&base()), &stream(&base()), &t).is_err());
 }
@@ -695,7 +850,8 @@ fn an_excluded_row_with_no_reason_is_red() {
 #[test]
 fn an_excluded_row_with_no_issue_is_red() {
     let mut t = loose();
-    t.excluded.push(exclusion(Scope::Record("point".into()), "a reason", "  "));
+    t.excluded
+        .push(exclusion(Scope::Record("point".into()), "a reason", "  "));
     assert!(matches!(t.validate(), Err(TableError::NoIssue(_))));
 }
 
@@ -703,17 +859,35 @@ fn an_excluded_row_with_no_issue_is_red() {
 fn a_known_divergence_row_with_no_reason_or_no_issue_is_red() {
     let mut k = known(5.0, 5.5);
     k.reason = String::new();
-    assert!(matches!(with_known(k).validate(), Err(TableError::NoReason(_))));
+    assert!(matches!(
+        with_known(k).validate(),
+        Err(TableError::NoReason(_))
+    ));
     let mut k = known(5.0, 5.5);
     k.issue = String::new();
-    assert!(matches!(with_known(k).validate(), Err(TableError::NoIssue(_))));
+    assert!(matches!(
+        with_known(k).validate(),
+        Err(TableError::NoIssue(_))
+    ));
 }
 
 #[test]
 fn a_warning_row_that_excludes_without_a_reason_or_issue_is_red() {
-    let t = ClassTable::for_pair(ORACLE_RUST, WarningRow::Excluded { reason: String::new(), issue: "x".into() });
+    let t = ClassTable::for_pair(
+        ORACLE_RUST,
+        WarningRow::Excluded {
+            reason: String::new(),
+            issue: "x".into(),
+        },
+    );
     assert!(matches!(t.validate(), Err(TableError::NoReason(_))));
-    let t = ClassTable::for_pair(ORACLE_RUST, WarningRow::Excluded { reason: "x".into(), issue: String::new() });
+    let t = ClassTable::for_pair(
+        ORACLE_RUST,
+        WarningRow::Excluded {
+            reason: "x".into(),
+            issue: String::new(),
+        },
+    );
     assert!(matches!(t.validate(), Err(TableError::NoIssue(_))));
 }
 

@@ -14,9 +14,7 @@
 mod support;
 
 use acadsharp_rs_tests::canonical::{Record, parse_stream};
-use acadsharp_rs_tests::compare::{
-    BOUNDED_TIGHT, Class, FindingKind, Stream, compare,
-};
+use acadsharp_rs_tests::compare::{BOUNDED_TIGHT, Class, FindingKind, Stream, compare};
 use acadsharp_rs_tests::fixtures;
 use support::tight;
 
@@ -60,8 +58,15 @@ fn sweep(id: &str) -> usize {
     let table = tight();
     let a = Stream::new(base.clone());
     let unperturbed = compare(id, &a, &a, &table).expect("table");
-    assert!(unperturbed.findings.is_empty(), "{id}: identical streams differ");
-    assert_eq!(unperturbed.aligned.len(), base.len(), "{id}: identical streams must align fully");
+    assert!(
+        unperturbed.findings.is_empty(),
+        "{id}: identical streams differ"
+    );
+    assert_eq!(
+        unperturbed.aligned.len(),
+        base.len(),
+        "{id}: identical streams must align fully"
+    );
     assert_eq!(
         unperturbed.floats_compared,
         float_count(&base),
@@ -80,7 +85,11 @@ fn sweep(id: &str) -> usize {
             report.findings.len()
         );
         let f = &report.findings[0];
-        assert_eq!(f.kind, FindingKind::FieldMismatch, "{id}: record {r} float {k}");
+        assert_eq!(
+            f.kind,
+            FindingKind::FieldMismatch,
+            "{id}: record {r} float {k}"
+        );
         assert_eq!(f.index_a, Some(r), "{id}: record {r} float {k}");
         assert!(
             matches!(f.class, Class::BoundedTight | Class::Angle),
@@ -128,7 +137,11 @@ fn half_the_bound_is_never_a_finding() {
         assert!(
             report.findings.is_empty(),
             "half a bound on float {k} of record {r} was flagged: {:?}",
-            report.findings.iter().map(|f| f.render()).collect::<Vec<_>>()
+            report
+                .findings
+                .iter()
+                .map(|f| f.render())
+                .collect::<Vec<_>>()
         );
     }
 }
