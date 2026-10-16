@@ -14,7 +14,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
-use acadsharp_rs_tests::fixtures;
+use acadsharp_rs_tests::fixtures::{self, ManifestFile};
 use sha2::{Digest, Sha256};
 
 /// Every DWG generation ACadSharp's `DwgReader` documents as readable.
@@ -25,6 +25,41 @@ use sha2::{Digest, Sha256};
 /// which is exactly the accident this exists to catch.
 const EXPECTED_VERSIONS: &[&str] = &[
     "AC1014", "AC1015", "AC1018", "AC1021", "AC1024", "AC1027", "AC1032",
+];
+
+/// How many rows each table and tier holds, written out by hand.
+///
+/// Spelled out for the same reason `EXPECTED_VERSIONS` is: deriving a count from
+/// the manifest would make a shrunken manifest agree with itself. Moving one of
+/// these is a decision, and it comes with the reason in the manifest header.
+///
+/// Tier A is the seven AutoCAD saves plus fifteen more from ACadSharp's
+/// `samples/` (`sample_base`, `empty`, the ten dynamic blocks, `AecObjects`,
+/// `geoloc`, `export_sample`). Tier B is libviprs-dep's regression drawings and
+/// Tier C its stress drawings. The two libviprs-dep `real_*` drawings are the
+/// same bytes as two Tier A saves and are not rows of their own.
+const EXPECTED_TIER_A: usize = 22;
+const EXPECTED_TIER_B: usize = 41;
+const EXPECTED_TIER_C: usize = 7;
+/// libviprs-dep's recordings of those drawings (two of them point at Tier A).
+const EXPECTED_RECORDINGS: usize = 45;
+/// AutoCAD's own DXF twins and the other DXFs: 12 + 2 + 10 + 2.
+const EXPECTED_ORACLE_INPUTS: usize = 26;
+/// Distinct census blobs: `sample_base`, AC1014, AC1024, and the one blob five
+/// other saves share byte for byte.
+const EXPECTED_CENSUS: usize = 4;
+/// Drawings the oracle refuses.
+const EXPECTED_REFUSALS: usize = 2;
+
+/// The seven stress drawings, by hand.
+const TIER_C_IDS: [&str; 7] = [
+    "g13_dimension_deep",
+    "g13_many_inserts",
+    "g13_scale_16x",
+    "g13_scale_4x",
+    "g13_wide_polyline",
+    "g13_wide_spline",
+    "g13_xref_long",
 ];
 
 /// Smallest plausible DWG. The real samples are around a megabyte, so this
@@ -72,22 +107,66 @@ fn the_upstream_pin_is_an_exact_commit() {
         "upstream.commit {:?} is not lowercase hex",
         up.commit
     );
-    for fx in fixtures::all() {
-        assert!(
-            fx.source_url.contains(&up.commit),
-            "{}: source_url does not carry the pinned commit, so it does not \
-             describe where these bytes came from: {}",
-            fx.id,
-            fx.source_url
-        );
-        for floating in ["/master/", "/main/", "/HEAD/"] {
-            assert!(
-                !fx.source_url.contains(floating),
-                "{}: source_url uses the floating ref {floating}",
-                fx.id
-            );
-        }
+    assert_eq!(
+        fixtures::sources().get("acadsharp").map(|s| s.commit.as_str()),
+        Some(up.commit.as_str()),
+        "[upstream] and [sources.acadsharp] are two copies of one pin and must agree"
+    );
+}
+
+/// `(id, source, source_url, license_evidence)` for every row of every table.
+fn every_pinned_row() -> Vec<(String, String, String, String)> {
+    let mut rows = Vec::new();
+    for f in fixtures::all() {
+        rows.push((
+            f.id.clone(),
+            f.source.clone().unwrap_or_default(),
+            f.source_url.clone(),
+            f.license_evidence.clone(),
+        ));
     }
+    for r in fixtures::refusals() {
+        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+    }
+    for r in fixtures::recordings() {
+        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+    }
+    for r in fixtures::oracle_inputs() {
+        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+    }
+    for r in fixtures::censuses() {
+        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+    }
+    rows
+}
+
+#[test]
+fn every_row_is_pinned_to_its_own_sources_commit() {
+    assert_eq!(fixtures::sources().len(), 2, "acadsharp and libviprs_dep");
+    let mut checked = 0usize;
+    for (id, source, url, licence) in every_pinned_row() {
+        let src = fixtures::sources()
+            .get(&source)
+            .unwrap_or_else(|| panic!("{id}: source {source:?} is not defined"));
+        assert_eq!(src.commit.len(), 40, "{source}: commit is not a full sha");
+        for floating in ["/master/", "/main/", "/HEAD/"] {
+            assert!(!url.contains(floating), "{id}: source_url uses the floating ref {floating}");
+        }
+        assert!(
+            url.starts_with(&src.url_prefix) && url.contains(&format!("/{}/", src.commit)),
+            "{id}: source_url is not on {source}'s prefix at {source}'s commit: {url}"
+        );
+        assert!(
+            licence.starts_with(&src.url_prefix) && licence.contains(&src.commit),
+            "{id}: license_evidence is not pinned to {source}'s commit: {licence}"
+        );
+        checked += 1;
+    }
+    assert_eq!(
+        checked,
+        EXPECTED_TIER_A + EXPECTED_TIER_B + EXPECTED_TIER_C + EXPECTED_RECORDINGS
+            + EXPECTED_ORACLE_INPUTS + EXPECTED_CENSUS + EXPECTED_REFUSALS
+    );
 }
 
 #[test]
@@ -96,9 +175,9 @@ fn every_fixture_is_the_file_the_manifest_describes() {
     // assertion below pass over nothing, so the count is checked first.
     assert_eq!(
         fixtures::all().len(),
-        EXPECTED_VERSIONS.len(),
-        "expected {} fixtures, found {}",
-        EXPECTED_VERSIONS.len(),
+        EXPECTED_TIER_A + EXPECTED_TIER_B + EXPECTED_TIER_C,
+        "expected {} drawings, found {}",
+        EXPECTED_TIER_A + EXPECTED_TIER_B + EXPECTED_TIER_C,
         fixtures::all().len()
     );
 
@@ -151,19 +230,294 @@ fn every_fixture_is_the_file_the_manifest_describes() {
     }
 }
 
+/// Every file row in every table: id, relative path, sha256.
+fn every_file_row() -> Vec<(String, String, String)> {
+    let mut rows = Vec::new();
+    for f in fixtures::all() {
+        rows.push((f.id.clone(), f.file.clone(), f.sha256.clone()));
+    }
+    for r in fixtures::refusals() {
+        rows.push((r.id.clone(), r.file.clone(), r.sha256.clone()));
+    }
+    for r in fixtures::recordings() {
+        rows.push((r.id.clone(), r.file.clone(), r.sha256.clone()));
+    }
+    for r in fixtures::oracle_inputs() {
+        rows.push((r.id.clone(), r.file.clone(), r.sha256.clone()));
+    }
+    for r in fixtures::censuses() {
+        rows.push((r.id.clone(), r.file.clone(), r.sha256.clone()));
+    }
+    rows
+}
+
 #[test]
-fn no_two_fixtures_are_the_same_file() {
-    let mut by_hash: BTreeMap<&str, Vec<&str>> = BTreeMap::new();
-    for fx in fixtures::all() {
-        by_hash.entry(&fx.sha256).or_default().push(&fx.id);
+fn no_two_rows_are_the_same_file() {
+    // Across every table, so a drawing is never stored twice under two names:
+    // libviprs-dep's `real_AC1018` and `real_AC1032` are the same bytes as two
+    // Tier A saves, and are rows of those, not of their own.
+    let mut by_hash: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let mut by_path: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for (id, file, sha) in every_file_row() {
+        by_hash.entry(sha).or_default().push(id.clone());
+        by_path.entry(file).or_default().push(id);
     }
     let dupes: Vec<_> = by_hash.values().filter(|ids| ids.len() > 1).collect();
     assert!(
         dupes.is_empty(),
-        "these fixtures share a sha256, so at least one is not the version it \
-         claims to be: {dupes:?}. If a duplicate is ever deliberate, say so here \
-         with a reason rather than relaxing the check."
+        "these rows share a sha256, so a file is stored twice or one of them is not the file it \
+         claims to be: {dupes:?}"
     );
+    let shared: Vec<_> = by_path.values().filter(|ids| ids.len() > 1).collect();
+    assert!(shared.is_empty(), "these rows share a path: {shared:?}");
+}
+
+#[test]
+fn the_corpus_has_the_rows_it_should_per_table_and_tier() {
+    assert_eq!(fixtures::by_tier("A").len(), EXPECTED_TIER_A, "tier A drawings");
+    assert_eq!(fixtures::by_tier("B").len(), EXPECTED_TIER_B, "tier B drawings");
+    assert_eq!(fixtures::by_tier("C").len(), EXPECTED_TIER_C, "tier C drawings");
+    assert_eq!(fixtures::recordings().len(), EXPECTED_RECORDINGS, "recordings");
+    assert_eq!(fixtures::oracle_inputs().len(), EXPECTED_ORACLE_INPUTS, "oracle inputs");
+    assert_eq!(fixtures::censuses().len(), EXPECTED_CENSUS, "census files");
+    assert_eq!(fixtures::refusals().len(), EXPECTED_REFUSALS, "refusals");
+}
+
+#[test]
+fn every_drawing_has_exactly_one_tier_and_a_source() {
+    for fx in fixtures::all() {
+        let tier = fx.tier.as_deref().unwrap_or("");
+        assert!(
+            matches!(tier, "A" | "B" | "C"),
+            "{}: tier is {:?}, and a drawing has exactly one of A, B or C",
+            fx.id,
+            fx.tier
+        );
+        let source = fx.source.as_deref().unwrap_or("");
+        assert!(
+            fixtures::sources().contains_key(source),
+            "{}: source is {:?}, which no [sources.*] table defines",
+            fx.id,
+            fx.source
+        );
+    }
+}
+
+#[test]
+fn tier_c_is_exactly_the_seven_stress_drawings() {
+    let mut got: Vec<&str> = fixtures::by_tier("C").iter().map(|f| f.id.as_str()).collect();
+    got.sort_unstable();
+    assert_eq!(got, TIER_C_IDS);
+}
+
+#[test]
+fn tier_a_is_the_acadsharp_drawings_and_nothing_else() {
+    for fx in fixtures::by_tier("A") {
+        assert_eq!(
+            fx.source.as_deref(),
+            Some("acadsharp"),
+            "{}: Tier A is AutoCAD-authored, which is ACadSharp's samples",
+            fx.id
+        );
+    }
+    for fx in fixtures::by_tier("B")
+        .into_iter()
+        .chain(fixtures::by_tier("C"))
+    {
+        assert_eq!(
+            fx.source.as_deref(),
+            Some("libviprs_dep"),
+            "{}: Tiers B and C are libviprs-dep's writer-made drawings",
+            fx.id
+        );
+    }
+}
+
+#[test]
+fn the_two_shared_drawings_are_one_row_each_and_both_tiers_point_at_them() {
+    // `real_AC1018` and `real_AC1032` are `sample_AC1018` and `sample_AC1032`.
+    assert!(
+        fixtures::all().iter().all(|f| !f.id.starts_with("real_")),
+        "a `real_*` drawing has its own row, which stores the same bytes twice"
+    );
+    for (stem, id) in [("real_AC1018", "acadsharp-ac1018"), ("real_AC1032", "acadsharp-ac1032")] {
+        let rec = fixtures::recordings()
+            .iter()
+            .find(|r| r.file.ends_with(&format!("/{stem}.txt")))
+            .unwrap_or_else(|| panic!("no recording named {stem}"));
+        assert_eq!(rec.drawing, id, "{stem}'s recording must point at the Tier A row");
+        assert_eq!(
+            fixtures::by_id(id).and_then(|f| f.tier.as_deref()),
+            Some("A")
+        );
+    }
+}
+
+#[test]
+fn every_recording_names_a_drawing_or_a_refusal_that_exists() {
+    for rec in fixtures::recordings() {
+        let known = fixtures::by_id(&rec.drawing).is_some()
+            || fixtures::refusals().iter().any(|r| r.id == rec.drawing);
+        assert!(
+            known,
+            "{}: names the drawing {:?}, which is neither a [[fixture]] nor a [[refusal]]",
+            rec.id, rec.drawing
+        );
+    }
+    // And no drawing has two recordings.
+    let mut seen = BTreeSet::new();
+    for rec in fixtures::recordings() {
+        assert!(
+            seen.insert(&rec.drawing),
+            "{}: a second recording of {}",
+            rec.id,
+            rec.drawing
+        );
+    }
+}
+
+#[test]
+fn every_other_table_points_at_rows_that_exist() {
+    for dxf in fixtures::oracle_inputs() {
+        if let Some(twin) = &dxf.for_fixture {
+            assert!(
+                fixtures::by_id(twin).is_some(),
+                "{}: is the DXF twin of {twin}, which is not a [[fixture]]",
+                dxf.id
+            );
+        }
+    }
+    for c in fixtures::censuses() {
+        assert!(!c.for_fixtures.is_empty(), "{}: describes no drawing", c.id);
+        for twin in &c.for_fixtures {
+            assert!(
+                fixtures::by_id(twin).is_some(),
+                "{}: is the census of {twin}, which is not a [[fixture]]",
+                c.id
+            );
+        }
+        assert_eq!(
+            c.also_source_paths.len(),
+            c.also_source_urls.len(),
+            "{}: every extra upstream path needs its URL",
+            c.id
+        );
+    }
+}
+
+#[test]
+fn every_refusal_names_the_oracle_exit_code_it_expects() {
+    // The oracle's `ExitCode` enum, by hand (reference/ACadSharp.Reference/
+    // ExportResult.cs). A refusal row whose name and number disagree is a
+    // refusal nobody ran.
+    let known = [
+        ("ReaderFailure", 3),
+        ("UnsupportedVersion", 4),
+        ("CanonicalSerializationFailure", 6),
+    ];
+    for r in fixtures::refusals() {
+        assert!(
+            known.contains(&(r.oracle_exit.as_str(), r.oracle_exit_code)),
+            "{}: {} / {} is not a pair of the oracle's exit codes",
+            r.id,
+            r.oracle_exit,
+            r.oracle_exit_code
+        );
+    }
+    let by_id = |id: &str| fixtures::refusals().iter().find(|r| r.id == id);
+    assert_eq!(by_id("g13_ac1009").map(|r| r.oracle_exit.as_str()), Some("UnsupportedVersion"));
+    assert_eq!(
+        by_id("g13_nan_bulge").map(|r| r.oracle_exit.as_str()),
+        Some("CanonicalSerializationFailure")
+    );
+}
+
+#[test]
+fn every_row_of_every_table_loads_and_a_missing_file_does_not() {
+    // Every row, verified. The count is the positive control: a loop over no
+    // rows loads nothing and passes.
+    let mut loaded = 0usize;
+    for r in fixtures::refusals() {
+        r.load().unwrap_or_else(|e| panic!("{e}"));
+        loaded += 1;
+    }
+    for r in fixtures::recordings() {
+        r.load().unwrap_or_else(|e| panic!("{e}"));
+        loaded += 1;
+    }
+    for r in fixtures::oracle_inputs() {
+        r.load().unwrap_or_else(|e| panic!("{e}"));
+        loaded += 1;
+    }
+    for r in fixtures::censuses() {
+        r.load().unwrap_or_else(|e| panic!("{e}"));
+        loaded += 1;
+    }
+    for f in fixtures::all() {
+        f.load().unwrap_or_else(|e| panic!("{e}"));
+        loaded += 1;
+    }
+    assert_eq!(
+        loaded,
+        EXPECTED_TIER_A + EXPECTED_TIER_B + EXPECTED_TIER_C + EXPECTED_RECORDINGS
+            + EXPECTED_ORACLE_INPUTS + EXPECTED_CENSUS + EXPECTED_REFUSALS
+    );
+
+    // A row whose file is gone is an error naming the row.
+    let mut ghost = fixtures::recordings()[0].clone();
+    ghost.file = "libviprs-dep/recordings/not-there.txt".to_string();
+    let err = ghost.load().expect_err("a missing file must not load");
+    assert!(err.to_string().contains(&ghost.id), "{err}");
+    // And so is one whose bytes are not the frozen ones.
+    let mut wrong = fixtures::recordings()[0].clone();
+    wrong.sha256 = "0".repeat(64);
+    assert!(wrong.load().expect_err("wrong sha").to_string().contains("sha256"));
+}
+
+#[test]
+fn the_dxf_twins_are_dxf_and_the_census_files_are_json() {
+    let mut binary = 0usize;
+    for dxf in fixtures::oracle_inputs() {
+        let bytes = dxf.load().unwrap_or_else(|e| panic!("{e}"));
+        let is_binary = bytes.starts_with(b"AutoCAD Binary DXF");
+        if is_binary {
+            binary += 1;
+        } else {
+            let head = String::from_utf8_lossy(&bytes[..bytes.len().min(64)]).to_string();
+            assert!(
+                head.trim_start().starts_with('0'),
+                "{}: not a DXF (an ASCII DXF opens with group code 0): {head:?}",
+                dxf.id
+            );
+        }
+        if let Some(enc) = &dxf.encoding {
+            assert_eq!(
+                enc == "binary",
+                is_binary,
+                "{}: the row says {enc} and the bytes say otherwise",
+                dxf.id
+            );
+        }
+    }
+    assert_eq!(binary, 7, "seven binary DXFs: AC1009 and AC1015 to AC1032");
+    for c in fixtures::censuses() {
+        let bytes = c.load().unwrap_or_else(|e| panic!("{e}"));
+        serde_json::from_slice::<serde_json::Value>(&bytes)
+            .unwrap_or_else(|e| panic!("{}: not JSON: {e}", c.id));
+    }
+}
+
+#[test]
+fn refusals_are_not_drawings_the_oracle_would_freeze() {
+    // The two files the oracle refuses must not be [[fixture]] rows, because
+    // `--all` reads every one and would exit non-zero.
+    for r in fixtures::refusals() {
+        assert!(
+            fixtures::by_id(&r.id).is_none(),
+            "{}: is both a refusal and a fixture",
+            r.id
+        );
+    }
 }
 
 #[test]
@@ -184,65 +538,101 @@ fn the_upstream_licence_travels_with_the_fixtures() {
 
 #[test]
 fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
+    // Any file, anywhere under fixtures/. The documents, the licence texts and
+    // `expected/` (claimed by the reference fields, checked below) are the only
+    // things that need no row.
     let root = fixtures::fixture_root();
-    let claimed: BTreeSet<PathBuf> = fixtures::all().iter().map(|f| f.path()).collect();
+    let mut claimed: BTreeSet<PathBuf> = BTreeSet::new();
+    for (_, file, _) in every_file_row() {
+        claimed.insert(root.join(file));
+    }
+    let mut referenced: BTreeSet<PathBuf> = BTreeSet::new();
+    for f in fixtures::all() {
+        referenced.extend(f.reference_jsonl_path());
+        referenced.extend(f.reference_svg_path());
+    }
 
     let mut orphans = Vec::new();
     let mut found = 0usize;
-    for path in dwg_files_under(&root) {
+    for path in files_under(&root, &|_| true) {
+        let rel = path.strip_prefix(&root).unwrap_or(&path).to_path_buf();
+        let name = rel.to_string_lossy().replace('\\', "/");
+        let is_doc = matches!(name.as_str(), "manifest.toml" | "README.md")
+            || (name.starts_with("LICENSE") && name.ends_with(".txt"));
+        if is_doc {
+            continue;
+        }
+        if name == "expected/SUMMARY.md" || referenced.contains(&path) {
+            continue;
+        }
         found += 1;
         if !claimed.contains(&path) {
-            orphans.push(
-                path.strip_prefix(&root)
-                    .unwrap_or(&path)
-                    .display()
-                    .to_string(),
-            );
+            orphans.push(name);
         }
     }
 
-    // Positive control. Without it a typo in the walker that returned nothing
-    // would make the orphan check pass by never looking at anything.
+    // Positive control. Without it a walker that returned nothing would make
+    // the orphan check pass by never looking at anything.
     assert_eq!(
         found,
-        fixtures::all().len(),
-        "walked {} DWG files under {} but the manifest lists {}",
-        found,
+        claimed.len(),
+        "walked {found} files under {} but the manifest claims {}",
         root.display(),
-        fixtures::all().len()
+        claimed.len()
     );
     assert!(
         orphans.is_empty(),
-        "these DWG files are in the tree but not in fixtures/manifest.toml: {orphans:?}. \
-         A fixture nobody added to the manifest is a fixture nobody vetted: no provenance, \
-         no licence, no hash. Add an entry or delete the file."
+        "these files are in the tree but not in fixtures/manifest.toml: {orphans:?}. A file \
+         nobody added to the manifest is a file nobody vetted: no provenance, no licence, no \
+         hash. Add a row or delete the file."
     );
 }
 
 #[test]
-fn every_fixture_carries_its_own_licence_evidence() {
-    let up = fixtures::upstream();
+fn every_row_carries_its_own_licence_evidence() {
+    for (id, source, _url, evidence) in every_pinned_row() {
+        assert!(
+            evidence.starts_with("https://"),
+            "{id}: license_evidence is {evidence:?}, which is not a URL anyone can check"
+        );
+        assert!(
+            fixtures::sources().contains_key(&source),
+            "{id}: no such source {source:?}"
+        );
+    }
     for fx in fixtures::all() {
         assert!(
             !fx.license.trim().is_empty(),
-            "{}: no licence recorded, so there is nothing saying these bytes may be \
-             redistributed",
+            "{}: no licence recorded, so there is nothing saying these bytes may be redistributed",
             fx.id
         );
+    }
+    // The drawings that are not ACadSharp's own say where their provenance is
+    // written down, pinned to a commit.
+    for fx in fixtures::all() {
+        if fx.source.as_deref() == Some("libviprs_dep") {
+            let prov = fx.provenance_evidence.as_deref().unwrap_or("");
+            assert!(
+                prov.contains(&fixtures::sources()["libviprs_dep"].commit),
+                "{}: provenance_evidence {prov:?} is not pinned to libviprs-dep's commit",
+                fx.id
+            );
+        }
+    }
+}
+
+#[test]
+fn each_sources_licence_text_travels_with_it() {
+    for (name, src) in fixtures::sources() {
+        let path = fixtures::fixture_root().join(&src.license_file);
+        let text = std::fs::read_to_string(&path)
+            .unwrap_or_else(|e| panic!("{name}: {} must be readable: {e}", path.display()));
         assert!(
-            fx.license_evidence.starts_with("https://"),
-            "{}: license_evidence is {:?}, which is not a URL anyone can check",
-            fx.id,
-            fx.license_evidence
+            text.contains("MIT License"),
+            "{name}: {} does not look like the MIT licence the manifest claims",
+            path.display()
         );
-        // Pinned for the same reason the fixture URLs are: a licence read off
-        // a branch is a licence that can change after the fact.
-        assert!(
-            fx.license_evidence.contains(&up.commit),
-            "{}: license_evidence is not pinned to the upstream commit: {}",
-            fx.id,
-            fx.license_evidence
-        );
+        assert_eq!(src.license, "MIT", "{name}");
     }
 }
 
@@ -326,13 +716,6 @@ fn no_test_reads_the_corpus_behind_the_loaders_back() {
          genuinely needs raw bytes, add the file to ALLOWED here with a reason.\n\
          (scanned {scanned} files)"
     );
-}
-
-/// Every `.dwg` under `dir`, recursively.
-fn dwg_files_under(dir: &std::path::Path) -> Vec<PathBuf> {
-    files_under(dir, &|p| {
-        p.extension().is_some_and(|e| e.eq_ignore_ascii_case("dwg"))
-    })
 }
 
 /// Every `.rs` under `dir`, recursively.
