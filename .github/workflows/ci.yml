@@ -22,6 +22,8 @@ name: CI
 # `VIPRS_REQUIRE_COUNTERPART: 1` in each job is the other half: it turns "I
 # cannot tell which acadsharp-rs this is" from a printed reason into a failure,
 # so a sibling that arrived some other way cannot pass for the pinned one.
+# `ACADRUST_REQUIRE: 1` is the same for the second sibling, `../acadrust`, which
+# `ACADRUST_REV` pins by the same script and the same action (`pin: ACADRUST_REV`).
 # `tests/counterpart_pin.rs` walks every job in this file and fails if one of
 # them is missing either piece, so a job added later cannot quietly run without
 # the counterpart.
@@ -95,18 +97,25 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
     steps:
       - uses: actions/checkout@v4
       # Right after checkout, because the pin file and `tools/counterpart.sh`
       # both come out of the checkout, and because nothing below this line can
       # even load the manifest without the sibling.
       - uses: ./.github/actions/clone-counterpart
+      # The second sibling. Cargo reads every path dependency's manifest at
+      # resolve time, optional or not, so `../acadrust` has to be on disk before
+      # anything builds, even though the default build never compiles it.
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
       - uses: Swatinem/rust-cache@v2
       - run: cargo fmt -- --check
-      - run: cargo clippy --all-targets -- -D warnings -W clippy::incompatible_msrv -W deprecated
+      - run: cargo clippy --locked --all-targets -- -D warnings -W clippy::incompatible_msrv -W deprecated
       # `tools/counterpart.sh` is the whole cross-repo pin, every job here runs
       # it before anything else, and until this line nothing checked it. It is a
       # step in an existing job rather than a job of its own on purpose: a new
@@ -127,12 +136,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
     steps:
       - uses: actions/checkout@v4
       # Right after checkout, because the pin file and `tools/counterpart.sh`
       # both come out of the checkout, and because nothing below this line can
       # even load the manifest without the sibling.
       - uses: ./.github/actions/clone-counterpart
+      # The second sibling. Cargo reads every path dependency's manifest at
+      # resolve time, optional or not, so `../acadrust` has to be on disk before
+      # anything builds, even though the default build never compiles it.
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
       - uses: dtolnay/rust-toolchain@1.99
       - uses: Swatinem/rust-cache@v2
       # The floor is written in three places and nothing else compares them, so
@@ -161,7 +177,7 @@ jobs:
           # job name, which is the thing that makes the context un-renameable.
           [ -z "$labelled" ] || { echo "::error::the MSRV job name has a version in it ($labelled); keep it plain so a floor bump does not rename a required check"; rc=1; }
           exit $rc
-      - run: cargo check --all-targets
+      - run: cargo check --locked --all-targets
 
   docs:
     # Also deliberately plain. Naming the denied lints in the context means
@@ -174,29 +190,43 @@ jobs:
       # stays green (libviprs#697, #795).
       RUSTDOCFLAGS: -D rustdoc::broken_intra_doc_links -D rustdoc::private_intra_doc_links -D rustdoc::redundant_explicit_links
       VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
     steps:
       - uses: actions/checkout@v4
       # Right after checkout, because the pin file and `tools/counterpart.sh`
       # both come out of the checkout, and because nothing below this line can
       # even load the manifest without the sibling.
       - uses: ./.github/actions/clone-counterpart
+      # The second sibling. Cargo reads every path dependency's manifest at
+      # resolve time, optional or not, so `../acadrust` has to be on disk before
+      # anything builds, even though the default build never compiles it.
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       # All features, so a gated surface resolves instead of reading as broken
       # links. docs.rs itself builds with all-features.
-      - run: cargo doc --no-deps --all-features
+      - run: cargo doc --locked --no-deps --all-features
 
   test:
     name: Test
     runs-on: ubuntu-latest
     env:
       VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
     steps:
       - uses: actions/checkout@v4
       # Right after checkout, because the pin file and `tools/counterpart.sh`
       # both come out of the checkout, and because nothing below this line can
       # even load the manifest without the sibling.
       - uses: ./.github/actions/clone-counterpart
+      # The second sibling. Cargo reads every path dependency's manifest at
+      # resolve time, optional or not, so `../acadrust` has to be on disk before
+      # anything builds, even though the default build never compiles it.
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       # `tools/regenerate_reference.py` imports `compression.zstd`, which is
@@ -217,10 +247,10 @@ jobs:
       # already-required context rather than by an advisory job nobody reads.
       # It needs no network, no .NET and no download: the committed corpus is
       # authoritative and CI never refreshes it.
-      - run: cargo test --all-targets
+      - run: cargo test --locked --all-targets
       # `--all-targets` skips doctests, so they need their own line or the
       # examples in the public API documentation are compiled by nothing.
-      - run: cargo test --doc
+      - run: cargo test --locked --doc
       # The same properties from the other side, and the one that catches a
       # manifest whose pin has stopped being a pin. Offline by construction.
       - name: Fixture corpus matches the manifest

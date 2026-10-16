@@ -1,13 +1,15 @@
-name: Clone the pinned acadsharp-rs
+name: Clone a pinned counterpart
 description: >
-  Lay libviprs/acadsharp-rs down beside this checkout at exactly the commit in
-  COUNTERPART_REV, and refuse everything else. There is no branch-name guessing,
-  no repository variable and no fallback to the default branch, so a run here is
-  always about the revision this repository declares. The rule itself lives in
-  tools/counterpart.sh, which tests/counterpart_pin.rs also drives, so CI and
-  cargo test cannot drift apart about it. Check this repository out first
-  (actions/checkout@v4): both the pin file and that script come from the
-  checkout.
+  Lay a sibling repository down beside this checkout at exactly the commit in
+  its pin file, and refuse everything else. `pin: COUNTERPART_REV` (the default)
+  is libviprs/acadsharp-rs, the crate under test; `pin: ACADRUST_REV` is
+  libviprs/acadrust, the fork the second emitter is built from. There is no
+  branch-name guessing, no repository variable and no fallback to the default
+  branch, so a run here is always about the revision this repository declares.
+  The rule itself lives in tools/counterpart.sh, which tests/counterpart_pin.rs
+  also drives, so CI and cargo test cannot drift apart about it. Check this
+  repository out first (actions/checkout@v4): both the pin file and that script
+  come from the checkout.
 
 inputs:
   token:
@@ -18,32 +20,60 @@ inputs:
       pass one is the repository-variable failure with extra steps.
     required: false
     default: ${{ github.token }}
+  pin:
+    description: >
+      Which committed pin file to honour: COUNTERPART_REV or ACADRUST_REV. It
+      names a file in this repository, never a revision.
+    required: false
+    default: COUNTERPART_REV
 
 runs:
   using: composite
   steps:
-    - name: Lay acadsharp-rs down at exactly COUNTERPART_REV
+    - name: Work out which counterpart the pin file is about
+      id: which
       shell: bash
       env:
-        COUNTERPART_REPO: ${{ github.repository_owner }}/acadsharp-rs
-      # The parent of the workspace is the directory that has to hold
-      # `acadsharp-rs/`, because the dependency is `../acadsharp-rs` relative to
-      # this checkout. The script refuses a destination that already has
-      # something in it rather than fetching over somebody's tree.
-      run: '"$GITHUB_WORKSPACE/tools/counterpart.sh" clone "$GITHUB_WORKSPACE/../acadsharp-rs"'
+        PIN: ${{ inputs.pin }}
+      # The one place a pin file name becomes a repository name. An unknown
+      # name is refused, so a typo cannot select some default.
+      run: |
+        set -euo pipefail
+        case "$PIN" in
+          COUNTERPART_REV) name=acadsharp-rs ;;
+          ACADRUST_REV) name=acadrust ;;
+          *)
+            echo "::error::the clone action's pin input is '$PIN', and the pin files I know are COUNTERPART_REV and ACADRUST_REV"
+            exit 1
+            ;;
+        esac
+        echo "name=$name" >> "$GITHUB_OUTPUT"
 
-    - name: COUNTERPART_REV names a commit on acadsharp-rs main
+    - name: Lay the counterpart down at exactly the pinned sha
+      shell: bash
+      env:
+        COUNTERPART_NAME: ${{ steps.which.outputs.name }}
+        COUNTERPART_REPO: ${{ github.repository_owner }}/${{ steps.which.outputs.name }}
+      # The parent of the workspace is the directory that has to hold the
+      # sibling, because the dependency is `../<name>` relative to this
+      # checkout. The script refuses a destination that already has something
+      # in it rather than fetching over somebody's tree.
+      run: '"$GITHUB_WORKSPACE/tools/counterpart.sh" clone "$GITHUB_WORKSPACE/../$COUNTERPART_NAME"'
+
+    - name: The pin names a commit on the counterpart's main
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.token }}
-        COUNTERPART_REPO: ${{ github.repository_owner }}/acadsharp-rs
+        COUNTERPART_NAME: ${{ steps.which.outputs.name }}
+        COUNTERPART_REPO: ${{ github.repository_owner }}/${{ steps.which.outputs.name }}
       run: |
         set -euo pipefail
         rev="$("$GITHUB_WORKSPACE/tools/counterpart.sh" rev)"
         # An `if` rather than a swallowed error, so a failed compare call says
         # so in the log instead of arriving here as an empty string with no
         # explanation. Either way the rule below refuses a status it does not
-        # recognise rather than reading silence as consent.
+        # recognise rather than reading silence as consent. `clone` has already
+        # asked git the same question, so this is the API-side second opinion.
         if ! status="$(gh api "repos/${COUNTERPART_REPO}/compare/main...${rev}" --jq .status)"; then
           echo "the compare call for main...${rev} failed, so I have no status to judge"
           status=""

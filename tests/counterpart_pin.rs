@@ -159,7 +159,6 @@ fn all_run_blocks(steps: &[Yaml]) -> String {
         .join("\n")
 }
 
-
 /// A throwaway git repository shaped like acadsharp-rs or acadrust after a
 /// rewrite of `main`: history rewritten from the root with identical trees, the
 /// old tip still fetchable by sha and reached by no branch.
@@ -179,7 +178,12 @@ struct Fixture {
 
 fn git(dir: &Path, args: &[&str]) -> String {
     let out = Command::new("git")
-        .args(["-c", "user.name=fixture", "-c", "user.email=fixture@example.invalid"])
+        .args([
+            "-c",
+            "user.name=fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+        ])
         .args(args)
         .current_dir(dir)
         .env("GIT_AUTHOR_DATE", "2026-01-01T00:00:00Z")
@@ -219,7 +223,10 @@ fn fixture_repo(tag: &str) -> Fixture {
 
     // The rewrite: a new root commit with the old tip's tree, and main moves.
     let tree = git(&dir, &["rev-parse", &format!("{old_tip}^{{tree}}")]);
-    let twin = git(&dir, &["commit-tree", &tree, "-m", "rewritten from the root"]);
+    let twin = git(
+        &dir,
+        &["commit-tree", &tree, "-m", "rewritten from the root"],
+    );
     git(&dir, &["update-ref", "refs/heads/main", &twin]);
     git(&dir, &["reset", "-q", "--hard", "main"]);
     let main_tip = commit_file(&dir, "d", "four\n");
@@ -1162,10 +1169,11 @@ fn the_readme_states_the_rule_it_used_to_call_an_open_question() {
 // The second sibling: acadrust, declared, optional, and resolved
 // ---------------------------------------------------------------------------
 
-fn cargo_metadata() -> serde_json::Value {
+fn cargo_metadata(extra: &[&str]) -> serde_json::Value {
     let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".to_string());
     let out = Command::new(cargo)
         .args(["metadata", "--format-version", "1"])
+        .args(extra)
         .arg("--manifest-path")
         .arg(repo_root().join("Cargo.toml"))
         .output()
@@ -1185,7 +1193,7 @@ fn the_manifest_declares_acadrust_as_an_optional_path_dependency_behind_a_featur
     let line = manifest
         .lines()
         .map(str::trim_start)
-        .find(|l| l.starts_with("acadrust ") || l.starts_with("acadrust="))
+        .find(|l| (l.starts_with("acadrust ") || l.starts_with("acadrust=")) && l.contains("path"))
         .unwrap_or_else(|| panic!("Cargo.toml declares no acadrust dependency"));
     assert!(
         line.contains("path = \"../acadrust\"") && line.contains("optional = true"),
@@ -1199,15 +1207,19 @@ fn the_manifest_declares_acadrust_as_an_optional_path_dependency_behind_a_featur
     );
     // The default build must not pull it in.
     assert!(
-        !manifest.lines().any(|l| l.trim_start().starts_with("default")),
+        !manifest
+            .lines()
+            .any(|l| l.trim_start().starts_with("default")),
         "this crate has no default features; acadrust must stay off unless asked for"
     );
 }
 
 #[test]
 fn cargo_resolves_acadrust_from_the_sibling_and_a_default_build_does_not_use_it() {
-    let meta = cargo_metadata();
-    let packages = meta["packages"].as_array().expect("no packages");
+    // Resolved with every feature on, because an optional dependency that is off
+    // is not in the resolve graph at all, which is the second half of this test.
+    let all = cargo_metadata(&["--all-features"]);
+    let packages = all["packages"].as_array().expect("no packages");
 
     let acadrust = packages
         .iter()
@@ -1237,6 +1249,7 @@ fn cargo_resolves_acadrust_from_the_sibling_and_a_default_build_does_not_use_it(
 
     // With no feature on, the resolver does not wire it in: nothing from it is
     // compiled by an ordinary `cargo test`.
+    let meta = cargo_metadata(&[]);
     let root = meta["resolve"]["root"].as_str().unwrap();
     let node = meta["resolve"]["nodes"]
         .as_array()
@@ -1268,7 +1281,10 @@ fn the_two_pins_are_two_files_and_neither_is_the_others() {
 
 #[test]
 fn the_script_refuses_a_pin_name_it_does_not_know() {
-    let got = run(&["rev"], &[("COUNTERPART_NAME", Some("somebody-elses-repo"))]);
+    let got = run(
+        &["rev"],
+        &[("COUNTERPART_NAME", Some("somebody-elses-repo"))],
+    );
     assert_eq!(got.code, 2, "a wiring mistake exits 2:\n{}", got.said());
     got.mentions("COUNTERPART_NAME");
 }
@@ -1302,7 +1318,10 @@ fn the_suite_lock_is_committed_and_every_cargo_step_uses_it() {
             "`cargo {command}` runs without --locked, so it could resolve something the lock does not say"
         );
     }
-    assert!(cargo_steps >= 5, "I found only {cargo_steps} cargo steps in ci.yml");
+    assert!(
+        cargo_steps >= 5,
+        "I found only {cargo_steps} cargo steps in ci.yml"
+    );
 }
 
 #[test]
@@ -1324,7 +1343,9 @@ fn clone_with_the_committed_acadrust_pin_succeeds() {
     // since a `clone` that refused everything would fail it. Strict by default;
     // `VIPRS_OFFLINE=1` skips it out loud.
     if std::env::var("VIPRS_OFFLINE").as_deref() == Ok("1") {
-        eprintln!("VIPRS_OFFLINE=1, so I did NOT check that clone accepts the committed ACADRUST_REV");
+        eprintln!(
+            "VIPRS_OFFLINE=1, so I did NOT check that clone accepts the committed ACADRUST_REV"
+        );
         return;
     }
     let dest = scratch("acadrust-live-clone").join("acadrust");
