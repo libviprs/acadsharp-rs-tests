@@ -77,6 +77,12 @@ fn records(fixture: &fixtures::DwgFixture) -> Vec<Value> {
         fixture.id
     );
 
+    // The format has one reader. The strict parser goes first so a stream it
+    // refuses is refused by name and line before any structural check below
+    // looks at it through `Value`.
+    acadsharp_rs_tests::canonical::parse_stream(&text)
+        .unwrap_or_else(|e| panic!("{}: canonical::parse_stream refused it: {e}", fixture.id));
+
     text.lines()
         .enumerate()
         .map(|(index, line)| {

@@ -16,6 +16,8 @@
 // lands.
 use acadsharp_rs as _;
 
+pub mod canonical;
+pub mod compare;
 pub mod fixtures;
 pub mod parity;
 
