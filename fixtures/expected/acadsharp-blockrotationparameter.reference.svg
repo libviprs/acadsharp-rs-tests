@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- acadsharp-rs-tests visual reference, svg schema 1 -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1024" height="1024" preserveAspectRatio="xMidYMid meet" viewBox="-6.1 -8.6 57.2 15.003300858899113">
+<rect x="-6.1" y="-8.6" width="57.2" height="15.003300858899113" fill="#FFFFFF" stroke="none"/>
+<g fill="none" stroke="#000000" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="0.0" cy="0.0" r="5.0"/>
+<line x1="0.0" y1="0.0" x2="3.367778697655221E-16" y2="-7.5"/>
+<line x1="5.0" y1="0.0" x2="-5.0" y2="-6.123233995736765E-16"/>
+<line x1="-2.245185798436814E-16" y1="5.0" x2="2.245185798436814E-16" y2="-5.0"/>
+<circle cx="15.0" cy="0.0" r="5.0"/>
+<line x1="15.0" y1="0.0" x2="19.820907072649046" y2="-5.745333323392336"/>
+<line x1="20.0" y1="0.0" x2="10.0" y2="-6.123233995736765E-16"/>
+<line x1="15.0" y1="5.0" x2="15.0" y2="-5.0"/>
+<circle cx="30.0" cy="0.0" r="5.0"/>
+<line x1="30.0" y1="0.0" x2="37.5" y2="4.440892098500626E-16"/>
+<line x1="35.0" y1="0.0" x2="25.0" y2="-6.123233995736765E-16"/>
+<line x1="30.0" y1="5.0" x2="30.0" y2="-5.0"/>
+<circle cx="45.0" cy="0.0" r="5.0"/>
+<line x1="45.0" y1="0.0" x2="39.6966991411009" y2="5.303300858899113"/>
+<line x1="50.0" y1="0.0" x2="40.0" y2="-6.123233995736765E-16"/>
+<line x1="45.0" y1="5.0" x2="45.0" y2="-5.0"/>
+</g>
+</svg>

@@ -213,7 +213,7 @@ class TestPinRefusals(unittest.TestCase):
     def test_a_url_pinned_to_a_different_commit_is_refused(self):
         other = "0" * 40
         url = f"https://raw.githubusercontent.com/DomCR/ACadSharp/{other}/samples/sample_AC1018.dwg"
-        self.assertIn("does not carry upstream.commit", " ".join(tool.check_pin(self.manifest(url=url))))
+        self.assertIn("does not carry", " ".join(tool.check_pin(self.manifest(url=url))))
 
 
 class TestTheRealManifest(unittest.TestCase):

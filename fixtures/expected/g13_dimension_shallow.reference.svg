@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- acadsharp-rs-tests visual reference, svg schema 1 -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1024" height="1024" preserveAspectRatio="xMidYMid meet" viewBox="-1.285 -65.535 12.57 66.82">
+<rect x="-1.285" y="-65.535" width="12.57" height="66.82" fill="#FFFFFF" stroke="none"/>
+<g fill="none" stroke="#000000" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 0.0 0.0 l 0 0"/>
+<path d="M 10.0 0.0 l 0 0"/>
+<path d="M 0.0 -3.0 l 0 0"/>
+<path d="M 10.0 -3.0 l 0 0"/>
+<line x1="0.0" y1="-3.0" x2="10.0" y2="-3.0"/>
+<polygon points="0.0,-3.0 0.18,-3.03 0.18,-2.97" fill="#000000"/>
+<polygon points="10.0,-3.0 9.82,-2.97 9.82,-3.03" fill="#000000"/>
+<line x1="0.0" y1="-0.625" x2="0.0" y2="-4.25"/>
+<line x1="10.0" y1="-0.625" x2="10.0" y2="-4.25"/>
+<text x="5.0" y="-3.625" font-family="sans-serif" font-size="0.18" fill="#000000" stroke="none" text-anchor="middle" dominant-baseline="central" xml:space="preserve">10</text>
+<path d="M 0.0 -20.0 l 0 0"/>
+<path d="M 10.0 -20.0 l 0 0"/>
+<path d="M 0.0 -23.0 l 0 0"/>
+<path d="M 10.0 -23.0 l 0 0"/>
+<line x1="0.0" y1="-23.0" x2="10.0" y2="-23.0"/>
+<polygon points="0.0,-23.0 0.18,-23.03 0.18,-22.97" fill="#000000"/>
+<polygon points="10.0,-23.0 9.82,-22.97 9.82,-23.03" fill="#000000"/>
+<line x1="0.0" y1="-20.625" x2="0.0" y2="-24.25"/>
+<line x1="10.0" y1="-20.625" x2="10.0" y2="-24.25"/>
+<text x="5.0" y="-23.625" font-family="sans-serif" font-size="0.18" fill="#000000" stroke="none" text-anchor="middle" dominant-baseline="central" xml:space="preserve">10</text>
+<path d="M 0.0 -40.0 l 0 0"/>
+<path d="M 10.0 -40.0 l 0 0"/>
+<path d="M 0.0 -43.0 l 0 0"/>
+<path d="M 10.0 -43.0 l 0 0"/>
+<line x1="0.0" y1="-43.0" x2="10.0" y2="-43.0"/>
+<polygon points="0.0,-43.0 0.18,-43.03 0.18,-42.97" fill="#000000"/>
+<polygon points="10.0,-43.0 9.82,-42.97 9.82,-43.03" fill="#000000"/>
+<line x1="0.0" y1="-40.625" x2="0.0" y2="-44.25"/>
+<line x1="10.0" y1="-40.625" x2="10.0" y2="-44.25"/>
+<text x="5.0" y="-43.625" font-family="sans-serif" font-size="0.18" fill="#000000" stroke="none" text-anchor="middle" dominant-baseline="central" xml:space="preserve">10</text>
+<path d="M 0.0 -60.0 l 0 0"/>
+<path d="M 10.0 -60.0 l 0 0"/>
+<path d="M 0.0 -63.0 l 0 0"/>
+<path d="M 10.0 -63.0 l 0 0"/>
+<line x1="0.0" y1="-63.0" x2="10.0" y2="-63.0"/>
+<polygon points="0.0,-63.0 0.18,-63.03 0.18,-62.97" fill="#000000"/>
+<polygon points="10.0,-63.0 9.82,-62.97 9.82,-63.03" fill="#000000"/>
+<line x1="0.0" y1="-60.625" x2="0.0" y2="-64.25"/>
+<line x1="10.0" y1="-60.625" x2="10.0" y2="-64.25"/>
+<text x="5.0" y="-63.625" font-family="sans-serif" font-size="0.18" fill="#000000" stroke="none" text-anchor="middle" dominant-baseline="central" xml:space="preserve">10</text>
+</g>
+</svg>

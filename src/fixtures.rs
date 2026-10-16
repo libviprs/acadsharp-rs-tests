@@ -101,6 +101,14 @@ pub struct DwgFixture {
     /// (stress: both engines open it and agree on counts). Single-valued.
     #[serde(default)]
     pub tier: Option<String>,
+    /// Set, with a reason, on a drawing that is meant to hold no geometry: an
+    /// empty drawing, or a refused-entity fixture whose stream is the warnings
+    /// that say so. A reference with no primitives is otherwise refused, since a
+    /// differential over nothing cannot fail; this is the explicit, reasoned
+    /// exemption, and it is checked from both sides (a row that claims it while
+    /// the stream holds primitives is refused too).
+    #[serde(default)]
+    pub no_primitives: Option<String>,
     /// Where the provenance of a file that is not ACadSharp's own is written
     /// down, pinned to a commit.
     #[serde(default)]

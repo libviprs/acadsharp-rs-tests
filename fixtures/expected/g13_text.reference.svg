@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- acadsharp-rs-tests visual reference, svg schema 1 -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1024" height="1024" preserveAspectRatio="xMidYMid meet" viewBox="1.02 -14.23 10.46 11.96">
+<rect x="1.02" y="-14.23" width="10.46" height="11.96" fill="#FFFFFF" stroke="none"/>
+<g fill="none" stroke="#000000" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round">
+<text x="1.25" y="-2.5" font-family="sans-serif" font-size="3.7499999999999996" fill="#000000" stroke="none" text-anchor="start" dominant-baseline="alphabetic" transform="rotate(-7.16197243913529 1.25 -2.5)" xml:space="preserve">VIPRS-G13-TEXT</text>
+<text x="11.25" y="-12.5" font-family="sans-serif" font-size="1.5" fill="#000000" stroke="none" text-anchor="start" dominant-baseline="text-before-edge" xml:space="preserve">VIPRS-G13-MTEXT</text>
+</g>
+</svg>

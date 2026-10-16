@@ -290,7 +290,10 @@ fn every_frozen_stream_parses_and_matches_its_summary() {
         );
         parsed += 1;
     }
-    assert_eq!(parsed, 7, "the corpus holds seven AutoCAD saves today");
+    assert_eq!(
+        parsed, 70,
+        "the corpus holds seventy drawings the oracle reads today"
+    );
 }
 
 fn three_records() -> Vec<Record> {

@@ -191,6 +191,29 @@ class StreamChecks(unittest.TestCase):
         )
         self.assertTrue(any("no primitive records" in p for p in problems), problems)
 
+    def no_geometry(self) -> str:
+        return "".join(l for l in self.GOOD.splitlines(keepends=True) if '"line"' not in l)
+
+    def test_a_reasoned_exemption_lets_a_warnings_only_stream_through(self):
+        fixture = {"acad_version": "AC1032", "no_primitives": "a refused-entity fixture"}
+        problems = tool.check_stream("fx", fixture, self.no_geometry().encode("utf-8"))
+        self.assertEqual(problems, [])
+
+    def test_an_exemption_with_nothing_to_compare_is_still_caught(self):
+        fixture = {"acad_version": "AC1032", "no_primitives": "a reason"}
+        bare = "".join(
+            l for l in self.no_geometry().splitlines(keepends=True) if '"warning"' not in l
+        )
+        problems = tool.check_stream("fx", fixture, bare.encode("utf-8"))
+        self.assertTrue(any("nothing is left to compare" in p for p in problems), problems)
+
+    def test_an_exemption_the_stream_no_longer_needs_is_caught(self):
+        # A row that claims no geometry while the stream holds some is a row to
+        # tighten, the same way a KNOWN_DIVERGENCE that vanished is.
+        fixture = {"acad_version": "AC1032", "no_primitives": "a reason"}
+        problems = tool.check_stream("fx", fixture, self.GOOD.encode("utf-8"))
+        self.assertTrue(any("Remove `no_primitives`" in p for p in problems), problems)
+
     def test_a_line_that_is_not_json_is_caught(self):
         problems = self.check(self.GOOD + "not json at all\n")
         self.assertTrue(any("is not JSON" in p for p in problems), problems)

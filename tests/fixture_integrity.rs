@@ -108,7 +108,9 @@ fn the_upstream_pin_is_an_exact_commit() {
         up.commit
     );
     assert_eq!(
-        fixtures::sources().get("acadsharp").map(|s| s.commit.as_str()),
+        fixtures::sources()
+            .get("acadsharp")
+            .map(|s| s.commit.as_str()),
         Some(up.commit.as_str()),
         "[upstream] and [sources.acadsharp] are two copies of one pin and must agree"
     );
@@ -126,16 +128,36 @@ fn every_pinned_row() -> Vec<(String, String, String, String)> {
         ));
     }
     for r in fixtures::refusals() {
-        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+        rows.push((
+            r.id.clone(),
+            r.source.clone(),
+            r.source_url.clone(),
+            r.license_evidence.clone(),
+        ));
     }
     for r in fixtures::recordings() {
-        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+        rows.push((
+            r.id.clone(),
+            r.source.clone(),
+            r.source_url.clone(),
+            r.license_evidence.clone(),
+        ));
     }
     for r in fixtures::oracle_inputs() {
-        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+        rows.push((
+            r.id.clone(),
+            r.source.clone(),
+            r.source_url.clone(),
+            r.license_evidence.clone(),
+        ));
     }
     for r in fixtures::censuses() {
-        rows.push((r.id.clone(), r.source.clone(), r.source_url.clone(), r.license_evidence.clone()));
+        rows.push((
+            r.id.clone(),
+            r.source.clone(),
+            r.source_url.clone(),
+            r.license_evidence.clone(),
+        ));
     }
     rows
 }
@@ -150,7 +172,10 @@ fn every_row_is_pinned_to_its_own_sources_commit() {
             .unwrap_or_else(|| panic!("{id}: source {source:?} is not defined"));
         assert_eq!(src.commit.len(), 40, "{source}: commit is not a full sha");
         for floating in ["/master/", "/main/", "/HEAD/"] {
-            assert!(!url.contains(floating), "{id}: source_url uses the floating ref {floating}");
+            assert!(
+                !url.contains(floating),
+                "{id}: source_url uses the floating ref {floating}"
+            );
         }
         assert!(
             url.starts_with(&src.url_prefix) && url.contains(&format!("/{}/", src.commit)),
@@ -164,8 +189,13 @@ fn every_row_is_pinned_to_its_own_sources_commit() {
     }
     assert_eq!(
         checked,
-        EXPECTED_TIER_A + EXPECTED_TIER_B + EXPECTED_TIER_C + EXPECTED_RECORDINGS
-            + EXPECTED_ORACLE_INPUTS + EXPECTED_CENSUS + EXPECTED_REFUSALS
+        EXPECTED_TIER_A
+            + EXPECTED_TIER_B
+            + EXPECTED_TIER_C
+            + EXPECTED_RECORDINGS
+            + EXPECTED_ORACLE_INPUTS
+            + EXPECTED_CENSUS
+            + EXPECTED_REFUSALS
     );
 }
 
@@ -274,11 +304,31 @@ fn no_two_rows_are_the_same_file() {
 
 #[test]
 fn the_corpus_has_the_rows_it_should_per_table_and_tier() {
-    assert_eq!(fixtures::by_tier("A").len(), EXPECTED_TIER_A, "tier A drawings");
-    assert_eq!(fixtures::by_tier("B").len(), EXPECTED_TIER_B, "tier B drawings");
-    assert_eq!(fixtures::by_tier("C").len(), EXPECTED_TIER_C, "tier C drawings");
-    assert_eq!(fixtures::recordings().len(), EXPECTED_RECORDINGS, "recordings");
-    assert_eq!(fixtures::oracle_inputs().len(), EXPECTED_ORACLE_INPUTS, "oracle inputs");
+    assert_eq!(
+        fixtures::by_tier("A").len(),
+        EXPECTED_TIER_A,
+        "tier A drawings"
+    );
+    assert_eq!(
+        fixtures::by_tier("B").len(),
+        EXPECTED_TIER_B,
+        "tier B drawings"
+    );
+    assert_eq!(
+        fixtures::by_tier("C").len(),
+        EXPECTED_TIER_C,
+        "tier C drawings"
+    );
+    assert_eq!(
+        fixtures::recordings().len(),
+        EXPECTED_RECORDINGS,
+        "recordings"
+    );
+    assert_eq!(
+        fixtures::oracle_inputs().len(),
+        EXPECTED_ORACLE_INPUTS,
+        "oracle inputs"
+    );
     assert_eq!(fixtures::censuses().len(), EXPECTED_CENSUS, "census files");
     assert_eq!(fixtures::refusals().len(), EXPECTED_REFUSALS, "refusals");
 }
@@ -305,7 +355,10 @@ fn every_drawing_has_exactly_one_tier_and_a_source() {
 
 #[test]
 fn tier_c_is_exactly_the_seven_stress_drawings() {
-    let mut got: Vec<&str> = fixtures::by_tier("C").iter().map(|f| f.id.as_str()).collect();
+    let mut got: Vec<&str> = fixtures::by_tier("C")
+        .iter()
+        .map(|f| f.id.as_str())
+        .collect();
     got.sort_unstable();
     assert_eq!(got, TIER_C_IDS);
 }
@@ -340,12 +393,18 @@ fn the_two_shared_drawings_are_one_row_each_and_both_tiers_point_at_them() {
         fixtures::all().iter().all(|f| !f.id.starts_with("real_")),
         "a `real_*` drawing has its own row, which stores the same bytes twice"
     );
-    for (stem, id) in [("real_AC1018", "acadsharp-ac1018"), ("real_AC1032", "acadsharp-ac1032")] {
+    for (stem, id) in [
+        ("real_AC1018", "acadsharp-ac1018"),
+        ("real_AC1032", "acadsharp-ac1032"),
+    ] {
         let rec = fixtures::recordings()
             .iter()
             .find(|r| r.file.ends_with(&format!("/{stem}.txt")))
             .unwrap_or_else(|| panic!("no recording named {stem}"));
-        assert_eq!(rec.drawing, id, "{stem}'s recording must point at the Tier A row");
+        assert_eq!(
+            rec.drawing, id,
+            "{stem}'s recording must point at the Tier A row"
+        );
         assert_eq!(
             fixtures::by_id(id).and_then(|f| f.tier.as_deref()),
             Some("A")
@@ -425,7 +484,10 @@ fn every_refusal_names_the_oracle_exit_code_it_expects() {
         );
     }
     let by_id = |id: &str| fixtures::refusals().iter().find(|r| r.id == id);
-    assert_eq!(by_id("g13_ac1009").map(|r| r.oracle_exit.as_str()), Some("UnsupportedVersion"));
+    assert_eq!(
+        by_id("g13_ac1009").map(|r| r.oracle_exit.as_str()),
+        Some("UnsupportedVersion")
+    );
     assert_eq!(
         by_id("g13_nan_bulge").map(|r| r.oracle_exit.as_str()),
         Some("CanonicalSerializationFailure")
@@ -459,8 +521,13 @@ fn every_row_of_every_table_loads_and_a_missing_file_does_not() {
     }
     assert_eq!(
         loaded,
-        EXPECTED_TIER_A + EXPECTED_TIER_B + EXPECTED_TIER_C + EXPECTED_RECORDINGS
-            + EXPECTED_ORACLE_INPUTS + EXPECTED_CENSUS + EXPECTED_REFUSALS
+        EXPECTED_TIER_A
+            + EXPECTED_TIER_B
+            + EXPECTED_TIER_C
+            + EXPECTED_RECORDINGS
+            + EXPECTED_ORACLE_INPUTS
+            + EXPECTED_CENSUS
+            + EXPECTED_REFUSALS
     );
 
     // A row whose file is gone is an error naming the row.
@@ -471,7 +538,13 @@ fn every_row_of_every_table_loads_and_a_missing_file_does_not() {
     // And so is one whose bytes are not the frozen ones.
     let mut wrong = fixtures::recordings()[0].clone();
     wrong.sha256 = "0".repeat(64);
-    assert!(wrong.load().expect_err("wrong sha").to_string().contains("sha256"));
+    assert!(
+        wrong
+            .load()
+            .expect_err("wrong sha")
+            .to_string()
+            .contains("sha256")
+    );
 }
 
 #[test]

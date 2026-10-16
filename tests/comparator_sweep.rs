@@ -110,14 +110,28 @@ fn the_sweep_over_ac1032_visits_exactly_the_floats_counted_by_hand() {
     assert_eq!(sweep("acadsharp-ac1032"), AC1032_FLOATS);
 }
 
+/// The seven AutoCAD saves of the one drawing. The sweep is quadratic in a
+/// stream's size (every float, against a whole stream), so it runs over these
+/// and not over the whole corpus, where `g13_many_inserts` alone holds thirty
+/// thousand records.
+const SAVES: [&str; 7] = [
+    "acadsharp-ac1014",
+    "acadsharp-ac1015",
+    "acadsharp-ac1018",
+    "acadsharp-ac1021",
+    "acadsharp-ac1024",
+    "acadsharp-ac1027",
+    "acadsharp-ac1032",
+];
+
 #[test]
 fn every_frozen_stream_survives_the_sweep() {
     let mut total = 0;
-    for fixture in fixtures::all() {
-        if fixture.id == "acadsharp-ac1032" {
+    for id in SAVES {
+        if id == "acadsharp-ac1032" {
             continue;
         }
-        total += sweep(&fixture.id);
+        total += sweep(id);
     }
     // Six more saves of the same drawing, so about the same again each.
     assert!(total > 6 * 2000, "the sweep visited only {total} floats");
