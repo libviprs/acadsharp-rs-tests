@@ -48,6 +48,10 @@ sha2 = "0.10"
 # the way of `cargo test`, and nothing in this crate ever compresses.
 ruzstd = "0.9"
 
+# Reading canonical schema 1 (src/canonical.rs). A dependency now, not a dev one:
+# the parser and the comparator are library code, and both emitters link them.
+serde_json = "1"
+
 [dev-dependencies]
 # Parsing `.github/workflows/ci.yml` and the clone action as YAML rather than as
 # text. `tests/counterpart_pin.rs` asserts things about jobs, steps and step
@@ -56,8 +60,3 @@ ruzstd = "0.9"
 # inside a comment, and fails on a perfectly good step written with different
 # quoting.
 yaml-rust2 = "0.10"
-# Reading the frozen reference records back structurally. The suite asserts
-# properties of the canonical stream (first record, schema version, at least one
-# primitive), and doing that with string matching would pass on a file that is
-# not JSON at all.
-serde_json = "1"
