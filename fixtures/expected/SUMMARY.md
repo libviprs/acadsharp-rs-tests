@@ -87,3 +87,13 @@ not the entity counts a DWG inspector would show.
 | regression_hatch_loops | AC1032 | 11 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 2 | 5 |
 | regression_unsupported_entity | AC1032 | 11 | 0 | 1 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 6 |
 | regression_large_entity_count | AC1032 | 50008 | 0 | 0 | 1 | 0 | 50000 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| parity_arc | AC1032 | 10 | 2 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| parity_circle | AC1032 | 10 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| parity_ellipse | AC1032 | 10 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| parity_spline | AC1032 | 10 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 2 | 5 |
+| parity_line | AC1032 | 10 | 0 | 0 | 1 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| parity_polyline | AC1032 | 12 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 2 | 5 |
+| parity_text | AC1032 | 13 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 4 | 2 | 5 |
+| parity_insert | AC1032 | 10 | 0 | 0 | 1 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| parity_hatch | AC1032 | 11 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 2 | 5 |
+| parity_viewport | AC1032 | 15 | 0 | 0 | 1 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 4 | 7 |

@@ -19,15 +19,18 @@ fn generated() -> Vec<&'static fixtures::DwgFixture> {
         .collect()
 }
 
-/// The names the generator's `Drawings/*.cs` declare, read from the source.
+/// The names the generator's `Drawings/*.cs` and `Parity/*.cs` declare, read from
+/// the source.
 fn catalog_names() -> Vec<String> {
-    let dir = root().join(GENERATOR).join("Drawings");
     let mut names = Vec::new();
-    for e in std::fs::read_dir(dir).unwrap() {
-        let text = std::fs::read_to_string(e.unwrap().path()).unwrap();
-        let at = text.find("public const string Name = \"").unwrap()
-            + "public const string Name = \"".len();
-        names.push(text[at..].split('"').next().unwrap().to_string());
+    for sub in ["Drawings", "Parity"] {
+        let dir = root().join(GENERATOR).join(sub);
+        for e in std::fs::read_dir(dir).unwrap() {
+            let text = std::fs::read_to_string(e.unwrap().path()).unwrap();
+            let at = text.find("public const string Name = \"").unwrap()
+                + "public const string Name = \"".len();
+            names.push(text[at..].split('"').next().unwrap().to_string());
+        }
     }
     names.sort();
     names
@@ -50,7 +53,8 @@ fn a_generated_row_names_its_generator_and_that_generator_source_is_the_one_hash
             .as_deref()
             .unwrap_or_else(|| panic!("{}: no generator_source", f.id));
         assert!(
-            src.starts_with(&format!("{GENERATOR}/Drawings/")),
+            src.starts_with(&format!("{GENERATOR}/Drawings/"))
+                || src.starts_with(&format!("{GENERATOR}/Parity/")),
             "{}: {src}",
             f.id
         );

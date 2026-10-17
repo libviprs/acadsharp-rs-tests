@@ -29,7 +29,7 @@ reads and freezes, and has exactly one `tier`:
 | tier | what | rows | source |
 |---|---|---|---|
 | A | decision grade, AutoCAD-authored: the seven saves, `sample_base`, `empty`, the ten `dynamic-blocks/BLOCK*`, `AecObjects`, `geoloc`, `export_sample` | 22 | ACadSharp `samples/` |
-| B | regression grade: libviprs-dep's synthetics, written by ACadSharp's own `DwgWriter`, and the seven drawings this repository generates (below) | 48 (41 + 7) | libviprs-dep, and `generated` |
+| B | regression grade: libviprs-dep's synthetics, written by ACadSharp's own `DwgWriter`, and the seventeen drawings this repository generates (the seven regression classes below, and ten parity families for the upstream tests) | 58 (41 + 17) | libviprs-dep, and `generated` |
 | C | stress: `g13_many_inserts`, `g13_dimension_deep`, `g13_scale_4x`, `g13_scale_16x`, `g13_wide_polyline`, `g13_wide_spline`, `g13_xref_long`. Both engines open them and agree on counts; timing them is libviprs-bench's job | 7 | libviprs-dep |
 
 The other tables have the same provenance fields: `[[refusal]]` (2 drawings the
@@ -308,3 +308,13 @@ and `ACadSharp.Generator check fixtures/generated/dwg` fails if a committed file
 differs from what the generator writes today. Each row's
 `generator_source_sha256` is the hash of the one file that defines it, and
 `tests/generated_fixtures.rs` recomputes it.
+
+## Parity families (H4.2)
+
+Ten more generated drawings, `parity_arc`, `parity_circle`, `parity_ellipse`,
+`parity_spline`, `parity_line`, `parity_polyline`, `parity_text`, `parity_insert`,
+`parity_hatch` and `parity_viewport`, written by `reference/ACadSharp.Generator/Parity/`.
+They exist so `tests/upstream_parity/*.rs` can assert values the generator wrote
+(a radius of 5.0, a nested insert that lands at (94,54)-(94,56)) rather than only
+that a decode succeeded. Their expected outputs are frozen like any other row's, so
+the differential covers them too.

@@ -16,12 +16,12 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | pair | rows | MATCH | KNOWN | DIFF | COUNT | OPEN_FAILED | EXCLUDED | DUAL_ORACLE |
 |---|---|---|---|---|---|---|---|---|
-| `acadsharp/acadrust` | 77 | 56 | 0 | 17 | 3 | 1 | 0 | 0 |
+| `acadsharp/acadrust` | 87 | 62 | 0 | 21 | 3 | 1 | 0 | 0 |
 | `ezdxf/acadrust` | 23 | 12 | 0 | 11 | 0 | 0 | 0 | 0 |
 | `ezdxf/acadsharp` | 23 | 9 | 0 | 14 | 0 | 0 | 0 | 0 |
 | `ezdxf/oracle` | 23 | 15 | 0 | 8 | 0 | 0 | 0 | 0 |
-| `oracle/acadrust` | 77 | 69 | 6 | 2 | 0 | 0 | 0 | 0 |
-| `oracle/acadsharp` | 77 | 57 | 0 | 16 | 3 | 1 | 0 | 0 |
+| `oracle/acadrust` | 87 | 78 | 6 | 3 | 0 | 0 | 0 | 0 |
+| `oracle/acadsharp` | 87 | 64 | 0 | 19 | 3 | 1 | 0 | 0 |
 | `self/acadrust` | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 |
 | `self/acadsharp` | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 |
 | `self/oracle` | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 |
@@ -51,6 +51,10 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `g13_ocs_skew` | DIFF:1 | libviprs/acadsharp-rs-tests#64 | acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding) |
 | `g13_polyface_mesh` | COUNT:7/3 | libviprs/acadsharp-rs-tests#62 | acadrust agrees with the oracle where the shim differs: the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings) |
 | `g13_polygon_mesh` | COUNT:7/3 | libviprs/acadsharp-rs-tests#62 | acadrust agrees with the oracle where the shim differs: the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings) |
+| `parity_ellipse` | DIFF:1 | libviprs/acadsharp-rs-tests#89 | the oracle and acadrust add the major axis angle (pi/2 for this arc) to an elliptical arc's start and end parameters, and the shim returns the 0.5 and 2.5 the generator wrote (1 finding) |
+| `parity_hatch` | DIFF:3 | libviprs/acadsharp-rs-tests#59 | acadrust agrees with the oracle where the shim differs: a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the three loop records on one side (3 findings) |
+| `parity_text` | DIFF:1 | libviprs/acadsharp-rs-tests#54 | an insert's ATTRIBs come before the block body on the wire and after it in schema 1, so the one line and the attribute text swap places (1 finding) |
+| `parity_viewport` | DIFF:2 | libviprs/acadsharp-rs-tests#90 | acadrust reports the two layouts added by name (Plan A, Plan B) as view kind unknown where the oracle and the shim say layout (2 findings) |
 | `regression_hatch_loops` | DIFF:3 | libviprs/acadsharp-rs-tests#55 | acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (3 findings) |
 | `regression_text_zero_height` | DIFF:2 | libviprs/acadsharp-rs-tests#78 | acadrust agrees with the oracle where the shim differs: acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings) |
 
@@ -113,6 +117,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `acadsharp-export-sample` | DIFF:9 | libviprs/acadsharp-rs-tests#56, libviprs/acadsharp-rs-tests#65, libviprs/acadsharp-rs-tests#67 | acadrust reports z 0.0 for polylines the oracle puts at z 1.0 or -1.0, not adjudicated (11 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding); the oracle writes weights of 0.0 for a non-rational spline (1 finding) |
 | `acadsharp-sample-base` | KNOWN:1 | libviprs/libviprs-dep#112 | listed in parity/TABLES.toml |
 | `g13_hatch` | KNOWN:1 | libviprs/acadsharp-rs-tests#67 | listed in parity/TABLES.toml |
+| `parity_viewport` | DIFF:2 | libviprs/acadsharp-rs-tests#90 | acadrust reports the two layouts added by name (Plan A, Plan B) as view kind unknown where the oracle and the shim say layout (2 findings) |
 | `regression_text_zero_height` | DIFF:2 | libviprs/acadsharp-rs-tests#78 | acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings) |
 
 ### `oracle/acadsharp`
@@ -138,6 +143,9 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `g13_ocs_skew` | DIFF:1 | libviprs/acadsharp-rs-tests#64 | under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding) |
 | `g13_polyface_mesh` | COUNT:3/7 | libviprs/acadsharp-rs-tests#62 | the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings) |
 | `g13_polygon_mesh` | COUNT:3/7 | libviprs/acadsharp-rs-tests#62 | the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings) |
+| `parity_ellipse` | DIFF:1 | libviprs/acadsharp-rs-tests#89 | the oracle and acadrust add the major axis angle (pi/2 for this arc) to an elliptical arc's start and end parameters, and the shim returns the 0.5 and 2.5 the generator wrote (1 finding) |
+| `parity_hatch` | DIFF:3 | libviprs/acadsharp-rs-tests#59 | a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the three loop records on one side (3 findings) |
+| `parity_text` | DIFF:1 | libviprs/acadsharp-rs-tests#54 | an insert's ATTRIBs come before the block body on the wire and after it in schema 1, so the one line and the attribute text swap places (1 finding) |
 | `regression_hatch_loops` | DIFF:3 | libviprs/acadsharp-rs-tests#55 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (3 findings) |
 
 ### `self/acadrust`
