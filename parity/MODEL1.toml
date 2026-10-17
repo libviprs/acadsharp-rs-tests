@@ -334,3 +334,106 @@ fixtures = [
 ]
 reason = "the AutoCAD DXF of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
 issue = "libviprs/acadsharp-rs-tests#31"
+
+# ---- known: ACadSharp keys a dictionary entry by the object's name
+[[known]]
+names = [
+  "dictionary/ACAD_SCALELIST.entries[*].key", "dictionary/ACAD_MLINESTYLE.entries[*].key",
+  "dictionary/ACAD_LAYOUT.entries[*].key", "dictionary/ACAD_MATERIAL.entries[*].key",
+  "dictionary/ACAD_VISUALSTYLE.entries[*].key"
+]
+pairs = ["oracle/acadrust", "ezdxf/oracle"]
+reason = "ACadSharp adds each dictionary entry under the object's own name (CadDictionaryTemplate.build: this.CadObject.Add(entry.Name, entry)), not under the key the file stores, which acadrust and ezdxf report (A0, A1 for the scales, Standard for the mline style, the upper case keys of the AC1014 save)"
+issue = "libviprs/acadsharp-rs-tests#124"
+
+# ---- known: ACadSharp's DXF reader swallows a visual style
+[[known]]
+names = [
+  "dictionary/ACAD_VISUALSTYLE.entries.len", "dictionary/ACAD_VISUALSTYLE.entry_count"
+]
+pairs = ["ezdxf/oracle", "dxf-dwg:oracle", "oracle/acadrust"]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii",
+  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "ACadSharp's DXF reader answers true for every code of a VISUALSTYLE (DxfObjectsSectionReader.readVisualStyle), the handle included, so no dictionary resolves the 24 styles and the oracle lists none; ezdxf, acadrust and ACadSharp's own DWG reader list all 24"
+issue = "libviprs/acadsharp-rs-tests#125"
+
+# ---- known: the keys of the schemas of a decompose data dictionary
+[[known]]
+names = [
+  "dictionary/AcDsDecomposeData/AcDsSchemas.entries[*].key"
+]
+pairs = ["dxf-dwg:oracle", "dxf-dwg:acadrust"]
+reason = "AutoCAD keys each schema XRECORD of AcDsDecomposeData by a pointer value of the saving process (2869978012640 in the DWG, 2871287105568 in its DXF twin), so two saves of one drawing differ by construction"
+issue = "libviprs/acadsharp-rs-tests#31"
+
+# ---- known: the AC1014 save
+[[known]]
+names = [
+  "dictionary/table/*.hard_owner", "dictionary/layout/*.hard_owner",
+  "dictionary/ACAD_PLOTSTYLENAME.cloning", "dictionary/ACAD_PLOTSTYLENAME.entries.len",
+  "dictionary/ACAD_PLOTSTYLENAME.entry_count"
+]
+pairs = ["oracle/acadrust"]
+fixtures = ["acadsharp-ac1014"]
+reason = "on the AC1014 save ACadSharp skips the dictionary byte its reader calls always 0 and reports the hard owner flag false for every extension dictionary where acadrust (and the later saves) say true, and it lists no ACAD_PLOTSTYLENAME entry where acadrust lists one; the save has no DXF twin to say which is right"
+issue = "libviprs/acadsharp-rs-tests#128"
+
+# ---- excluded: acadrust's DXF reader keeps no extension dictionary of a table entry or a layout
+[[excluded]]
+engine = "acadrust"
+names = [
+  "dictionary/table/*", "dictionary/layout/*"
+]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii",
+  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "acadrust's DXF reader keeps the extension dictionary of an entity and of nothing else (xdic_by_handle is filled during a DWG read only), so the dictionaries of the table entries and the layouts of a DXF are not there"
+issue = "libviprs/acadsharp-rs-tests#127"
+
+# ---- excluded: the extension dictionaries of two saves of one drawing
+[[excluded]]
+engine = "oracle"
+pairs = ["dxf-dwg:oracle"]
+names = [
+  "dictionary/table/*", "dictionary/layout/*"
+]
+reason = "AutoCAD wrote the DWG and its DXF twin at different moments and the two do not hold the same extension dictionaries or the same entries in them (the dynamic block's and the layers' only in the DWG, the GAS_LINE linetype's only in the DXF, ACAD_XREC_ROUNDTRIP xrecords in the DWG's view_custom and layout Model; ezdxf agrees with the oracle on the DXF and acadrust with the oracle on the DWG), so a difference there is one of the files and not of the reader"
+issue = "libviprs/acadsharp-rs-tests#31"
+
+# ---- excluded: the anonymous blocks are named differently by the readers
+[[excluded]]
+engine = "oracle"
+pairs = ["oracle/acadrust"]
+names = [
+  "dictionary/table/block_record/*U", "dictionary/table/block_record/*U/*",
+  "dictionary/table/block_record/*U0", "dictionary/table/block_record/*U0/*",
+  "dictionary/table/block_record/*U1", "dictionary/table/block_record/*U1/*"
+]
+reason = "acadrust names the anonymous blocks of the DWG saves *U, *U0 and *U1 where the oracle (and the DXF twins, per ezdxf) name them *U17 to *U19; the block_record kind is where that is settled, and the extension dictionaries only follow the name"
+issue = "libviprs/acadsharp-rs-tests#37"
+
+[[excluded]]
+engine = "acadrust"
+pairs = ["oracle/acadrust"]
+names = [
+  "dictionary/table/block_record/*U18", "dictionary/table/block_record/*U18/*",
+  "dictionary/table/block_record/*U19", "dictionary/table/block_record/*U19/*"
+]
+reason = "acadrust names the anonymous blocks of the DWG saves *U, *U0 and *U1 where the oracle (and the DXF twins, per ezdxf) name them *U17 to *U19; the block_record kind is where that is settled, and the extension dictionaries only follow the name"
+issue = "libviprs/acadsharp-rs-tests#37"
+
+# ---- excluded: acadrust's DWG reader and the dynamic block's extension dictionary
+[[excluded]]
+engine = "acadrust"
+pairs = ["oracle/acadrust"]
+names = [
+  "dictionary/table/block_record/my-dynamic-block", "dictionary/table/block_record/my-dynamic-block/*"
+]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021"
+]
+reason = "on the AC1014 to AC1021 saves the oracle lists the extension dictionary of the dynamic block's record (the DXF twins have none, so the DWG is the only place to ask) and acadrust lists none; the saves from AC1024 on agree"
+issue = "libviprs/acadsharp-rs-tests#129"
