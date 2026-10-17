@@ -332,7 +332,18 @@ jobs:
           target: linux-x64
       - name: Export ACADSHARP_NATIVE_DIR
         run: echo "ACADSHARP_NATIVE_DIR=${{ steps.native.outputs.dir }}" >> "$GITHUB_ENV"
+      # `VIPRS_CELL_MODE` makes `fixture_parity` fail if this binary was linked
+      # any other way, and `VIPRS_CELL_OUT` is where it writes the canonical
+      # output the final comparison job reads.
       - run: cargo test --locked --all-targets --features native
+        env:
+          VIPRS_CELL_MODE: shared
+          VIPRS_CELL_OUT: ${{ runner.temp }}/cell-out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cell-linux-x64-shared
+          path: ${{ runner.temp }}/cell-out
+          if-no-files-found: error
       # The same smoke binary, in a container that has nothing but libc, and a
       # control that a framework-dependent .NET app cannot start in that same
       # container. The runner image ships an SDK, which is why the control
@@ -364,6 +375,14 @@ jobs:
       - name: Export ACADSHARP_NATIVE_DIR
         run: echo "ACADSHARP_NATIVE_DIR=${{ steps.native.outputs.dir }}" >> "$GITHUB_ENV"
       - run: cargo test --locked --all-targets --features native
+        env:
+          VIPRS_CELL_MODE: shared
+          VIPRS_CELL_OUT: ${{ runner.temp }}/cell-out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cell-mac-arm64-shared
+          path: ${{ runner.temp }}/cell-out
+          if-no-files-found: error
       # macOS has no container to put the smoke in, so the proof is weaker and
       # says so: it records whether the runner image has a dotnet at all, and
       # runs the smoke with a PATH that cannot find one.
@@ -433,3 +452,75 @@ jobs:
       # no second copy of the test lines to keep in step. The script fetches the
       # native archive at the crate's own pin, verified, when the job has not.
       - run: tools/run-tests.sh --in-ci
+
+  # --- The lane matrix (H4.1) -------------------------------------------------
+  #
+  # Every other cell of the native lane: each published target, shared, and again
+  # static wherever the archive is certified. The cells are planned from
+  # NATIVE_ARTIFACT.toml by `tools/native_cells.py` with no download, so a target
+  # whose row says `static_certified = false` gets no static cell at all, not a
+  # skipped one. The two cells that carry the no-.NET proof (linux-x64 shared and
+  # mac-arm64 shared) are the jobs above and are left out of the plan so no cell
+  # runs twice under one name.
+  native-plan:
+    name: Native matrix plan
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        run: echo "matrix=$(python3 tools/native_cells.py)" >> "$GITHUB_OUTPUT"
+
+  native-matrix:
+    name: ${{ matrix.name }}
+    needs: native-plan
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.native-plan.outputs.matrix) }}
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
+      VIPRS_REQUIRE_NATIVE: 1
+      ACADSHARP_REQUIRE_NATIVE: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/clone-counterpart
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Fetch the archive by hash
+        id: native
+        uses: ./.github/actions/fetch-native-artifact
+        with:
+          target: ${{ matrix.target }}
+      - name: Run the cell
+        env:
+          TARGET: ${{ matrix.target }}
+          MODE: ${{ matrix.mode }}
+          CONTAINER: ${{ matrix.container }}
+          ARCHIVE: ${{ steps.native.outputs.dir }}
+        run: tools/native_cell.sh "$TARGET" "$MODE" "$ARCHIVE" "$RUNNER_TEMP/cell-out" "$CONTAINER"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ runner.temp }}/cell-out
+          if-no-files-found: error
+
+  # A static link and a shared link of one archive are the same code. This is the
+  # job that says so: for every target with both cells, the canonical output of
+  # every drawing has to be byte-identical, with no tolerance.
+  native-compare:
+    name: Native (shared versus static)
+    needs: [native-linux-x64, native-mac-arm64, native-matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cell-*
+          path: cells
+      - run: python3 tools/compare_cells.py cells

@@ -301,3 +301,142 @@ fn the_leak_cell_exists_runs_on_nightly_and_compares_two_loop_lengths() {
         "the script must say what LSan does not see"
     );
 }
+
+// ---- the lane matrix ---------------------------------------------------------
+
+#[test]
+fn the_matrix_is_planned_from_the_manifest_and_every_cell_runs_the_cell_script() {
+    let ci = yaml(".github/workflows/ci.yml");
+
+    let plan = &ci["jobs"]["native-plan"];
+    let plan_runs: String = plan["steps"]
+        .as_vec()
+        .expect("steps")
+        .iter()
+        .filter_map(|s| s["run"].as_str())
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(
+        plan_runs.contains("tools/native_cells.py"),
+        "the plan must come from the manifest, with no download"
+    );
+    assert!(
+        !plan_runs.contains("cargo"),
+        "the planner runs no cargo (it is exempt from the sibling clones for that reason)"
+    );
+
+    let matrix = &ci["jobs"]["native-matrix"];
+    assert_eq!(matrix["name"].as_str(), Some("${{ matrix.name }}"));
+    assert_eq!(matrix["needs"].as_str(), Some("native-plan"));
+    assert_eq!(
+        matrix["strategy"]["fail-fast"].as_bool(),
+        Some(false),
+        "one broken cell must not hide the others"
+    );
+    assert!(
+        matrix["strategy"]["matrix"]
+            .as_str()
+            .is_some_and(|m| m.contains("fromJSON(needs.native-plan.outputs.matrix)")),
+        "the matrix must be the planner's output"
+    );
+    let runs: String = matrix["steps"]
+        .as_vec()
+        .expect("steps")
+        .iter()
+        .filter_map(|s| s["run"].as_str())
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(
+        runs.contains("tools/native_cell.sh"),
+        "cells run through the one script"
+    );
+    // The matrix values reach the script through env, never interpolated into it.
+    assert!(
+        !runs.contains("${{"),
+        "a matrix value was interpolated into a shell line: {runs}"
+    );
+}
+
+#[test]
+fn the_comparison_job_needs_every_cell_and_compares_bytes() {
+    let ci = yaml(".github/workflows/ci.yml");
+    let job = &ci["jobs"]["native-compare"];
+    assert_eq!(job["name"].as_str(), Some("Native (shared versus static)"));
+    let needs: Vec<&str> = job["needs"]
+        .as_vec()
+        .expect("needs is a list")
+        .iter()
+        .filter_map(Yaml::as_str)
+        .collect();
+    for n in ["native-linux-x64", "native-mac-arm64", "native-matrix"] {
+        assert!(needs.contains(&n), "native-compare does not wait for {n}");
+    }
+    let steps = job["steps"].as_vec().expect("steps");
+    let runs: String = steps
+        .iter()
+        .filter_map(|s| s["run"].as_str())
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(runs.contains("tools/compare_cells.py"));
+    assert!(
+        !runs.contains("cargo"),
+        "a job that runs no cargo is only exempt from the sibling clones while it stays one"
+    );
+    // The two H3.2 jobs hand their output over under the names the comparison
+    // reads.
+    for (key, artifact) in [
+        ("native-linux-x64", "cell-linux-x64-shared"),
+        ("native-mac-arm64", "cell-mac-arm64-shared"),
+    ] {
+        let upload = ci["jobs"][key]["steps"]
+            .as_vec()
+            .expect("steps")
+            .iter()
+            .any(|s| {
+                s["uses"]
+                    .as_str()
+                    .is_some_and(|u| u.starts_with("actions/upload-artifact"))
+                    && s["with"]["name"].as_str() == Some(artifact)
+            });
+        assert!(upload, "{key} never uploads {artifact}");
+    }
+}
+
+#[test]
+fn the_cell_script_turns_static_into_the_crates_feature_and_musl_into_a_container_run() {
+    let script = read("tools/native_cell.sh");
+    assert!(
+        script.contains("acadsharp-rs/link-static"),
+        "the static cell must ask the crate for a static link"
+    );
+    assert!(
+        script.contains("VIPRS_CELL_MODE"),
+        "the cell must tell fixture_parity which link it intends"
+    );
+    assert!(
+        script.contains("-crt-static"),
+        "a musl cell cannot load a shared library with a static libc"
+    );
+    assert!(script.contains("docker run"), "musl cells run in an image");
+}
+
+#[test]
+fn the_lane_test_holds_a_cell_to_its_mode_and_writes_the_output_the_comparison_reads() {
+    let test = read("tests/fixture_parity.rs");
+    for needle in [
+        "VIPRS_CELL_MODE",
+        "VIPRS_CELL_OUT",
+        "SUITE_NATIVE_LINK_KIND",
+        ".acadsharp.jsonl",
+    ] {
+        assert!(
+            test.contains(needle),
+            "tests/fixture_parity.rs never mentions {needle}"
+        );
+    }
+    let build = read("build.rs");
+    assert!(
+        build.contains("SUITE_NATIVE_LINK_KIND"),
+        "build.rs must hand the link kind to the lane test"
+    );
+}
