@@ -1,0 +1,216 @@
+using System.Globalization;
+
+using ACadSharp.Header;
+using ACadSharp.IO;
+using ACadSharp.Reference.Canonical;
+using ACadSharp.Tables;
+
+namespace ACadSharp.Reference.Model1;
+
+/// <summary>
+/// Reads the <c>model-1</c> records out of a document: everything past what a
+/// viewer draws. See <c>docs/MODEL_1.md</c> for the contract.
+/// </summary>
+public static class Model1Extractor
+{
+    /// <summary>Reads a DWG and extracts its model-1 records.</summary>
+    /// <param name="path">Path to the input file.</param>
+    /// <returns>The encoded stream, or the reason there is none.</returns>
+    public static Result<byte[]> ExtractFile(string path)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(path);
+        if (!File.Exists(path))
+        {
+            return Result.Fail<byte[]>(ExitCode.ReaderFailure, $"{path}: no such file");
+        }
+
+        CadDocument document;
+        try
+        {
+            document = DwgReader.Read(path);
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
+        {
+            return Result.Fail<byte[]>(
+                ExitCode.ReaderFailure, $"{path}: ACadSharp could not read this file: {ex.GetType().Name}: {ex.Message}");
+        }
+
+        try
+        {
+            return Result.Ok<byte[]>(Model1Record.Encode(Extract(document)));
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
+        {
+            return Result.Fail<byte[]>(
+                ExitCode.UnhandledAcadSharpError,
+                $"{path}: model-1 extraction failed: {ex.GetType().Name}: {ex.Message}");
+        }
+    }
+
+    /// <summary>Extracts every model-1 record the document holds.</summary>
+    /// <param name="document">The document.</param>
+    /// <returns>The records, unsorted. <see cref="Model1Record.Encode"/> sorts them.</returns>
+    public static IReadOnlyList<Model1Record> Extract(CadDocument document)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        var records = new List<Model1Record>();
+        ExtractHeader(document, records);
+        return records;
+    }
+
+    private static void ExtractHeader(CadDocument document, List<Model1Record> records)
+    {
+        CadHeader header = document.Header;
+
+        // GetHeaderMap is reflection over CadHeader's attributed properties,
+        // which is fine in a JIT process. It is the one enumeration of the
+        // header's variables that carries the DXF name and the DXF codes.
+        foreach (string name in CadHeader.GetHeaderMap().Keys)
+        {
+            Dictionary<DxfCode, object>? values = header.GetValues(name);
+            if (values is null || values.Count == 0)
+            {
+                throw new InvalidOperationException($"{name}: the header map lists it and GetValues gives nothing");
+            }
+
+            List<int> codes = [.. values.Keys.Select(k => (int)k)];
+            string type = HeaderType(name, codes);
+            string value = type switch
+            {
+                "point2" => Point(values, 2),
+                "point3" => Point(values, 3),
+                _ => HeaderValue(name, type, values.Values.First()),
+            };
+
+            records.Add(Model1Record.Of(
+                "header",
+                name,
+                ("name", NumericFormatting.Quoted(name)),
+                ("type", NumericFormatting.Quoted(type)),
+                ("value", value)));
+        }
+    }
+
+    /// <summary>
+    /// The written form of a header variable, decided by the DXF group code the
+    /// variable is stored under. One rule, shared by every emitter.
+    /// </summary>
+    /// <param name="name">The variable, for the error message.</param>
+    /// <param name="codes">Its DXF codes: one for a scalar, two or three for a point.</param>
+    /// <returns><c>string</c>, <c>int</c>, <c>double</c>, <c>bool</c>, <c>point2</c> or <c>point3</c>.</returns>
+    public static string HeaderType(string name, IReadOnlyList<int> codes)
+    {
+        ArgumentNullException.ThrowIfNull(codes);
+        if (codes.Count == 2)
+        {
+            return "point2";
+        }
+
+        if (codes.Count == 3)
+        {
+            return "point3";
+        }
+
+        int code = codes[0];
+        return code switch
+        {
+            >= 0 and <= 9 => "string",
+            >= 40 and <= 59 => "double",
+            >= 60 and <= 79 => "int",
+            >= 90 and <= 99 => "int",
+            >= 100 and <= 102 => "string",
+            >= 140 and <= 149 => "double",
+            >= 160 and <= 179 => "int",
+            >= 270 and <= 289 => "int",
+            >= 290 and <= 299 => "bool",
+            >= 370 and <= 389 => "int",
+            _ => throw new InvalidOperationException(
+                string.Create(CultureInfo.InvariantCulture, $"{name}: no written form is defined for DXF code {code}")),
+        };
+    }
+
+    private static string Point(Dictionary<DxfCode, object> values, int dimension)
+    {
+        double[] parts = [.. values.Values.Select(v => Convert.ToDouble(v, CultureInfo.InvariantCulture))];
+        if (parts.Length != dimension)
+        {
+            throw new InvalidOperationException("a point variable did not give " + dimension + " components");
+        }
+
+        return "[" + string.Join(',', parts.Select(NumericFormatting.Real)) + "]";
+    }
+
+    private static string HeaderValue(string name, string type, object? raw)
+    {
+        switch (type)
+        {
+            case "string":
+                return NumericFormatting.Quoted(AsString(name, raw));
+            case "int":
+                return NumericFormatting.Whole(AsInt(name, raw));
+            case "double":
+                return NumericFormatting.Real(AsDouble(name, raw));
+            case "bool":
+                return AsInt(name, raw) != 0 ? "true" : "false";
+            default:
+                throw new InvalidOperationException($"{name}: {type} is not a scalar type");
+        }
+    }
+
+    private static string AsString(string name, object? raw) => raw switch
+    {
+        null => string.Empty,
+        string s => NumericFormatting.NormalizeLineEndings(s),
+        ulong handle => handle.ToString("X", CultureInfo.InvariantCulture),
+        TableEntry entry => entry.Name ?? string.Empty,
+        _ => throw new InvalidOperationException($"{name}: a {raw.GetType().Name} has no string form"),
+    };
+
+    private static long AsInt(string name, object? raw) => raw switch
+    {
+        bool b => b ? 1 : 0,
+        char c => c,
+        Enum e => Convert.ToInt64(e, CultureInfo.InvariantCulture),
+        Color color => color.Index,
+        byte or sbyte or short or ushort or int or uint or long => Convert.ToInt64(raw, CultureInfo.InvariantCulture),
+        ulong u => checked((long)u),
+        _ => throw new InvalidOperationException($"{name}: {raw?.GetType().Name ?? "null"} has no integer form"),
+    };
+
+    /// <summary>
+    /// The Julian day number the DXF writes a date as, with the day's fraction.
+    /// Written here rather than taken from ACadSharp's internal helper, so the
+    /// conversion is part of this contract and not of a library detail.
+    /// </summary>
+    /// <param name="date">The date.</param>
+    /// <returns>Days, with the time of day as the fraction.</returns>
+    private static double JulianDate(DateTime date)
+    {
+        int year = date.Year;
+        int month = date.Month;
+        double fraction = date.Day + (date.Hour / 24.0) + (date.Minute / 1440.0)
+            + ((date.Second + (date.Millisecond / 1000.0)) / 86400.0);
+        if (month < 3)
+        {
+            year -= 1;
+            month += 12;
+        }
+
+        int a = year / 100;
+        int b = 2 - a + (a / 4);
+        int c = year < 0 ? (int)((365.25 * year) - 0.75) : (int)(365.25 * year);
+        int d = (int)(30.6001 * (month + 1));
+        return b + c + d + 1720995 + fraction;
+    }
+
+    private static double AsDouble(string name, object? raw) => raw switch
+    {
+        double d => d,
+        float f => f,
+        DateTime date => JulianDate(date),
+        TimeSpan span => span.TotalDays,
+        byte or sbyte or short or ushort or int or uint or long or ulong =>
+            Convert.ToDouble(raw, CultureInfo.InvariantCulture),
+        _ => throw new InvalidOperationException($"{name}: {raw?.GetType().Name ?? "null"} has no double form"),
+    };
+}

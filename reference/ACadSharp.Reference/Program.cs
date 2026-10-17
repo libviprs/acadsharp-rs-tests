@@ -4,6 +4,7 @@ using System.Text;
 using ACadSharp.Reference;
 using ACadSharp.Reference.Cad;
 using ACadSharp.Reference.Canonical;
+using ACadSharp.Reference.Model1;
 using ACadSharp.Reference.Svg;
 
 // The .NET JIT reference oracle.
@@ -28,6 +29,9 @@ namespace ACadSharp.Reference
     {
         /// <summary>Suffix of the canonical semantic artefact, before compression.</summary>
         public const string JsonlSuffix = ".reference.jsonl";
+
+        /// <summary>Suffix of the model-1 artefact (docs/MODEL_1.md), before any storage.</summary>
+        public const string Model1Suffix = ".model1.jsonl";
 
         /// <summary>Suffix of the visual artefact.</summary>
         public const string SvgSuffix = ".reference.svg";
@@ -115,6 +119,21 @@ namespace ACadSharp.Reference
                     ExitCode.UnsupportedVersion,
                     $"{job.Input}: the manifest says {job.ExpectedVersion} but ACadSharp read " +
                     $"{result.AcadVersion}. One of the two is describing a different file.");
+            }
+
+            if (job.Model1Path is { } model1Path)
+            {
+                Result<byte[]> model1 = Model1Extractor.ExtractFile(job.Input);
+                if (!model1.IsOk)
+                {
+                    return model1.Error;
+                }
+
+                ExportError? model1Written = Write(model1Path, model1.Value);
+                if (model1Written is not null)
+                {
+                    return model1Written;
+                }
             }
 
             byte[] jsonl;
@@ -258,7 +277,8 @@ namespace ACadSharp.Reference
                         Path.Combine(manifestDirectory, row.File.Replace('/', Path.DirectorySeparatorChar)),
                         Path.Combine(outputDirectory, row.Id + JsonlSuffix),
                         options.NoSvg ? null : Path.Combine(outputDirectory, row.Id + SvgSuffix),
-                        row.AcadVersion));
+                        row.AcadVersion,
+                        options.Model1 ? Path.Combine(outputDirectory, row.Id + Model1Suffix) : null));
                 }
 
                 return Result.Ok<IReadOnlyList<Job>>(jobs);
@@ -271,12 +291,13 @@ namespace ACadSharp.Reference
                     input,
                     options.JsonlPath!,
                     options.SvgPath,
-                    string.Empty),
+                    string.Empty,
+                    options.Model1Path),
             ]);
         }
 
         private sealed record Job(
-            string Id, string Input, string JsonlPath, string? SvgPath, string ExpectedVersion);
+            string Id, string Input, string JsonlPath, string? SvgPath, string ExpectedVersion, string? Model1Path);
 
         /// <summary>The parsed command line.</summary>
         public sealed record Options
@@ -294,6 +315,8 @@ namespace ACadSharp.Reference
                 Options:
                   --jsonl <path>      Where to write the canonical JSONL. Required for a single file.
                   --svg <path>        Where to write the visual SVG. Optional for a single file.
+                  --model1 <path>     Also write the model-1 stream (docs/MODEL_1.md) for a single file.
+                  --model1-all        With --all, also write <id>.model1.jsonl beside each reference.
                   --manifest <path>   fixtures/manifest.toml. Requires --all and --output.
                   --all               Process every [[fixture]] row in the manifest.
                   --output <dir>      Directory for --all output, named <id>.reference.jsonl/.svg.
@@ -328,6 +351,12 @@ namespace ACadSharp.Reference
             /// <summary>Where <c>--all</c> writes.</summary>
             public string? OutputDirectory { get; init; }
 
+            /// <summary>Where the single run writes its model-1 stream, if anywhere.</summary>
+            public string? Model1Path { get; init; }
+
+            /// <summary>Whether <c>--all</c> also writes a model-1 stream per fixture.</summary>
+            public bool Model1 { get; init; }
+
             /// <summary>Whether <c>--all</c> skips SVG generation.</summary>
             public bool NoSvg { get; init; }
 
@@ -357,6 +386,8 @@ namespace ACadSharp.Reference
                 string? manifest = null;
                 string? outputDirectory = null;
                 string? summary = null;
+                string? model1Path = null;
+                bool model1All = false;
                 bool noSvg = false;
                 bool all = false;
                 bool verbose = false;
@@ -400,6 +431,19 @@ namespace ACadSharp.Reference
                                 return Missing(arg);
                             }
 
+                            break;
+
+                        case "--model1":
+                            model1Path = Next(arg);
+                            if (model1Path is null)
+                            {
+                                return Missing(arg);
+                            }
+
+                            break;
+
+                        case "--model1-all":
+                            model1All = true;
                             break;
 
                         case "--manifest":
@@ -515,6 +559,12 @@ namespace ACadSharp.Reference
                         return Result.Fail<Options>(ExitCode.Usage, "--all needs --output <dir>");
                     }
 
+                    if (model1Path is not null)
+                    {
+                        return Result.Fail<Options>(
+                            ExitCode.Usage, "--model1 names one file; with --all use --model1-all");
+                    }
+
                     if (input is not null)
                     {
                         return Result.Fail<Options>(
@@ -527,6 +577,11 @@ namespace ACadSharp.Reference
                     if (all)
                     {
                         return Result.Fail<Options>(ExitCode.Usage, "--all needs --manifest <path>");
+                    }
+
+                    if (model1All)
+                    {
+                        return Result.Fail<Options>(ExitCode.Usage, "--model1-all needs --manifest <path> --all");
                     }
 
                     if (input is null)
@@ -552,6 +607,8 @@ namespace ACadSharp.Reference
                     ManifestPath = manifest,
                     OutputDirectory = outputDirectory,
                     SummaryPath = summary,
+                    Model1Path = model1Path,
+                    Model1 = model1All,
                     NoSvg = noSvg,
                     MaxDepth = maxDepth,
                     MarginFraction = margin,

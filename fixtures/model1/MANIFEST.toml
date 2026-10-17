@@ -1,0 +1,141 @@
+# fixtures/model1/MANIFEST.toml: the frozen ground truths for the model-1 stream.
+#
+# Written by `tools/model1.py freeze --accept`; checked by `tools/model1.py verify`
+# and by tests/model1_fixtures.rs. Do not edit: the next accepted freeze overwrites it.
+# The sha256 is of the file as committed (they are small, so they are not compressed).
+
+[[file]]
+id = "acadsharp-ac1014"
+engine = "oracle"
+path = "oracle/acadsharp-ac1014.oracle.model1.jsonl"
+sha256 = "98189e53051d6ecf7f6b11ff3602afe2dfda5e13c7c382e2da388434165c5d1c"
+records = 249
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "acadsharp-ac1015"
+engine = "oracle"
+path = "oracle/acadsharp-ac1015.oracle.model1.jsonl"
+sha256 = "742218d44a5af352293c04931d283ea53d2d103c1e7eb5f413d414fe45732cd8"
+records = 249
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "acadsharp-ac1018"
+engine = "oracle"
+path = "oracle/acadsharp-ac1018.oracle.model1.jsonl"
+sha256 = "60fd736263d6b42de2d446db7df16874426dbd23299e7b2f7c5c7f807ea6ea42"
+records = 249
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "acadsharp-ac1021"
+engine = "oracle"
+path = "oracle/acadsharp-ac1021.oracle.model1.jsonl"
+sha256 = "f71f4ffd56abce6c0e7dd1c0ccb6c25318e28a80281328426e82f76ba5329022"
+records = 249
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "acadsharp-ac1024"
+engine = "oracle"
+path = "oracle/acadsharp-ac1024.oracle.model1.jsonl"
+sha256 = "5136f78765d1d83b40fc73d4878fd33a9e91282a7ce3123a1f38e0107dbe212c"
+records = 249
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "acadsharp-ac1027"
+engine = "oracle"
+path = "oracle/acadsharp-ac1027.oracle.model1.jsonl"
+sha256 = "c1a42621a683fcac3a8a151160949a03b4c24c09086684c38fc558fa94bcc3b7"
+records = 249
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "acadsharp-ac1032"
+engine = "oracle"
+path = "oracle/acadsharp-ac1032.oracle.model1.jsonl"
+sha256 = "6e13312c8f56837dc2148a52cef060f2a3819a58f5822b99628d238f2beeb0e6"
+records = 249
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "dxf-sample-ac1015-ascii"
+engine = "ezdxf"
+path = "ezdxf/dxf-sample-ac1015-ascii.ezdxf.model1.jsonl"
+sha256 = "af3bad8ea943c0fabc398608ea764274b369c01777eaeac3ed5f8a6f82f6767b"
+records = 199
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+skipped_handle_variables = ""
+
+[[file]]
+id = "dxf-sample-ac1018-ascii"
+engine = "ezdxf"
+path = "ezdxf/dxf-sample-ac1018-ascii.ezdxf.model1.jsonl"
+sha256 = "7a585490d7a46b20b4b6cb7349a90ca773929174de637eef1f99a3779621b9b3"
+records = 211
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+skipped_handle_variables = ""
+
+[[file]]
+id = "dxf-sample-ac1021-ascii"
+engine = "ezdxf"
+path = "ezdxf/dxf-sample-ac1021-ascii.ezdxf.model1.jsonl"
+sha256 = "a6f68c3f9b3b3050d402daf73921524513705daffce7b7f90094a627b09fff97"
+records = 248
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+skipped_handle_variables = "$CMATERIAL $INTERFEREOBJVS $INTERFEREVPVS"
+
+[[file]]
+id = "dxf-sample-ac1024-ascii"
+engine = "ezdxf"
+path = "ezdxf/dxf-sample-ac1024-ascii.ezdxf.model1.jsonl"
+sha256 = "6bd4bdcd93226f0cd463fb919479fe065e3a3125785471628158d3ef7c3ba88a"
+records = 249
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+skipped_handle_variables = "$CMATERIAL $INTERFEREOBJVS $INTERFEREVPVS"
+
+[[file]]
+id = "dxf-sample-ac1027-ascii"
+engine = "ezdxf"
+path = "ezdxf/dxf-sample-ac1027-ascii.ezdxf.model1.jsonl"
+sha256 = "35e8f0410acc6c56ddf9a5a009da793febe0e146cf5d7bf2ed8e5be250203a36"
+records = 250
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+skipped_handle_variables = "$CMATERIAL $INTERFEREOBJVS $INTERFEREVPVS"
+
+[[file]]
+id = "dxf-sample-ac1032-ascii"
+engine = "ezdxf"
+path = "ezdxf/dxf-sample-ac1032-ascii.ezdxf.model1.jsonl"
+sha256 = "4b225f14ab7d0878c4a7c0d9b47a273572dc39af88c94c4e15495b0df100996c"
+records = 250
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+skipped_handle_variables = "$CMATERIAL $INTERFEREOBJVS $INTERFEREVPVS"

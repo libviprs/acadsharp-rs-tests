@@ -1,0 +1,7 @@
+# parity/MODEL1.toml: what the model-1 comparison lists instead of failing on.
+#
+# Two kinds of row, both with a reason and an issue (the loader refuses one
+# without either): `known` is a value that differs by construction between
+# two files or two engines, `excluded` is a name an engine cannot produce.
+# tests/parity_model1.rs holds the lists to the data: an unlisted one-sided name
+# is a finding, and a listed one the run never needed is stale and red.
