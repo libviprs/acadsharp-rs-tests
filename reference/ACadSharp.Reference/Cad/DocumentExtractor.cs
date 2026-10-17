@@ -38,8 +38,11 @@ public static class DocumentExtractor
     /// <summary>Container format stamped into the document record.</summary>
     public const string Format = "dwg";
 
+    private static bool IsDxf(string path) =>
+        string.Equals(Path.GetExtension(path), ".dxf", StringComparison.OrdinalIgnoreCase);
+
     /// <summary>
-    /// Reads a DWG and extracts it.
+    /// Reads a DWG or a DXF (chosen by extension) and extracts it.
     /// </summary>
     /// <param name="path">Path to the input file.</param>
     /// <param name="maxDepth">Block nesting limit.</param>
@@ -59,7 +62,11 @@ public static class DocumentExtractor
         CadDocument document;
         try
         {
-            document = DwgReader.Read(path, warnings.OnNotification);
+            // The container is chosen by extension, nothing else: ACadSharp's
+            // DxfReader detects ASCII, binary and the R12 binary layout itself.
+            document = IsDxf(path)
+                ? DxfReader.Read(path, warnings.OnNotification)
+                : DwgReader.Read(path, warnings.OnNotification);
         }
         catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
         {
@@ -75,7 +82,8 @@ public static class DocumentExtractor
 
         try
         {
-            return Result.Ok<ExtractionResult>(ExtractDocument(document, warnings, maxDepth));
+            return Result.Ok<ExtractionResult>(
+                ExtractDocument(document, warnings, maxDepth, IsDxf(path) ? "dxf" : Format));
         }
         catch (NonFiniteValueException ex)
         {
@@ -96,11 +104,13 @@ public static class DocumentExtractor
     /// <param name="document">The document.</param>
     /// <param name="warnings">The collector, already carrying any reader notifications.</param>
     /// <param name="maxDepth">Block nesting limit.</param>
+    /// <param name="format">The container the document came from, <c>dwg</c> or <c>dxf</c>.</param>
     /// <returns>The extraction.</returns>
     public static ExtractionResult ExtractDocument(
         CadDocument document,
         WarningCollector warnings,
-        int maxDepth = BlockResolver.DefaultMaxDepth)
+        int maxDepth = BlockResolver.DefaultMaxDepth,
+        string format = Format)
     {
         ArgumentNullException.ThrowIfNull(document);
         ArgumentNullException.ThrowIfNull(warnings);
@@ -111,7 +121,7 @@ public static class DocumentExtractor
         string version = document.Header?.Version.ToString() ?? "Unknown";
         var records = new List<CanonicalRecord>
         {
-            new DocumentRecord(Format, version, document.Header?.MaintenanceVersion ?? 0),
+            new DocumentRecord(format, version, document.Header?.MaintenanceVersion ?? 0),
         };
 
         IReadOnlyList<Layout> layouts = OrderLayouts(document);

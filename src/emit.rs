@@ -104,12 +104,30 @@ impl RunInfo {
         engine_head: Option<String>,
         fixture: &crate::fixtures::DwgFixture,
     ) -> Self {
+        Self::for_input(
+            engine,
+            engine_pin,
+            engine_head,
+            &fixture.id,
+            &fixture.sha256,
+        )
+    }
+
+    /// [`Self::for_run`] for any manifest row with an id and a sha256: a DWG
+    /// fixture, or a DXF `[[oracle_input]]`.
+    pub fn for_input(
+        engine: &str,
+        engine_pin: &str,
+        engine_head: Option<String>,
+        id: &str,
+        sha256: &str,
+    ) -> Self {
         Self {
             engine: engine.to_string(),
             engine_pin: engine_pin.to_string(),
             engine_head,
-            fixture: fixture.id.clone(),
-            fixture_sha256: fixture.sha256.clone(),
+            fixture: id.to_string(),
+            fixture_sha256: sha256.to_string(),
             target: format!("{}-{}", std::env::consts::ARCH, std::env::consts::OS),
             rayon_num_threads: std::env::var("RAYON_NUM_THREADS").ok(),
             extra: Vec::new(),

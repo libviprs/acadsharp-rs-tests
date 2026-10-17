@@ -12,7 +12,7 @@
 use std::path::Path;
 use std::process::ExitCode;
 
-use acadsharp_rs_tests::acadrust_emit::extract_bytes;
+use acadsharp_rs_tests::acadrust_emit::{extract_bytes, extract_dxf_bytes};
 use acadsharp_rs_tests::emit::{EmitArgs, RunInfo, checkout_head, write_emission};
 use acadsharp_rs_tests::fixtures;
 
@@ -35,31 +35,56 @@ fn main() -> ExitCode {
             return ExitCode::from(2);
         }
     };
-    let Some(fixture) = fixtures::by_id(&args.fixture) else {
+    let sibling = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("..")
+        .join("acadrust");
+    // A `[[fixture]]` is a DWG; an `[[oracle_input]]` is one of AutoCAD's DXF
+    // twins. The id says which, and the manifest is the only list of either.
+    let (id, sha256, extracted) = if let Some(fixture) = fixtures::by_id(&args.fixture) {
+        let bytes = match fixture.load() {
+            Ok(b) => b,
+            Err(e) => {
+                eprintln!("emit-acadrust: {e}");
+                return ExitCode::from(1);
+            }
+        };
+        (
+            fixture.id.clone(),
+            fixture.sha256.clone(),
+            extract_bytes(&bytes),
+        )
+    } else if let Some(input) = fixtures::oracle_inputs()
+        .iter()
+        .find(|i| i.id == args.fixture)
+    {
+        use acadsharp_rs_tests::fixtures::ManifestFile;
+        let bytes = match input.load() {
+            Ok(b) => b,
+            Err(e) => {
+                eprintln!("emit-acadrust: {e}");
+                return ExitCode::from(1);
+            }
+        };
+        (
+            input.id.clone(),
+            input.sha256.clone(),
+            extract_dxf_bytes(&bytes),
+        )
+    } else {
         eprintln!(
-            "emit-acadrust: no fixture {:?} in fixtures/manifest.toml; the manifest is the only list",
+            "emit-acadrust: no fixture or DXF input {:?} in fixtures/manifest.toml; the manifest is the only list",
             args.fixture
         );
         return ExitCode::from(2);
     };
-    let bytes = match fixture.load() {
-        Ok(b) => b,
-        Err(e) => {
-            eprintln!("emit-acadrust: {e}");
-            return ExitCode::from(1);
-        }
-    };
-    let emission = match extract_bytes(&bytes) {
+    let emission = match extracted {
         Ok(e) => e,
         Err(e) => {
-            eprintln!("emit-acadrust: {}: {e}", fixture.id);
+            eprintln!("emit-acadrust: {id}: {e}");
             return ExitCode::from(1);
         }
     };
-    let sibling = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("..")
-        .join("acadrust");
-    let run = RunInfo::for_run("acadrust", &pinned(), checkout_head(&sibling), fixture);
+    let run = RunInfo::for_input("acadrust", &pinned(), checkout_head(&sibling), &id, &sha256);
     match write_emission(&args.out, &run, &emission) {
         Ok(paths) => {
             for p in paths {
@@ -68,7 +93,7 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         Err(e) => {
-            eprintln!("emit-acadrust: {}: {e}", fixture.id);
+            eprintln!("emit-acadrust: {id}: {e}");
             ExitCode::from(1)
         }
     }
