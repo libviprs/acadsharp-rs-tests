@@ -103,7 +103,14 @@ pub fn judge_self(
     let verdict = if !open.is_empty() {
         Verdict::Diff(records_of(open.into_iter()))
     } else {
-        Verdict::Known(records_of(known.into_iter()))
+        // What the table already lists (a known divergence, a known missing
+        // record) is known too: a cell with both kinds must not count only the
+        // ones the caller explained.
+        let listed = report
+            .findings
+            .iter()
+            .filter(|f| matches!(f.disposition, crate::compare::Disposition::Known { .. }));
+        Verdict::Known(records_of(known.into_iter().chain(listed)))
     };
     Ok(Judged {
         verdict,
