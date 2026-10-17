@@ -387,7 +387,10 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
         .collect();
     for r in &mirrored {
         let o = r.get("acadrust").unwrap_or_else(|| {
-            panic!("{} is mirrored for acadsharp-rs and shares that with acadrust", r["path"])
+            panic!(
+                "{} is mirrored for acadsharp-rs and shares that with acadrust",
+                r["path"]
+            )
         });
         assert_ne!(
             o["status"].as_str(),
