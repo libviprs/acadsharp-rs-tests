@@ -13,48 +13,43 @@
 use std::collections::BTreeMap;
 
 use acadsharp_rs_tests::acadrust_emit::extract_dxf_bytes;
-use acadsharp_rs_tests::canonical::{Record, Sidecar, SidecarEntry, parse_stream};
+use acadsharp_rs_tests::canonical::{Record, parse_stream};
 use acadsharp_rs_tests::fixtures::{self, ManifestFile};
 
 const RECORD: &str = include_str!("../parity/r12_codepage.toml");
-/// The three handles the issue names: the callout and the two degree texts.
-const HANDLES: [&str; 3] = ["64B", "634", "63E"];
 
-/// Text of every text record whose leaf handle is one of [`HANDLES`], by handle.
-fn by_handle(records: &[Record], sidecar: &[SidecarEntry]) -> BTreeMap<String, String> {
-    let mut out = BTreeMap::new();
-    for (i, r) in records.iter().enumerate() {
-        if let Record::Text(t) = r {
-            // A dimension's text sits in its block: the handle path is the insert,
-            // the dimension (64B) and the text, so match anywhere along it.
-            if let Some(e) = sidecar.get(i) {
-                if let Some(h) = e.handles.iter().find(|h| HANDLES.contains(&h.as_str())) {
-                    out.insert(h.clone(), t.text.clone());
-                }
+/// The three strings, as a reader returns them: every text record that is the
+/// callout (`45,6` after a diameter sign, whatever the sign came out as) or one of the
+/// two degree texts (`94` and the character after it). Content and not handle,
+/// because the oracle's stream has no sidecar to name 64B, 634 and 63E by.
+fn the_strings(records: &[Record]) -> Vec<String> {
+    records
+        .iter()
+        .filter_map(|r| match r {
+            Record::Text(t) if t.text.ends_with("45,6") || t.text.starts_with("94") => {
+                Some(t.text.clone())
             }
-        }
-    }
-    out
+            _ => None,
+        })
+        .collect()
 }
 
-fn readings(input: &str) -> BTreeMap<&'static str, BTreeMap<String, String>> {
+fn readings(input: &str) -> BTreeMap<&'static str, Vec<String>> {
     let mut out = BTreeMap::new();
     let row = fixtures::oracle_inputs()
         .iter()
         .find(|i| i.id == input)
         .unwrap();
+    let oracle = parse_stream(&String::from_utf8(row.load_reference_jsonl().unwrap()).unwrap())
+        .unwrap();
+    out.insert("oracle", the_strings(&oracle));
     // acadrust, live.
     let emission = extract_dxf_bytes(&row.load().unwrap()).unwrap();
-    out.insert("acadrust", by_handle(&emission.records, &emission.sidecar));
+    out.insert("acadrust", the_strings(&emission.records));
     // ezdxf, frozen.
     let gt = fixtures::ground_truth(input).unwrap();
     let records = parse_stream(&String::from_utf8(gt.load_jsonl().unwrap()).unwrap()).unwrap();
-    let sidecar = Sidecar::parse(
-        &String::from_utf8(gt.load_sidecar().unwrap()).unwrap(),
-        &records,
-    )
-    .unwrap();
-    out.insert("ezdxf", by_handle(&records, &sidecar.entries));
+    out.insert("ezdxf", the_strings(&records));
     out
 }
 
@@ -67,16 +62,6 @@ fn print_the_r12_strings() {
     for input in ["dxf-sample-ac1009-ascii", "dxf-sample-ac1009-binary"] {
         for (engine, m) in readings(input) {
             println!("R12 {input} {engine} {m:?}");
-        }
-        // The oracle has no sidecar: every text with 45,6 or 94 in it, in order.
-        let row = fixtures::oracle_inputs().iter().find(|i| i.id == input).unwrap();
-        let recs = parse_stream(&String::from_utf8(row.load_reference_jsonl().unwrap()).unwrap()).unwrap();
-        for r in recs {
-            if let Record::Text(t) = r {
-                if t.text.contains("45") || t.text.starts_with("94") {
-                    println!("R12 {input} oracle {:?}", t.text);
-                }
-            }
         }
     }
 }
