@@ -113,6 +113,15 @@ The round-trip lane (R5.3) keys its tables `w-<writer>:<reader>`: a reader's rea
 | `w-acadsharp:acadsharp`, `w-acadrust:acadsharp` | the wire 2 gaps above | `EXCLUDED` | as above |
 | `w-acadsharp:acadrust`, `w-acadsharp:acadsharp` | the `KNOWN_DIVERGENCE` rows of `oracle/acadrust` and `oracle/acadsharp` for `acadsharp-ac1032`, copied to each output | `KNOWN_DIVERGENCE` (red if it stops holding) | per row, as in R4.1 |
 
+ACadSharp's writers are an upstream project, so what they get wrong is pinned here and reasoned rather than fixed. A field that differs is a `KNOWN_DIVERGENCE` row as above. A record the writer leaves out has no field to hold on to, so it is a `[[known_missing]]` row: the record kind and the oracle's indices of the source's records that must still be missing from the output, keyed by cell. The records come back as a red stale row, which is the cue to remove it. The upstream report for each is in its issue.
+
+| pair | row | class | issue |
+|---|---|---|---|
+| `w-acadsharp:oracle`, `:acadrust`, `:ezdxf` | the 53 records of both ACAD_TABLE entities, in every DXF and in the DWG at AC1015 and AC1018 (`acadsharp:acadsharp` the same without the polygon) | `KNOWN_MISSING` | libviprs/acadsharp-rs-tests#106 |
+| `w-acadsharp:acadrust` | what acadrust reads of the AC1014 DWG that ACadSharp and acadsharp-rs cannot open | `KNOWN_MISSING` | libviprs/acadsharp-rs-tests#107 |
+| `w-acadsharp:oracle`, `:acadrust` | the model space tail of the AC1015 DWG from record 183 (oracle only), and the spline at AC1015, AC1018 and AC1024 | `KNOWN_MISSING` | libviprs/acadsharp-rs-tests#108 |
+| `w-acadsharp:acadrust` | `text.text` of the four MTEXTs in the binary DXFs, `^J` for a line feed | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#109 |
+
 Everything else the run finds that no row lists is a `DIFF` or a `COUNT` in
 `parity/VERDICTS.toml`, with an issue, and is debt rather than an exception.
 

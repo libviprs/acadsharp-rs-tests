@@ -1490,7 +1490,7 @@ pairs = ["w-acadsharp:oracle"]
 fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
 record_type = "text"
 oracle_indices = [183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 201, 209, 240, 242, 246, 259, 274, 284, 290, 292]
-reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (89 records besides the two tables), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
 issue = "libviprs/acadsharp-rs-tests#108"
 
 [[known_missing]]
@@ -1498,7 +1498,7 @@ pairs = ["w-acadsharp:oracle"]
 fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
 record_type = "circle"
 oracle_indices = [200, 243, 244, 288, 293, 294, 295, 296]
-reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (89 records besides the two tables), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
 issue = "libviprs/acadsharp-rs-tests#108"
 
 [[known_missing]]
@@ -1506,7 +1506,7 @@ pairs = ["w-acadsharp:oracle"]
 fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
 record_type = "polyline"
 oracle_indices = [196, 198, 239, 241, 245, 247, 248, 253, 254, 255, 256, 257, 258, 289, 291]
-reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (89 records besides the two tables), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
 issue = "libviprs/acadsharp-rs-tests#108"
 
 [[known_missing]]
@@ -1514,7 +1514,7 @@ pairs = ["w-acadsharp:oracle"]
 fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
 record_type = "point"
 oracle_indices = [210, 211, 212, 275, 276, 277, 285, 286, 287]
-reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (89 records besides the two tables), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
 issue = "libviprs/acadsharp-rs-tests#108"
 
 [[known_missing]]
@@ -1522,7 +1522,7 @@ pairs = ["w-acadsharp:oracle"]
 fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
 record_type = "polygon"
 oracle_indices = [207, 208, 282, 283]
-reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (89 records besides the two tables), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
 issue = "libviprs/acadsharp-rs-tests#108"
 
 [[known_missing]]
@@ -1530,7 +1530,7 @@ pairs = ["w-acadsharp:oracle"]
 fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
 record_type = "line"
 oracle_indices = [199, 202, 203, 204, 205, 206, 249, 250, 251, 252, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 278, 279, 280, 281]
-reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (89 records besides the two tables), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
 issue = "libviprs/acadsharp-rs-tests#108"
 
 [[known_missing]]
