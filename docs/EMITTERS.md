@@ -391,3 +391,42 @@ Each output has a cell per reader and one `w-<writer>:version` row, which is
 where a writer that writes the wrong version is caught (every cell excludes
 `document.acad_version`). Stage two (libviprs/acadsharp-rs-tests#41) runs the
 rest of the sources through the same plan in the nightly.
+
+## R12 (AC1009) and AC1012 (R5.2)
+
+**R12 DXF.** `sample_AC1009_ascii.dxf` and `_binary.dxf` go through the DXF lane like the
+other twins, read by the oracle, acadrust and ezdxf. R12 has no LAYOUT objects, so
+"view" needed a definition: model space and paper space are two blocks and nothing
+else, and all three readers name them `Model` and `Layout1` (ezdxf's names; the oracle's
+`DocumentExtractor` and acadrust's `extract` do the same when a drawing has no layouts).
+Both twins are the AC1015 drawing, so each reader's R12 reading is held against its AC1015
+DWG reading under `BOUNDED` (`dxf-dwg:*`): AutoCAD lowered the drawing to write R12, which
+has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table, and exploded them into
+lines, polylines and texts, so those cells are `COUNT` (about 2,250 records against 297) with
+that reason, which is the finding and not a defect of any reader. The R12 ASCII twin stores
+coordinates to four decimals, so its `dxf-ascii-binary` cells are `DIFF:6` to `DIFF:7` for the
+same reason on all three readers.
+
+**The R12 twin as a code page case** is `parity/r12_codepage.toml`, held by `tests/r12.rs`: the
+diameter callout (handle 64B) is the raw byte 0xD8 and the two degree texts (634, 63E) are the
+literal `94?`. ezdxf decodes the callout as Windows-1252 in both files (`Ø45,6`); acadrust does
+the same in the ASCII file and decodes it as UTF-8 in the binary one (U+FFFD); the oracle's
+reading has no callout text at all. R5.4 links the file.
+
+**The AC1009 DWG stub** (`g13_ac1009`, six bytes) is a refusal fixture: the oracle exits 4
+(`UnsupportedVersion`, frozen in the manifest row), acadrust says `Unsupported CAD version:
+"AC1009"`, acadsharp-rs says it "does not read that drawing format", and ezdxf is not asked. A
+read that succeeds is red (`tests/r12.rs`), with a control that the same door reads a real DWG.
+
+**AC1012 DXF** has a verdict per writer and reader in the round-trip matrix: both writers write
+it at AC1012 from `sample_AC1032.dwg` (stage one) and the oracle, acadrust and ezdxf read it.
+
+**AC1012 DWG.** The corpus has one: the file acadrust writes at AC1012 from `sample_AC1032.dwg`
+(`w-acadrust-ac1032-dwg-ac1012`, regression grade: one implementation's dialect, read by
+others). The oracle opens it and finds 296 records fewer than the source (libviprs/acadsharp-rs-tests#112),
+acadrust reads its own file, and acadsharp-rs does not open it at all (it reads AC1014 to
+AC1032, so the AC1012 DWG column has one reader fewer than #28 assumed). ACadSharp writes no AC1012
+DWG. No decision-grade file exists: LibreDWG's R13 sample has no origin written down, and a
+LibreDWG-written file would be a second regression-grade dialect, not AutoCAD's. So AC1012 DWG stays
+regression grade, with that one file, until someone has an AutoCAD-written R13 drawing with a
+licence.

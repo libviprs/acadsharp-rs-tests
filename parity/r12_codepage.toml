@@ -1,0 +1,52 @@
+# AutoCAD's R12 twin as a code page case (R5.2, acadsharp-rs-tests#28), read by
+# tests/r12.rs and held to what the three readers return today.
+#
+# The R12 DXF declares no $DWGCODEPAGE (R12 has none) and carries one raw byte: the
+# diameter callout at handle 64B is 0xD8 then "45,6" (AutoCAD best-fitted the
+# diameter sign, U+2205, to 0xD8, which is O-with-stroke in Windows-1252), and the two
+# degree texts at handles 634 and 63E are the literal "94?" (the degree sign did not
+# survive the lowering; the file has a question mark). In the AC1015 and AC1018 twins
+# the same callout is the escape \U+220545,6 and in the AC1021 and AC1032 twins it is
+# UTF-8, which is AutoCAD's own partition: escape what the page cannot hold. R5.4
+# (acadsharp-rs-tests#30) links this file for the question it asks of a file AutoCAD
+# wrote.
+#
+# `strings` is every text record that is the callout or a degree text, in stream order.
+# `assumed` is the code page the reader behaved as, read off what it returned: nothing
+# declares one.
+
+[[row]]
+input = "dxf-sample-ac1009-ascii"
+reader = "ezdxf"
+strings = ["94?", "94?", "Ø45,6"]
+assumed = "Windows-1252 (ezdxf assumes cp1252 when the header has no $DWGCODEPAGE)"
+
+[[row]]
+input = "dxf-sample-ac1009-ascii"
+reader = "acadrust"
+strings = ["94?", "94?", "Ø45,6"]
+assumed = "Windows-1252 on the ASCII file: 0xD8 came back as Ø"
+
+[[row]]
+input = "dxf-sample-ac1009-ascii"
+reader = "oracle"
+strings = ["94?", "94?"]
+assumed = "not visible: the oracle's reading has no text for the callout at all, so there is no byte to decode (the dimension's text is missing from its R12 reading, as in its DXF reading of the later twins)"
+
+[[row]]
+input = "dxf-sample-ac1009-binary"
+reader = "ezdxf"
+strings = ["94?", "94?", "Ø45,6"]
+assumed = "Windows-1252"
+
+[[row]]
+input = "dxf-sample-ac1009-binary"
+reader = "acadrust"
+strings = ["94?", "94?", "�45,6"]
+assumed = "UTF-8 on the binary file: 0xD8 is not valid UTF-8 and came back as U+FFFD, where the same reader decodes the same byte in the ASCII twin as Windows-1252"
+
+[[row]]
+input = "dxf-sample-ac1009-binary"
+reader = "oracle"
+strings = ["94?", "94?"]
+assumed = "not visible, as for the ASCII twin"

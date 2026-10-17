@@ -116,6 +116,8 @@ The oracle's reading of AutoCAD's own DXF, one row per `[[oracle_input]]`.
 | dxf-blockxyparameter | AC1032 | 56 | 0 | 21 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 31 |
 | dxf-geoloc | AC1032 | 37 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 33 |
 | dxf-geoloc-ac1021 | AC1021 | 36 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 32 |
+| dxf-sample-ac1009-ascii | AC1009 | 2702 | 3 | 15 | 1 | 0 | 1294 | 38 | 344 | 314 | 0 | 232 | 2 | 459 |
+| dxf-sample-ac1009-binary | AC1009 | 2702 | 3 | 15 | 1 | 0 | 1294 | 38 | 344 | 314 | 0 | 232 | 2 | 459 |
 | dxf-sample-ac1015-ascii | AC1015 | 3559 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 3262 |
 | dxf-sample-ac1015-binary | AC1015 | 3559 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 3262 |
 | dxf-sample-ac1018-ascii | AC1018 | 3559 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 3262 |

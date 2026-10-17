@@ -109,7 +109,7 @@ pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
         sink: Vec::new(),
     };
     x.reader_notifications();
-    let mut views: Vec<(i16, String, acadrust::types::Handle)> = doc
+    let mut layouts: Vec<(i16, String, acadrust::types::Handle)> = doc
         .objects
         .values()
         .filter_map(|o| match o {
@@ -117,10 +117,32 @@ pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
             _ => None,
         })
         .collect();
-    views.sort_by(|a, b| {
+    layouts.sort_by(|a, b| {
         a.0.cmp(&b.0)
             .then_with(|| a.1.as_bytes().cmp(b.1.as_bytes()))
     });
+    // (view name, block name when there is one). A drawing with no LAYOUT objects
+    // (R12) has model space and paper space as two blocks and nothing else; ezdxf
+    // reads them as "Model" and "Layout1", and so do the oracle and this, so the
+    // three agree on what a view is when the file names none (R5.2, #28).
+    let views: Vec<(String, Option<String>)> = if layouts.is_empty() {
+        vec![
+            ("Model".to_string(), Some("*Model_Space".to_string())),
+            ("Layout1".to_string(), Some("*Paper_Space".to_string())),
+        ]
+    } else {
+        layouts
+            .iter()
+            .map(|(_, name, handle)| {
+                let block = doc
+                    .block_records
+                    .iter()
+                    .find(|b| b.handle == *handle)
+                    .map(|b| b.name.clone());
+                (name.clone(), block)
+            })
+            .collect()
+    };
 
     let mut head: Vec<Item> = vec![Item::framing(Record::Document(Document {
         format: format.to_string(),
@@ -128,13 +150,8 @@ pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
         maintenance_version: u64::from(doc.maintenance_version),
     }))];
 
-    for (index, (_, name, block_handle)) in views.iter().enumerate() {
-        let block_name = doc
-            .block_records
-            .iter()
-            .find(|b| b.handle == *block_handle)
-            .map(|b| b.name.clone());
-        let kind = match &block_name {
+    for (index, (name, block_name)) in views.iter().enumerate() {
+        let kind = match block_name {
             Some(n) if n.eq_ignore_ascii_case("*Model_Space") => "model",
             Some(n) if n.to_ascii_uppercase().starts_with("*PAPER_SPACE") => "layout",
             _ => "unknown",
@@ -148,7 +165,7 @@ pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
             x.warn("missing_reference", "Layout", "layout_without_block_record");
             continue;
         };
-        let entities: Vec<&EntityType> = doc.entities_in_block(&block_name).collect();
+        let entities: Vec<&EntityType> = doc.entities_in_block(block_name).collect();
         let mut path = Vec::new();
         for e in entities {
             x.extract(e, index as u64, &Xf::identity(), 0, false, &mut path);

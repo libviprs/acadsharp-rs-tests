@@ -17,18 +17,18 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | pair | rows | MATCH | KNOWN | DIFF | COUNT | OPEN_FAILED | EXCLUDED | DUAL_ORACLE |
 |---|---|---|---|---|---|---|---|---|
 | `acadsharp/acadrust` | 87 | 62 | 0 | 21 | 3 | 1 | 0 | 0 |
-| `dxf-ascii-binary:acadrust` | 6 | 5 | 0 | 0 | 0 | 1 | 0 | 0 |
-| `dxf-ascii-binary:ezdxf` | 6 | 1 | 5 | 0 | 0 | 0 | 0 | 0 |
-| `dxf-ascii-binary:oracle` | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `dxf-dwg:acadrust` | 23 | 14 | 6 | 1 | 0 | 2 | 0 | 0 |
-| `dxf-dwg:acadsharp` | 23 | 0 | 0 | 0 | 0 | 0 | 23 | 0 |
-| `dxf-dwg:oracle` | 23 | 10 | 0 | 13 | 0 | 0 | 0 | 0 |
-| `dxf:ezdxf/acadrust` | 24 | 18 | 4 | 0 | 0 | 2 | 0 | 0 |
-| `dxf:ezdxf/oracle` | 24 | 12 | 0 | 12 | 0 | 0 | 0 | 0 |
-| `dxf:oracle/acadrust` | 24 | 12 | 0 | 10 | 0 | 2 | 0 | 0 |
-| `ezdxf/acadrust` | 23 | 12 | 0 | 11 | 0 | 0 | 0 | 0 |
-| `ezdxf/acadsharp` | 23 | 9 | 0 | 14 | 0 | 0 | 0 | 0 |
-| `ezdxf/oracle` | 23 | 15 | 0 | 8 | 0 | 0 | 0 | 0 |
+| `dxf-ascii-binary:acadrust` | 7 | 5 | 0 | 1 | 0 | 1 | 0 | 0 |
+| `dxf-ascii-binary:ezdxf` | 7 | 1 | 5 | 1 | 0 | 0 | 0 | 0 |
+| `dxf-ascii-binary:oracle` | 7 | 6 | 0 | 1 | 0 | 0 | 0 | 0 |
+| `dxf-dwg:acadrust` | 25 | 14 | 6 | 1 | 2 | 2 | 0 | 0 |
+| `dxf-dwg:acadsharp` | 25 | 0 | 0 | 0 | 0 | 0 | 25 | 0 |
+| `dxf-dwg:oracle` | 25 | 10 | 0 | 13 | 2 | 0 | 0 | 0 |
+| `dxf:ezdxf/acadrust` | 26 | 19 | 4 | 1 | 0 | 2 | 0 | 0 |
+| `dxf:ezdxf/oracle` | 26 | 12 | 0 | 14 | 0 | 0 | 0 | 0 |
+| `dxf:oracle/acadrust` | 26 | 12 | 0 | 12 | 0 | 2 | 0 | 0 |
+| `ezdxf/acadrust` | 25 | 12 | 0 | 11 | 2 | 0 | 0 | 0 |
+| `ezdxf/acadsharp` | 25 | 9 | 0 | 14 | 2 | 0 | 0 | 0 |
+| `ezdxf/oracle` | 25 | 15 | 0 | 8 | 2 | 0 | 0 | 0 |
 | `oracle/acadrust` | 87 | 78 | 6 | 3 | 0 | 0 | 0 | 0 |
 | `oracle/acadsharp` | 87 | 64 | 0 | 19 | 3 | 1 | 0 | 0 |
 | `self/acadrust` | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 |
@@ -81,23 +81,33 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
+| `dxf-sample-ac1009` | DIFF:7 | libviprs/acadsharp-rs-tests#28 | AutoCAD's R12 ASCII DXF stores coordinates to four decimals where its binary twin keeps the raw doubles (62.8993 against 62.89926158724518), so the bound for sixteen digits against raw doubles cannot hold; the difference is in the two files and every reader sees it |
 | `dxf-sample-ac1018` | OPEN_FAILED | libviprs/acadsharp-rs-tests#95 | exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6; exit 1: emit-acadrust: dxf-sample-ac1018-binary: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6 |
 
 ### `dxf-ascii-binary:ezdxf`
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
+| `dxf-sample-ac1009` | DIFF:6 | libviprs/acadsharp-rs-tests#28 | AutoCAD's R12 ASCII DXF stores coordinates to four decimals where its binary twin keeps the raw doubles (62.8993 against 62.89926158724518), so the bound for sixteen digits against raw doubles cannot hold; the difference is in the two files and every reader sees it |
 | `dxf-sample-ac1018` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1021` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1024` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1027` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1032` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 
+### `dxf-ascii-binary:oracle`
+
+| fixture | verdict | issue | reason |
+|---|---|---|---|
+| `dxf-sample-ac1009` | DIFF:6 | libviprs/acadsharp-rs-tests#28 | AutoCAD's R12 ASCII DXF stores coordinates to four decimals where its binary twin keeps the raw doubles (62.8993 against 62.89926158724518), so the bound for sixteen digits against raw doubles cannot hold; the difference is in the two files and every reader sees it |
+
 ### `dxf-dwg:acadrust`
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
 | `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | the DXF twin holds four lines the DWG draws (handles 411 and 412 in the insert at 254, 3FE and 3FF in the insert at 299, none of which occurs in the DXF); the oracle and acadrust agree on that, and ezdxf over the same DXF draws the same lines as they do |
+| `dxf-sample-ac1009-ascii` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
+| `dxf-sample-ac1009-binary` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1015-ascii` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1015-binary` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1018-ascii` | OPEN_FAILED | libviprs/acadsharp-rs-tests#95 | exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6 |
@@ -122,6 +132,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `dxf-blockvisibilityparameter` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
 | `dxf-blockxyparameter` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
 | `dxf-geoloc` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
+| `dxf-sample-ac1009-ascii` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
+| `dxf-sample-ac1009-binary` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
 | `dxf-sample-ac1015-ascii` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
 | `dxf-sample-ac1015-binary` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
 | `dxf-sample-ac1018-ascii` | EXCLUDED | libviprs/acadsharp-rs-tests#27 | the C ABI opens DWG only, so acadsharp-rs has no DXF reading to hold against its DWG reading |
@@ -140,6 +152,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | fixture | verdict | issue | reason |
 |---|---|---|---|
 | `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | the DXF twin holds four lines the DWG draws (handles 411 and 412 in the insert at 254, 3FE and 3FF in the insert at 299, none of which occurs in the DXF); the oracle and acadrust agree on that, and ezdxf over the same DXF draws the same lines as they do |
+| `dxf-sample-ac1009-ascii` | COUNT:2243/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2243 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
+| `dxf-sample-ac1009-binary` | COUNT:2243/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2243 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1015-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1015-binary` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1018-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
@@ -157,6 +171,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
+| `dxf-sample-ac1009-binary` | DIFF:1 | libviprs/acadsharp-rs-tests#28 | the diameter callout's raw byte 0xD8: ezdxf decodes it as Windows-1252 (Ø) and acadrust as UTF-8 for a binary DXF (U+FFFD); the R12 file declares no code page (parity/r12_codepage.toml) |
 | `dxf-sample-ac1018-ascii` | OPEN_FAILED | libviprs/acadsharp-rs-tests#95 | exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6 |
 | `dxf-sample-ac1018-binary` | OPEN_FAILED | libviprs/acadsharp-rs-tests#95 | exit 1: emit-acadrust: dxf-sample-ac1018-binary: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6 |
 | `dxf-sample-ac1021-binary` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
@@ -168,6 +183,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
+| `dxf-sample-ac1009-ascii` | DIFF:226 | libviprs/acadsharp-rs-tests#130 | the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names |
+| `dxf-sample-ac1009-binary` | DIFF:226 | libviprs/acadsharp-rs-tests#130 | the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names |
 | `dxf-sample-ac1015-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1015-binary` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1018-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
@@ -185,6 +202,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
+| `dxf-sample-ac1009-ascii` | DIFF:226 | libviprs/acadsharp-rs-tests#130 | the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names |
+| `dxf-sample-ac1009-binary` | DIFF:226 | libviprs/acadsharp-rs-tests#130 | the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names |
 | `dxf-sample-ac1015-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1015-binary` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1018-ascii` | OPEN_FAILED | libviprs/acadsharp-rs-tests#95 | exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6 |
@@ -203,6 +222,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | fixture | verdict | issue | reason |
 |---|---|---|---|
 | `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings) |
+| `dxf-sample-ac1009-ascii` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
+| `dxf-sample-ac1009-binary` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1015-ascii` | DIFF:1 | libviprs/libviprs-dep#111 | saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding) |
 | `dxf-sample-ac1015-binary` | DIFF:1 | libviprs/libviprs-dep#111 | saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding) |
 | `dxf-sample-ac1018-ascii` | DIFF:1 | libviprs/libviprs-dep#111 | saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding) |
@@ -220,6 +241,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 |---|---|---|---|
 | `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings) |
 | `dxf-blockvisibilityparameter` | DIFF:8 | libviprs/acadsharp-rs-tests#55 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (8 findings) |
+| `dxf-sample-ac1009-ascii` | COUNT:1862/219 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 1862 records against the AC1015 DWG's 219. The lowering is the file's, and the same in every reader |
+| `dxf-sample-ac1009-binary` | COUNT:1862/219 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 1862 records against the AC1015 DWG's 219. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1015-ascii` | DIFF:52 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings) |
 | `dxf-sample-ac1015-binary` | DIFF:52 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings) |
 | `dxf-sample-ac1018-ascii` | DIFF:52 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings) |
@@ -238,6 +261,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | fixture | verdict | issue | reason |
 |---|---|---|---|
 | `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings) |
+| `dxf-sample-ac1009-ascii` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
+| `dxf-sample-ac1009-binary` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1018-binary` | DIFF:4 | libviprs/acadsharp-rs-tests#24 | an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings) |
 | `dxf-sample-ac1021-binary` | DIFF:4 | libviprs/acadsharp-rs-tests#24 | an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings) |
 | `dxf-sample-ac1024-binary` | DIFF:4 | libviprs/acadsharp-rs-tests#24 | an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings) |
