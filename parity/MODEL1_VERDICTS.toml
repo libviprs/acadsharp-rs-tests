@@ -1,4 +1,3 @@
-+ sh -c 'MODEL1_REGEN=1 cargo test --features acadrust --test parity_model1 -- --nocapture --test-threads=1 the_run_agrees 2>&1 | sed -n "/==MODEL1_VERDICTS==/,/==END==/p"; cargo test --features acadrust --test parity_model1 2>&1 | grep -E "^error|^warning" '
 # parity/MODEL1_VERDICTS.toml: one row per (fixture, pair) of the model-1 stream.
 #
 # The words are the ones src/verdict.rs defines and parity/VERDICTS.toml uses.
