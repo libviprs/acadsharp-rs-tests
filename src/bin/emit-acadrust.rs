@@ -109,19 +109,28 @@ fn main() -> ExitCode {
         }
     };
     // model-1 (docs/MODEL_1.md): the header variables, in a file beside the others.
+    // A round-trip output (stdin) is judged on schema 1 alone: a writer's damaged file
+    // can fail the model-1 render, and that must not turn a good schema 1 reading into
+    // a refusal (R5.3). A fixture or a twin still fails the run on it.
     let model1 = match acadsharp_rs_tests::acadrust_model1::render(&bytes, is_dxf) {
-        Ok(t) => t,
+        Ok(t) => Some(t),
+        Err(e) if args.stdin_as.is_some() => {
+            eprintln!("emit-acadrust: {id}: model-1 skipped: {e}");
+            None
+        }
         Err(e) => {
             eprintln!("emit-acadrust: {id}: model-1: {e}");
             return ExitCode::from(1);
         }
     };
-    let model1_path = acadsharp_rs_tests::model1::output_path(&args.out, &id, "acadrust");
-    if let Err(e) =
-        std::fs::create_dir_all(&args.out).and_then(|()| std::fs::write(&model1_path, model1))
-    {
-        eprintln!("emit-acadrust: {id}: {}: {e}", model1_path.display());
-        return ExitCode::from(1);
+    if let Some(model1) = model1 {
+        let model1_path = acadsharp_rs_tests::model1::output_path(&args.out, &id, "acadrust");
+        if let Err(e) =
+            std::fs::create_dir_all(&args.out).and_then(|()| std::fs::write(&model1_path, model1))
+        {
+            eprintln!("emit-acadrust: {id}: {}: {e}", model1_path.display());
+            return ExitCode::from(1);
+        }
     }
     let run = RunInfo::for_input("acadrust", &pinned(), checkout_head(&sibling), &id, &sha256);
     match write_emission(&args.out, &run, &emission) {
