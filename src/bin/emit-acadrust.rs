@@ -108,20 +108,26 @@ fn main() -> ExitCode {
             return ExitCode::from(1);
         }
     };
-    // model-1 (docs/MODEL_1.md): the header variables, in a file beside the others.
-    let model1 = match acadsharp_rs_tests::acadrust_model1::render(&bytes, is_dxf) {
-        Ok(t) => t,
-        Err(e) => {
-            eprintln!("emit-acadrust: {id}: model-1: {e}");
-            return ExitCode::from(1);
-        }
-    };
+    // model-1 (docs/MODEL_1.md): the header variables, tables and objects, in a
+    // file beside the others. It is a second stream, so a drawing whose records
+    // it refuses (two entries under one key, say) does not take the schema 1
+    // stream down with it: the reason is printed and no model-1 file is written,
+    // which `tests/parity_model1.rs` reports as a missing stream for the inputs
+    // it needs.
     let model1_path = acadsharp_rs_tests::model1::output_path(&args.out, &id, "acadrust");
-    if let Err(e) =
-        std::fs::create_dir_all(&args.out).and_then(|()| std::fs::write(&model1_path, model1))
-    {
-        eprintln!("emit-acadrust: {id}: {}: {e}", model1_path.display());
-        return ExitCode::from(1);
+    match acadsharp_rs_tests::acadrust_model1::render(&bytes, is_dxf) {
+        Ok(text) => {
+            if let Err(e) = std::fs::create_dir_all(&args.out)
+                .and_then(|()| std::fs::write(&model1_path, text))
+            {
+                eprintln!("emit-acadrust: {id}: {}: {e}", model1_path.display());
+                return ExitCode::from(1);
+            }
+        }
+        Err(e) => {
+            let _ = std::fs::remove_file(&model1_path);
+            eprintln!("emit-acadrust: {id}: model-1 not written: {e}");
+        }
     }
     let run = RunInfo::for_input("acadrust", &pinned(), checkout_head(&sibling), &id, &sha256);
     match write_emission(&args.out, &run, &emission) {
