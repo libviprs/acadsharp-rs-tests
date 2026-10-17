@@ -390,6 +390,12 @@ def main() -> int:
         sources = sources_of(manifest)
         for row in all_rows:
             path = ROOT / "fixtures" / row["file"]
+            # A generated drawing is not downloadable: its source_url names the
+            # code that wrote it, and `verify_tree` below holds the committed
+            # bytes to the row's hash. The generator is what reproduces it.
+            if sources.get(row.get("source"), {}).get("generated"):
+                print(f"generated  {row['file']}  {row['bytes']:,} bytes (not fetched)")
+                continue
             found = fetch_one(row, path)
             # The same blob is served under other upstream names; each of them
             # has to serve the same bytes, or the "also" is a claim nothing holds.

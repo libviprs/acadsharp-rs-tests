@@ -19,7 +19,8 @@ use acadsharp_rs_tests::canonical::{self, Record, Text, Vec3};
 use acadsharp_rs_tests::fixtures;
 
 fn stream(id: &str) -> Vec<Record> {
-    let fx = fixtures::by_id(id).unwrap_or_else(|| panic!("{id} has no row in fixtures/manifest.toml"));
+    let fx =
+        fixtures::by_id(id).unwrap_or_else(|| panic!("{id} has no row in fixtures/manifest.toml"));
     let bytes = fx
         .load_reference_jsonl()
         .unwrap_or_else(|e| panic!("{id}: reference output: {e}"));
@@ -33,19 +34,37 @@ fn is_warning(r: &Record) -> bool {
 
 fn lines(recs: &[Record]) -> Vec<&canonical::Line> {
     recs.iter()
-        .filter_map(|r| if let Record::Line(l) = r { Some(l) } else { None })
+        .filter_map(|r| {
+            if let Record::Line(l) = r {
+                Some(l)
+            } else {
+                None
+            }
+        })
         .collect()
 }
 
 fn polylines(recs: &[Record]) -> Vec<&canonical::Polyline> {
     recs.iter()
-        .filter_map(|r| if let Record::Polyline(p) = r { Some(p) } else { None })
+        .filter_map(|r| {
+            if let Record::Polyline(p) = r {
+                Some(p)
+            } else {
+                None
+            }
+        })
         .collect()
 }
 
 fn texts(recs: &[Record]) -> Vec<&Text> {
     recs.iter()
-        .filter_map(|r| if let Record::Text(t) = r { Some(t) } else { None })
+        .filter_map(|r| {
+            if let Record::Text(t) = r {
+                Some(t)
+            } else {
+                None
+            }
+        })
         .collect()
 }
 
@@ -72,25 +91,40 @@ fn ensure(cond: bool, what: impl FnOnce() -> String) -> Result<(), String> {
 /// `2 * sagitta / chord`, and no `line` and no `arc` anywhere. A bulge of 0 would
 /// be a straight segment, which is the failure this guards against.
 fn claim_bulge(recs: &[Record]) -> Result<(), String> {
-    ensure(count(recs, "line") == 0, || "a straight line record is present".into())?;
-    ensure(count(recs, "arc") == 0, || "an arc record is present, and schema 1 keeps bulges".into())?;
+    ensure(count(recs, "line") == 0, || {
+        "a straight line record is present".into()
+    })?;
+    ensure(count(recs, "arc") == 0, || {
+        "an arc record is present, and schema 1 keeps bulges".into()
+    })?;
     let pls = polylines(recs);
-    ensure(pls.len() == 1, || format!("{} polyline records, expected 1", pls.len()))?;
+    ensure(pls.len() == 1, || {
+        format!("{} polyline records, expected 1", pls.len())
+    })?;
     let p = pls[0];
     ensure(p.points.len() == 4 && p.bulges.len() == 4, || {
-        format!("{} points and {} bulges, expected 4 and 4", p.points.len(), p.bulges.len())
+        format!(
+            "{} points and {} bulges, expected 4 and 4",
+            p.points.len(),
+            p.bulges.len()
+        )
     })?;
     // chord 10 each; sagitta 2, 5 (a semicircle) and -1.25 (bulging the other way).
     let want: [(f64, f64); 3] = [(10.0, 2.0), (10.0, 5.0), (10.0, -1.25)];
     for (i, (chord, sagitta)) in want.into_iter().enumerate() {
-        let got_chord = (p.points[i + 1][0] - p.points[i][0]).hypot(p.points[i + 1][1] - p.points[i][1]);
-        ensure(near(got_chord, chord), || format!("segment {i} has chord {got_chord}, expected {chord}"))?;
+        let got_chord =
+            (p.points[i + 1][0] - p.points[i][0]).hypot(p.points[i + 1][1] - p.points[i][1]);
+        ensure(near(got_chord, chord), || {
+            format!("segment {i} has chord {got_chord}, expected {chord}")
+        })?;
         let bulge = 2.0 * sagitta / chord;
         ensure(near(p.bulges[i], bulge), || {
             format!("segment {i} has bulge {}, expected {bulge}", p.bulges[i])
         })?;
     }
-    ensure(p.bulges[3] == 0.0, || "the last vertex has a segment after it".into())?;
+    ensure(p.bulges[3] == 0.0, || {
+        "the last vertex has a segment after it".into()
+    })?;
     ensure(p.bulges.iter().filter(|b| **b != 0.0).count() == 3, || {
         "not exactly three non-zero bulges".into()
     })
@@ -117,7 +151,11 @@ fn bulge_claim_fails_on_zero_bulges() {
 fn bulge_claim_fails_when_the_polyline_was_decomposed_to_lines() {
     let mut recs = stream("regression_bulge");
     let at = recs.iter().position(|r| r.kind() == "polyline").unwrap();
-    recs[at] = Record::Line(canonical::Line { view: 0, a: [0.0; 3], b: [10.0, 0.0, 0.0] });
+    recs[at] = Record::Line(canonical::Line {
+        view: 0,
+        a: [0.0; 3],
+        b: [10.0, 0.0, 0.0],
+    });
     assert!(claim_bulge(&recs).unwrap_err().contains("line record"));
 }
 
@@ -129,7 +167,9 @@ fn bulge_claim_fails_when_the_polyline_was_decomposed_to_lines() {
 /// translate.
 fn claim_insert_transform(recs: &[Record]) -> Result<(), String> {
     let ls = lines(recs);
-    ensure(ls.len() == 1, || format!("{} line records, expected 1", ls.len()))?;
+    ensure(ls.len() == 1, || {
+        format!("{} line records, expected 1", ls.len())
+    })?;
     let (s, c) = (std::f64::consts::PI / 6.0).sin_cos();
     let world = |x: f64, y: f64| -> Vec3 {
         let (sx, sy) = ((x + 5.0) * 2.0, (y + 2.0) * 3.0);
@@ -146,7 +186,9 @@ fn claim_insert_transform(recs: &[Record]) -> Result<(), String> {
     }
     // The transform is not the identity: a line that never moved passes the
     // check above only if the hand computation was wrong too.
-    ensure(!near(l.a[0], 5.0), || "the line was not transformed at all".into())
+    ensure(!near(l.a[0], 5.0), || {
+        "the line was not transformed at all".into()
+    })
 }
 
 #[test]
@@ -164,7 +206,11 @@ fn insert_transform_claim_fails_when_rotation_is_dropped() {
             l.b = [100.0 + 12.0, 50.0 + 6.0, 0.0];
         }
     }
-    assert!(claim_insert_transform(&recs).unwrap_err().contains("start[0]"));
+    assert!(
+        claim_insert_transform(&recs)
+            .unwrap_err()
+            .contains("start[0]")
+    );
 }
 
 // ------------------------------------------------------ text_zero_height ---
@@ -186,14 +232,23 @@ fn long_string() -> String {
 /// The long string beside them is the part that has to survive intact.
 fn claim_text_zero_height(recs: &[Record]) -> Result<(), String> {
     let ts = texts(recs);
-    ensure(ts.len() == 1, || format!("{} text records, expected the one long MTEXT", ts.len()))?;
+    ensure(ts.len() == 1, || {
+        format!("{} text records, expected the one long MTEXT", ts.len())
+    })?;
     let t = ts[0];
-    ensure(near(t.height, 2.5), || format!("the long text has height {}", t.height))?;
+    ensure(near(t.height, 2.5), || {
+        format!("the long text has height {}", t.height)
+    })?;
     let want = long_string();
     ensure(t.text.chars().count() == 6000, || {
-        format!("the long string has {} characters, expected 6000", t.text.chars().count())
+        format!(
+            "the long string has {} characters, expected 6000",
+            t.text.chars().count()
+        )
     })?;
-    ensure(t.text == want, || "the long string came back different".into())?;
+    ensure(t.text == want, || {
+        "the long string came back different".into()
+    })?;
     let lost = recs
         .iter()
         .filter(|r| matches!(r, Record::Warning(w) if w.category == "invalid_entity" && w.detail == "reader_error"))
@@ -227,7 +282,11 @@ fn text_zero_height_claim_fails_when_a_loss_is_silent() {
         .position(|r| matches!(r, Record::Warning(w) if w.detail == "reader_error"))
         .unwrap();
     recs.remove(at);
-    assert!(claim_text_zero_height(&recs).unwrap_err().contains("reader_error"));
+    assert!(
+        claim_text_zero_height(&recs)
+            .unwrap_err()
+            .contains("reader_error")
+    );
 }
 
 // ------------------------------------------------------- dimension_fields ---
@@ -239,12 +298,16 @@ fn text_zero_height_claim_fails_when_a_loss_is_silent() {
 /// count and the content, and the count is what breaks if a kind is missing.
 fn claim_dimension_fields(recs: &[Record]) -> Result<(), String> {
     let got: Vec<&str> = texts(recs).iter().map(|t| t.text.as_str()).collect();
-    ensure(got.len() == 7, || format!("{} text records, expected 7: {got:?}", got.len()))?;
+    ensure(got.len() == 7, || {
+        format!("{} text records, expected 7: {got:?}", got.len())
+    })?;
     ensure(got == ["10", "5", "4", "8", "90°", "60°", "120"], || {
         format!("measured texts are {got:?}")
     })?;
     ensure(
-        !recs.iter().any(|r| matches!(r, Record::Warning(w) if w.detail == "dimension_block_missing")),
+        !recs
+            .iter()
+            .any(|r| matches!(r, Record::Warning(w) if w.detail == "dimension_block_missing")),
         || "a dimension's block is missing from the output".into(),
     )
 }
@@ -259,7 +322,11 @@ fn dimension_fields_claim_fails_with_six_kinds() {
     let mut recs = stream("regression_dimension_fields");
     let at = recs.iter().rposition(|r| r.kind() == "text").unwrap();
     recs.remove(at);
-    assert!(claim_dimension_fields(&recs).unwrap_err().contains("expected 7"));
+    assert!(
+        claim_dimension_fields(&recs)
+            .unwrap_err()
+            .contains("expected 7")
+    );
 }
 
 // ------------------------------------------------------------ hatch_loops ---
@@ -272,12 +339,18 @@ fn dimension_fields_claim_fails_with_six_kinds() {
 /// records and the ring structure would be invisible, which is why none are
 /// allowed here.
 fn claim_hatch_loops(recs: &[Record]) -> Result<(), String> {
-    ensure(count(recs, "line") == 0, || "boundary edges arrived as lines".into())?;
+    ensure(count(recs, "line") == 0, || {
+        "boundary edges arrived as lines".into()
+    })?;
     let rings = polylines(recs);
-    ensure(rings.len() == 3, || format!("{} rings, expected 3", rings.len()))?;
+    ensure(rings.len() == 3, || {
+        format!("{} rings, expected 3", rings.len())
+    })?;
     for (i, r) in rings.iter().enumerate() {
         ensure(r.closed, || format!("ring {i} is open"))?;
-        ensure(r.points.len() == 4, || format!("ring {i} has {} vertices", r.points.len()))?;
+        ensure(r.points.len() == 4, || {
+            format!("ring {i} has {} vertices", r.points.len())
+        })?;
     }
     let bbox = |p: &canonical::Polyline| {
         let xs = p.points.iter().map(|q| q[0]);
@@ -290,9 +363,14 @@ fn claim_hatch_loops(recs: &[Record]) -> Result<(), String> {
         )
     };
     let (outer, a, b) = (bbox(rings[0]), bbox(rings[1]), bbox(rings[2]));
-    let inside = |i: (f64, f64, f64, f64)| i.0 > outer.0 && i.1 > outer.1 && i.2 < outer.2 && i.3 < outer.3;
-    ensure(inside(a) && inside(b), || "an island is not strictly inside the outer loop".into())?;
-    ensure(a.2 < b.0 || b.2 < a.0 || a.3 < b.1 || b.3 < a.1, || "the islands overlap".into())
+    let inside =
+        |i: (f64, f64, f64, f64)| i.0 > outer.0 && i.1 > outer.1 && i.2 < outer.2 && i.3 < outer.3;
+    ensure(inside(a) && inside(b), || {
+        "an island is not strictly inside the outer loop".into()
+    })?;
+    ensure(a.2 < b.0 || b.2 < a.0 || a.3 < b.1 || b.3 < a.1, || {
+        "the islands overlap".into()
+    })
 }
 
 #[test]
@@ -324,14 +402,29 @@ fn hatch_loops_claim_fails_when_an_island_leaves_the_outer_loop() {
 /// and the mesh is accounted for by exactly one `unsupported_entity` warning that
 /// names it, on top of the warnings every drawing in this generator carries.
 fn claim_unsupported_entity(recs: &[Record], baseline_warnings: usize) -> Result<(), String> {
-    let kinds: Vec<&str> = recs.iter().filter(|r| !is_warning(r)).map(|r| r.kind()).collect();
-    ensure(kinds == ["document", "view", "view", "line", "circle"], || format!("records are {kinds:?}"))?;
+    let kinds: Vec<&str> = recs
+        .iter()
+        .filter(|r| !is_warning(r))
+        .map(|r| r.kind())
+        .collect();
+    ensure(
+        kinds == ["document", "view", "view", "line", "circle"],
+        || format!("records are {kinds:?}"),
+    )?;
     let named: Vec<&canonical::Warning> = recs
         .iter()
-        .filter_map(|r| if let Record::Warning(w) = r { Some(w) } else { None })
+        .filter_map(|r| {
+            if let Record::Warning(w) = r {
+                Some(w)
+            } else {
+                None
+            }
+        })
         .filter(|w| w.category == "unsupported_entity" && w.entity_type == "Mesh")
         .collect();
-    ensure(named.len() == 1, || format!("{} warnings name the Mesh, expected 1", named.len()))?;
+    ensure(named.len() == 1, || {
+        format!("{} warnings name the Mesh, expected 1", named.len())
+    })?;
     let all = count(recs, "warning");
     ensure(all == baseline_warnings + 1, || {
         format!("{all} warnings, expected the baseline {baseline_warnings} plus the mesh")
@@ -346,7 +439,11 @@ fn baseline_warnings() -> usize {
 
 #[test]
 fn unsupported_entity_claim() {
-    claim_unsupported_entity(&stream("regression_unsupported_entity"), baseline_warnings()).unwrap();
+    claim_unsupported_entity(
+        &stream("regression_unsupported_entity"),
+        baseline_warnings(),
+    )
+    .unwrap();
 }
 
 #[test]
@@ -371,11 +468,18 @@ fn unsupported_entity_claim_fails_when_the_entity_vanishes_silently() {
 /// native lane and is not in this file.
 fn claim_large_entity_count(recs: &[Record]) -> Result<(), String> {
     let ls = lines(recs);
-    ensure(ls.len() == 50_000, || format!("{} line records, expected 50000", ls.len()))?;
+    ensure(ls.len() == 50_000, || {
+        format!("{} line records, expected 50000", ls.len())
+    })?;
     for (i, l) in ls.iter().enumerate() {
         let (x, y) = ((i % 250) as f64, (i / 250) as f64);
         ensure(l.a == [x, y, 0.0] && l.b == [x + 1.0, y, 0.0], || {
-            format!("line {i} is {:?} to {:?}, expected ({x}, {y}) to ({}, {y})", l.a, l.b, x + 1.0)
+            format!(
+                "line {i} is {:?} to {:?}, expected ({x}, {y}) to ({}, {y})",
+                l.a,
+                l.b,
+                x + 1.0
+            )
         })?;
     }
     Ok(())
@@ -391,5 +495,9 @@ fn large_entity_count_claim_fails_on_a_dropped_line() {
     let mut recs = stream("regression_large_entity_count");
     let at = recs.iter().rposition(|r| r.kind() == "line").unwrap();
     recs.remove(at);
-    assert!(claim_large_entity_count(&recs).unwrap_err().contains("49999"));
+    assert!(
+        claim_large_entity_count(&recs)
+            .unwrap_err()
+            .contains("49999")
+    );
 }

@@ -425,6 +425,11 @@ pub struct Source {
     pub license: String,
     /// The licence text, relative to `fixtures/`.
     pub license_file: String,
+    /// `true` for the source whose files this repository writes itself
+    /// (`reference/ACadSharp.Generator`): there is nothing to download, so the
+    /// fetch tool skips its rows and the generator is what reproduces them.
+    #[serde(default)]
+    pub generated: bool,
 }
 
 /// A row that is a file but not a drawing the oracle reads.
