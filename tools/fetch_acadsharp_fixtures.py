@@ -291,6 +291,11 @@ def verify_tree(manifest: dict, root: pathlib.Path) -> list[str]:
     # with no row has no provenance, no licence and no hash, which means nobody
     # reviewed it. Any extension, any directory. The documents, the licence
     # texts and `expected/` (owned by regenerate_reference.py) need no row.
+    # The ezdxf ground truths are claimed by their own rows (the hashes live in
+    # the row, and `tools/ground_truth/extract_ezdxf.py verify` checks them).
+    for gt in manifest.get("ground_truth", []):
+        for key in ("jsonl", "sidecar", "run"):
+            claimed.add((fixtures_dir / gt[key]).resolve())
     if fixtures_dir.is_dir():
         for p in sorted(fixtures_dir.rglob("*")):
             if not p.is_file():

@@ -268,6 +268,12 @@ jobs:
       # the rows claim, and SUMMARY.md. It decompresses and never regenerates.
       - name: Reference outputs match the manifest
         run: python3 tools/regenerate_reference.py verify
+      # The ezdxf ground truths (R3.4), checked against the manifest with no
+      # ezdxf at all: the hashes, the requirements hash and the pinned image.
+      # Re-extracting needs the pinned image, so it is a separate command
+      # (`extract_ezdxf.py freeze`), never something a test run does by accident.
+      - name: Ground truths match the manifest
+        run: python3 tools/ground_truth/extract_ezdxf.py verify
       # The refusals both tools have to make. The fetch tool's are driven
       # through a local stub server rather than a mocked urlopen, because the
       # interesting behaviour is how urllib follows redirects and how much of a

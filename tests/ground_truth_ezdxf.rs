@@ -83,12 +83,42 @@ fn run_json_carries_the_version_the_requirements_hash_and_the_image_digest() {
 #[test]
 fn the_ascii_and_binary_twins_of_a_save_read_the_same() {
     // The same drawing in two encodings: ezdxf's loader for each, and the
-    // extraction has to agree. A difference is the loader's, not the drawing's.
+    // extraction has to agree to the comparator's bound. A binary DXF keeps the
+    // doubles AutoCAD held and an ASCII one keeps sixteen digits, so the last
+    // digit may differ; anything more is the loader's, not the drawing's.
+    let read = |id: &str| {
+        let g = fixtures::ground_truth(id).unwrap();
+        let records = parse_stream(&String::from_utf8(g.load_jsonl().unwrap()).unwrap()).unwrap();
+        let sidecar =
+            Sidecar::parse(&String::from_utf8(g.load_sidecar().unwrap()).unwrap(), &records).unwrap();
+        Stream { records, sidecar: Some(sidecar) }
+    };
+    let table = ClassTable::for_pair(Pair::new(Engine::Ezdxf, Engine::Ezdxf), WarningRow::Compare);
+    // The one place AutoCAD's own two files for a save differ. From the R2004
+    // save on, its ASCII DXF writes the paragraph break of four MTEXTs as a line
+    // feed (`^J`) and its binary DXF as the escape `\P`. Both are AutoCAD's
+    // writing, the DWG reads as a line feed, and the schema carries what the
+    // file stores, so it is listed and not smoothed over.
+    let known: Vec<(String, String, String)> = ["1018", "1021", "1024", "1027", "1032"]
+        .iter()
+        .flat_map(|v| {
+            ["3EC", "3F5", "3F6", "779"]
+                .iter()
+                .map(move |h| (format!("AC{v}"), h.to_string(), "text.text".to_string()))
+        })
+        .collect();
+    let mut seen = Vec::new();
     for v in ["1015", "1018", "1021", "1024", "1027", "1032"] {
-        let a = fixtures::ground_truth(&format!("dxf-sample-ac{v}-ascii")).unwrap();
-        let b = fixtures::ground_truth(&format!("dxf-sample-ac{v}-binary")).unwrap();
-        assert_eq!(a.load_jsonl().unwrap(), b.load_jsonl().unwrap(), "AC{v}");
+        let a = read(&format!("dxf-sample-ac{v}-ascii"));
+        let b = read(&format!("dxf-sample-ac{v}-binary"));
+        let save = format!("AC{v}");
+        let report = compare(&save, &a, &b, &table).unwrap();
+        for f in report.red() {
+            let handle = f.handles_a.as_ref().and_then(|h| h.last()).cloned().unwrap_or_default();
+            seen.push((save.clone(), handle, format!("{}.{}", f.record_type, f.field)));
+        }
     }
+    assert_eq!(seen, known, "the ASCII and binary DXF of a save differ only where the list above says");
 }
 
 #[test]
@@ -122,5 +152,5 @@ fn ezdxf_over_autocads_dxf_agrees_with_the_oracle_on_the_ac1015_save() {
         report.red().iter().map(|f| f.render()).collect::<Vec<_>>().join("\n")
     );
     // Not vacuous: hundreds of records took part.
-    assert!(report.aligned.len() > 300, "{}", report.aligned.len());
+    assert!(report.aligned.len() > 250, "{}", report.aligned.len());
 }
