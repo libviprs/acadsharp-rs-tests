@@ -183,7 +183,7 @@ pub fn parse_stream(text: &str) -> Result<Vec<Record>, String> {
         if keys != want {
             return Err(format!("line {n}: fields {keys:?}, want {want:?}"));
         }
-        if obj["model"] != Json::from(1) {
+        if obj["model"].as_i64() != Some(1) {
             return Err(format!("line {n}: model is not 1"));
         }
         let order = "{\"model\":1,\"record\":\"header\",\"name\":";
