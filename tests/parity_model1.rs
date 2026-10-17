@@ -183,6 +183,9 @@ fn the_run_agrees_with_the_committed_verdicts() {
             });
         }
         std::fs::write(verdicts_path(), table.render()).unwrap();
+        // The run may be in a container whose tree is thrown away, so the table
+        // is printed too, between two markers.
+        println!("==MODEL1_VERDICTS==\n{}==END==", table.render());
         eprintln!("rewrote {}", verdicts_path().display());
         return;
     }
@@ -227,6 +230,32 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
         }
     }
     assert!(stale.is_empty(), "exclusions the run never needed:\n  {}", stale.join("\n  "));
+}
+
+/// The same for `known`: a listed difference that no longer happens is red and
+/// asks for its row to go. That is what makes a fix remove its own rows.
+#[test]
+fn every_known_row_is_still_a_difference_the_run_finds() {
+    let rules = model1::committed_rules().unwrap();
+    let Some(run) = gate(compute(&rules)) else { return };
+    let mut stale = Vec::new();
+    for k in &rules.known {
+        for n in &k.names {
+            let hit = run.reports.iter().any(|((fixture, pair), r)| {
+                (k.pairs.is_empty() || k.pairs.contains(pair))
+                    && (k.fixtures.is_empty() || k.fixtures.contains(fixture))
+                    && r.findings.iter().any(|f| {
+                        &f.key == n
+                            && f.disposition == Disposition::Known
+                            && matches!(f.kind, FindingKind::Value | FindingKind::Type)
+                    })
+            });
+            if !hit {
+                stale.push(format!("{n} ({})", k.issue));
+            }
+        }
+    }
+    assert!(stale.is_empty(), "known rows the run never needed:\n  {}", stale.join("\n  "));
 }
 
 /// The control: the run's own wiring, with one value changed in a scratch copy

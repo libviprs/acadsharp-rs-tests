@@ -244,6 +244,10 @@ pub struct Known {
     /// Pairs the row applies to; empty means every pair.
     #[serde(default)]
     pub pairs: Vec<String>,
+    /// Fixture ids the row applies to (the first side's: a save for
+    /// `oracle/acadrust`, a twin for the ezdxf pairs); empty means every fixture.
+    #[serde(default)]
+    pub fixtures: Vec<String>,
     pub reason: String,
     pub issue: String,
 }
@@ -288,9 +292,12 @@ impl Rules {
         })
     }
 
-    fn known_for(&self, pair: &str, name: &str) -> Option<&Known> {
+    /// The row that lists a difference of `name` for this pair and fixture.
+    pub fn known_for(&self, pair: &str, fixture: &str, name: &str) -> Option<&Known> {
         self.known.iter().find(|k| {
-            k.names.iter().any(|n| n == name) && (k.pairs.is_empty() || k.pairs.iter().any(|p| p == pair))
+            k.names.iter().any(|n| n == name)
+                && (k.pairs.is_empty() || k.pairs.iter().any(|p| p == pair))
+                && (k.fixtures.is_empty() || k.fixtures.iter().any(|f| f == fixture))
         })
     }
 }
@@ -466,7 +473,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
         match (ia.get(name), ib.get(name)) {
             (Some(x), Some(y)) => {
                 report.compared += 1;
-                let known = rules.known_for(pair, name);
+                let known = rules.known_for(pair, a.fixture, name);
                 let (kind, detail) = if x.type_name() != y.type_name() {
                     (FindingKind::Type, format!("type {} vs {}", x.type_name(), y.type_name()))
                 } else if !same(x, y) {
