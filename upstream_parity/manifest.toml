@@ -336,7 +336,7 @@ acadrust = { status = "not_applicable", reason = "tests ACadSharp's own group co
 [[test_file]]
 path = "Header/CadHeaderTests.cs"
 status = "native_conformance"
-reason = "header variables, which the oracle captures in full (249 of them) and compares directly"
+reason = "header variables. The oracle's schema 1 stream has no header record (its document record carries the version and the maintenance version and nothing else); the model-1 stream (docs/MODEL_1.md) writes one record per CadHeader variable (249, 247 of them frozen) and compares them by DXF name against acadrust and ezdxf. acadsharp-rs is excluded: its C ABI exposes flattened primitives only"
 
 [[test_file]]
 path = "IO/AcisTextCodecTests.cs"

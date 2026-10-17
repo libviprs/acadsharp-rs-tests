@@ -9,6 +9,8 @@
 
 #[cfg(feature = "acadrust")]
 pub mod acadrust_emit;
+#[cfg(feature = "acadrust")]
+pub mod acadrust_model1;
 pub mod acadsharp_emit;
 pub mod canonical;
 pub mod census;
@@ -18,6 +20,7 @@ pub mod emit;
 pub mod fixtures;
 pub mod fuzz_harness;
 pub mod invariance;
+pub mod model1;
 pub mod ocs;
 pub mod parity;
 pub mod parity_run;

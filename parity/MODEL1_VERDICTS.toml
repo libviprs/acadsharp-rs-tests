@@ -1,0 +1,290 @@
+# parity/MODEL1_VERDICTS.toml: one row per (fixture, pair) of the model-1 stream.
+#
+# The words are the ones src/verdict.rs defines and parity/VERDICTS.toml uses.
+# `tests/parity_model1.rs` recomputes every verdict from a real run and is red on
+# any row that moved, better or worse, until this file changes. A row that is not
+# MATCH has a reason and an issue; for KNOWN the reason is that every difference
+# is a row of parity/MODEL1.toml, and the issues are the ones those rows name.
+#
+# `MODEL1_REGEN=1 cargo test --features acadrust --test parity_model1` rewrites it.
+
+[[row]]
+fixture = "acadsharp-ac1014"
+pair = "oracle/acadrust"
+verdict = "KNOWN:17"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#99"
+first = 'header $CELTYPE "BYLAYER" vs "ByLayer" [Known]'
+
+[[row]]
+fixture = "acadsharp-ac1015"
+pair = "oracle/acadrust"
+verdict = "KNOWN:18"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#101"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
+
+[[row]]
+fixture = "acadsharp-ac1018"
+pair = "oracle/acadrust"
+verdict = "KNOWN:16"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#101"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
+
+[[row]]
+fixture = "acadsharp-ac1021"
+pair = "oracle/acadrust"
+verdict = "KNOWN:9"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#101"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
+
+[[row]]
+fixture = "acadsharp-ac1024"
+pair = "oracle/acadrust"
+verdict = "KNOWN:9"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#101"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
+
+[[row]]
+fixture = "acadsharp-ac1027"
+pair = "oracle/acadrust"
+verdict = "KNOWN:9"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#101"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
+
+[[row]]
+fixture = "acadsharp-ac1032"
+pair = "oracle/acadrust"
+verdict = "KNOWN:9"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#101"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "dxf-dwg:acadrust"
+verdict = "KNOWN:6"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#31"
+first = 'header $DIMBLK "BoxBlank" vs "" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "dxf-dwg:oracle"
+verdict = "KNOWN:10"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31"
+first = "header $CELWEIGHT -1 vs 29 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "ezdxf/oracle"
+verdict = "KNOWN:1"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99"
+first = 'header $HANDSEED "154D" vs "1551" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "oracle/acadrust"
+verdict = "KNOWN:12"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101"
+first = 'header $HANDSEED "1551" vs "154D" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "dxf-dwg:acadrust"
+verdict = "OPEN_FAILED"
+reason = "exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6"
+issue = "libviprs/acadsharp-rs-tests#95"
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "dxf-dwg:oracle"
+verdict = "KNOWN:14"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "ezdxf/acadrust"
+verdict = "OPEN_FAILED"
+reason = "exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6"
+issue = "libviprs/acadsharp-rs-tests#95"
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "ezdxf/oracle"
+verdict = "KNOWN:2"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100"
+first = 'header $HANDSEED "1484" vs "1488" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "oracle/acadrust"
+verdict = "OPEN_FAILED"
+reason = "exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6"
+issue = "libviprs/acadsharp-rs-tests#95"
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "dxf-dwg:acadrust"
+verdict = "KNOWN:6"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "dxf-dwg:oracle"
+verdict = "KNOWN:14"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "ezdxf/acadrust"
+verdict = "KNOWN:1"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100"
+first = "header $XCLIPFRAME type bool vs int [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "ezdxf/oracle"
+verdict = "KNOWN:2"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100"
+first = 'header $HANDSEED "13D0" vs "13D4" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "oracle/acadrust"
+verdict = "KNOWN:3"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#100"
+first = 'header $HANDSEED "13D4" vs "13D0" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "dxf-dwg:acadrust"
+verdict = "KNOWN:8"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "dxf-dwg:oracle"
+verdict = "KNOWN:17"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "ezdxf/oracle"
+verdict = "KNOWN:1"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99"
+first = 'header $HANDSEED "1367" vs "136B" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "oracle/acadrust"
+verdict = "KNOWN:2"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101"
+first = 'header $HANDSEED "136B" vs "1367" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "dxf-dwg:acadrust"
+verdict = "KNOWN:8"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "dxf-dwg:oracle"
+verdict = "KNOWN:17"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "ezdxf/oracle"
+verdict = "KNOWN:1"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99"
+first = 'header $HANDSEED "1308" vs "130C" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "oracle/acadrust"
+verdict = "KNOWN:2"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101"
+first = 'header $HANDSEED "130C" vs "1308" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "dxf-dwg:acadrust"
+verdict = "KNOWN:8"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101"
+first = "header $CECOLOR 193 vs -1 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "dxf-dwg:oracle"
+verdict = "KNOWN:18"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101"
+first = "header $ACADMAINTVER 329 vs 228 [Known]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "ezdxf/oracle"
+verdict = "KNOWN:1"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99"
+first = 'header $HANDSEED "12DC" vs "12E0" [Known]'
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "oracle/acadrust"
+verdict = "KNOWN:2"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101"
+first = 'header $HANDSEED "12E0" vs "12DC" [Known]'

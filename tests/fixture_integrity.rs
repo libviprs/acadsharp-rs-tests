@@ -649,13 +649,26 @@ fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
         }
     }
 
+    // The model-1 ground truths (R5.5) are claimed by fixtures/model1/MANIFEST.toml,
+    // which carries their hashes, and the list of names ezdxf left out sits beside
+    // each ezdxf stream.
+    for f in acadsharp_rs_tests::model1::frozen_files().expect("fixtures/model1/MANIFEST.toml") {
+        let path = root.join("model1").join(&f.path);
+        if f.engine == "ezdxf" {
+            referenced.insert(path.with_extension("skipped"));
+        }
+        referenced.insert(path);
+    }
+
     let mut orphans = Vec::new();
     let mut found = 0usize;
     for path in files_under(&root, &|_| true) {
         let rel = path.strip_prefix(&root).unwrap_or(&path).to_path_buf();
         let name = rel.to_string_lossy().replace('\\', "/");
-        let is_doc = matches!(name.as_str(), "manifest.toml" | "README.md")
-            || (name.starts_with("LICENSE") && name.ends_with(".txt"));
+        let is_doc = matches!(
+            name.as_str(),
+            "manifest.toml" | "README.md" | "model1/MANIFEST.toml"
+        ) || (name.starts_with("LICENSE") && name.ends_with(".txt"));
         if is_doc {
             continue;
         }
