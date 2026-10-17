@@ -87,8 +87,7 @@ pub struct Schema {
     pub fields: &'static [(&'static str, Ty)],
 }
 
-/// Every kind with a record, in `docs/MODEL_1.md`.
-pub const SCHEMAS: &[Schema] = &[Schema {
+const LAYER: Schema = Schema {
     kind: "layer",
     fields: &[
         ("flags", Ty::Int),
@@ -99,7 +98,21 @@ pub const SCHEMAS: &[Schema] = &[Schema {
         ("lineweight", Ty::Int),
         ("plot", Ty::Bool),
     ],
-}];
+};
+
+const LINETYPE: Schema = Schema {
+    kind: "linetype",
+    fields: &[
+        ("description", Ty::Str),
+        ("alignment", Ty::Int),
+        ("pattern_length", Ty::Double),
+        ("segments", Ty::List(SEGMENT)),
+    ],
+};
+
+/// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
+/// and one name here, so a new kind never touches the others.
+pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE];
 
 /// One segment of a linetype's pattern, in file order.
 const SEGMENT: &[(&str, Ty)] = &[
