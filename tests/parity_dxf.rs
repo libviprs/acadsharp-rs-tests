@@ -15,10 +15,11 @@ use acadsharp_rs_tests::verdict::{Table, Verdict};
 
 const VERDICTS: &str = include_str!("../parity/VERDICTS.toml");
 
-/// How many DXFs the oracle reads into schema 1: the 26 in the manifest less the
-/// two AC1009 files, which are R5.2's. Written out so a row that silently stops
-/// being read is red.
-const READ_BY_THE_ORACLE: usize = 24;
+/// How many DXFs the oracle reads into schema 1: all 26 in the manifest, the two
+/// AC1009 files included now that the oracle names the two spaces of a drawing that
+/// has no LAYOUT objects (R5.2). Written out so a row that silently stops being
+/// read is red.
+const READ_BY_THE_ORACLE: usize = 26;
 
 fn inputs() -> Vec<&'static fixtures::OracleInput> {
     fixtures::oracle_inputs()
@@ -28,15 +29,12 @@ fn inputs() -> Vec<&'static fixtures::OracleInput> {
 }
 
 #[test]
-fn the_oracle_reads_twenty_four_dxfs_and_says_why_it_does_not_read_the_other_two() {
+fn the_oracle_reads_every_dxf_in_the_manifest() {
     assert_eq!(fixtures::oracle_inputs().len(), 26);
     assert_eq!(inputs().len(), READ_BY_THE_ORACLE);
-    for i in fixtures::oracle_inputs()
-        .iter()
-        .filter(|i| i.no_reference.is_some())
-    {
-        assert!(i.id.contains("ac1009"), "{}: only R12 is deferred", i.id);
-        assert!(i.reference_jsonl.is_none(), "{}", i.id);
+    for i in fixtures::oracle_inputs() {
+        assert!(i.no_reference.is_none(), "{}: {:?}", i.id, i.no_reference);
+        assert!(i.reference_jsonl.is_some(), "{}", i.id);
     }
 }
 
@@ -123,10 +121,11 @@ fn cells() -> BTreeSet<(String, String)> {
 
 #[test]
 fn the_lane_has_the_cells_the_issue_counts() {
-    // 24 inputs x 3 reader pairs; 23 with a DWG twin (all but geoloc_AC1021) x 3 (two readers and the
-    // excluded acadsharp-rs); 6 saves x 3 readers.
+    // 26 inputs x 3 reader pairs; 25 with a DWG twin (all but geoloc_AC1021; the AC1009
+    // pair's twin is the AC1015 DWG of the same drawing) x 3 (two readers and the
+    // excluded acadsharp-rs); 7 saves x 3 readers.
     let want = cells();
-    assert_eq!(want.len(), 24 * 3 + 23 * 3 + 6 * 3, "{}", want.len());
+    assert_eq!(want.len(), 26 * 3 + 25 * 3 + 7 * 3, "{}", want.len());
 }
 
 #[test]

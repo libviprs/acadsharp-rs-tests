@@ -36,7 +36,7 @@ issue = "libviprs/libviprs-dep#104"
 [[exclude]]
 pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "polygon"
-reason = "the wire carries no entity type, so a hatch loop and a SOLID are both a Polygon, and a hatch loop is one record per loop with bulges where schema 1 sends one analytic record per edge."
+reason = "decided, not a gap (acadsharp-rs-tests#59): the wire draws a hatch loop as the one filled boundary it is, a Polygon with bulges, where schema 1 sends one analytic record per edge. Both describe the same boundary and a viewer paints the same thing, and the wire carries no entity type, so a hatch loop and a SOLID look alike and the kind is excluded for the pairs with the wire in them. Hatch edges are still compared between the oracle and acadrust, and a hatch type bit in a later wire's prologue would let the SOLIDs be compared again."
 issue = "libviprs/acadsharp-rs-tests#59"
 
 [[exclude]]
@@ -50,7 +50,7 @@ issue = "libviprs/acadsharp-rs-tests#61"
 pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "spline"
 field = "fit_points"
-reason = "fit points are not on wire 2."
+reason = "decided, not a gap (acadsharp-rs-tests#58): fit points are editing data. The curve a viewer draws is the control points and the knots, which the wire carries, so the wire leaves fit points out on purpose and this field is excluded for good."
 issue = "libviprs/acadsharp-rs-tests#58"
 
 [[exclude]]
@@ -209,7 +209,7 @@ issue = "libviprs/acadsharp-rs-tests#59"
 pairs = ["ezdxf/acadsharp"]
 record = "spline"
 field = "fit_points"
-reason = "fit points are not on wire 2."
+reason = "decided, not a gap (acadsharp-rs-tests#58): fit points are editing data. The curve a viewer draws is the control points and the knots, which the wire carries, so the wire leaves fit points out on purpose and this field is excluded for good."
 issue = "libviprs/acadsharp-rs-tests#58"
 
 [[exclude]]
@@ -1390,3 +1390,570 @@ record = "document"
 field = "maintenance_version"
 reason = "a writer stamps its own maintenance number; it is not the source's."
 issue = "libviprs/acadsharp-rs-tests#29"
+
+# ---- what ACadSharp's writers leave out or spell differently (R5.3 findings) -------------------
+#
+# These are defects of ACadSharp 3.7.1's writers, an upstream project we do not own, so they
+# are pinned and reasoned here rather than fixed. A row goes red the day the writer stops doing
+# it, which is the cue to remove it. Each issue carries the draft of the upstream report.
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1032-dxf-ascii-ac1012", "w-acadsharp-ac1032-dxf-ascii-ac1014", "w-acadsharp-ac1032-dxf-ascii-ac1015", "w-acadsharp-ac1032-dxf-ascii-ac1018", "w-acadsharp-ac1032-dxf-ascii-ac1021", "w-acadsharp-ac1032-dxf-ascii-ac1024", "w-acadsharp-ac1032-dxf-ascii-ac1027", "w-acadsharp-ac1032-dxf-ascii-ac1032", "w-acadsharp-ac1032-dxf-binary-ac1012", "w-acadsharp-ac1032-dxf-binary-ac1014", "w-acadsharp-ac1032-dxf-binary-ac1015", "w-acadsharp-ac1032-dxf-binary-ac1018", "w-acadsharp-ac1032-dxf-binary-ac1021", "w-acadsharp-ac1032-dxf-binary-ac1024", "w-acadsharp-ac1032-dxf-binary-ac1027", "w-acadsharp-ac1032-dxf-binary-ac1032"]
+record_type = "polygon"
+oracle_indices = [126]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018"]
+record_type = "polygon"
+oracle_indices = [126]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1032-dxf-ascii-ac1012", "w-acadsharp-ac1032-dxf-ascii-ac1014", "w-acadsharp-ac1032-dxf-ascii-ac1015", "w-acadsharp-ac1032-dxf-ascii-ac1018", "w-acadsharp-ac1032-dxf-ascii-ac1021", "w-acadsharp-ac1032-dxf-ascii-ac1024", "w-acadsharp-ac1032-dxf-ascii-ac1027", "w-acadsharp-ac1032-dxf-ascii-ac1032", "w-acadsharp-ac1032-dxf-binary-ac1012", "w-acadsharp-ac1032-dxf-binary-ac1014", "w-acadsharp-ac1032-dxf-binary-ac1015", "w-acadsharp-ac1032-dxf-binary-ac1018", "w-acadsharp-ac1032-dxf-binary-ac1021", "w-acadsharp-ac1032-dxf-binary-ac1024", "w-acadsharp-ac1032-dxf-binary-ac1027", "w-acadsharp-ac1032-dxf-binary-ac1032"]
+record_type = "text"
+oracle_indices = [127, 128, 129, 130, 131, 132, 133, 134, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 225]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018"]
+record_type = "text"
+oracle_indices = [127, 128, 129, 130, 131, 132, 133, 134, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 225]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadsharp"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018"]
+record_type = "text"
+oracle_indices = [127, 128, 129, 130, 131, 132, 133, 134, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 225]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent. (acadsharp-rs has no polygon record, so the first table's polygon is not among the records compared)"
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1032-dxf-ascii-ac1012", "w-acadsharp-ac1032-dxf-ascii-ac1014", "w-acadsharp-ac1032-dxf-ascii-ac1015", "w-acadsharp-ac1032-dxf-ascii-ac1018", "w-acadsharp-ac1032-dxf-ascii-ac1021", "w-acadsharp-ac1032-dxf-ascii-ac1024", "w-acadsharp-ac1032-dxf-ascii-ac1027", "w-acadsharp-ac1032-dxf-ascii-ac1032", "w-acadsharp-ac1032-dxf-binary-ac1012", "w-acadsharp-ac1032-dxf-binary-ac1014", "w-acadsharp-ac1032-dxf-binary-ac1015", "w-acadsharp-ac1032-dxf-binary-ac1018", "w-acadsharp-ac1032-dxf-binary-ac1021", "w-acadsharp-ac1032-dxf-binary-ac1024", "w-acadsharp-ac1032-dxf-binary-ac1027", "w-acadsharp-ac1032-dxf-binary-ac1032"]
+record_type = "line"
+oracle_indices = [135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018"]
+record_type = "line"
+oracle_indices = [135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadsharp"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018"]
+record_type = "line"
+oracle_indices = [135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent. (acadsharp-rs has no polygon record, so the first table's polygon is not among the records compared)"
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1032-dxf-ascii-ac1012", "w-acadsharp-ac1032-dxf-ascii-ac1014", "w-acadsharp-ac1032-dxf-ascii-ac1015", "w-acadsharp-ac1032-dxf-ascii-ac1018", "w-acadsharp-ac1032-dxf-ascii-ac1021", "w-acadsharp-ac1032-dxf-ascii-ac1024", "w-acadsharp-ac1032-dxf-ascii-ac1027", "w-acadsharp-ac1032-dxf-ascii-ac1032", "w-acadsharp-ac1032-dxf-binary-ac1012", "w-acadsharp-ac1032-dxf-binary-ac1014", "w-acadsharp-ac1032-dxf-binary-ac1015", "w-acadsharp-ac1032-dxf-binary-ac1018", "w-acadsharp-ac1032-dxf-binary-ac1021", "w-acadsharp-ac1032-dxf-binary-ac1024", "w-acadsharp-ac1032-dxf-binary-ac1027", "w-acadsharp-ac1032-dxf-binary-ac1032"]
+record_type = "circle"
+oracle_indices = [224, 226, 227]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018"]
+record_type = "circle"
+oracle_indices = [224, 226, 227]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadsharp"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018"]
+record_type = "circle"
+oracle_indices = [224, 226, 227]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the source's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and the oracle, acadrust, acadsharp-rs and ezdxf all agree it is absent. (acadsharp-rs has no polygon record, so the first table's polygon is not among the records compared)"
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
+record_type = "text"
+oracle_indices = [183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 201, 209, 240, 242, 246, 259, 274, 284, 290, 292]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
+record_type = "circle"
+oracle_indices = [200, 243, 244, 288, 293, 294, 295, 296]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
+record_type = "polyline"
+oracle_indices = [196, 198, 239, 241, 245, 247, 248, 253, 254, 255, 256, 257, 258, 289, 291]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
+record_type = "point"
+oracle_indices = [210, 211, 212, 275, 276, 277, 285, 286, 287]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
+record_type = "polygon"
+oracle_indices = [207, 208, 282, 283]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015"]
+record_type = "line"
+oracle_indices = [199, 202, 203, 204, 205, 206, 249, 250, 251, 252, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 278, 279, 280, 281]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on (114 records, 88 of them besides the second table), and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; the records are all gone from the first one onward, which fits a break in the entity chain that R13 to R2000 files use, but which side breaks it is not established here."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1015", "w-acadsharp-ac1032-dwg-ac1018", "w-acadsharp-ac1032-dwg-ac1024"]
+record_type = "spline"
+oracle_indices = [52]
+reason = "The spline (oracle index 52) is not in the DWG ACadSharp 3.7.1 writes at AC1015, AC1018 or AC1024, and the oracle and acadrust agree it is absent; AC1027 and AC1032 keep it. The cause is not established."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "arc"
+oracle_indices = [65, 75]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "text"
+oracle_indices = [59, 68, 78, 93, 99, 106, 113, 122, 127, 128, 129, 130, 131, 132, 133, 134, 172, 180, 181, 182, 209, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 225, 274, 284]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "spline"
+oracle_indices = [52]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "circle"
+oracle_indices = [171, 224, 226, 227, 243, 244, 288]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "polyline"
+oracle_indices = [120, 121, 178, 179]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "point"
+oracle_indices = [60, 61, 62, 69, 70, 71, 72, 79, 80, 81, 82, 83, 96, 97, 101, 102, 107, 108, 109, 114, 115, 116, 123, 124, 125, 210, 211, 212, 275, 276, 277, 285, 286, 287]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "polygon"
+oracle_indices = [57, 58, 66, 67, 76, 77, 95, 100, 126, 207, 208, 282, 283]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1032-dwg-ac1014"]
+record_type = "line"
+oracle_indices = [54, 55, 56, 63, 64, 73, 74, 92, 94, 98, 103, 104, 105, 110, 111, 112, 117, 118, 119, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 169, 170, 203, 204, 205, 206, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 278, 279, 280, 281]
+reason = "ACadSharp 3.7.1 writes an AC1014 DWG that neither ACadSharp nor acadsharp-rs can open (InvalidCastException, CadBlockRecordTemplate to CadEntityTemplate). acadrust opens it and finds only part of the drawing, which is what the file is worth: what a reader that tolerates a damaged file does with it is not a property of the writer, so it is listed here as the damage and not argued."
+issue = "libviprs/acadsharp-rs-tests#107"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1021"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1021"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1021"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1021"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1024"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1024"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1024"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1024"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1027"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1027"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1027"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1027"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1032"
+record_type = "text"
+field = "text"
+oracle_index = 46
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1032"
+record_type = "text"
+field = "text"
+oracle_index = 47
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1032"
+record_type = "text"
+field = "text"
+oracle_index = 48
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext^Jwith multiple lines in it"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-ac1032-dxf-binary-ac1032"
+record_type = "text"
+field = "text"
+oracle_index = 177
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
+issue = "libviprs/acadsharp-rs-tests#109"
+

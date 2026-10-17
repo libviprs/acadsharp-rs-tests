@@ -458,6 +458,67 @@ def dimstyle_lines(doc) -> list[tuple[str, str, str]]:
             fields.append(("$" + field, text))
         fields.append(("annotative", "true" if annotative(ds) else "false"))
         out.append(line("dimstyle", name, fields))
+
+def table_entries(doc):
+    """The table entries by the kind the owner paths of docs/MODEL_1.md use."""
+    for kind, table in (
+        ("layer", doc.layers),
+        ("linetype", doc.linetypes),
+        ("textstyle", doc.styles),
+        ("dimstyle", doc.dimstyles),
+        ("block_record", doc.block_records),
+        ("appid", doc.appids),
+        ("view", doc.views),
+        ("vport", doc.viewports),
+        ("ucs", doc.ucs),
+    ):
+        for entry in table:
+            yield kind, entry.dxf.name, entry
+
+
+def dictionary_lines(doc) -> list[tuple[str, str, str]]:
+    """One `dictionary` record per DICTIONARY (and DICTIONARYWDFLT) reachable from
+    the root, keyed by the path of entry keys, and per extension dictionary of a
+    table entry or a layout (docs/MODEL_1.md). Those of entities are keyed by
+    handle only and are not written.
+    """
+    out = []
+    seen = set()
+
+    def walk(d, path: str) -> None:
+        if id(d) in seen:
+            return
+        seen.add(id(d))
+        # An entry whose handle names no object is a dangling reference.
+        items = sorted(((k, e) for k, e in d.items() if e is not None), key=lambda kv: kv[0].encode("utf-8"))
+        entries = ",".join(
+            "{" + f'"key":{quote(k)},"class":{quote(e.dxftype())}' + "}" for k, e in items
+        )
+        out.append(
+            line(
+                "dictionary",
+                path,
+                [
+                    ("name", quote(path)),
+                    ("hard_owner", "true" if int(d.dxf.get("hard_owned", 0)) else "false"),
+                    ("cloning", str(int(d.dxf.get("cloning", 1)))),
+                    ("entries", f"[{entries}]"),
+                    ("entry_count", str(len(items))),
+                ],
+            )
+        )
+        for k, e in items:
+            if e.dxftype() in ("DICTIONARY", "ACDBDICTIONARYWDFLT"):
+                walk(e, k if not path else f"{path}/{k}")
+
+    walk(doc.rootdict, "")
+    for kind, name, entry in table_entries(doc):
+        if entry.has_extension_dict:
+            walk(entry.get_extension_dict().dictionary, f"table/{kind}/{name}")
+    for layout in doc.layouts:
+        dxf_layout = layout.dxf_layout
+        if dxf_layout.has_extension_dict:
+            walk(dxf_layout.get_extension_dict().dictionary, f"layout/{layout.name}")
     return out
 
 
@@ -476,7 +537,7 @@ def command_extract_ezdxf(args) -> int:
             return 1
         doc = ezdxf.readfile(str(path))
         records, skipped = header_lines(doc)
-        text = encode(records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc) + dimstyle_lines(doc))
+        text = encode(records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc) + dimstyle_lines(doc) + dictionary_lines(doc))
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
         print(f"{rid}: {len(text.splitlines())} records")

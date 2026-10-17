@@ -7,8 +7,13 @@
 //! the DXF writer would apply on the way out, because a record says what the
 //! reader found and not what a writer would make of it.
 
-use acadrust::document::CadDocument;
-use acadrust::types::Color;
+use std::collections::HashSet;
+
+use acadrust::document::{
+    CadDocument, SemanticNodeV1, SemanticPartV1, SemanticReferenceV1, SemanticRelationshipKindV1,
+};
+use acadrust::objects::ObjectType;
+use acadrust::types::{Color, Handle};
 
 use crate::model1::{Entry, Header, Record, Value};
 
@@ -495,6 +500,166 @@ pub fn dimstyle_records(doc: &CadDocument) -> Vec<Record> {
             Record::Entry(Entry::new("dimstyle", t.name.clone(), values))
         })
         .collect()
+
+/// The DXF object name of an object in a dictionary: what ACadSharp calls
+/// `ObjectName` and ezdxf `dxftype()`. An object acadrust does not model is
+/// `Unknown { type_name }` and keeps the name it was read under.
+pub fn object_class(object: &ObjectType) -> String {
+    match object {
+        ObjectType::Dictionary(_) => "DICTIONARY".into(),
+        ObjectType::Layout(_) => "LAYOUT".into(),
+        ObjectType::XRecord(_) => "XRECORD".into(),
+        ObjectType::Group(_) => "GROUP".into(),
+        ObjectType::MLineStyle(_) => "MLINESTYLE".into(),
+        ObjectType::ImageDefinition(_) => "IMAGEDEF".into(),
+        ObjectType::UnderlayDefinition(d) => d.entity_name().into(),
+        ObjectType::PlotSettings(_) => "PLOTSETTINGS".into(),
+        ObjectType::MultiLeaderStyle(_) => "MLEADERSTYLE".into(),
+        ObjectType::TableStyle(_) => "TABLESTYLE".into(),
+        ObjectType::TableContent(_) => "TABLECONTENT".into(),
+        ObjectType::Scale(_) => "SCALE".into(),
+        ObjectType::ObjectContextData(d) => d.class_name().into(),
+        ObjectType::SortEntitiesTable(_) => "SORTENTSTABLE".into(),
+        ObjectType::DictionaryVariable(_) => "DICTIONARYVAR".into(),
+        ObjectType::VisualStyle(_) => "VISUALSTYLE".into(),
+        ObjectType::Material(_) => "MATERIAL".into(),
+        ObjectType::ImageDefinitionReactor(_) => "IMAGEDEF_REACTOR".into(),
+        ObjectType::GeoData(_) => "GEODATA".into(),
+        ObjectType::SpatialFilter(_) => "SPATIAL_FILTER".into(),
+        ObjectType::RasterVariables(_) => "RASTERVARIABLES".into(),
+        ObjectType::BookColor(_) => "DBCOLOR".into(),
+        ObjectType::PlaceHolder(_) => "ACDBPLACEHOLDER".into(),
+        ObjectType::DictionaryWithDefault(_) => "ACDBDICTIONARYWDFLT".into(),
+        ObjectType::WipeoutVariables(_) => "WIPEOUTVARIABLES".into(),
+        ObjectType::BlockVisibilityParameter(_) => "BLOCKVISIBILITYPARAMETER".into(),
+        ObjectType::DynamicBlock(d) => d.dxf_name.clone(),
+        ObjectType::Associative(d) => d.dxf_name.clone(),
+        ObjectType::ClassObject(d) => d.dxf_name().into(),
+        ObjectType::DataObject(d) => d.dxf_name().into(),
+        ObjectType::Field(_) => "FIELD".into(),
+        ObjectType::FieldList(_) => "FIELDLIST".into(),
+        ObjectType::RegisteredClass(d) => d.dxf_name.clone(),
+        ObjectType::DgnLineStyle(d) => d.dxf_name().into(),
+        ObjectType::ProxyObject(_) => "ACAD_PROXY_OBJECT".into(),
+        ObjectType::Unknown { type_name, .. } => type_name.clone(),
+    }
+}
+
+/// Where one dictionary starts, and the path it is keyed under.
+fn walk_dictionary(
+    doc: &CadDocument,
+    handle: Handle,
+    path: &str,
+    out: &mut Vec<Record>,
+    seen: &mut HashSet<Handle>,
+) {
+    let (entries, hard_owner, cloning) = match doc.objects.get(&handle) {
+        Some(ObjectType::Dictionary(d)) => (&d.entries, d.hard_owner, d.duplicate_cloning),
+        Some(ObjectType::DictionaryWithDefault(d)) => {
+            (&d.entries, d.hard_owner, d.duplicate_cloning)
+        }
+        _ => return,
+    };
+    if !seen.insert(handle) {
+        return;
+    }
+    // An entry whose handle names no object is a dangling reference: a reader
+    // that resolves the entry to an object has nothing to list.
+    let mut listed: Vec<(&str, Handle, String)> = entries
+        .iter()
+        .filter_map(|(key, h)| {
+            doc.objects
+                .get(h)
+                .map(|o| (key.as_str(), *h, object_class(o)))
+        })
+        .collect();
+    listed.sort_by(|a, b| a.0.as_bytes().cmp(b.0.as_bytes()));
+    out.push(Record::Entry(Entry::new(
+        "dictionary",
+        path,
+        vec![
+            Value::Bool(hard_owner),
+            Value::Int(i64::from(cloning)),
+            Value::List(
+                listed
+                    .iter()
+                    .map(|(k, _, c)| vec![Value::Str((*k).to_string()), Value::Str(c.clone())])
+                    .collect(),
+            ),
+            Value::Int(listed.len() as i64),
+        ],
+    )));
+    for (key, h, _) in &listed {
+        let child = if path.is_empty() {
+            (*key).to_string()
+        } else {
+            format!("{path}/{key}")
+        };
+        walk_dictionary(doc, *h, &child, out, seen);
+    }
+}
+
+/// The owner a table record or a layout is named by in a path
+/// (`table/<kind>/<name>`, `layout/<name>`), when the node is one that has such
+/// a name.
+fn owner_path(node: &SemanticNodeV1<'_>) -> Option<String> {
+    use acadrust::document::SemanticTableRecordV1 as T;
+    Some(match node {
+        SemanticNodeV1::TableRecord(t) => {
+            let (kind, name) = match t {
+                T::Layer(r) => ("layer", &r.name),
+                T::LineType(r) => ("linetype", &r.name),
+                T::TextStyle(r) => ("textstyle", &r.name),
+                T::DimStyle(r) => ("dimstyle", &r.name),
+                T::BlockRecord(r) => ("block_record", &r.name),
+                T::AppId(r) => ("appid", &r.name),
+                T::View(r) => ("view", &r.name),
+                T::VPort(r) => ("vport", &r.name),
+                T::Ucs(r) => ("ucs", &r.name),
+                T::Vx(_) => return None,
+            };
+            format!("table/{kind}/{name}")
+        }
+        SemanticNodeV1::Object(ObjectType::Layout(l)) => format!("layout/{}", l.name),
+        _ => return None,
+    })
+}
+
+/// One `dictionary` record per DICTIONARY (and DICTIONARYWDFLT) reachable from
+/// the root, keyed by the path of entry keys (docs/MODEL_1.md), and per
+/// extension dictionary of a table entry or a layout. Those of entities are
+/// keyed by handle only and are not written.
+pub fn dictionary_records(doc: &CadDocument) -> Vec<Record> {
+    let mut out = Vec::new();
+    let mut seen = HashSet::new();
+    walk_dictionary(
+        doc,
+        doc.header.named_objects_dict_handle,
+        "",
+        &mut out,
+        &mut seen,
+    );
+    let mut owned: Vec<(String, Handle)> = Vec::new();
+    doc.semantic_inventory_v1().visit(|part| {
+        if let SemanticPartV1::Relationship {
+            kind: SemanticRelationshipKindV1::ExtensionDictionary,
+            source: SemanticReferenceV1::Resolved(node),
+            target: SemanticReferenceV1::Resolved(SemanticNodeV1::Object(target)),
+        } = part
+            && let Some(path) = owner_path(&node)
+        {
+            let handle = match target {
+                ObjectType::Dictionary(d) => d.handle,
+                ObjectType::DictionaryWithDefault(d) => d.handle,
+                _ => return,
+            };
+            owned.push((path, handle));
+        }
+    });
+    for (path, handle) in owned {
+        walk_dictionary(doc, handle, &path, &mut out, &mut seen);
+    }
+    out
 }
 
 /// What `emit-acadrust` writes beside the schema 1 stream.
@@ -504,6 +669,7 @@ pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     all.extend(linetype_records(doc));
     all.extend(textstyle_records(doc));
     all.extend(dimstyle_records(doc));
+    all.extend(dictionary_records(doc));
     all
 }
 

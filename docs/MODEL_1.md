@@ -26,6 +26,7 @@ side is `tools/model1.py`.
 | `linetype` | this document | the entry name |
 | `textstyle` | this document | the entry name |
 | `dimstyle` | this document | the entry name |
+| `dictionary` | this document | the path of entry keys from the root |
 
 The rest of the table kinds (`linetype`, `textstyle`, `dimstyle`,
 `block_record`, `layout`), `dictionary`, and `xdata` with `xrecord` are each
@@ -277,6 +278,57 @@ colour index, or -1 for a true colour; a flag is the integer 0 or 1; an angle
   is the `dxf-dwg:` rows.
 - **annotative** is `excluded` for the oracle, as for the text style.
 - An entry with no name has no record.
+
+## `dictionary`
+
+```json
+{"model":1,"record":"dictionary","name":"ACAD_MLINESTYLE","hard_owner":false,"cloning":1,"entries":[{"key":"Standard","class":"MLINESTYLE"}],"entry_count":1}
+```
+
+One record per DICTIONARY (and DICTIONARYWDFLT) object, keyed by the path of
+entry keys from the named object dictionary, `/`-joined. The root is the empty
+path. A nested dictionary is an entry of its parent with the class `DICTIONARY`,
+and its own record follows under the longer path (`ACAD_GROUP` under the root,
+and a dictionary inside it, if there were one, as `ACAD_GROUP/<key>`).
+
+| field | type | code | meaning |
+|---|---|---|---|
+| `hard_owner` | bool | 280 | the dictionary-level hard ownership flag |
+| `cloning` | int | 281 | the duplicate record cloning flag |
+| `entries` | list | 3 and 350 | `(key, class)` sorted by key (UTF-8 bytes); `class` is the entry's DXF object name |
+| `entry_count` | int | | the number of entries |
+
+- **Entry order is not compared.** ACadSharp keeps entries in a `Dictionary`,
+  acadrust and ezdxf in file order, and the record sorts by key. Per-entry hard
+  ownership (360 against 350) is acadrust-only and stays out; the
+  dictionary-level flag is the compared one.
+- **The class is the DXF object name.** `NonGraphicalObject.ObjectName` on the
+  oracle, the `ObjectType` variant's DXF name (or `Unknown { type_name }`) on
+  acadrust, `dxftype()` on ezdxf. The oracle reads with
+  `KeepUnknownNonGraphicalObjects` on, so an entry whose class it has no type for
+  stays in the list under the class name the file gives it. The switch keeps an
+  object after the reader's notification has fired, and schema 1 emits no
+  object, so no schema 1 output moves because of it. The DXF reader needs a
+  second switch: it reads the handle of an unknown object only when
+  `KeepUnknownEntities` is on, where the name says it means the other one, so
+  the oracle sets both for a DXF (libviprs/acadsharp-rs-tests#126). The unknown
+  entities that keeps are drawing content, which no model-1 record reads.
+- **The key is the file's.** ACadSharp adds each entry under the object's own
+  name (`CadDictionaryTemplate.build`), so for a dictionary whose keys are not
+  the names (ACAD_SCALELIST, which AutoCAD keys `A0`, `A1`, and so on) the
+  oracle's key is the name. Those are `known` rows for the five dictionaries it
+  touches (libviprs/acadsharp-rs-tests#124).
+- **An entry that names no object** is a dangling reference. A reader that
+  resolves the entry has nothing to list, so it is not listed.
+- **Extension dictionaries** hang off an owner and not off the root. Those of
+  table entries and layouts are in, keyed `table/<kind>/<name>` (the kind is
+  the table in lower case: `layer`, `linetype`, `textstyle`, `dimstyle`,
+  `block_record`, `appid`, `view`, `vport`, `ucs`) and `layout/<name>`, and the
+  dictionaries inside them follow under the longer path. Those of entities are
+  keyed by handle only and are not written, until the entity owners of the
+  `xdata` kind (R5.5.7) prove the sidecar rule there.
+- **A class only one side can name** is listed by name in `parity/MODEL1.toml`
+  and is the list R5.6's object rows want.
 
 ## Comparing
 
