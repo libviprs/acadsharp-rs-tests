@@ -781,7 +781,8 @@ fn the_oracle_keeps_the_entries_acadsharp_has_no_class_for() {
         assert!(
             entries
                 .iter()
-                .any(|(k, c)| k == "ACAD_ASSOCPERSSUBENTMANAGER" && c == "ACDBASSOCPERSSUBENTMANAGER"),
+                .any(|(k, c)| k == "ACAD_ASSOCPERSSUBENTMANAGER"
+                    && c == "ACDBASSOCPERSSUBENTMANAGER"),
             "{id}: the oracle lost the root entry ACAD_ASSOCPERSSUBENTMANAGER: {entries:?}"
         );
     }
