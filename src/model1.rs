@@ -611,8 +611,8 @@ mod tests {
         let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &rules);
         assert_eq!(r.verdict(), Verdict::Match);
         assert_eq!(r.findings.len(), 1);
-        // and the same row does not excuse the other direction
-        let r = compare("oracle/acadrust", &side("acadrust", &b), &side("oracle", &a), &rules);
+        // and the same row does not excuse the oracle lacking a name acadrust has
+        let r = compare("oracle/acadrust", &side("oracle", &b), &side("acadrust", &a), &rules);
         assert_eq!(r.verdict(), Verdict::Diff(1));
     }
 
