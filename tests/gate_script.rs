@@ -224,3 +224,45 @@ fn plan_names_the_base_table_the_verdicts_are_held_to_a_second_time() {
         "{text}"
     );
 }
+
+/// Issue 84: a red cargo line must not hide the lines after it.
+#[test]
+fn a_red_cargo_line_does_not_stop_the_later_lines_and_the_script_still_fails() {
+    let dir = scratch("gate_keeps_going");
+    repo(&dir.join("crate"));
+    repo(&dir.join("fork"));
+    let bin = dir.join("bin");
+    std::fs::create_dir_all(&bin).unwrap();
+    let log = dir.join("calls.log");
+    // A cargo that records its arguments and fails on the first call only.
+    let shim = format!(
+        "#!/bin/sh\necho \"$@\" >> {log}\nif [ \"$(wc -l < {log})\" -eq 1 ]; then exit 1; fi\nexit 0\n",
+        log = log.display()
+    );
+    std::fs::write(bin.join("cargo"), shim).unwrap();
+    {
+        use std::os::unix::fs::PermissionsExt;
+        std::fs::set_permissions(bin.join("cargo"), std::fs::Permissions::from_mode(0o755)).unwrap();
+    }
+    let native = dir.join("native");
+    std::fs::create_dir_all(&native).unwrap();
+    let path = format!("{}:{}", bin.display(), std::env::var("PATH").unwrap());
+    let out = Command::new("bash")
+        .arg(script())
+        .args(["--in-ci", "--acadsharp-rs"])
+        .arg(dir.join("crate"))
+        .arg("--acadrust")
+        .arg(dir.join("fork"))
+        .env("PATH", path)
+        .env("ACADSHARP_NATIVE_DIR", &native)
+        .output()
+        .unwrap();
+    let calls = std::fs::read_to_string(&log).unwrap_or_default();
+    assert_eq!(
+        calls.lines().count(),
+        3,
+        "all three cargo lines have to run; ran:\n{calls}\nstderr: {}",
+        String::from_utf8_lossy(&out.stderr)
+    );
+    assert!(!out.status.success(), "a red line is a red gate");
+}
