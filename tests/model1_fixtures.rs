@@ -61,7 +61,10 @@ fn the_oracle_writes_cadheaders_variables_less_the_two_it_cannot_freeze_on_every
         // CadHeader.GetHeaderMap() has 249; $TDUCREATE and $TDUUPDATE are the time
         // of the read and are not written (docs/MODEL_1.md).
         assert_eq!(names.len(), 247, "{s}");
-        assert!(!names.contains("$TDUCREATE") && !names.contains("$TDUUPDATE"), "{s}");
+        assert!(
+            !names.contains("$TDUCREATE") && !names.contains("$TDUUPDATE"),
+            "{s}"
+        );
         if let Some(f) = &first {
             assert_eq!(
                 f, &names,

@@ -661,8 +661,7 @@ fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
         let is_doc = matches!(
             name.as_str(),
             "manifest.toml" | "README.md" | "model1/MANIFEST.toml"
-        )
-            || (name.starts_with("LICENSE") && name.ends_with(".txt"));
+        ) || (name.starts_with("LICENSE") && name.ends_with(".txt"));
         if is_doc {
             continue;
         }
