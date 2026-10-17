@@ -26,9 +26,12 @@
 #
 # To bump it: put an `acadsharp-rs` `main` commit here, run the suite against a
 # sibling checkout at that commit, and say below what moved.
-ae89e80977561bfe98c12660bbf47963d7c87206
+f23f37bd453e02e660ef655faa381c45509d8ac1
 # Moved from 88d34a0f (main was rewritten with identical trees; ae89e80 is the
 # same tree on main, #18). Was: acadsharp-rs main @ 2026-09-13, which is the CI gate plus the crate
 # scaffolding, and everything that repository's main carries today. Nothing in
 # this suite consumes the crate's API yet, so this pin is not waiting on any
 # crate change, and moving it is a one-line PR rather than a two-repo dance.
+# Moved to f23f37b (acadsharp-rs main @ 2026-10-16, after the acadrust sibling step in its Suite job). The crate's
+# build script gained a serde_json build dependency since the last pin, so Cargo.lock moved with it. This suite now
+# consumes the crate's API: emit-acadsharp is R3.1, and the parity run reads it.
