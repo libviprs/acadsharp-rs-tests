@@ -103,6 +103,32 @@ class TestCoverageAccounting(unittest.TestCase):
         self.assertIn("probably_fine", str(cm.exception))
 
 
+class TestPerProvider(unittest.TestCase):
+    ROWS = [
+        {"path": "a.cs", "status": "differential", "evidence": ["path:Cargo.toml"]},
+        {"path": "b.cs", "status": "not_applicable",
+         "acadrust": {"status": "differential", "reason": "acadrust reads it"}},
+        {"path": "c.cs", "status": "native_conformance"},
+    ]
+
+    def test_an_override_moves_the_row_for_acadrust_only(self):
+        sharp = tool.provider_counts(self.ROWS, "acadsharp")
+        rust = tool.provider_counts(self.ROWS, "acadrust")
+        self.assertEqual((sharp["applicable"], rust["applicable"]), (2, 3))
+
+    def test_unevidenced_rows_are_listed_per_provider(self):
+        sharp = tool.provider_counts(self.ROWS, "acadsharp")
+        rust = tool.provider_counts(self.ROWS, "acadrust")
+        self.assertEqual(sharp["unevidenced"], ["c.cs"])
+        self.assertEqual(rust["unevidenced"], ["b.cs", "c.cs"])
+        self.assertEqual(sharp["evidenced"], 1)
+
+    def test_report_returns_the_rows_that_name_nothing(self):
+        with unittest.mock.patch("sys.stdout", io.StringIO()):
+            missing = tool.report_coverage(self.ROWS)
+        self.assertEqual(missing, ["acadsharp: c.cs", "acadrust: b.cs", "acadrust: c.cs"])
+
+
 class TestDirectoryInventory(unittest.TestCase):
     def setUp(self):
         import tempfile

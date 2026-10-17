@@ -53,3 +53,6 @@ Thumbs.db
 # two concurrent agent lanes cannot clobber each other's. The worktree IS the
 # repo, so without this they get swept in by a careless `git add -A`.
 .pr-*.md
+
+# The no-.NET proof builds in a rust:bookworm container into the checkout.
+/target-bookworm/

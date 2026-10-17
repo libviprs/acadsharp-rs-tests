@@ -13,8 +13,10 @@
 # refuses a target whose source reaches the native side, and checks the CI job
 # runs exactly this list.
 #
-# `lib` is the crate's own unit tests.
-lib
+# `lib` (the crate's own unit tests) is not on the list: src/ now holds the
+# emitter that drives the native library, and the guard refuses a lib target
+# whose sources reach it. The pure-Rust modules are covered through the test
+# targets below, which use them.
 canonical_parser every_frozen_stream_parses_and_matches_its_summary
 canonical_writer every_frozen_stream_survives_a_parse_a_render_and_a_parse
 comparator

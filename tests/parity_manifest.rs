@@ -295,3 +295,122 @@ fn the_snapshot_is_named_after_the_commit_it_describes() {
         format!("inventory.{}.txt", m.upstream.commit)
     );
 }
+
+// ---------------------------------------------------------------------------
+// #49: a row may say something different for acadrust, and may name its evidence.
+// ---------------------------------------------------------------------------
+
+const DXF_ROW: &str = r#"
+[[test_file]]
+path = "IO/DXF/DxfReaderTests.cs"
+status = "not_applicable"
+reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1)" }
+"#;
+
+#[test]
+fn validate_refuses_an_acadrust_override_with_no_reason() {
+    let bad = format!(
+        "{GOOD}{}",
+        DXF_ROW.replace(r#", reason = "acadrust reads DXF (R5.1)""#, "")
+    );
+    let p = problems_for(&bad);
+    assert!(p.contains("DxfReaderTests.cs"), "{p}");
+    assert!(p.contains("acadrust"), "{p}");
+    assert!(p.contains("no reason"), "{p}");
+}
+
+#[test]
+fn validate_refuses_an_acadrust_override_that_restates_the_row() {
+    // An override equal to the row it sits on says nothing and hides which rows differ.
+    let bad = format!(
+        "{GOOD}{}",
+        DXF_ROW.replace(
+            r#"acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1)" }"#,
+            r#"acadrust = { status = "not_applicable", reason = "DXF, and the crate opens only DWG" }"#
+        )
+    );
+    let p = problems_for(&bad);
+    assert!(p.contains("restates"), "{p}");
+}
+
+#[test]
+fn validate_accepts_an_acadrust_override() {
+    assert_eq!(problems_for(&format!("{GOOD}{DXF_ROW}")), "");
+}
+
+#[test]
+fn validate_refuses_evidence_that_resolves_to_nothing() {
+    let with = |ev: &str| {
+        GOOD.replace(
+            r#"status = "differential""#,
+            &format!("status = \"differential\"\nevidence = [{ev}]"),
+        )
+    };
+
+    let p = problems_for(&with(r#""fixture:no-such-fixture""#));
+    assert!(p.contains("no-such-fixture"), "{p}");
+    assert!(p.contains("fixtures/manifest.toml"), "{p}");
+
+    let p = problems_for(&with(r#""path:tests/does_not_exist.rs""#));
+    assert!(p.contains("does_not_exist.rs"), "{p}");
+
+    let p = problems_for(&with(r#""verdict:sample_AC1032:oracle-vs-acadrust""#));
+    assert!(
+        p.contains("verdict:"),
+        "a kind with no source yet is refused, not trusted: {p}"
+    );
+
+    // controls: evidence that does resolve is quiet
+    assert_eq!(problems_for(&with(r#""path:Cargo.toml""#)), "");
+    let id = acadsharp_rs_tests::fixtures::all()[0].id.clone();
+    assert_eq!(problems_for(&with(&format!("\"fixture:{id}\""))), "");
+}
+
+#[test]
+fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
+    let raw: toml::Value =
+        toml::from_str(include_str!("../upstream_parity/manifest.toml")).unwrap();
+    let rows = raw["test_file"].as_array().unwrap();
+    let status_of = |p: &str| {
+        let r = rows.iter().find(|r| r["path"].as_str() == Some(p)).unwrap();
+        r.get("acadrust")
+            .map(|o| o["status"].as_str().unwrap().to_string())
+    };
+    let over = rows.iter().filter(|r| r.get("acadrust").is_some()).count();
+    assert_eq!(over, 16, "nine DXF rows and seven writer rows");
+
+    for p in [
+        "IO/DXF/DxfReaderTests.cs",
+        "IO/DXF/DxfWriterTests.cs",
+        "IO/DXF/DxfWriterSingleObjectTests.cs",
+        "IO/DWG/DwgWriterTests.cs",
+        "IO/DWG/DwgWriterSingleObjectTests.cs",
+        "IO/RewriteSamplesTests.cs",
+        "IO/WriterSingleObjectTests.cs",
+    ] {
+        assert_eq!(
+            status_of(p).as_deref(),
+            Some("differential"),
+            "{p} applies to acadrust"
+        );
+    }
+    // ACadSharp internals stay out for both, with a reason that says so.
+    for p in [
+        "DxfMapTests.cs",
+        "DxfPropertyTests.cs",
+        "GroupCodeValueTests.cs",
+        "Internal/DxfMapTests.cs",
+        "IO/DXF/DxfAcdsDataSectionTests.cs",
+        "IO/DXF/DxfAcisSatTextTests.cs",
+        "Internal/DwgHandleWriterTests.cs",
+        "Internal/DwgHeaderWriterTests.cs",
+        "Internal/DwgSectionWriterTestBase.cs",
+    ] {
+        assert_eq!(
+            status_of(p).as_deref(),
+            Some("not_applicable"),
+            "{p} stays out"
+        );
+    }
+}

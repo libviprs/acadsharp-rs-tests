@@ -90,6 +90,41 @@ pub struct TestFile {
     /// Why, for every status other than `mirrored`.
     #[serde(default)]
     pub reason: Option<String>,
+    /// What acadrust does with this file when that differs from the row. No
+    /// override means acadrust shares the row's status and reason.
+    #[serde(default)]
+    pub acadrust: Option<Override>,
+    /// What covers the row: `fixture:<id>` (a row of `fixtures/manifest.toml`)
+    /// or `path:<relative path>` (a file in this crate). Other kinds are
+    /// refused until the thing they would resolve against exists.
+    #[serde(default)]
+    pub evidence: Vec<String>,
+}
+
+/// One engine's own answer for a row.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Override {
+    pub status: Status,
+    #[serde(default)]
+    pub reason: Option<String>,
+}
+
+/// An engine a row can be read for.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Provider {
+    Acadsharp,
+    Acadrust,
+}
+
+impl TestFile {
+    /// The status this row has for `p`: the override for acadrust if there is
+    /// one, the row's own otherwise.
+    pub fn status_for(&self, p: Provider) -> Status {
+        match (p, &self.acadrust) {
+            (Provider::Acadrust, Some(o)) => o.status,
+            _ => self.status,
+        }
+    }
 }
 
 /// Upstream data files usable as a second oracle.
@@ -132,9 +167,14 @@ impl Coverage {
 
 impl Manifest {
     pub fn coverage(&self) -> Coverage {
+        self.coverage_for(Provider::Acadsharp)
+    }
+
+    /// Counts per status as `p` sees the rows.
+    pub fn coverage_for(&self, p: Provider) -> Coverage {
         let mut c = Coverage::default();
         for f in &self.test_files {
-            match f.status {
+            match f.status_for(p) {
                 Status::Mirrored => c.mirrored += 1,
                 Status::Differential => c.differential += 1,
                 Status::NativeConformance => c.native_conformance += 1,
@@ -232,6 +272,52 @@ pub fn validate(m: &Manifest, crate_root: &Path) -> Vec<String> {
             }
         }
 
+        if let Some(o) = &f.acadrust {
+            if o.reason.as_deref().map(str::trim).unwrap_or("").is_empty() {
+                problems.push(format!(
+                    "{}: acadrust override ({}) with no reason. An override is a claim that the \
+                     engines differ, and the reason is the claim.",
+                    f.path,
+                    o.status.as_str()
+                ));
+            }
+            if o.status == f.status && o.reason == f.reason {
+                problems.push(format!(
+                    "{}: the acadrust override restates the row, so it says nothing and hides \
+                     which rows really differ. Drop it.",
+                    f.path
+                ));
+            }
+        }
+
+        for e in &f.evidence {
+            match e.split_once(':') {
+                Some(("fixture", id)) => {
+                    if !fixture_ids().contains(id) {
+                        problems.push(format!(
+                            "{}: evidence {e:?} names a fixture that is not a row of \
+                             fixtures/manifest.toml.",
+                            f.path
+                        ));
+                    }
+                }
+                Some(("path", rel)) => {
+                    if !crate_root.join(rel).exists() {
+                        problems.push(format!(
+                            "{}: evidence {e:?} is a path that does not exist.",
+                            f.path
+                        ));
+                    }
+                }
+                _ => problems.push(format!(
+                    "{}: evidence {e:?} has a kind this crate cannot resolve yet (only fixture: \
+                     and path:). A kind with no source to check it against is a claim, not \
+                     evidence.",
+                    f.path
+                )),
+            }
+        }
+
         // The forcing function. Once the planned file exists the row is no
         // longer a plan, and leaving it alone would quietly understate coverage
         // forever. Going red is how H4.2 gets told to promote the row.
@@ -268,6 +354,18 @@ pub fn validate(m: &Manifest, crate_root: &Path) -> Vec<String> {
 pub fn parse_manifest_text(text: &str) -> Result<usize, toml::de::Error> {
     let m: Manifest = toml::from_str(text)?;
     Ok(m.test_files.len() + m.baselines.len())
+}
+
+/// Every id any table of the corpus manifest carries.
+fn fixture_ids() -> std::collections::BTreeSet<&'static str> {
+    use crate::fixtures;
+    let mut ids: std::collections::BTreeSet<&'static str> =
+        fixtures::all().iter().map(|f| f.id.as_str()).collect();
+    ids.extend(fixtures::oracle_inputs().iter().map(|f| f.id.as_str()));
+    ids.extend(fixtures::refusals().iter().map(|f| f.id.as_str()));
+    ids.extend(fixtures::censuses().iter().map(|f| f.id.as_str()));
+    ids.extend(fixtures::recordings().iter().map(|f| f.id.as_str()));
+    ids
 }
 
 fn parsed() -> &'static Manifest {

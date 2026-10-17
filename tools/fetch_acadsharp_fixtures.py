@@ -291,6 +291,11 @@ def verify_tree(manifest: dict, root: pathlib.Path) -> list[str]:
     # with no row has no provenance, no licence and no hash, which means nobody
     # reviewed it. Any extension, any directory. The documents, the licence
     # texts and `expected/` (owned by regenerate_reference.py) need no row.
+    # The ezdxf ground truths are claimed by their own rows (the hashes live in
+    # the row, and `tools/ground_truth/extract_ezdxf.py verify` checks them).
+    for gt in manifest.get("ground_truth", []):
+        for key in ("jsonl", "sidecar", "run"):
+            claimed.add((fixtures_dir / gt[key]).resolve())
     if fixtures_dir.is_dir():
         for p in sorted(fixtures_dir.rglob("*")):
             if not p.is_file():
@@ -390,6 +395,12 @@ def main() -> int:
         sources = sources_of(manifest)
         for row in all_rows:
             path = ROOT / "fixtures" / row["file"]
+            # A generated drawing is not downloadable: its source_url names the
+            # code that wrote it, and `verify_tree` below holds the committed
+            # bytes to the row's hash. The generator is what reproduces it.
+            if sources.get(row.get("source"), {}).get("generated"):
+                print(f"generated  {row['file']}  {row['bytes']:,} bytes (not fetched)")
+                continue
             found = fetch_one(row, path)
             # The same blob is served under other upstream names; each of them
             # has to serve the same bytes, or the "also" is a claim nothing holds.

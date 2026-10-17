@@ -291,8 +291,8 @@ fn every_frozen_stream_parses_and_matches_its_summary() {
         parsed += 1;
     }
     assert_eq!(
-        parsed, 70,
-        "the corpus holds seventy drawings the oracle reads today"
+        parsed, 77,
+        "the corpus holds seventy-seven drawings the oracle reads today"
     );
 }
 

@@ -32,6 +32,6 @@ f23f37bd453e02e660ef655faa381c45509d8ac1
 # scaffolding, and everything that repository's main carries today. Nothing in
 # this suite consumes the crate's API yet, so this pin is not waiting on any
 # crate change, and moving it is a one-line PR rather than a two-repo dance.
-# Moved to acadsharp-rs main @ f23f37b (the safe API, the batch decoder and the
-# AOT parity work). The fuzz harness (#8) parses wire batches with
-# `acadsharp_rs::batch::BatchReader`, which the old pin did not have.
+# Moved to f23f37b (acadsharp-rs main @ 2026-10-16, after the acadrust sibling step in its Suite job). The crate's
+# build script gained a serde_json build dependency since the last pin, so Cargo.lock moved with it. This suite now
+# consumes the crate's API: emit-acadsharp is R3.1, and the parity run reads it.

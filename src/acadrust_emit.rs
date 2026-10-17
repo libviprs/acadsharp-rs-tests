@@ -63,6 +63,7 @@ pub fn extract(doc: &CadDocument) -> Emission {
     let mut x = Extractor {
         doc,
         warnings: Vec::new(),
+        at: Vec::new(),
         active: Vec::new(),
         sink: Vec::new(),
     };
@@ -113,15 +114,20 @@ pub fn extract(doc: &CadDocument) -> Emission {
         }
     }
 
-    x.warnings.sort();
+    x.warnings
+        .sort_by(|a, b| (&a.0, &a.1, &a.2).cmp(&(&b.0, &b.1, &b.2)));
     let mut items = head;
     items.append(&mut x.sink);
-    for (category, entity_type, detail) in x.warnings {
-        items.push(Item::framing(Record::Warning(Warning {
-            category,
-            entity_type,
-            detail,
-        })));
+    for (category, entity_type, detail, at) in x.warnings {
+        items.push(Item {
+            record: Record::Warning(Warning {
+                category,
+                entity_type,
+                detail,
+            }),
+            path: at,
+            dxf: None,
+        });
     }
 
     let mut out = Emission::default();
@@ -281,19 +287,10 @@ impl Xf {
 
     /// The object coordinate system a DXF normal implies, as a map from OCS
     /// into world space. DXF's arbitrary axis algorithm: the 1/64 test is from
-    /// the specification and is not a tolerance to tune.
+    /// the specification and is not a tolerance to tune. The rule itself is
+    /// `ocs::axes`, which `emit-acadsharp` projects through as well.
     fn arbitrary_axis(normal: V3) -> Xf {
-        let mut n = normalize(normal);
-        if n == [0.0; 3] {
-            n = [0.0, 0.0, 1.0];
-        }
-        let pick = if n[0].abs() < 1.0 / 64.0 && n[1].abs() < 1.0 / 64.0 {
-            [0.0, 1.0, 0.0]
-        } else {
-            [0.0, 0.0, 1.0]
-        };
-        let ax = normalize(cross(pick, n));
-        let ay = normalize(cross(n, ax));
+        let (ax, ay, n) = crate::ocs::axes(normal);
         Xf {
             m: [
                 [ax[0], ay[0], n[0]],
@@ -477,33 +474,17 @@ fn map_curve(center: V3, u: V3, v: V3, to_world: &Xf) -> Mapped {
     }
 }
 
-/// An angle reduced into `[0, 2*pi)`. One already in range comes back
-/// bit-identical, which keeps an untransformed arc carrying the digits the file
-/// stores.
-fn normalize_angle(angle: f64) -> f64 {
-    if (0.0..TAU).contains(&angle) {
-        return angle;
-    }
-    let reduced = angle - TAU * (angle / TAU).floor();
-    if reduced >= TAU { 0.0 } else { reduced }
-}
-
-/// A start and end into the canonical "sweeps counter-clockwise" form: a start
-/// in `[0, 2*pi)` and an end strictly greater than it.
-fn sweep(start: f64, end: f64, offset: f64) -> (f64, f64) {
-    let s = normalize_angle(start + offset);
-    let mut e = normalize_angle(end + offset);
-    if e <= s {
-        e += TAU;
-    }
-    (s, e)
-}
+use crate::ocs::{normalize_angle, sweep};
 
 // ---- the extractor ------------------------------------------------------------------
 
 struct Extractor<'a> {
     doc: &'a CadDocument,
-    warnings: Vec<(String, String, String)>,
+    /// Category, entity type, detail, and the handle path of the entity being
+    /// read when it was raised (empty for a finding about the document).
+    warnings: Vec<(String, String, String, Vec<u64>)>,
+    /// The handle path of the entity `extract` is inside, for `warn`.
+    at: Vec<u64>,
     /// Block names on the path being expanded. Keyed on the block itself and not
     /// on a handle: a document built in memory has not been assigned handles
     /// yet, so every block would answer zero and the first nested block would
@@ -518,6 +499,7 @@ impl Extractor<'_> {
             category.to_string(),
             entity_type.to_string(),
             detail.to_string(),
+            self.at.clone(),
         ));
     }
 
@@ -559,6 +541,25 @@ impl Extractor<'_> {
     }
 
     fn extract(
+        &mut self,
+        entity: &EntityType,
+        view: u64,
+        xf: &Xf,
+        depth: usize,
+        inside_block: bool,
+        path: &mut Vec<u64>,
+    ) {
+        // A warning names the entity it was raised inside, so a diff and the
+        // census check can say which one. Restored on the way out, because the
+        // extraction recurses.
+        let mut here = path.clone();
+        here.push(entity.common().handle.value());
+        let saved = std::mem::replace(&mut self.at, here);
+        self.extract_entity(entity, view, xf, depth, inside_block, path);
+        self.at = saved;
+    }
+
+    fn extract_entity(
         &mut self,
         entity: &EntityType,
         view: u64,

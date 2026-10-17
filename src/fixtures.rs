@@ -114,6 +114,22 @@ pub struct DwgFixture {
     #[serde(default)]
     pub provenance_evidence: Option<String>,
 
+    /// For a drawing this suite generated (`source = "generated"`): the
+    /// generator project that wrote it, relative to the repository root.
+    #[serde(default)]
+    pub generated_by: Option<String>,
+    /// The one file under the generator that defines how this drawing is built.
+    #[serde(default)]
+    pub generator_source: Option<String>,
+    /// sha256 of `generator_source` when the row was written. A test recomputes
+    /// it, so a drawing whose definition changed without its row changing is
+    /// caught.
+    #[serde(default)]
+    pub generator_source_sha256: Option<String>,
+    /// The ACadSharp version the generator wrote the drawing with.
+    #[serde(default)]
+    pub acadsharp_generator_version: Option<String>,
+
     /// The compressed canonical reference output, relative to `fixtures/`.
     ///
     /// Optional rather than an empty string on purpose: an empty string is a
@@ -409,6 +425,11 @@ pub struct Source {
     pub license: String,
     /// The licence text, relative to `fixtures/`.
     pub license_file: String,
+    /// `true` for the source whose files this repository writes itself
+    /// (`reference/ACadSharp.Generator`): there is nothing to download, so the
+    /// fetch tool skips its rows and the generator is what reproduces them.
+    #[serde(default)]
+    pub generated: bool,
 }
 
 /// A row that is a file but not a drawing the oracle reads.
@@ -572,6 +593,101 @@ pub struct Refusal {
 }
 manifest_file!(Refusal);
 
+/// A ground truth neither reader produced: ezdxf's reading of one of
+/// AutoCAD's own DXF files, frozen the way the oracle's outputs are.
+///
+/// The three files are compressed streams (`jsonl`, `sidecar`) and a plain
+/// `run.json`; the manifest holds the sha256 of each one's **uncompressed**
+/// bytes. Written by `tools/ground_truth/extract_ezdxf.py freeze --accept`,
+/// never by hand.
+#[derive(Debug, Clone, Deserialize)]
+pub struct GroundTruth {
+    pub id: String,
+    /// The `[[oracle_input]]` row this is a reading of.
+    pub input: String,
+    pub engine: String,
+    pub jsonl: String,
+    pub jsonl_uncompressed_sha256: String,
+    pub sidecar: String,
+    pub sidecar_uncompressed_sha256: String,
+    pub run: String,
+    pub run_sha256: String,
+    pub ezdxf_version: String,
+    pub requirements_sha256: String,
+    pub image: String,
+    pub records: u64,
+    pub schema: u64,
+}
+
+impl GroundTruth {
+    fn read_packed(&self, relative: &str, want: &str) -> Result<Vec<u8>, FixtureError> {
+        let path = fixture_root().join(relative);
+        let compressed = std::fs::read(&path).map_err(|source| FixtureError::Unreadable {
+            id: self.id.clone(),
+            path: path.clone(),
+            source,
+        })?;
+        let mut decoder =
+            ruzstd::decoding::StreamingDecoder::new(compressed.as_slice()).map_err(|e| {
+                FixtureError::Corrupt {
+                    id: self.id.clone(),
+                    detail: format!("{} is not a zstd frame: {e}", path.display()),
+                }
+            })?;
+        let mut data = Vec::new();
+        std::io::Read::read_to_end(&mut decoder, &mut data).map_err(|e| FixtureError::Corrupt {
+            id: self.id.clone(),
+            detail: format!("{} did not decompress: {e}", path.display()),
+        })?;
+        let got = format!("{:x}", Sha256::digest(&data));
+        if got != want {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!(
+                    "{relative} hashes to {got} uncompressed, the manifest froze {want}"
+                ),
+            });
+        }
+        Ok(data)
+    }
+
+    /// The schema 1 stream, verified against the manifest.
+    pub fn load_jsonl(&self) -> Result<Vec<u8>, FixtureError> {
+        self.read_packed(&self.jsonl, &self.jsonl_uncompressed_sha256)
+    }
+
+    /// The sidecar, verified against the manifest.
+    pub fn load_sidecar(&self) -> Result<Vec<u8>, FixtureError> {
+        self.read_packed(&self.sidecar, &self.sidecar_uncompressed_sha256)
+    }
+
+    /// `run.json`, verified against the manifest.
+    pub fn load_run(&self) -> Result<Vec<u8>, FixtureError> {
+        let path = fixture_root().join(&self.run);
+        let data = std::fs::read(&path).map_err(|source| FixtureError::Unreadable {
+            id: self.id.clone(),
+            path: path.clone(),
+            source,
+        })?;
+        let got = format!("{:x}", Sha256::digest(&data));
+        if got != self.run_sha256 {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!(
+                    "run.json hashes to {got}, the manifest froze {}",
+                    self.run_sha256
+                ),
+            });
+        }
+        Ok(data)
+    }
+
+    /// Every file this row claims, relative to the fixture root.
+    pub fn files(&self) -> [&str; 3] {
+        [&self.jsonl, &self.sidecar, &self.run]
+    }
+}
+
 #[derive(Debug, Deserialize)]
 struct Manifest {
     upstream: Upstream,
@@ -587,6 +703,8 @@ struct Manifest {
     censuses: Vec<Census>,
     #[serde(default, rename = "refusal")]
     refusals: Vec<Refusal>,
+    #[serde(default, rename = "ground_truth")]
+    ground_truths: Vec<GroundTruth>,
 }
 
 /// Parses any text as a corpus manifest and returns how many rows it holds, or
@@ -629,6 +747,16 @@ pub fn oracle_inputs() -> &'static [OracleInput] {
 /// AutoCAD's recorded object census files.
 pub fn censuses() -> &'static [Census] {
     &manifest().censuses
+}
+
+/// The ground truths neither reader produced (ezdxf over AutoCAD's DXF).
+pub fn ground_truths() -> &'static [GroundTruth] {
+    &manifest().ground_truths
+}
+
+/// The ground truth that reads the `[[oracle_input]]` row `input`.
+pub fn ground_truth(input: &str) -> Option<&'static GroundTruth> {
+    ground_truths().iter().find(|g| g.input == input)
 }
 
 /// Drawings the oracle is expected to refuse.

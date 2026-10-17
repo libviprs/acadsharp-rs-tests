@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Writes this suite's generated DWG fixtures with ACadSharp's own DwgWriter,
+    at exactly the ACadSharp version the oracle reads them with.
+
+    A separate project from the oracle on purpose. The oracle has exactly one
+    PackageReference and no ProjectReference, and a test holds it to that; a
+    generator is a producer, not a reader, and folding the two together would
+    put a writer inside the thing that is meant to be an independent witness.
+    The two share the package version and nothing else, and a test in the Rust
+    suite fails if the versions ever differ.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ACadSharp.Generator</RootNamespace>
+    <AssemblyName>ACadSharp.Generator</AssemblyName>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <PublishAot>false</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ACadSharp" Version="3.7.1" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- acadsharp-rs-tests visual reference, svg schema 1 -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1024" height="1024" preserveAspectRatio="xMidYMid meet" viewBox="-0.46 -8.46 23.92 8.92">
+<rect x="-0.46" y="-8.46" width="23.92" height="8.92" fill="#FFFFFF" stroke="none"/>
+<g fill="none" stroke="#000000" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round">
+<line x1="0.0" y1="0.0" x2="10.0" y2="0.0"/>
+<circle cx="20.0" cy="-5.0" r="3.0"/>
+</g>
+</svg>

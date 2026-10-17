@@ -927,14 +927,18 @@ fn the_action_parses_and_has_no_way_to_fall_back_to_a_branch() {
         "the action's `pin` input has to default to COUNTERPART_REV, so existing callers keep \
          meaning the crate"
     );
-    let actions: Vec<_> = fs::read_dir(repo_root().join(".github").join("actions"))
+    let mut actions: Vec<_> = fs::read_dir(repo_root().join(".github").join("actions"))
         .expect("no .github/actions")
         .filter_map(Result::ok)
         .map(|e| e.file_name().to_string_lossy().into_owned())
         .collect();
+    actions.sort();
+    // `fetch-native-artifact` is the native lane's own action (a different
+    // thing: it fetches an archive by hash and clones nothing). What this guards
+    // is a second *clone* action, so the list is the clone action plus that one.
     assert_eq!(
         actions,
-        ["clone-counterpart"],
+        ["clone-counterpart", "fetch-native-artifact"],
         "there is one clone action, not one per pin: a second copy is a second rule"
     );
 

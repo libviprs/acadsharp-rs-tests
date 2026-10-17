@@ -39,7 +39,10 @@ const EXPECTED_VERSIONS: &[&str] = &[
 /// Tier C its stress drawings. The two libviprs-dep `real_*` drawings are the
 /// same bytes as two Tier A saves and are not rows of their own.
 const EXPECTED_TIER_A: usize = 22;
-const EXPECTED_TIER_B: usize = 41;
+/// libviprs-dep's 41 plus the seven drawings this repository generates
+/// (`reference/ACadSharp.Generator`, source `generated`).
+const EXPECTED_GENERATED: usize = 7;
+const EXPECTED_TIER_B: usize = 41 + EXPECTED_GENERATED;
 const EXPECTED_TIER_C: usize = 7;
 /// libviprs-dep's recordings of those drawings (two of them point at Tier A).
 const EXPECTED_RECORDINGS: usize = 45;
@@ -164,7 +167,11 @@ fn every_pinned_row() -> Vec<(String, String, String, String)> {
 
 #[test]
 fn every_row_is_pinned_to_its_own_sources_commit() {
-    assert_eq!(fixtures::sources().len(), 2, "acadsharp and libviprs_dep");
+    assert_eq!(
+        fixtures::sources().len(),
+        3,
+        "acadsharp, libviprs_dep and generated"
+    );
     let mut checked = 0usize;
     for (id, source, url, licence) in every_pinned_row() {
         let src = fixtures::sources()
@@ -377,10 +384,13 @@ fn tier_a_is_the_acadsharp_drawings_and_nothing_else() {
         .into_iter()
         .chain(fixtures::by_tier("C"))
     {
-        assert_eq!(
-            fx.source.as_deref(),
-            Some("libviprs_dep"),
-            "{}: Tiers B and C are libviprs-dep's writer-made drawings",
+        // Tier B is also where this repository's own generated drawings go
+        // (`tests/generated_fixtures.rs` holds those rows to their provenance).
+        let generated =
+            fx.tier.as_deref() == Some("B") && fx.source.as_deref() == Some("generated");
+        assert!(
+            generated || fx.source.as_deref() == Some("libviprs_dep"),
+            "{}: Tiers B and C are libviprs-dep's writer-made drawings, or generated here",
             fx.id
         );
     }
@@ -623,6 +633,13 @@ fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
     for f in fixtures::all() {
         referenced.extend(f.reference_jsonl_path());
         referenced.extend(f.reference_svg_path());
+    }
+    // The ezdxf ground truths are claimed by their own rows, which carry the
+    // hashes (R3.4).
+    for g in fixtures::ground_truths() {
+        for file in g.files() {
+            referenced.insert(root.join(file));
+        }
     }
 
     let mut orphans = Vec::new();
