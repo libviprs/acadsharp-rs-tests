@@ -210,10 +210,7 @@ fn compute(rules: &Rules) -> Result<Run, String> {
             }
         }
     }
-    let rust = rust
-        .into_iter()
-        .map(|(k, v)| (k.to_string(), v))
-        .collect();
+    let rust = rust.into_iter().map(|(k, v)| (k.to_string(), v)).collect();
     Ok(Run {
         reports,
         failures,
@@ -234,7 +231,6 @@ fn gate<T>(r: Result<T, String>) -> Option<T> {
 
 #[test]
 fn the_run_agrees_with_the_committed_verdicts() {
-    let rules = model1::committed_rules().unwrap();
     let Some(run) = gate(the_run().as_ref().map_err(String::clone)) else {
         return;
     };
@@ -374,7 +370,9 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
     for e in &rules.excluded {
         for n in &e.names {
             let hit = used.iter().any(|(eng, fx, name)| {
-                eng == &e.engine && model1::glob(n, name) && (e.fixtures.is_empty() || e.fixtures.contains(fx))
+                eng == &e.engine
+                    && model1::glob(n, name)
+                    && (e.fixtures.is_empty() || e.fixtures.contains(fx))
             });
             if !hit {
                 stale.push(format!("{} {n}", e.engine));
@@ -546,6 +544,11 @@ fn one_changed_layer_colour_is_red_and_names_the_layer() {
         &rules,
     );
     let key = format!("layer/{name}.color");
-    assert_eq!(after.red().len(), before.red().len() + 1, "{}", after.first());
+    assert_eq!(
+        after.red().len(),
+        before.red().len() + 1,
+        "{}",
+        after.first()
+    );
     assert!(after.red().iter().any(|f| f.key == key), "{key}");
 }

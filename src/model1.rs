@@ -244,8 +244,16 @@ pub fn parse_stream(text: &str) -> Result<Vec<Record>, String> {
             .as_str()
             .ok_or(format!("line {n}: name"))?
             .to_string();
-        let int = |k: &str| obj[k].as_i64().ok_or(format!("line {n}: {k} is not an integer"));
-        let boolean = |k: &str| obj[k].as_bool().ok_or(format!("line {n}: {k} is not a bool"));
+        let int = |k: &str| {
+            obj[k]
+                .as_i64()
+                .ok_or(format!("line {n}: {k} is not an integer"))
+        };
+        let boolean = |k: &str| {
+            obj[k]
+                .as_bool()
+                .ok_or(format!("line {n}: {k} is not a bool"))
+        };
         let r = if rec == "layer" {
             Record::Layer(Layer {
                 name,
@@ -655,7 +663,10 @@ pub fn glob(pattern: &str, text: &str) -> bool {
 /// `parity/MODEL1.toml` rows use.
 pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
     let index = |s: &Side| -> BTreeMap<String, Item> {
-        s.records.iter().map(|r| (item_key(r), item_of(r))).collect()
+        s.records
+            .iter()
+            .map(|r| (item_key(r), item_of(r)))
+            .collect()
     };
     let (ia, ib) = (index(a), index(b));
     let names: BTreeSet<&String> = ia.keys().chain(ib.keys()).collect();
@@ -707,12 +718,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 report.findings.push(Finding {
                     kind: FindingKind::OnlyInA,
                     key: name.clone(),
-                    detail: format!(
-                        "{name} = {} on {}, not on {}",
-                        x.show(),
-                        a.engine,
-                        b.engine
-                    ),
+                    detail: format!("{name} = {} on {}, not on {}", x.show(), a.engine, b.engine),
                     disposition: if excluded.is_some() {
                         Disposition::Excluded
                     } else {
@@ -726,12 +732,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 report.findings.push(Finding {
                     kind: FindingKind::OnlyInB,
                     key: name.clone(),
-                    detail: format!(
-                        "{name} = {} on {}, not on {}",
-                        y.show(),
-                        b.engine,
-                        a.engine
-                    ),
+                    detail: format!("{name} = {} on {}, not on {}", y.show(), b.engine, a.engine),
                     disposition: if excluded.is_some() {
                         Disposition::Excluded
                     } else {
@@ -982,7 +983,12 @@ mod tests {
     fn a_changed_layer_colour_is_one_finding_naming_the_layer_and_the_field() {
         let a = vec![layer("0", 7), layer("Walls", 1)];
         let b = vec![layer("0", 7), layer("Walls", 2)];
-        let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &Rules::default());
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
         assert_eq!(r.verdict(), Verdict::Diff(1));
         assert_eq!(r.red()[0].key, "layer/Walls.color");
         assert_eq!(r.compared, 2);
@@ -992,14 +998,24 @@ mod tests {
     fn a_layer_on_one_side_is_red_and_a_rule_can_name_layers_with_a_star() {
         let a = vec![layer("0", 7), layer("Walls", 1)];
         let b = vec![layer("0", 7)];
-        let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &Rules::default());
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
         assert_eq!(r.verdict(), Verdict::Diff(1));
         assert_eq!(r.red()[0].key, "layer/Walls");
         let rules = Rules::parse(
             "[[excluded]]\nengine = \"acadrust\"\nnames = [\"layer/W*\"]\nreason = \"r\"\nissue = \"i\"\n",
         )
         .unwrap();
-        let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &rules);
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &rules,
+        );
         assert_eq!(r.verdict(), Verdict::Match);
     }
 
