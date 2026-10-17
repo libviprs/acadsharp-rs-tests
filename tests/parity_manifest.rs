@@ -356,7 +356,10 @@ fn validate_refuses_evidence_that_resolves_to_nothing() {
     assert!(p.contains("does_not_exist.rs"), "{p}");
 
     let p = problems_for(&with(r#""verdict:sample_AC1032:oracle-vs-acadrust""#));
-    assert!(p.contains("verdict:"), "a kind with no source yet is refused, not trusted: {p}");
+    assert!(
+        p.contains("verdict:"),
+        "a kind with no source yet is refused, not trusted: {p}"
+    );
 
     // controls: evidence that does resolve is quiet
     assert_eq!(problems_for(&with(r#""path:Cargo.toml""#)), "");
@@ -371,7 +374,8 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
     let rows = raw["test_file"].as_array().unwrap();
     let status_of = |p: &str| {
         let r = rows.iter().find(|r| r["path"].as_str() == Some(p)).unwrap();
-        r.get("acadrust").map(|o| o["status"].as_str().unwrap().to_string())
+        r.get("acadrust")
+            .map(|o| o["status"].as_str().unwrap().to_string())
     };
     let over = rows.iter().filter(|r| r.get("acadrust").is_some()).count();
     assert_eq!(over, 16, "nine DXF rows and seven writer rows");
@@ -385,7 +389,11 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
         "IO/RewriteSamplesTests.cs",
         "IO/WriterSingleObjectTests.cs",
     ] {
-        assert_eq!(status_of(p).as_deref(), Some("differential"), "{p} applies to acadrust");
+        assert_eq!(
+            status_of(p).as_deref(),
+            Some("differential"),
+            "{p} applies to acadrust"
+        );
     }
     // ACadSharp internals stay out for both, with a reason that says so.
     for p in [
@@ -399,6 +407,10 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
         "Internal/DwgHeaderWriterTests.cs",
         "Internal/DwgSectionWriterTestBase.cs",
     ] {
-        assert_eq!(status_of(p).as_deref(), Some("not_applicable"), "{p} stays out");
+        assert_eq!(
+            status_of(p).as_deref(),
+            Some("not_applicable"),
+            "{p} stays out"
+        );
     }
 }

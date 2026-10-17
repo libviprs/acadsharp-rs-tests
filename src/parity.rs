@@ -303,7 +303,10 @@ pub fn validate(m: &Manifest, crate_root: &Path) -> Vec<String> {
                 }
                 Some(("path", rel)) => {
                     if !crate_root.join(rel).exists() {
-                        problems.push(format!("{}: evidence {e:?} is a path that does not exist.", f.path));
+                        problems.push(format!(
+                            "{}: evidence {e:?} is a path that does not exist.",
+                            f.path
+                        ));
                     }
                 }
                 _ => problems.push(format!(
