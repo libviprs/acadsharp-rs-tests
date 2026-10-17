@@ -58,6 +58,7 @@ public static class Model1Extractor
         ArgumentNullException.ThrowIfNull(document);
         var records = new List<Model1Record>();
         ExtractHeader(document, records);
+        ExtractLayers(document, records);
         return records;
     }
 
@@ -107,6 +108,36 @@ public static class Model1Extractor
                 ("name", NumericFormatting.Quoted(name)),
                 ("type", NumericFormatting.Quoted(type)),
                 ("value", value)));
+        }
+    }
+
+    private static void ExtractLayers(CadDocument document, List<Model1Record> records)
+    {
+        foreach (Layer layer in document.Layers)
+        {
+            string name = layer.Name ?? string.Empty;
+            Color color = layer.Color;
+
+            // Only the bits a layer owns: frozen (1), frozen in new viewports (2)
+            // and locked (4). The xref bits describe the reference, not the layer.
+            long flags = (long)(short)layer.Flags & 7;
+
+            // The colour index (DXF 62; its sign is `on`), or -1 for a true colour
+            // (DXF 420), which has no index.
+            long index = color.IsTrueColor ? -1 : Math.Abs((long)color.Index);
+            long trueColor = color.IsTrueColor ? color.TrueColor & 0xFFFFFF : -1;
+
+            records.Add(Model1Record.Of(
+                "layer",
+                name,
+                ("name", NumericFormatting.Quoted(name)),
+                ("flags", NumericFormatting.Whole(flags)),
+                ("color", NumericFormatting.Whole(index)),
+                ("true_color", NumericFormatting.Whole(trueColor)),
+                ("on", layer.IsOn ? "true" : "false"),
+                ("linetype", NumericFormatting.Quoted(layer.LineType?.Name ?? string.Empty)),
+                ("lineweight", NumericFormatting.Whole((short)layer.LineWeight)),
+                ("plot", layer.PlotFlag ? "true" : "false")));
         }
     }
 

@@ -354,7 +354,7 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
     for e in &rules.excluded {
         for n in &e.names {
             let hit = used.iter().any(|(eng, fx, name)| {
-                eng == &e.engine && name == n && (e.fixtures.is_empty() || e.fixtures.contains(fx))
+                eng == &e.engine && model1::glob(n, name) && (e.fixtures.is_empty() || e.fixtures.contains(fx))
             });
             if !hit {
                 stale.push(format!("{} {n}", e.engine));
@@ -383,7 +383,7 @@ fn every_known_row_is_still_a_difference_the_run_finds() {
                 (k.pairs.is_empty() || k.pairs.contains(pair))
                     && (k.fixtures.is_empty() || k.fixtures.contains(fixture))
                     && r.findings.iter().any(|f| {
-                        &f.key == n
+                        model1::glob(n, &f.key)
                             && f.disposition == Disposition::Known
                             && matches!(f.kind, FindingKind::Value | FindingKind::Type)
                     })
@@ -433,7 +433,7 @@ fn one_changed_header_value_is_one_diff_and_names_the_variable() {
     );
     let mut touched = 0;
     for r in &mut oracle {
-        let Record::Header(h) = r;
+        let Record::Header(h) = r else { continue };
         if h.name == name
             && let model1::Value::Double(d) = &mut h.value
         {
@@ -460,4 +460,72 @@ fn one_changed_header_value_is_one_diff_and_names_the_variable() {
     let before_red = untouched.red().len();
     assert_eq!(red, before_red + 1, "{}", after.first());
     assert!(after.red().iter().any(|f| f.key == name));
+}
+
+/// The layer control: one layer's colour changed in a scratch copy of the
+/// oracle's stream turns that save's row red, and the finding names the layer
+/// and the field.
+#[test]
+fn one_changed_layer_colour_is_red_and_names_the_layer() {
+    let rules = model1::committed_rules().unwrap();
+    let id = "acadsharp-ac1032";
+    let Some(run) = gate(the_run().as_ref().map_err(String::clone)) else {
+        return;
+    };
+    let mine = run.rust[id].as_ref().expect("acadrust reads this save");
+    let mut oracle = model1::load_frozen("oracle", id).unwrap();
+    let before = compare(
+        "oracle/acadrust",
+        &Side {
+            engine: "oracle",
+            fixture: id,
+            records: &oracle,
+        },
+        &Side {
+            engine: "acadrust",
+            fixture: id,
+            records: mine,
+        },
+        &rules,
+    );
+    // A layer both sides hold and agree on the colour of, so the control starts clean.
+    let name = oracle
+        .iter()
+        .find_map(|r| match r {
+            Record::Layer(l)
+                if l.color > 0
+                    && before
+                        .findings
+                        .iter()
+                        .all(|f| f.key != format!("layer/{}.color", l.name)) =>
+            {
+                Some(l.name.clone())
+            }
+            _ => None,
+        })
+        .expect("the save has a layer with an index colour that matches");
+    for r in &mut oracle {
+        if let Record::Layer(l) = r
+            && l.name == name
+        {
+            l.color = if l.color == 1 { 2 } else { 1 };
+        }
+    }
+    let after = compare(
+        "oracle/acadrust",
+        &Side {
+            engine: "oracle",
+            fixture: id,
+            records: &oracle,
+        },
+        &Side {
+            engine: "acadrust",
+            fixture: id,
+            records: mine,
+        },
+        &rules,
+    );
+    let key = format!("layer/{name}.color");
+    assert_eq!(after.red().len(), before.red().len() + 1, "{}", after.first());
+    assert!(after.red().iter().any(|f| f.key == key), "{key}");
 }
