@@ -624,6 +624,13 @@ fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
         referenced.extend(f.reference_jsonl_path());
         referenced.extend(f.reference_svg_path());
     }
+    // The ezdxf ground truths are claimed by their own rows, which carry the
+    // hashes (R3.4).
+    for g in fixtures::ground_truths() {
+        for file in g.files() {
+            referenced.insert(root.join(file));
+        }
+    }
 
     let mut orphans = Vec::new();
     let mut found = 0usize;
