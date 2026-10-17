@@ -88,20 +88,18 @@ pub struct Schema {
 }
 
 /// Every kind with a record, in `docs/MODEL_1.md`.
-pub const SCHEMAS: &[Schema] = &[
-    Schema {
-        kind: "layer",
-        fields: &[
-            ("flags", Ty::Int),
-            ("color", Ty::Int),
-            ("true_color", Ty::Int),
-            ("on", Ty::Bool),
-            ("linetype", Ty::Str),
-            ("lineweight", Ty::Int),
-            ("plot", Ty::Bool),
-        ],
-    },
-];
+pub const SCHEMAS: &[Schema] = &[Schema {
+    kind: "layer",
+    fields: &[
+        ("flags", Ty::Int),
+        ("color", Ty::Int),
+        ("true_color", Ty::Int),
+        ("on", Ty::Bool),
+        ("linetype", Ty::Str),
+        ("lineweight", Ty::Int),
+        ("plot", Ty::Bool),
+    ],
+}];
 
 pub fn schema(kind: &str) -> Option<&'static Schema> {
     SCHEMAS.iter().find(|s| s.kind == kind)
@@ -338,11 +336,7 @@ fn parse_typed(j: &Json, ty: &Ty, what: &str) -> Result<Value, String> {
     })
 }
 
-fn parse_fields(
-    j: &Json,
-    fields: &[(&'static str, Ty)],
-    what: &str,
-) -> Result<Vec<Value>, String> {
+fn parse_fields(j: &Json, fields: &[(&'static str, Ty)], what: &str) -> Result<Vec<Value>, String> {
     let obj = j.as_object().ok_or(format!("{what}: not an object"))?;
     let mut have: Vec<&str> = obj.keys().map(String::as_str).collect();
     let mut want: Vec<&str> = fields.iter().map(|(n, _)| *n).collect();

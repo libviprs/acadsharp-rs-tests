@@ -19,8 +19,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use acadsharp_rs_tests::model1::{Value, 
-    self, Disposition, FindingKind, Record, Report, Rules, Side, compare,
+use acadsharp_rs_tests::model1::{
+    self, Disposition, FindingKind, Record, Report, Rules, Side, Value, compare,
 };
 use acadsharp_rs_tests::verdict::{Row, Table};
 
