@@ -55,7 +55,8 @@ public static class Model1Extractor
 
         try
         {
-            return Result.Ok<byte[]>(Model1Record.Encode(Extract(document)));
+            bool dxf = string.Equals(Path.GetExtension(path), ".dxf", StringComparison.OrdinalIgnoreCase);
+            return Result.Ok<byte[]>(Model1Record.Encode(Extract(document, dxf)));
         }
         catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
         {
@@ -68,15 +69,18 @@ public static class Model1Extractor
     /// <summary>Extracts every model-1 record the document holds.</summary>
     /// <param name="document">The document.</param>
     /// <returns>The records, unsorted. <see cref="Model1Record.Encode"/> sorts them.</returns>
-    public static IReadOnlyList<Model1Record> Extract(CadDocument document)
+    /// <param name="dxf">Whether the document was read from a DXF.</param>
+    public static IReadOnlyList<Model1Record> Extract(CadDocument document, bool dxf = false)
     {
+        s_dxf = dxf;
         ArgumentNullException.ThrowIfNull(document);
         var records = new List<Model1Record>();
         ExtractHeader(document, records);
         ExtractLayers(document, records);
         ExtractLinetypes(document, records);
         ExtractTextStyles(document, records);
-        ExtractDictionaries(document, records);
+        Dictionary<object, string> owners = ExtractDictionaries(document, records);
+        ExtractXData(document, records, owners);
         return records;
     }
 
@@ -210,12 +214,14 @@ public static class Model1Extractor
     /// layouts (<c>layout/&lt;name&gt;</c>). Extension dictionaries of entities are
     /// keyed by handle only and are left out (docs/MODEL_1.md).
     /// </summary>
-    private static void ExtractDictionaries(CadDocument document, List<Model1Record> records)
+    private static Dictionary<object, string> ExtractDictionaries(CadDocument document, List<Model1Record> records)
     {
-        var seen = new HashSet<object>(ReferenceEqualityComparer.Instance);
+        // The xdata owner of every dictionary and XRECORD the walk reaches:
+        // `dictionary/<path>` and `xrecord/<path>`.
+        var owners = new Dictionary<object, string>(ReferenceEqualityComparer.Instance);
         if (document.RootDictionary is { } root)
         {
-            WalkDictionary(root, string.Empty, records, seen);
+            WalkDictionary(root, string.Empty, records, owners);
         }
 
         foreach ((string kind, IEnumerable<TableEntry> entries) in TableEntries(document))
@@ -224,7 +230,7 @@ public static class Model1Extractor
             {
                 if (entry.XDictionary is { } xdic)
                 {
-                    WalkDictionary(xdic, $"table/{kind}/{entry.Name}", records, seen);
+                    WalkDictionary(xdic, $"table/{kind}/{entry.Name}", records, owners);
                 }
             }
         }
@@ -233,9 +239,134 @@ public static class Model1Extractor
         {
             if (layout.XDictionary is { } xdic)
             {
-                WalkDictionary(xdic, $"layout/{layout.Name}", records, seen);
+                WalkDictionary(xdic, $"layout/{layout.Name}", records, owners);
             }
         }
+
+        return owners;
+    }
+
+    /// <summary>
+    /// One <c>xdata</c> record per (owner, application): table entries
+    /// (<c>table/&lt;kind&gt;/&lt;name&gt;</c>), layouts, dictionaries and XRECORDs
+    /// by their path, and entities by handle.
+    /// </summary>
+    private static void ExtractXData(
+        CadDocument document, List<Model1Record> records, Dictionary<object, string> owners)
+    {
+        foreach ((string kind, IEnumerable<TableEntry> entries) in TableEntries(document))
+        {
+            foreach (TableEntry entry in entries)
+            {
+                AddXData(document, entry, $"table/{kind}/{entry.Name}", records);
+            }
+        }
+
+        foreach (Objects.Layout layout in document.Layouts)
+        {
+            AddXData(document, layout, $"layout/{layout.Name}", records);
+        }
+
+        foreach ((object obj, string owner) in owners)
+        {
+            AddXData(document, (CadObject)obj, owner, records);
+        }
+
+        foreach (BlockRecord record in document.BlockRecords)
+        {
+            foreach (Entities.Entity entity in record.Entities)
+            {
+                // The DXF reader is told to keep unknown entities (see ExtractFile),
+                // and one of those is no entity the other readers have.
+                if (entity is Entities.UnknownEntity)
+                {
+                    continue;
+                }
+
+                AddXData(document, entity, "entity/" + entity.Handle.ToString("X", CultureInfo.InvariantCulture), records);
+            }
+        }
+    }
+
+    private static void AddXData(CadDocument document, CadObject owner, string ownerPath, List<Model1Record> records)
+    {
+        foreach (KeyValuePair<AppId, XData.ExtendedData> app in owner.ExtendedData)
+        {
+            string appid = app.Key.Name ?? string.Empty;
+            var values = new List<string>();
+            foreach (XData.ExtendedDataRecord record in app.Value.Records)
+            {
+                int code = (int)record.Code;
+                object? raw = record switch
+                {
+                    XData.ExtendedDataLayer layer => document.GetCadObject<Layer>(layer.Value)?.Name ?? string.Empty,
+                    _ => record.RawValue,
+                };
+                values.Add(CodedValue(code, raw));
+            }
+
+            records.Add(Model1Record.Of(
+                "xdata",
+                ownerPath + "|" + appid,
+                ("name", NumericFormatting.Quoted(ownerPath + "|" + appid)),
+                ("owner", NumericFormatting.Quoted(ownerPath)),
+                ("appid", NumericFormatting.Quoted(appid)),
+                ("values", "[" + string.Join(',', values) + "]")));
+        }
+    }
+
+    /// <summary>
+    /// The written form of a value, decided by its group code. The same table as
+    /// <c>model1::value_form</c> in the Rust adapters and <c>value_form</c> in
+    /// <c>tools/model1.py</c>, written a third time on purpose.
+    /// </summary>
+    /// <param name="code">The group code.</param>
+    /// <returns><c>text</c>, <c>handle</c>, <c>binary</c>, <c>point</c>, <c>real</c> or <c>whole</c>.</returns>
+    public static string ValueForm(int code) => code switch
+    {
+        >= 0 and <= 4 or >= 6 and <= 9 or >= 100 and <= 102 or >= 300 and <= 309
+            or >= 410 and <= 419 or >= 430 and <= 439 or >= 470 and <= 479 or 999 => "text",
+        1000 or 1002 or 1003 => "text",
+        5 or 105 or >= 320 and <= 369 or >= 390 and <= 399 or >= 480 and <= 481 or 1005 => "handle",
+        >= 310 and <= 319 or 1004 => "binary",
+        >= 10 and <= 37 or >= 1010 and <= 1013 => "point",
+        >= 38 and <= 59 or >= 110 and <= 149 or >= 210 and <= 239 or >= 460 and <= 469
+            or >= 1040 and <= 1042 => "real",
+        >= 60 and <= 99 or >= 150 and <= 179 or >= 270 and <= 299 or >= 370 and <= 389
+            or >= 400 and <= 409 or >= 420 and <= 429 or >= 440 and <= 459 or 1070 or 1071 => "whole",
+        _ => throw new InvalidOperationException(
+            string.Create(CultureInfo.InvariantCulture, $"no written form is defined for group code {code}")),
+    };
+
+    /// <summary>One <c>{"code":..,"value":..}</c> pair.</summary>
+    private static string CodedValue(int code, object? raw)
+    {
+        string form = ValueForm(code);
+        string value = form switch
+        {
+            "text" => NumericFormatting.Quoted(NumericFormatting.NormalizeLineEndings(
+                raw switch
+                {
+                    null => string.Empty,
+                    char c => c.ToString(),
+                    _ => Convert.ToString(raw, CultureInfo.InvariantCulture) ?? string.Empty,
+                })),
+            "handle" => NumericFormatting.Quoted(raw switch
+            {
+                CadObject o => o.Handle.ToString("X", CultureInfo.InvariantCulture),
+                _ => Convert.ToUInt64(raw, CultureInfo.InvariantCulture).ToString("X", CultureInfo.InvariantCulture),
+            }),
+            "binary" => NumericFormatting.Quoted(Convert.ToHexString((byte[])raw!)),
+            "point" => raw switch
+            {
+                CSMath.XYZ p => "[" + NumericFormatting.Real(p.X) + "," + NumericFormatting.Real(p.Y) + "," + NumericFormatting.Real(p.Z) + "]",
+                CSMath.XY p => "[" + NumericFormatting.Real(p.X) + "," + NumericFormatting.Real(p.Y) + ",0.0]",
+                _ => throw new InvalidOperationException($"group code {code}: a {raw?.GetType().Name} is not a point"),
+            },
+            "real" => NumericFormatting.Real(Convert.ToDouble(raw, CultureInfo.InvariantCulture)),
+            _ => NumericFormatting.Whole(raw is bool b ? (b ? 1 : 0) : Convert.ToInt64(raw, CultureInfo.InvariantCulture)),
+        };
+        return "{\"code\":" + code.ToString(CultureInfo.InvariantCulture) + ",\"value\":" + value + "}";
     }
 
     /// <summary>The table entries by the kind the owner paths of docs/MODEL_1.md use.</summary>
@@ -253,9 +384,9 @@ public static class Model1Extractor
     }
 
     private static void WalkDictionary(
-        Objects.CadDictionary dictionary, string path, List<Model1Record> records, HashSet<object> seen)
+        Objects.CadDictionary dictionary, string path, List<Model1Record> records, Dictionary<object, string> owners)
     {
-        if (!seen.Add(dictionary))
+        if (!owners.TryAdd(dictionary, "dictionary/" + path))
         {
             return;
         }
@@ -281,11 +412,48 @@ public static class Model1Extractor
 
         foreach (string key in keys)
         {
+            string childPath = path.Length == 0 ? key : path + "/" + key;
             if (dictionary[key] is Objects.CadDictionary child)
             {
-                WalkDictionary(child, path.Length == 0 ? key : path + "/" + key, records, seen);
+                WalkDictionary(child, childPath, records, owners);
+            }
+            else if (dictionary[key] is Objects.XRecord xrecord && owners.TryAdd(xrecord, "xrecord/" + childPath))
+            {
+                records.Add(XRecordRecord(childPath, xrecord));
             }
         }
+    }
+
+    /// <summary>Set by <see cref="Extract"/>: whether the document came from a DXF.</summary>
+    private static bool s_dxf;
+
+    private static Model1Record XRecordRecord(string path, Objects.XRecord xrecord)
+    {
+        long cloning = (long)xrecord.CloningFlags;
+        var list = xrecord.Entries.ToList();
+
+        // ACadSharp's DXF reader leaves the 280 cloning flag of an XRECORD in its
+        // entry list and the flag at 0, where the DWG reader sets the flag and
+        // ezdxf and acadrust keep the 280 out of the list. A leading 280 with no
+        // flag is the flag; it is moved back so the entries line up
+        // (libviprs/acadsharp-rs-tests#133).
+        if (s_dxf && cloning == 0 && list.Count > 0 && list[0].Code == 280)
+        {
+            cloning = Convert.ToInt64(list[0].Value, CultureInfo.InvariantCulture);
+            list.RemoveAt(0);
+        }
+
+        // The handle-valued entries go last, each group in stored order: ACadSharp
+        // lists them last and a DWG keeps them in a stream of their own, so their
+        // place among the others is not compared (libviprs/acadsharp-rs-tests#136).
+        list = [.. list.Where(e => ValueForm(e.Code) != "handle"), .. list.Where(e => ValueForm(e.Code) == "handle")];
+
+        return Model1Record.Of(
+            "xrecord",
+            path,
+            ("name", NumericFormatting.Quoted(path)),
+            ("cloning", NumericFormatting.Whole(cloning)),
+            ("entries", "[" + string.Join(',', list.Select(e => CodedValue(e.Code, e.Value))) + "]"));
     }
 
     private static bool IsInventedName(string name) =>
