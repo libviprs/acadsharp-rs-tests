@@ -292,9 +292,3 @@ verdict = "KNOWN:3"
 reason = "listed in parity/MODEL1.toml"
 issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
 first = 'header $HANDSEED "12DC" vs "12E0" [Known]'
-
-[[row]]
-fixture = "dxf-sample-ac1032-ascii"
-pair = "oracle/acadrust"
-verdict = "KNOWN:16"
-reason = "listed in parity/MODELtest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.00s
