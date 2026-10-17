@@ -1331,11 +1331,11 @@ fn the_suite_lock_is_committed_and_every_cargo_step_uses_it() {
 #[test]
 fn the_readme_says_how_the_second_pin_lands_and_what_a_laptop_needs() {
     let body = read(&repo_root().join("README.md"));
-    for needed in ["ACADRUST_REV", "../acadrust", "acadrust-fork", "upstream"] {
+    for needed in ["ACADRUST_REV", "../acadrust", "pre-push hook", "upstream"] {
         assert!(
             body.contains(needed),
             "the README should mention {needed:?}: how a paired acadrust and suite change lands, \
-             the upstream-sync case, and that a laptop needs the fork beside the suite"
+             the upstream-sync case, and that a laptop needs the fork beside the suite under the name the hook keys its slot on"
         );
     }
 }

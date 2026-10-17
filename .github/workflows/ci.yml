@@ -34,6 +34,7 @@ name: CI
 #   2. MSRV          the declared floor, actually installed and checked
 #   3. Docs          rustdoc with the warn-by-default link lints denied
 #   4. Test          the suite
+#   5. Parity        both engines and the oracle over the corpus, through the gate script
 
 on:
   # A `push` run builds the branch head. It needs no merge commit, so it is
@@ -400,3 +401,35 @@ jobs:
         run: echo "ACADSHARP_NATIVE_DIR=${{ steps.native.outputs.dir }}" >> "$GITHUB_ENV"
       - name: Resource loops under LeakSanitizer
         run: tools/lsan_cell.sh x86_64-unknown-linux-gnu
+
+  parity:
+    # Plain, like the others: a version or a sha in a required check's name means
+    # the next bump renames the context and blocks every PR on branch protection.
+    name: Parity
+    runs-on: ubuntu-latest
+    # All four at job level and not on a step. A step-level `env:` reaches that
+    # step and not the others, and a REQUIRE variable that reaches one step of
+    # a job is a guard that is off everywhere the next step looks (the lesson the
+    # crate's `Test` job comment spells out). The gate script exports the same
+    # four itself; they are written here as well so the workflow says what it
+    # requires and `tests/parity_job.rs` can hold the two to each other.
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
+      ACADSHARP_REQUIRE_NATIVE: 1
+      ACADRUST_REQUIRE: 1
+      PARITY_REQUIRE_CORPUS: 1
+    steps:
+      - uses: actions/checkout@v4
+      # Both siblings, because cargo reads every path dependency's manifest at
+      # resolve time. The crate under test first, then the fork at ACADRUST_REV.
+      - uses: ./.github/actions/clone-counterpart
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      # The job runs the gate script and nothing else, so the job and the local
+      # gate (the pre-push hook, `tools/nas.sh run`) are one command and there is
+      # no second copy of the test lines to keep in step. The script fetches the
+      # native archive at the crate's own pin, verified, when the job has not.
+      - run: tools/run-tests.sh --in-ci
