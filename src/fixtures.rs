@@ -114,6 +114,22 @@ pub struct DwgFixture {
     #[serde(default)]
     pub provenance_evidence: Option<String>,
 
+    /// For a drawing this suite generated (`source = "generated"`): the
+    /// generator project that wrote it, relative to the repository root.
+    #[serde(default)]
+    pub generated_by: Option<String>,
+    /// The one file under the generator that defines how this drawing is built.
+    #[serde(default)]
+    pub generator_source: Option<String>,
+    /// sha256 of `generator_source` when the row was written. A test recomputes
+    /// it, so a drawing whose definition changed without its row changing is
+    /// caught.
+    #[serde(default)]
+    pub generator_source_sha256: Option<String>,
+    /// The ACadSharp version the generator wrote the drawing with.
+    #[serde(default)]
+    pub acadsharp_generator_version: Option<String>,
+
     /// The compressed canonical reference output, relative to `fixtures/`.
     ///
     /// Optional rather than an empty string on purpose: an empty string is a
@@ -409,6 +425,11 @@ pub struct Source {
     pub license: String,
     /// The licence text, relative to `fixtures/`.
     pub license_file: String,
+    /// `true` for the source whose files this repository writes itself
+    /// (`reference/ACadSharp.Generator`): there is nothing to download, so the
+    /// fetch tool skips its rows and the generator is what reproduces them.
+    #[serde(default)]
+    pub generated: bool,
 }
 
 /// A row that is a file but not a drawing the oracle reads.

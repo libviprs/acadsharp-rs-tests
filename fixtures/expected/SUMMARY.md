@@ -80,3 +80,10 @@ not the entity counts a DWG inspector would show.
 | g13_wipeout | AC1032 | 13 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 10 |
 | g13_xref | AC1032 | 8 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
 | g13_xref_long | AC1032 | 8 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| regression_bulge | AC1032 | 9 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 2 | 5 |
+| regression_insert_transform | AC1032 | 9 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
+| regression_text_zero_height | AC1032 | 11 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 7 |
+| regression_dimension_fields | AC1032 | 47 | 0 | 0 | 1 | 0 | 16 | 12 | 4 | 0 | 0 | 7 | 2 | 5 |
+| regression_hatch_loops | AC1032 | 11 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 2 | 5 |
+| regression_unsupported_entity | AC1032 | 11 | 0 | 1 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 6 |
+| regression_large_entity_count | AC1032 | 50008 | 0 | 0 | 1 | 0 | 50000 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |

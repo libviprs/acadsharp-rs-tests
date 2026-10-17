@@ -60,7 +60,7 @@ Conventions worth knowing, all from the schema or the oracle and all tested:
 ### Where acadrust and the oracle differ
 
 Measured with the comparator (`BOUNDED`, warnings and `document.maintenance_version`
-excluded) over every drawing the oracle froze, 70 of them. 63 agree to the
+excluded) over every drawing the oracle froze, 77 of them. 69 agree to the
 comparator's bound on every field of every record, including the record counts per
 kind for `sample_AC1032` (`tests/emit_acadrust.rs` holds that to the oracle's
 frozen output). The rest are below, and the same test fails if this table is not
@@ -78,6 +78,7 @@ difference with no row is unexplained.
 | acadsharp-export-sample | spline.periodic | 1 | A closed spline defined by fit points: the oracle says `periodic`, acadrust's flags say closed and not periodic. Not adjudicated, for the same reason. |
 | acadsharp-export-sample | spline.weights | 1 | A non-rational spline with nine control points. The oracle emits nine weights of 0.0; the schema says `weights` is empty for a non-rational curve, which is what acadrust emits. A zero weight is meaningless, so this is the oracle's artefact. |
 | g13_hatch | spline.weights | 1 | The same, on a hatch boundary spline: four weights of 0.0 from the oracle, none from acadrust. |
+| regression_text_zero_height | text. | 2 | A TEXT and an MTEXT of height 0. ACadSharp's writer writes the zero and its reader throws reading it back, so the oracle drops both and says so with two `reader_error` warnings; acadrust reads both and emits `text` records of height 0.0. The oracle is the one that cannot hold them, which is what the fixture pins (`tests/regression_claims.rs`). |
 
 Two things that are not differences but are limits, because no drawing in the
 corpus exercises them:
