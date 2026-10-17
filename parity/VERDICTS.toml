@@ -2315,7 +2315,7 @@ verdict = "MATCH"
 fixture = "g13_dimension_deep"
 pair = "acadsharp/acadrust"
 verdict = "OPEN_FAILED"
-reason = "exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on"
+reason = "exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; kept on purpose: max_block_depth is a limit the caller sets (64 by default) and the ABI makes passing it a terminal LIMIT_EXCEEDED, never a truncated stream; the fixture nests three thousand dimensions, which is the input that bound is for; schema 1's 16 levels is the oracle's own format rule (a warning, then carry on) and a different layer, so the two are not meant to agree on a hostile drawing; the row stays OPEN_FAILED with this written next to it"
 issue = "libviprs/acadsharp-rs-tests#68"
 
 [[row]]
@@ -2327,7 +2327,7 @@ verdict = "MATCH"
 fixture = "g13_dimension_deep"
 pair = "oracle/acadsharp"
 verdict = "OPEN_FAILED"
-reason = "exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on"
+reason = "exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; kept on purpose: max_block_depth is a limit the caller sets (64 by default) and the ABI makes passing it a terminal LIMIT_EXCEEDED, never a truncated stream; the fixture nests three thousand dimensions, which is the input that bound is for; schema 1's 16 levels is the oracle's own format rule (a warning, then carry on) and a different layer, so the two are not meant to agree on a hostile drawing; the row stays OPEN_FAILED with this written next to it"
 issue = "libviprs/acadsharp-rs-tests#68"
 
 [[row]]
@@ -2601,7 +2601,7 @@ first = "g13_ocs_mirror oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10
 fixture = "g13_ocs_plane"
 pair = "acadsharp/acadrust"
 verdict = "DIFF:1"
-reason = "acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+reason = "kept on purpose, the oracle is the one that is wrong: the oblique circle (extrusion 1,2,2) is a circle, and the oracle and emit-acadrust, which ports it, decide that by comparing two square roots for exact equality, which misses on the last bit and writes an ellipse of ratio 1.0000000000000002; the shim's circle is the right record (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
 first = 'g13_ocs_plane acadsharp-acadrust: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "circle" vs "ellipse" [EXACT]'
 
@@ -2614,7 +2614,7 @@ verdict = "MATCH"
 fixture = "g13_ocs_plane"
 pair = "oracle/acadsharp"
 verdict = "DIFF:1"
-reason = "under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+reason = "kept on purpose, the oracle is the one that is wrong: the oblique circle (extrusion 1,2,2) is a circle, and the oracle and emit-acadrust, which ports it, decide that by comparing two square roots for exact equality, which misses on the last bit and writes an ellipse of ratio 1.0000000000000002; the shim's circle is the right record (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
 first = 'g13_ocs_plane oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 

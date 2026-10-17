@@ -174,8 +174,34 @@ these is hidden by an exclusion; each is a `DIFF` or `COUNT` and the
 | full ellipse | one per save, 14 in `export-sample` | start 0, end 2pi | the stored start (pi, 3pi) | acadsharp-rs-tests#57 |
 | invisible entities | `acadsharp-blockvisibilityparameter` (8 records) | drawn | skipped | acadsharp-rs-tests#60 |
 | mesh edges | `g13_polyface_mesh`, `g13_polygon_mesh` | polylines (viprs.1 predates libviprs-dep#82) | a warning | acadsharp-rs-tests#62 |
-| block depth | `g13_dimension_deep` | the decode stops at `max_block_depth` | warns and carries on | acadsharp-rs-tests#68 |
+| block depth | `g13_dimension_deep` | the decode stops at `max_block_depth`, a terminal `LIMIT_EXCEEDED` | warns and carries on | kept on purpose, see below (acadsharp-rs-tests#68) |
 | spline flags and weights | `export-sample`, `g13_hatch` | `closed` and `periodic` disagree three ways; the oracle writes weights of 0.0 | | acadsharp-rs-tests#65, #67 |
+
+Four of those rows are fixed in libviprs-dep and wait on an archive. The mirrored
+insert (#63) and the non-uniform insert scale (#64) landed in
+libviprs-dep#151, and the maintenance version (#61) and the text alignment,
+width factor, style and anchor (#66) in libviprs-dep#152 (wire 3, which this
+suite cannot read until `acadsharp-rs` decodes it). The rows keep the verdicts
+they have until `NATIVE_ARTIFACT.toml` pins an archive built from that tree. One
+of #64's three fixtures will not flip: `g13_ocs_plane`'s oblique circle is
+written by the oracle as an ellipse of ratio 1.0000000000000002, because the
+oracle (and `emit-acadrust`, which ports it) compares two square roots for exact
+equality and misses on the last bit. The shim's circle is the right record, so
+that row stays a `DIFF` on purpose.
+
+The block depth row is a decision and not a debt (acadsharp-rs-tests#68). The
+wire's bound is `max_block_depth` in `Limits`, which the caller sets and which
+defaults to 64, and `docs/ABI.md` makes passing it a terminal `LIMIT_EXCEEDED`:
+the decode stops, and a consumer is never handed a stream that is quietly
+missing a subtree. `g13_dimension_deep` nests three thousand dimensions, so it
+is the input that bound exists for, and schema 1's 16 levels is a different
+rule in a different layer (a warning from the oracle's own resolver, then the
+rest of the drawing). Making the shim warn and carry on would turn a resource
+limit into a format rule and break the ABI's promise to every consumer, and
+raising the limit in `emit-acadsharp` until the fixture opened would make the
+row pass by changing what it measures. So the row stays `OPEN_FAILED` for
+`oracle/acadsharp` and `acadsharp/acadrust`, with the reason written beside it
+in `parity/VERDICTS.toml`.
 
 What this adapter converts, with the rule it applies:
 
