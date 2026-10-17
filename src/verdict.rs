@@ -80,7 +80,7 @@ impl Verdict {
 }
 
 /// Distinct records among some findings: a record with three bad fields is one.
-fn records_of<'a>(findings: impl Iterator<Item = &'a Finding>) -> usize {
+pub fn records_of<'a>(findings: impl Iterator<Item = &'a Finding>) -> usize {
     findings
         .map(|f| {
             (

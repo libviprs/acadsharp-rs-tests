@@ -20,7 +20,8 @@
 # parser (libviprs/libviprs#683 and #691 are what that cost). Here the whole
 # environment is a stock `rust` image, the trees go in as a tar stream, and the
 # only thing that is not already in the image is the native archive, which is
-# fetched once per sha into a named volume and verified every time.
+# fetched once per sha into a named volume and verified every time
+# (`NATIVE_ARTIFACT.toml` is the pin, `tools/fetch_native.py` the fetch).
 #
 # Every extracted file is touched. `git archive` stamps files with the commit's
 # time, and cargo decides a path dependency is fresh by comparing mtimes with the
@@ -248,58 +249,49 @@ export_requires() {
 
 # --- the three forms --------------------------------------------------------
 
-native_pin() { # <key> -> the value the crate's fetch action pins
-  local file="$ACADSHARP_RS/.github/actions/fetch-native-archive/action.yml"
-  [ -f "$file" ] || { echo "$PROG: no $file, so I cannot read the native archive pin" >&2; exit 1; }
-  # The input's default is the first `default:` after the `<key>:` input.
-  awk -v key="$1" '
-    $1 == key ":" { inside = 1; next }
-    inside && $1 == "default:" { print $2; exit }
-    inside && /^  [a-z]/ { inside = 0 }
-  ' "$file"
-}
-
-fetch_native() { # fetch (or take), verify and unpack the archive for this arch
-  local release archive sha cache src
-  release="$(native_pin release)"
+# The native archive. The published one comes from `NATIVE_ARTIFACT.toml` through
+# `tools/fetch_native.py`, which refuses a wrong hash before it extracts a byte,
+# for the target of whatever arch this runs on. `--native-tgz` supplies one that
+# is not the published one (a rebuild), verified against `--archive-sha256`.
+fetch_native() {
+  local dir sha target tomlsha
   if [ -n "$NATIVE_TGZ" ]; then
+    local archive cache top
     [ -f "$NATIVE_TGZ" ] || { echo "$PROG: no archive at $NATIVE_TGZ" >&2; exit 1; }
     [ -n "$ARCHIVE_SHA_OVERRIDE" ] || { echo "$PROG: --native-tgz needs --archive-sha256: an archive nobody hashed is not a label" >&2; exit 1; }
-    archive="$(basename "$NATIVE_TGZ")"; sha="$ARCHIVE_SHA_OVERRIDE"; src="$NATIVE_TGZ"
+    sha="$ARCHIVE_SHA_OVERRIDE"; archive="$(basename "$NATIVE_TGZ")"
+    cache="${CARGO_HOME:-$HOME/.cargo}/acadsharp-native/$sha"
+    mkdir -p "$cache"
+    cp "$NATIVE_TGZ" "$cache/$archive"
+    echo "$sha  $cache/$archive" | sha256sum -c -
+    rm -rf "$cache/unpacked"
+    mkdir -p "$cache/unpacked"
+    tar -xzf "$cache/$archive" -C "$cache/unpacked"
+    top="$(ls "$cache/unpacked")"
+    [ "$(printf '%s\n' "$top" | wc -l)" -eq 1 ] || { echo "$PROG: the archive has more than one top-level entry" >&2; exit 1; }
+    dir="$cache/unpacked/$top"
   else
     case "$(uname -m)" in
-      x86_64|amd64) archive="acadsharp-linux-x64.tgz"; sha="$(native_pin sha256)" ;;
-      arm64|aarch64) archive="acadsharp-linux-arm64.tgz"; sha="$ARCHIVE_SHA_OVERRIDE" ;;
+      x86_64|amd64) target=linux-x64 ;;
+      arm64|aarch64) target=linux-arm64 ;;
       *) echo "$PROG: no native archive for $(uname -m)" >&2; exit 1 ;;
     esac
-    if [ -z "$release" ] || [ -z "$sha" ]; then
-      echo "$PROG: I have no sha256 for $archive. The crate's action pins x64 only; pass --archive-sha256 (or ACADSHARP_ARCHIVE_SHA256) for this arch." >&2
-      exit 1
-    fi
-    src=""
+    dir="$(python3 "$SUITE/tools/fetch_native.py" --target "$target")"
+    sha="$(python3 - "$SUITE/NATIVE_ARTIFACT.toml" "$target" <<'PY'
+import sys, tomllib
+m = tomllib.load(open(sys.argv[1], "rb"))
+print(next(t["sha256"] for t in m["target"] if t["name"] == sys.argv[2]))
+PY
+)"
+    tomlsha="$sha"
+    [ -z "$ARCHIVE_SHA_OVERRIDE" ] || [ "$ARCHIVE_SHA_OVERRIDE" = "$tomlsha" ] || {
+      echo "$PROG: --archive-sha256 disagrees with NATIVE_ARTIFACT.toml for $target; use --native-tgz for another archive" >&2; exit 1; }
   fi
-  cache="${CARGO_HOME:-$HOME/.cargo}/acadsharp-native/$sha"
-  mkdir -p "$cache"
-  if [ -n "$src" ]; then
-    cp "$src" "$cache/$archive"
-  elif [ ! -f "$cache/$archive" ]; then
-    curl -fsSL --retry 3 -o "$cache/$archive.part" \
-      "https://github.com/libviprs/libviprs-dep/releases/download/$release/$archive"
-    mv "$cache/$archive.part" "$cache/$archive"
-  fi
-  # Verified on every run, a cache hit included.
-  echo "$sha  $cache/$archive" | sha256sum -c -
-  rm -rf "$cache/unpacked"
-  mkdir -p "$cache/unpacked"
-  tar -xzf "$cache/$archive" -C "$cache/unpacked"
-  local top
-  top="$(ls "$cache/unpacked")"
-  [ "$(printf '%s\n' "$top" | wc -l)" -eq 1 ] || { echo "$PROG: the archive has more than one top-level entry" >&2; exit 1; }
-  export ACADSHARP_NATIVE_DIR="$cache/unpacked/$top"
+  export ACADSHARP_NATIVE_DIR="$dir"
   # What the emitters stamp into `run.json`, so two archives that claim one
   # `artifact_version` still have different labels.
   export ACADSHARP_ARCHIVE_SHA256="$sha"
-  echo "native archive: $archive ($sha) at $ACADSHARP_NATIVE_DIR"
+  echo "native archive: $sha at $ACADSHARP_NATIVE_DIR"
 }
 
 if [ "$PLAN_ONLY" = 1 ]; then

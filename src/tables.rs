@@ -57,11 +57,19 @@ pub fn parse_pair(s: &str) -> Result<Pair, String> {
     let (a, b) = s
         .split_once('/')
         .ok_or_else(|| format!("{s:?} is not a pair written a/b"))?;
+    // `self/<engine>` is an engine against itself, across the seven saves.
+    if a == "self" {
+        let e = engine(b)?;
+        return Ok(Pair::new(e, e));
+    }
     Ok(Pair::new(engine(a)?, engine(b)?))
 }
 
 /// The spelling [`parse_pair`] reads.
 pub fn pair_name(p: Pair) -> String {
+    if p.a == p.b {
+        return format!("self/{}", p.a.name());
+    }
     format!("{}/{}", p.a.name(), p.b.name())
 }
 
@@ -222,6 +230,9 @@ mod tests {
             "acadsharp/acadrust"
         );
         assert!(parse_pair("oracle-acadsharp").is_err());
+        let me = parse_pair("self/acadrust").unwrap();
+        assert_eq!(me, Pair::new(Engine::Acadrust, Engine::Acadrust));
+        assert_eq!(pair_name(me), "self/acadrust");
         assert!(parse_pair("oracle/nobody").is_err());
     }
 

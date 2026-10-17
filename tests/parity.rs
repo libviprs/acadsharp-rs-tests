@@ -168,6 +168,63 @@ fn digests(out: &Path) -> Result<Option<Digests>, String> {
     }))
 }
 
+const SAVES: [&str; 6] = [
+    "acadsharp-ac1014",
+    "acadsharp-ac1015",
+    "acadsharp-ac1018",
+    "acadsharp-ac1021",
+    "acadsharp-ac1024",
+    "acadsharp-ac1027",
+];
+
+fn as_ref(e: &Emitted) -> Result<&Side, &String> {
+    match e {
+        Emitted::Ok(s) => Ok(s),
+        Emitted::Failed(m) => Err(m),
+    }
+}
+
+/// ezdxf's frozen reading of one DXF, with its sidecar.
+fn ezdxf_side(gt: &fixtures::GroundTruth) -> Result<Side, String> {
+    let text = String::from_utf8(gt.load_jsonl().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+    let records = parse_stream(&text).map_err(|e| format!("{}: {e}", gt.id))?;
+    let side = String::from_utf8(gt.load_sidecar().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+    let sidecar = Sidecar::parse(&side, &records).map_err(|e| format!("{}: {e}", gt.id))?;
+    Ok(Side { label: format!("ezdxf:{}", gt.id), stream: Stream { records, sidecar: Some(sidecar) } })
+}
+
+/// One row of the run: judge the pair, or `OPEN_FAILED` when a side did not open.
+fn put(
+    computed: &mut Computed,
+    tables: &BTreeMap<String, acadsharp_rs_tests::compare::ClassTable>,
+    fixture: &str,
+    pair: &str,
+    a: Result<&Side, &String>,
+    b: Result<&Side, &String>,
+    explained: Option<&dyn Fn(&acadsharp_rs_tests::compare::Finding) -> bool>,
+) -> Result<(), String> {
+    let key = (fixture.to_string(), pair.to_string());
+    match (a, b) {
+        (Ok(a), Ok(b)) => {
+            let j = match explained {
+                Some(e) => acadsharp_rs_tests::parity_run::judge_self(fixture, pair, a, b, tables, e)?,
+                None => judge_pair(fixture, pair, a, b, tables)?,
+            };
+            if std::env::var("PARITY_EXPLAIN").as_deref() == Ok("1") {
+                for line in &j.red {
+                    println!("EXPLAIN {pair} {line}");
+                }
+            }
+            computed.insert(key, (j.verdict.to_string(), j.first, String::new()));
+        }
+        (a, b) => {
+            let why = [a.err(), b.err()].into_iter().flatten().cloned().collect::<Vec<_>>().join("; ");
+            computed.insert(key, (Verdict::OpenFailed.to_string(), String::new(), why));
+        }
+    }
+    Ok(())
+}
+
 fn compute() -> Result<(Computed, Option<Digests>), String> {
     let tables = tables::load_all()?;
     let out = out_dir();
@@ -200,47 +257,60 @@ fn compute() -> Result<(Computed, Option<Digests>), String> {
     let mut results = results.into_inner().unwrap();
 
     let mut computed = Computed::new();
+    // Everything each engine said, by fixture, for the pairs built after the
+    // per-fixture ones: ezdxf against each engine, and each engine against itself
+    // across the seven saves.
+    let mut held: BTreeMap<(&'static str, String), Emitted> = BTreeMap::new();
+    let mut oracles: BTreeMap<String, Side> = BTreeMap::new();
     for (i, f) in all.iter().enumerate() {
         let (sharp_run, rust_run) = results.remove(&i).expect("every fixture was run");
         let sharp_run = sharp_run?;
         let rust_run = rust_run?;
         let oracle = frozen(f)?;
-        let mut put = |pair: &str,
-                       a: Result<&Side, &String>,
-                       b: Result<&Side, &String>|
-         -> Result<(), String> {
-            let key = (f.id.clone(), pair.to_string());
-            match (a, b) {
-                (Ok(a), Ok(b)) => {
-                    let j = judge_pair(&f.id, pair, a, b, &tables)?;
-                    if std::env::var("PARITY_EXPLAIN").as_deref() == Ok("1") {
-                        for line in &j.red {
-                            println!("EXPLAIN {pair} {line}");
-                        }
-                    }
-                    computed.insert(key, (j.verdict.to_string(), j.first, String::new()));
-                }
-                (a, b) => {
-                    let why = [a.err(), b.err()]
-                        .into_iter()
-                        .flatten()
-                        .cloned()
-                        .collect::<Vec<_>>()
-                        .join("; ");
-                    computed.insert(key, (Verdict::OpenFailed.to_string(), String::new(), why));
-                }
-            }
-            Ok(())
+        put(&mut computed, &tables, &f.id, "oracle/acadsharp", Ok(&oracle), as_ref(&sharp_run), None)?;
+        put(&mut computed, &tables, &f.id, "oracle/acadrust", Ok(&oracle), as_ref(&rust_run), None)?;
+        put(&mut computed, &tables, &f.id, "acadsharp/acadrust", as_ref(&sharp_run), as_ref(&rust_run), None)?;
+        held.insert(("acadsharp", f.id.clone()), sharp_run);
+        held.insert(("acadrust", f.id.clone()), rust_run);
+        oracles.insert(f.id.clone(), oracle);
+    }
+
+    // ezdxf, reading AutoCAD's own DXF of a drawing, against each of the three.
+    for gt in fixtures::ground_truths() {
+        let Some(twin_of) = fixtures::oracle_inputs()
+            .iter()
+            .find(|i| i.id == gt.input)
+            .and_then(|i| i.for_fixture.clone())
+        else {
+            // A DXF with no DWG twin (the AC1009 files) is an input for later work.
+            continue;
         };
-        fn as_ref(e: &Emitted) -> Result<&Side, &String> {
-            match e {
-                Emitted::Ok(s) => Ok(s),
-                Emitted::Failed(m) => Err(m),
-            }
+        let ez = ezdxf_side(gt)?;
+        let oracle = oracles.get(&twin_of).ok_or_else(|| format!("{}: its DWG twin {twin_of} is not a fixture", gt.input))?;
+        put(&mut computed, &tables, &gt.input, "ezdxf/oracle", Ok(&ez), Ok(oracle), None)?;
+        for (engine, pair) in [("acadsharp", "ezdxf/acadsharp"), ("acadrust", "ezdxf/acadrust")] {
+            let theirs = held.get(&(engine, twin_of.clone())).ok_or_else(|| format!("{twin_of}: no {engine} run"))?;
+            put(&mut computed, &tables, &gt.input, pair, Ok(&ez), as_ref(theirs), None)?;
         }
-        put("oracle/acadsharp", Ok(&oracle), as_ref(&sharp_run))?;
-        put("oracle/acadrust", Ok(&oracle), as_ref(&rust_run))?;
-        put("acadsharp/acadrust", as_ref(&sharp_run), as_ref(&rust_run))?;
+    }
+
+    // Each engine against itself across the seven saves, baseline AC1032. The
+    // oracle's differences are the exception list R3.4 committed; the other two
+    // engines have none, so theirs are findings.
+    let list = acadsharp_rs_tests::invariance::ExceptionList::oracle().map_err(|e| e.to_string())?;
+    let baseline = list.baseline.clone();
+    for save in SAVES {
+        let o_base = oracles.get(&baseline).expect("the baseline is a fixture");
+        let o_save = oracles.get(save).expect("a save is a fixture");
+        let explained = |f: &acadsharp_rs_tests::compare::Finding| {
+            list.row_for(save, f).is_some_and(|r| r.kind == acadsharp_rs_tests::invariance::Kind::Exception)
+        };
+        put(&mut computed, &tables, save, "self/oracle", Ok(o_base), Ok(o_save), Some(&explained))?;
+        for engine in ["acadsharp", "acadrust"] {
+            let base = held.get(&(engine, baseline.clone())).ok_or("no baseline run")?;
+            let this = held.get(&(engine, save.to_string())).ok_or("no run of a save")?;
+            put(&mut computed, &tables, save, &format!("self/{engine}"), as_ref(base), as_ref(this), None)?;
+        }
     }
     let digests = digests(&out)?;
     Ok((computed, digests))

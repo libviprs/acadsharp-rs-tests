@@ -8,8 +8,8 @@
 
 use std::collections::BTreeMap;
 
-use crate::compare::{ClassTable, Stream, compare};
-use crate::verdict::{Verdict, judge};
+use crate::compare::{ClassTable, Finding, Stream, compare};
+use crate::verdict::{Verdict, judge, records_of};
 
 /// One side of a pair: the stream, and the file it was read from. The label is
 /// what makes "the same stream handed in as both sides" detectable, since two
@@ -69,6 +69,39 @@ pub fn judge_pair(
         first: first.unwrap_or_default(),
         red: report.red().iter().map(|f| f.render()).collect(),
     })
+}
+
+/// [`judge_pair`] for an engine against itself across two saves, where a
+/// difference the format cannot carry is listed in an exception list.
+///
+/// `explained` says whether a red finding is one of those. The ones that are
+/// make the verdict `KNOWN:n` (n records), and any that are not make it `DIFF:n`
+/// over those records alone: an unlisted difference is not hidden by listed ones
+/// beside it.
+pub fn judge_self(
+    fixture: &str,
+    pair: &str,
+    a: &Side,
+    b: &Side,
+    tables: &BTreeMap<String, ClassTable>,
+    explained: &dyn Fn(&Finding) -> bool,
+) -> Result<Judged, String> {
+    let plain = judge_pair(fixture, pair, a, b, tables)?;
+    let table = &tables[pair];
+    let report = compare(fixture, &a.stream, &b.stream, table).map_err(|e| e.to_string())?;
+    let red = report.red();
+    if red.is_empty() {
+        return Ok(plain);
+    }
+    let (known, open): (Vec<&Finding>, Vec<&Finding>) = red.into_iter().partition(|f| explained(f));
+    let first = open.first().or(known.first()).map(|f| f.render()).unwrap_or_default();
+    let red_text: Vec<String> = open.iter().map(|f| f.render()).collect();
+    let verdict = if !open.is_empty() {
+        Verdict::Diff(records_of(open.into_iter()))
+    } else {
+        Verdict::Known(records_of(known.into_iter()))
+    };
+    Ok(Judged { verdict, first, red: red_text })
 }
 
 /// `OPEN_FAILED`'s reason: the exit code and the first line of stderr.
