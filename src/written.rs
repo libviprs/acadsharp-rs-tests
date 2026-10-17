@@ -17,6 +17,9 @@ pub const CONTAINERS: [&str; 3] = ["dwg", "dxf-ascii", "dxf-binary"];
 
 #[derive(Debug, Deserialize)]
 pub struct Stage {
+    /// Whether the stage's outputs are rows of `fixtures/manifest.toml`.
+    #[serde(default)]
+    pub committed: bool,
     pub sources: Vec<String>,
 }
 

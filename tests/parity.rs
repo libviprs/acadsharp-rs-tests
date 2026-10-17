@@ -524,27 +524,107 @@ fn lowered_by_list(
 /// What one reader made of one round-trip output.
 type Reading<'a> = Result<&'a Side, &'a String>;
 
-/// Judge one cell: `reader`'s reading of `w` against the writer's own reading of
+/// Judge one cell: `reader`'s reading of `o` against the writer's own reading of
 /// its source.
-fn cell(
+fn put_cell(
     computed: &mut Computed,
     tables: &BTreeMap<String, acadsharp_rs_tests::compare::ClassTable>,
-    w: &fixtures::Written,
+    o: &RtOutput,
     reference: &Side,
     explained: Option<&dyn Fn(&acadsharp_rs_tests::compare::Finding) -> bool>,
     reader: &str,
     got: Reading,
 ) -> Result<(), String> {
-    let pair = format!("w-{}:{reader}", w.writer);
-    put(
-        computed,
-        tables,
-        &w.id,
-        &pair,
-        Ok(reference),
-        got,
-        explained,
-    )
+    let pair = format!("w-{}:{reader}", o.writer);
+    put(computed, tables, &o.id, &pair, Ok(reference), got, explained)
+}
+
+/// One round-trip output, from wherever it came: a `[[written]]` row (stage one)
+/// or the scratch directory of the nightly (stage two). Everything a cell needs is
+/// here, so the judging does not care which.
+struct RtOutput {
+    id: String,
+    writer: String,
+    source: String,
+    container: String,
+    version: String,
+    /// The bytes, or why the writer produced none.
+    bytes: Result<Vec<u8>, String>,
+    /// The oracle's reading, or why there is none.
+    oracle: Result<Side, String>,
+    /// ezdxf's reading of a DXF output, or why there is none (`None` for a DWG).
+    ezdxf: Option<Result<Side, String>>,
+}
+
+/// The oracle's frozen reading of an output, as a side. A file so damaged that the
+/// oracle's own stream breaks the schema (a corrupt string in a warning) is that
+/// cell's outcome, not a failure of the run.
+fn oracle_written_side(id: &str, text: &str) -> Result<Side, String> {
+    match parse_stream(text) {
+        Ok(records) => Ok(Side {
+            label: format!("oracle-written:{id}"),
+            stream: Stream::new(records),
+        }),
+        Err(e) => Err(format!("the oracle's reading is not schema 1: {e}")),
+    }
+}
+
+/// Stage one: the rows of `fixtures/manifest.toml`.
+fn stage_one_outputs() -> Result<Vec<RtOutput>, String> {
+    let mut v = Vec::new();
+    for w in fixtures::written() {
+        // The bytes: stored (ACadSharp's) or made again here (acadrust's), and in
+        // both cases the bytes the manifest froze.
+        let bytes: Result<Vec<u8>, String> = if let Some(why) = &w.write_failed {
+            Err(format!("the writer failed: {why}"))
+        } else if w.is_stored() {
+            w.load().map_err(|e| e.to_string())
+        } else {
+            let src = fixtures::load(&w.source).map_err(|e| e.to_string())?;
+            let made = acadsharp_rs_tests::acadrust_emit::rewrite(&src, &w.container, &w.version)
+                .map_err(|e| format!("{}: acadrust cannot write it any more: {e}", w.id))?;
+            w.verify(&made)
+                .map_err(|e| format!("the writer is not deterministic or has moved: {e}"))?;
+            Ok(made)
+        };
+        let oracle = match (&w.reference_jsonl, &w.no_reference) {
+            (Some(_), _) => {
+                let text = String::from_utf8(
+                    w.load_reference_jsonl()
+                        .map_err(|e| format!("{}: {e}", w.id))?,
+                )
+                .map_err(|e| e.to_string())?;
+                oracle_written_side(&w.id, &text)
+            }
+            (None, Some(why)) => Err(format!("the oracle cannot read it: {why}")),
+            (None, None) => Err(format!(
+                "{}: the oracle neither read it nor said why not",
+                w.id
+            )),
+        };
+        let ezdxf = if w.container == "dwg" || w.write_failed.is_some() {
+            None
+        } else {
+            Some(match fixtures::ground_truth(&w.id) {
+                Some(gt) => match &gt.failed {
+                    Some(why) => Err(format!("ezdxf would not read it: {why}")),
+                    None => ezdxf_side(gt),
+                },
+                None => return Err(format!("{}: no ezdxf reading of a DXF output", w.id)),
+            })
+        };
+        v.push(RtOutput {
+            id: w.id.clone(),
+            writer: w.writer.clone(),
+            source: w.source.clone(),
+            container: w.container.clone(),
+            version: w.version.clone(),
+            bytes,
+            oracle,
+            ezdxf,
+        });
+    }
+    Ok(v)
 }
 
 fn roundtrip_lane(
@@ -555,6 +635,21 @@ fn roundtrip_lane(
     rust: &str,
     oracles: &BTreeMap<String, Side>,
     held: &BTreeMap<(&'static str, String), Emitted>,
+) -> Result<(), String> {
+    let outputs = stage_one_outputs()?;
+    judge_outputs(computed, base, out, sharp, rust, oracles, held, &outputs)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn judge_outputs(
+    computed: &mut Computed,
+    base: &BTreeMap<String, acadsharp_rs_tests::compare::ClassTable>,
+    out: &Path,
+    sharp: &str,
+    rust: &str,
+    oracles: &BTreeMap<String, Side>,
+    held: &BTreeMap<(&'static str, String), Emitted>,
+    outputs: &[RtOutput],
 ) -> Result<(), String> {
     use acadsharp_rs_tests::invariance::ExceptionList;
     let list = ExceptionList::oracle().map_err(|e| e.to_string())?;
@@ -570,61 +665,113 @@ fn roundtrip_lane(
     ] {
         let rows: Vec<_> = base.get(from).map(|t| t.known.clone()).unwrap_or_default();
         if let Some(t) = tables.get_mut(cell) {
-            for w in fixtures::written()
-                .iter()
-                .filter(|w| w.writer == "acadsharp")
-            {
-                for r in rows.iter().filter(|r| r.fixture == w.source) {
+            for o in outputs.iter().filter(|o| o.writer == "acadsharp") {
+                for r in rows.iter().filter(|r| r.fixture == o.source) {
                     let mut r = r.clone();
-                    r.fixture = w.id.clone();
+                    r.fixture = o.id.clone();
                     t.known.push(r);
                 }
             }
         }
     }
 
-    for w in fixtures::written() {
-        let kind = if w.container == "dwg" { "dwg" } else { "dxf" };
-        let reference: &Side = match w.writer.as_str() {
-            "acadsharp" => oracles
-                .get(&w.source)
-                .ok_or_else(|| format!("{}: its source {} is not a fixture", w.id, w.source))?,
-            _ => match held.get(&("acadrust", w.source.clone())) {
-                Some(Emitted::Ok(s)) => s,
-                _ => {
-                    return Err(format!(
-                        "{}: acadrust did not read its own source {}, so there is no reference",
-                        w.id, w.source
-                    ));
-                }
-            },
+    for o in outputs {
+        let kind = if o.container == "dwg" { "dwg" } else { "dxf" };
+        let version_row = format!("w-{}:version", o.writer);
+        let readers: &[&str] = if kind == "dwg" {
+            &["oracle", "acadrust", "acadsharp"]
+        } else {
+            &["oracle", "acadrust", "ezdxf"]
         };
 
-        // The bytes: stored (ACadSharp's) or made again here (acadrust's), and in
-        // both cases the bytes the manifest froze.
-        let bytes: Result<Vec<u8>, String> = if let Some(why) = &w.write_failed {
-            Err(format!("the writer failed: {why}"))
-        } else if w.is_stored() {
-            w.load().map_err(|e| e.to_string())
-        } else {
-            let src = fixtures::load(&w.source).map_err(|e| e.to_string())?;
-            let made = acadsharp_rs_tests::acadrust_emit::rewrite(&src, &w.container, &w.version)
-                .map_err(|e| format!("{}: acadrust cannot write it any more: {e}", w.id))?;
-            w.verify(&made)
-                .map_err(|e| format!("the writer is not deterministic or has moved: {e}"))?;
-            Ok(made)
+        // The writer's own reading of the source is the reference. When it has
+        // none (the library could not read its own source) every cell says so.
+        let reference: Result<&Side, String> = match o.writer.as_str() {
+            "acadsharp" => oracles
+                .get(&o.source)
+                .ok_or_else(|| format!("{}: its source {} is not a fixture", o.id, o.source)),
+            _ => match held.get(&("acadrust", o.source.clone())) {
+                Some(Emitted::Ok(s)) => Ok(s),
+                Some(Emitted::Failed(why)) => Err(format!(
+                    "acadrust did not read the source {}, so there is no reference: {why}",
+                    o.source
+                )),
+                None => Err(format!("{}: acadrust never read {}", o.id, o.source)),
+            },
         };
+        let reference = match reference {
+            Ok(r) => r,
+            Err(why) => {
+                for r in readers {
+                    computed.insert(
+                        (o.id.clone(), format!("w-{}:{r}", o.writer)),
+                        (Verdict::OpenFailed.to_string(), String::new(), why.clone()),
+                    );
+                }
+                computed.insert(
+                    (o.id.clone(), version_row.clone()),
+                    (Verdict::OpenFailed.to_string(), String::new(), why),
+                );
+                continue;
+            }
+        };
+
+        if let Err(why) = &o.bytes {
+            // The writer produced nothing, so no reader had anything to open.
+            for r in readers {
+                put_cell(computed, &tables, o, reference, None, r, Err(why))?;
+            }
+            computed.insert(
+                (o.id.clone(), version_row),
+                (Verdict::OpenFailed.to_string(), String::new(), why.clone()),
+            );
+            continue;
+        }
+        let bytes = o.bytes.as_ref().expect("checked above");
+
+        // The version it says it is: the oracle, a reader that did not write it,
+        // is the witness. Every cell excludes `document.acad_version` (the
+        // version is what was written), so this is where a writer that writes
+        // the wrong one is caught.
+        computed.insert(
+            (o.id.clone(), version_row),
+            match &o.oracle {
+                Ok(side) => {
+                    let said = match side.stream.records.first() {
+                        Some(acadsharp_rs_tests::canonical::Record::Document(d)) => {
+                            d.acad_version.clone()
+                        }
+                        _ => String::new(),
+                    };
+                    if said == o.version {
+                        (Verdict::Match.to_string(), String::new(), String::new())
+                    } else {
+                        (
+                            Verdict::Diff(1).to_string(),
+                            format!("{} wrote {}, the oracle reads {said:?}", o.id, o.version),
+                            String::new(),
+                        )
+                    }
+                }
+                Err(_) => (
+                    Verdict::OpenFailed.to_string(),
+                    String::new(),
+                    "the oracle cannot read it, so nothing independent says its version"
+                        .to_string(),
+                ),
+            },
+        );
 
         // A finding is explained when R3.4 lists it as the format's own lowering
         // for this version (ACadSharp's rewrites of the oracle's reference), or
         // when the reader already disagrees with the writer's reading of the
         // *source* in exactly that way (R4.1's verdict, inherited).
         let lowered =
-            w.writer == "acadsharp" && list.fixtures().contains(lowering_save(&w.version).as_str());
+            o.writer == "acadsharp" && list.fixtures().contains(lowering_save(&o.version).as_str());
         let make_explained = |baseline: std::collections::BTreeSet<BaselineKey>| {
-            let save = lowering_save(&w.version);
+            let save = lowering_save(&o.version);
             let list = &list;
-            let writer_is_acadsharp = w.writer == "acadsharp";
+            let writer_is_acadsharp = o.writer == "acadsharp";
             move |f: &acadsharp_rs_tests::compare::Finding| {
                 if baseline_key(f).is_some_and(|k| baseline.contains(&k)) {
                     return true;
@@ -632,86 +779,9 @@ fn roundtrip_lane(
                 lowered_by_list(writer_is_acadsharp && lowered, list, &save, f)
             }
         };
-
-        // The oracle's frozen reading.
-        let oracle_side = match (&w.reference_jsonl, &w.no_reference) {
-            (Some(_), _) => {
-                let text = String::from_utf8(
-                    w.load_reference_jsonl()
-                        .map_err(|e| format!("{}: {e}", w.id))?,
-                )
-                .map_err(|e| e.to_string())?;
-                // A file so damaged the oracle's own stream breaks the schema
-                // (a corrupt string in a warning) is that cell's outcome.
-                match parse_stream(&text) {
-                    Ok(records) => Ok(Side {
-                        label: format!("oracle-written:{}", w.id),
-                        stream: Stream::new(records),
-                    }),
-                    Err(e) => Err(format!("the oracle's reading is not schema 1: {e}")),
-                }
-            }
-            (None, Some(why)) => Err(format!("the oracle cannot read it: {why}")),
-            (None, None) => Err(format!(
-                "{}: the oracle neither read it nor said why not",
-                w.id
-            )),
-        };
-        let unwritten = bytes.as_ref().err().cloned();
-        if let Some(why) = &unwritten {
-            // The writer produced nothing, so no reader had anything to open.
-            let readers: &[&str] = if kind == "dwg" {
-                &["oracle", "acadrust", "acadsharp"]
-            } else {
-                &["oracle", "acadrust", "ezdxf"]
-            };
-            for r in readers {
-                cell(computed, &tables, w, reference, None, r, Err(why))?;
-            }
-            computed.insert(
-                (w.id.clone(), format!("w-{}:version", w.writer)),
-                (Verdict::OpenFailed.to_string(), String::new(), why.clone()),
-            );
-            continue;
-        }
-        let bytes = bytes.expect("checked above");
-
-        // The version it says it is: the oracle, a reader that did not write it,
-        // is the witness. Every cell excludes `document.acad_version` (the
-        // version is what was written), so this is where a writer that writes
-        // the wrong one is caught.
-        if let Ok(o) = &oracle_side {
-            let said = match o.stream.records.first() {
-                Some(acadsharp_rs_tests::canonical::Record::Document(d)) => d.acad_version.clone(),
-                _ => String::new(),
-            };
-            computed.insert(
-                (w.id.clone(), format!("w-{}:version", w.writer)),
-                if said == w.version {
-                    (Verdict::Match.to_string(), String::new(), String::new())
-                } else {
-                    (
-                        Verdict::Diff(1).to_string(),
-                        format!("{} wrote {}, the oracle reads {said:?}", w.id, w.version),
-                        String::new(),
-                    )
-                },
-            );
-        } else {
-            computed.insert(
-                (w.id.clone(), format!("w-{}:version", w.writer)),
-                (
-                    Verdict::OpenFailed.to_string(),
-                    String::new(),
-                    "the oracle cannot read it, so nothing independent says its version"
-                        .to_string(),
-                ),
-            );
-        }
-
         // Each reader's reading of the source, for the baseline it inherits.
         let held_side = |engine: &'static str| -> Option<&Side> {
-            match held.get(&(engine, w.source.clone())) {
+            match held.get(&(engine, o.source.clone())) {
                 Some(Emitted::Ok(s)) => Some(s),
                 _ => None,
             }
@@ -721,16 +791,16 @@ fn roundtrip_lane(
                      of_source: Option<&Side>,
                      got: Reading|
          -> Result<(), String> {
-            let pair = format!("w-{}:{reader}", w.writer);
-            let base = match (of_source, tables.get(&pair)) {
-                (Some(side), Some(table)) => baseline_keys(table, &w.source, reference, side),
+            let pair = format!("w-{}:{reader}", o.writer);
+            let baseline = match (of_source, tables.get(&pair)) {
+                (Some(side), Some(table)) => baseline_keys(table, &o.source, reference, side),
                 _ => Default::default(),
             };
-            let explained = make_explained(base);
-            cell(
+            let explained = make_explained(baseline);
+            put_cell(
                 computed,
                 &tables,
-                w,
+                o,
                 reference,
                 Some(&explained),
                 reader,
@@ -738,11 +808,11 @@ fn roundtrip_lane(
             )
         };
 
-        match &oracle_side {
-            Ok(s) => judge(computed, "oracle", oracles.get(&w.source), Ok(s))?,
+        match &o.oracle {
+            Ok(s) => judge(computed, "oracle", oracles.get(&o.source), Ok(s))?,
             Err(why) => judge(computed, "oracle", None, Err(why))?,
         }
-        let rust_run = emit_stdin(rust, "acadrust", &w.id, kind, &bytes, out)?;
+        let rust_run = emit_stdin(rust, "acadrust", &o.id, kind, bytes, out)?;
         judge(
             computed,
             "acadrust",
@@ -750,7 +820,7 @@ fn roundtrip_lane(
             as_ref(&rust_run),
         )?;
         if kind == "dwg" {
-            let sharp_run = emit_stdin(sharp, "acadsharp", &w.id, kind, &bytes, out)?;
+            let sharp_run = emit_stdin(sharp, "acadsharp", &o.id, kind, bytes, out)?;
             judge(
                 computed,
                 "acadsharp",
@@ -758,28 +828,20 @@ fn roundtrip_lane(
                 as_ref(&sharp_run),
             )?;
         } else {
-            // AutoCAD's own DXF of the source is ezdxf's baseline.
+            // AutoCAD's own DXF of the source is ezdxf's baseline, when the
+            // source has one (the saves do; the synthetics do not).
             let twin = fixtures::oracle_inputs()
                 .iter()
                 .find(|i| {
-                    i.for_fixture.as_deref() == Some(w.source.as_str())
+                    i.for_fixture.as_deref() == Some(o.source.as_str())
                         && i.encoding.as_deref() == Some("ascii")
                 })
                 .and_then(|i| fixtures::ground_truth(&i.id))
                 .map(ezdxf_side)
                 .transpose()?;
-            match fixtures::ground_truth(&w.id) {
-                Some(gt) => match &gt.failed {
-                    Some(why) => {
-                        let why = format!("ezdxf would not read it: {why}");
-                        judge(computed, "ezdxf", twin.as_ref(), Err(&why))?;
-                    }
-                    None => {
-                        let side = ezdxf_side(gt)?;
-                        judge(computed, "ezdxf", twin.as_ref(), Ok(&side))?;
-                    }
-                },
-                None => return Err(format!("{}: no ezdxf reading of a DXF output", w.id)),
+            match o.ezdxf.as_ref().ok_or_else(|| format!("{}: no ezdxf reading", o.id))? {
+                Ok(side) => judge(computed, "ezdxf", twin.as_ref(), Ok(side))?,
+                Err(why) => judge(computed, "ezdxf", twin.as_ref(), Err(why))?,
             }
         }
     }
@@ -1358,4 +1420,305 @@ fn every_acadrust_row_is_what_acadrust_writes_now() {
             rewrite(&src, &w.container, &w.version).unwrap_or_else(|e| panic!("{}: {e}", w.id));
         w.verify(&made).unwrap_or_else(|e| panic!("{e}"));
     }
+}
+
+// ---- the round-trip lane, stage two: the nightly (R5.3.1) ---------------------------------
+//
+// One more `#[ignore]` function in this file, selected by `tools/run-tests.sh
+// --stage-two <dir>` and by nothing else: the default `cargo test` and the PR gate
+// never run it, and `tests/stage_two_policy.rs` holds the selector to the target.
+// Its outputs are not in the repository. `tools/stage_two.py` makes them and every
+// frozen reading of them in a scratch directory on the docker host (that is the
+// nightly, run on MARS while Actions is off), and this reads that directory.
+
+/// The cells of one source: three readers for each of the 48 outputs
+/// (22 from ACadSharp and 26 from acadrust) and one version row each.
+const CELLS_PER_SOURCE: usize = 48 * 3 + 48;
+
+/// Stage two's sources and, written out per source, how many cells each makes. A
+/// source that silently produces nothing is red, and the sum is the table's size.
+const STAGE_TWO: [(&str, usize); 48] = [
+    ("acadsharp-ac1014", CELLS_PER_SOURCE),
+    ("acadsharp-ac1015", CELLS_PER_SOURCE),
+    ("acadsharp-ac1018", CELLS_PER_SOURCE),
+    ("acadsharp-ac1021", CELLS_PER_SOURCE),
+    ("acadsharp-ac1024", CELLS_PER_SOURCE),
+    ("acadsharp-ac1027", CELLS_PER_SOURCE),
+    ("acadsharp-sample-base", CELLS_PER_SOURCE),
+    ("g11_codepage", CELLS_PER_SOURCE),
+    ("g11_shapes", CELLS_PER_SOURCE),
+    ("g13_arc", CELLS_PER_SOURCE),
+    ("g13_bad_extents", CELLS_PER_SOURCE),
+    ("g13_circle", CELLS_PER_SOURCE),
+    ("g13_deep_blocks", CELLS_PER_SOURCE),
+    ("g13_dimension", CELLS_PER_SOURCE),
+    ("g13_dimension_shallow", CELLS_PER_SOURCE),
+    ("g13_ellipse", CELLS_PER_SOURCE),
+    ("g13_empty_view", CELLS_PER_SOURCE),
+    ("g13_face3d", CELLS_PER_SOURCE),
+    ("g13_hatch", CELLS_PER_SOURCE),
+    ("g13_insert", CELLS_PER_SOURCE),
+    ("g13_leader", CELLS_PER_SOURCE),
+    ("g13_line", CELLS_PER_SOURCE),
+    ("g13_long_text", CELLS_PER_SOURCE),
+    ("g13_mesh", CELLS_PER_SOURCE),
+    ("g13_mesh_bad_faces", CELLS_PER_SOURCE),
+    ("g13_mirrored_bulge", CELLS_PER_SOURCE),
+    ("g13_mline", CELLS_PER_SOURCE),
+    ("g13_nonuniform", CELLS_PER_SOURCE),
+    ("g13_ocs_mirror", CELLS_PER_SOURCE),
+    ("g13_ocs_plane", CELLS_PER_SOURCE),
+    ("g13_ocs_rotated", CELLS_PER_SOURCE),
+    ("g13_ocs_skew", CELLS_PER_SOURCE),
+    ("g13_point", CELLS_PER_SOURCE),
+    ("g13_polyface_mesh", CELLS_PER_SOURCE),
+    ("g13_polygon_mesh", CELLS_PER_SOURCE),
+    ("g13_polyline", CELLS_PER_SOURCE),
+    ("g13_ray_xline", CELLS_PER_SOURCE),
+    ("g13_scale_1x", CELLS_PER_SOURCE),
+    ("g13_slot", CELLS_PER_SOURCE),
+    ("g13_slot_block", CELLS_PER_SOURCE),
+    ("g13_solid", CELLS_PER_SOURCE),
+    ("g13_spline", CELLS_PER_SOURCE),
+    ("g13_text", CELLS_PER_SOURCE),
+    ("g13_tolerance", CELLS_PER_SOURCE),
+    ("g13_two_entities", CELLS_PER_SOURCE),
+    ("g13_unsupported", CELLS_PER_SOURCE),
+    ("g13_wipeout", CELLS_PER_SOURCE),
+    ("g13_xref", CELLS_PER_SOURCE),
+];
+
+/// Refusal fixtures have no cells: nothing opens them. Named, so they are not
+/// counted as zero by accident.
+const STAGE_TWO_REFUSALS: [&str; 2] = ["g13_ac1009", "g13_nan_bulge"];
+
+const STAGE_TWO_DIR: &str = "ROUNDTRIP_STAGE_TWO_DIR";
+
+#[derive(serde::Deserialize)]
+struct IndexRow {
+    id: String,
+    writer: String,
+    source: String,
+    container: String,
+    version: String,
+    ext: String,
+    #[serde(default)]
+    sha256: String,
+    #[serde(default)]
+    write_failed: Option<String>,
+    #[serde(default)]
+    no_reference: Option<String>,
+}
+
+#[derive(serde::Deserialize)]
+struct Index {
+    #[serde(default)]
+    output: Vec<IndexRow>,
+}
+
+fn stage_two_verdicts_path() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("parity")
+        .join("VERDICTS_STAGE2.toml")
+}
+
+/// The scratch directory's outputs, as stage one's rows are.
+fn stage_two_outputs(dir: &Path) -> Result<Vec<RtOutput>, String> {
+    use sha2::{Digest, Sha256};
+    let text = std::fs::read_to_string(dir.join("index.toml"))
+        .map_err(|e| format!("{}: {e}", dir.join("index.toml").display()))?;
+    let index: Index = toml::from_str(&text).map_err(|e| format!("index.toml: {e}"))?;
+    let mut v = Vec::new();
+    for row in index.output {
+        let bytes: Result<Vec<u8>, String> = match &row.write_failed {
+            Some(why) => Err(format!("the writer failed: {why}")),
+            None => {
+                let path = dir.join("files").join(format!("{}.{}", row.id, row.ext));
+                let b = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+                let got = format!("{:x}", Sha256::digest(&b));
+                if got != row.sha256 {
+                    return Err(format!("{}: {got} on disk, the index froze {}", row.id, row.sha256));
+                }
+                Ok(b)
+            }
+        };
+        let oracle = match (&row.write_failed, &row.no_reference) {
+            (Some(_), _) => Err("the writer produced nothing".to_string()),
+            (None, Some(why)) => Err(format!("the oracle cannot read it: {why}")),
+            (None, None) => {
+                let path = dir.join("read").join(format!("{}.reference.jsonl", row.id));
+                let t = std::fs::read_to_string(&path)
+                    .map_err(|e| format!("{}: {e}", path.display()))?;
+                oracle_written_side(&row.id, &t)
+            }
+        };
+        let ezdxf = if row.ext == "dxf" && row.write_failed.is_none() {
+            let base = dir.join("ezdxf");
+            let err = base.join(format!("{}.ezdxf.error.txt", row.id));
+            Some(if let Ok(why) = std::fs::read_to_string(&err) {
+                Err(format!("ezdxf would not read it: {}", why.trim()))
+            } else {
+                let j = base.join(format!("{}.ezdxf.jsonl", row.id));
+                let sj = base.join(format!("{}.ezdxf.src.jsonl", row.id));
+                let t = std::fs::read_to_string(&j).map_err(|e| format!("{}: {e}", j.display()))?;
+                let st =
+                    std::fs::read_to_string(&sj).map_err(|e| format!("{}: {e}", sj.display()))?;
+                match parse_stream(&t) {
+                    Ok(records) => {
+                        let sidecar = Sidecar::parse(&st, &records)
+                            .map_err(|e| format!("{}: {e}", sj.display()))?;
+                        Ok(Side {
+                            label: format!("ezdxf-written:{}", row.id),
+                            stream: Stream {
+                                records,
+                                sidecar: Some(sidecar),
+                            },
+                        })
+                    }
+                    Err(e) => Err(format!("ezdxf's reading is not schema 1: {e}")),
+                }
+            })
+        } else {
+            None
+        };
+        v.push(RtOutput {
+            id: row.id,
+            writer: row.writer,
+            source: row.source,
+            container: row.container,
+            version: row.version,
+            bytes,
+            oracle,
+            ezdxf,
+        });
+    }
+    Ok(v)
+}
+
+#[test]
+#[ignore = "the nightly: tools/run-tests.sh --stage-two <dir> (libviprs/acadsharp-rs-tests#41)"]
+fn roundtrip_stage_two() {
+    let dir = std::env::var(STAGE_TWO_DIR).unwrap_or_else(|_| {
+        panic!(
+            "{STAGE_TWO_DIR} is not set. This is the nightly's test: tools/stage_two.py makes \
+             the directory and tools/run-tests.sh --stage-two <dir> runs it."
+        )
+    });
+    let dir = PathBuf::from(dir);
+    let outputs = stage_two_outputs(&dir).unwrap_or_else(|e| panic!("{e}"));
+
+    // The sources, and how many cells each should make, written out.
+    let mut want: BTreeMap<&str, usize> = BTreeMap::new();
+    for (s, n) in STAGE_TWO {
+        assert!(want.insert(s, n).is_none(), "{s} is listed twice");
+    }
+    assert_eq!(STAGE_TWO.iter().map(|(_, n)| n).sum::<usize>(), 9216);
+    for r in STAGE_TWO_REFUSALS {
+        assert!(
+            fixtures::refusals().iter().any(|f| f.id == r),
+            "{r} is named as a refusal fixture and is not one"
+        );
+        assert!(!want.contains_key(r), "{r} is a refusal fixture: it has no cells");
+    }
+    let planned: Vec<String> = acadsharp_rs_tests::written::outputs("two")
+        .iter()
+        .map(|o| o.id())
+        .collect();
+    let have: std::collections::BTreeSet<&str> = outputs.iter().map(|o| o.id.as_str()).collect();
+    for id in &planned {
+        assert!(have.contains(id.as_str()), "{id} is planned and the directory has no row");
+    }
+    assert_eq!(outputs.len(), planned.len(), "the directory has outputs nobody planned");
+
+    let tables = tables::load_all().unwrap();
+    let out = out_dir().join("stage_two");
+    std::fs::create_dir_all(&out).unwrap();
+    let sharp = env!("CARGO_BIN_EXE_emit-acadsharp");
+    let rust = env!("CARGO_BIN_EXE_emit-acadrust");
+
+    // Each source, read by the two live readers and by the oracle's frozen output.
+    let mut oracles: BTreeMap<String, Side> = BTreeMap::new();
+    let mut held: BTreeMap<(&'static str, String), Emitted> = BTreeMap::new();
+    for (id, _) in STAGE_TWO {
+        let f = fixtures::by_id(id).unwrap_or_else(|| panic!("{id} is not a fixture"));
+        oracles.insert(id.to_string(), frozen(f).unwrap_or_else(|e| panic!("{e}")));
+        held.insert(("acadsharp", id.to_string()), emit(sharp, "acadsharp", id, &out).unwrap());
+        held.insert(("acadrust", id.to_string()), emit(rust, "acadrust", id, &out).unwrap());
+    }
+
+    let mut computed = Computed::new();
+    judge_outputs(&mut computed, &tables, &out, sharp, rust, &oracles, &held, &outputs)
+        .unwrap_or_else(|e| panic!("{e}"));
+
+    // Per source, the hand-written count.
+    for (source, cells) in STAGE_TWO {
+        let made = computed
+            .keys()
+            .filter(|(fx, _)| {
+                outputs.iter().any(|o| &o.id == fx && o.source == source)
+            })
+            .count();
+        assert_eq!(made, cells, "{source}: {made} cells, expected {cells}");
+    }
+    assert_eq!(computed.len(), 9216);
+
+    let regen = std::env::var("PARITY_REGEN").as_deref() == Ok("1");
+    let path = stage_two_verdicts_path();
+    let committed = match std::fs::read_to_string(&path) {
+        Ok(t) => Table::parse(&t).unwrap_or_else(|e| panic!("{}: {e}", path.display())),
+        Err(_) if regen => Table::default(),
+        Err(e) => panic!("{}: {e}", path.display()),
+    };
+    if regen {
+        let old = committed.by_key();
+        let mut table = Table {
+            runs: committed.runs.clone(),
+            rows: Vec::new(),
+        };
+        for ((fixture, pair), (verdict, first, why)) in &computed {
+            let kept = old.get(&(fixture.clone(), pair.clone()));
+            let moved = kept.is_some_and(|r| &r.verdict != verdict);
+            let needs = verdict != "MATCH";
+            table.rows.push(Row {
+                fixture: fixture.clone(),
+                pair: pair.clone(),
+                verdict: verdict.clone(),
+                reason: if needs && !moved {
+                    kept.map(|r| r.reason.clone()).unwrap_or_else(|| why.clone())
+                } else if verdict == "OPEN_FAILED" {
+                    why.clone()
+                } else {
+                    String::new()
+                },
+                issue: if needs && !moved {
+                    kept.map(|r| r.issue.clone()).unwrap_or_default()
+                } else {
+                    String::new()
+                },
+                first: first.clone(),
+            });
+        }
+        std::fs::write(&path, table.render()).unwrap();
+        eprintln!("rewrote {}", path.display());
+        return;
+    }
+    let actual: BTreeMap<(String, String), (String, String)> = computed
+        .iter()
+        .map(|(k, (v, f, _))| (k.clone(), (v.clone(), f.clone())))
+        .collect();
+    let moved = committed.moved(&actual);
+    assert!(
+        moved.is_empty(),
+        "{} verdict(s) moved against {}:\n  {}",
+        moved.len(),
+        path.display(),
+        moved.iter().take(50).cloned().collect::<Vec<_>>().join("\n  ")
+    );
+    let refusals = committed.refusals();
+    assert!(
+        refusals.is_empty(),
+        "{}:\n  {}",
+        path.display(),
+        refusals.iter().take(50).cloned().collect::<Vec<_>>().join("\n  ")
+    );
 }

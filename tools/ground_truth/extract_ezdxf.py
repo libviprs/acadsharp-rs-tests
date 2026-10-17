@@ -924,6 +924,43 @@ def command_extract(args) -> int:
     return 0
 
 
+def command_extract_dir(args) -> int:
+    """ezdxf over a directory of DXF outputs that are not in the manifest: stage
+    two of the round-trip matrix (R5.3.1), whose outputs are made in a scratch
+    directory by the nightly and never committed. `--index` lists them
+    (`[[output]]` with `id`, `ext`, and `sha256`); nothing here is frozen, the
+    files land in `--out` as `<id>.ezdxf.jsonl`, `.src.jsonl` or `.error.txt`."""
+    import ezdxf
+
+    with open(args.index, "rb") as fh:
+        index = tomllib.load(fh)
+    files = pathlib.Path(args.files)
+    out = pathlib.Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    done = 0
+    for row in index.get("output", []):
+        if row.get("ext") != "dxf" or row.get("write_failed"):
+            continue
+        path = files / f"{row['id']}.dxf"
+        if sha256(path.read_bytes()) != row["sha256"]:
+            print(f"{row['id']}: not the file the index describes", file=sys.stderr)
+            return 1
+        base = out / f"{row['id']}.{ENGINE}"
+        try:
+            doc = ezdxf.readfile(str(path))
+            records, sidecar = extract_document(doc, doc.dxfversion)
+        except Exception as exc:
+            message = " ".join(f"{type(exc).__name__}: {exc}".split())[:300]
+            base.with_name(base.name + ".error.txt").write_text(message + "\n", encoding="utf-8")
+            continue
+        jsonl, src = emit_texts(records, sidecar)
+        base.with_name(base.name + ".jsonl").write_text(jsonl, encoding="utf-8", newline="\n")
+        base.with_name(base.name + ".src.jsonl").write_text(src, encoding="utf-8", newline="\n")
+        done += 1
+    print(f"{done} DXF outputs read by ezdxf {ezdxf.__version__}")
+    return 0
+
+
 # ---------------------------------------------------- freeze and verify (host) ---
 
 
@@ -1187,6 +1224,11 @@ def main(argv=None) -> int:
     p.add_argument("--only", action="append")
     p.add_argument("--requirements-sha256", default=None)
     p.set_defaults(fn=command_extract)
+    p = sub.add_parser("extract-dir")
+    p.add_argument("--index", required=True)
+    p.add_argument("--files", required=True)
+    p.add_argument("--out", required=True)
+    p.set_defaults(fn=command_extract_dir)
     p = sub.add_parser("freeze")
     p.add_argument("--accept", action="store_true")
     p.add_argument("--image", default=IMAGE)
