@@ -50,7 +50,7 @@ issue = "libviprs/acadsharp-rs-tests#61"
 pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "spline"
 field = "fit_points"
-reason = "fit points are not on wire 2."
+reason = "decided, not a gap (acadsharp-rs-tests#58): fit points are editing data. The curve a viewer draws is the control points and the knots, which the wire carries, so the wire leaves fit points out on purpose and this field is excluded for good."
 issue = "libviprs/acadsharp-rs-tests#58"
 
 [[exclude]]
@@ -209,7 +209,7 @@ issue = "libviprs/acadsharp-rs-tests#59"
 pairs = ["ezdxf/acadsharp"]
 record = "spline"
 field = "fit_points"
-reason = "fit points are not on wire 2."
+reason = "decided, not a gap (acadsharp-rs-tests#58): fit points are editing data. The curve a viewer draws is the control points and the knots, which the wire carries, so the wire leaves fit points out on purpose and this field is excluded for good."
 issue = "libviprs/acadsharp-rs-tests#58"
 
 [[exclude]]
