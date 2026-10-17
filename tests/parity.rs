@@ -471,8 +471,14 @@ fn a_base_with_one_row_moved_is_red_and_names_that_row() {
             "the_run_agrees_with_the_committed_verdicts",
             "--nocapture",
         ]);
+        // Its own output directory: two runs writing one `target/parity` at the
+        // same time would read each other's half-written sidecars.
+        let own = Path::new(env!("CARGO_TARGET_TMPDIR"))
+            .join(format!("parity-child-{}", base.is_some()));
+        cmd.env("PARITY_OUT", own);
         cmd.env_remove("PARITY_VERDICTS_BASE")
-            .env_remove("PARITY_REGEN");
+            .env_remove("PARITY_REGEN")
+            .env_remove("PARITY_REGEN_DIGESTS");
         if let Some(b) = base {
             cmd.env("PARITY_VERDICTS_BASE", b);
         }
