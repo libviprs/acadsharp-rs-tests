@@ -378,7 +378,32 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
             .map(|o| o["status"].as_str().unwrap().to_string())
     };
     let over = rows.iter().filter(|r| r.get("acadrust").is_some()).count();
-    assert_eq!(over, 16, "nine DXF rows and seven writer rows");
+    // Nine DXF rows and seven writer rows, plus one per `mirrored` row: a mirrored
+    // test (H4.2) goes through acadsharp-rs's safe API, so acadrust must not
+    // inherit the status. It is `differential`, covered by the oracle comparison.
+    let mirrored: Vec<&toml::Value> = rows
+        .iter()
+        .filter(|r| r["status"].as_str() == Some("mirrored"))
+        .collect();
+    for r in &mirrored {
+        let o = r.get("acadrust").unwrap_or_else(|| {
+            panic!(
+                "{} is mirrored for acadsharp-rs and shares that with acadrust",
+                r["path"]
+            )
+        });
+        assert_ne!(
+            o["status"].as_str(),
+            Some("mirrored"),
+            "{}: acadrust has no Rust mirror of this suite",
+            r["path"]
+        );
+    }
+    assert_eq!(
+        over,
+        16 + mirrored.len(),
+        "nine DXF rows and seven writer rows, and one per mirrored row"
+    );
 
     for p in [
         "IO/DXF/DxfReaderTests.cs",
