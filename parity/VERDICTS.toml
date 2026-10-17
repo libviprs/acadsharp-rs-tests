@@ -1,0 +1,1929 @@
+# parity/VERDICTS.toml: one row per (fixture, pair).
+#
+# The words are defined in src/verdict.rs. `tests/parity.rs` recomputes every
+# verdict from a real run and is red on any row that moved, better or worse,
+# until this file changes. A row that is not MATCH has a reason and an issue:
+# a committed DIFF is debt, and its issue is where it gets adjudicated.
+#
+# `PARITY_REGEN=1 cargo test --features acadrust --test parity` rewrites the
+# verdicts and `first` from the run, keeps the reason and issue of every row
+# whose key it finds, and leaves the rest blank, which the test then refuses.
+# There is no `arch` key on a row: verdicts are arch-independent by contract,
+# and the [[run]] tables list the runs that confirmed that.
+
+[[run]]
+arch = "x86_64"
+archive = "3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...)"
+acadsharp_rs = "f23f37bd453e02e660ef655faa381c45509d8ac1"
+acadrust = "39a11909acf56747f22c7309a0681bef8e6b61b8"
+date = "2026-10-16"
+
+[[run]]
+arch = "aarch64"
+archive = "3.7.1-viprs.1 (acadsharp-linux-arm64.tgz, sha256 dd938ef9...)"
+acadsharp_rs = "f23f37bd453e02e660ef655faa381c45509d8ac1"
+acadrust = "39a11909acf56747f22c7309a0681bef8e6b61b8"
+date = "2026-10-16"
+
+[[run]]
+arch = "x86_64"
+archive = "3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...)"
+acadsharp_rs = "f23f37bd453e02e660ef655faa381c45509d8ac1"
+acadrust = "39a11909acf56747f22c7309a0681bef8e6b61b8"
+date = "2026-10-16"
+
+[[run]]
+arch = "aarch64"
+archive = "3.7.1-viprs.1 (acadsharp-linux-arm64.tgz, sha256 dd938ef9...)"
+acadsharp_rs = "f23f37bd453e02e660ef655faa381c45509d8ac1"
+acadrust = "39a11909acf56747f22c7309a0681bef8e6b61b8"
+date = "2026-10-16"
+
+[[row]]
+fixture = "acadsharp-ac1014"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:53"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1014 acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1014"
+pair = "oracle/acadrust"
+verdict = "KNOWN:1"
+reason = "listed in parity/TABLES.toml"
+issue = "libviprs/libviprs-dep#111"
+first = "acadsharp-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+
+[[row]]
+fixture = "acadsharp-ac1014"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1014 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1014"
+pair = "self/acadrust"
+verdict = "DIFF:70"
+reason = "AC1014 stores table names upper-cased, so a text style reads STANDARD where later saves read Standard (69 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
+first = "acadsharp-ac1014 acadrust-acadrust: view 0 a#42 b#42 A handles 3B9 B handles 3B9 text.style: \"custom_text_style\" vs \"CUSTOM_TEXT_STYLE\" [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1014"
+pair = "self/acadsharp"
+verdict = "DIFF:7"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/libviprs-dep#150, libviprs/libviprs-dep#111"
+first = "acadsharp-ac1014 acadsharp-acadsharp: view 0 a#27 b#27 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1014"
+pair = "self/oracle"
+verdict = "DIFF:2"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1014 oracle-oracle: view 0 a#52 b#52 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1015"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:53"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1015 acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1015"
+pair = "oracle/acadrust"
+verdict = "KNOWN:1"
+reason = "listed in parity/TABLES.toml"
+issue = "libviprs/libviprs-dep#111"
+first = "acadsharp-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+
+[[row]]
+fixture = "acadsharp-ac1015"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1015 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1015"
+pair = "self/acadrust"
+verdict = "DIFF:7"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1015 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1015"
+pair = "self/acadsharp"
+verdict = "DIFF:8"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/libviprs-dep#150, libviprs/libviprs-dep#111"
+first = "acadsharp-ac1015 acadsharp-acadsharp: view 0 a#27 b#27 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1015"
+pair = "self/oracle"
+verdict = "DIFF:2"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1015 oracle-oracle: view 0 a#52 b#52 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1018"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:53"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1018 acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1018"
+pair = "oracle/acadrust"
+verdict = "KNOWN:1"
+reason = "listed in parity/TABLES.toml"
+issue = "libviprs/libviprs-dep#111"
+first = "acadsharp-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+
+[[row]]
+fixture = "acadsharp-ac1018"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1018 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1018"
+pair = "self/acadrust"
+verdict = "DIFF:2"
+reason = "the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)"
+issue = "libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
+first = "acadsharp-ac1018 acadrust-acadrust: view 0 a#52 b#52 A handles 434 B handles 434 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1018"
+pair = "self/acadsharp"
+verdict = "DIFF:3"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150, libviprs/libviprs-dep#111"
+first = "acadsharp-ac1018 acadsharp-acadsharp: view 0 a#33 b#33 A handles 434 B handles 434 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1018"
+pair = "self/oracle"
+verdict = "DIFF:2"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1018 oracle-oracle: view 0 a#52 b#52 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1021"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:52"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1021 acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1021"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-ac1021"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1021 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1021"
+pair = "self/acadrust"
+verdict = "DIFF:2"
+reason = "the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)"
+issue = "libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
+first = "acadsharp-ac1021 acadrust-acadrust: view 0 a#52 b#52 A handles 434 B handles 434 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1021"
+pair = "self/acadsharp"
+verdict = "DIFF:2"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1021 acadsharp-acadsharp: view 0 a#33 b#33 A handles 434 B handles 434 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1021"
+pair = "self/oracle"
+verdict = "DIFF:2"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1021 oracle-oracle: view 0 a#52 b#52 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1024"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:52"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1024 acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1024"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-ac1024"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1024 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1024"
+pair = "self/acadrust"
+verdict = "DIFF:2"
+reason = "the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)"
+issue = "libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
+first = "acadsharp-ac1024 acadrust-acadrust: view 0 a#52 b#52 A handles 434 B handles 434 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1024"
+pair = "self/acadsharp"
+verdict = "DIFF:2"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1024 acadsharp-acadsharp: view 0 a#33 b#33 A handles 434 B handles 434 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1024"
+pair = "self/oracle"
+verdict = "DIFF:2"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
+first = "acadsharp-ac1024 oracle-oracle: view 0 a#52 b#52 spline.control_points.len: 0 vs 4 [EXACT]"
+
+[[row]]
+fixture = "acadsharp-ac1027"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:52"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1027 acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1027"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-ac1027"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1027 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1027"
+pair = "self/acadrust"
+verdict = "DIFF:1"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)"
+issue = "libviprs/libviprs-dep#112"
+first = "acadsharp-ac1027 acadrust-acadrust: view 0 a#180 b#180 A handles 79C/79D B handles 79C/79D text.x: 977.2814835151885 vs 977.1230330707217 (abs 1.5845044446678003e-1, rel 1.6213388582463352e-4) [BOUNDED]"
+
+[[row]]
+fixture = "acadsharp-ac1027"
+pair = "self/acadsharp"
+verdict = "DIFF:1"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)"
+issue = "libviprs/libviprs-dep#112"
+first = "acadsharp-ac1027 acadsharp-acadsharp: view 0 a#130 b#130 A handles 79D B handles 79D text.x: 977.2814835151885 vs 977.1230330707217 (abs 1.5845044446678003e-1, rel 1.6213388582463352e-4) [BOUNDED_TIGHT]"
+
+[[row]]
+fixture = "acadsharp-ac1027"
+pair = "self/oracle"
+verdict = "DIFF:1"
+reason = "the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings)"
+issue = "libviprs/libviprs-dep#112"
+first = "acadsharp-ac1027 oracle-oracle: view 0 a#180 b#180 text.x: 977.2814835151885 vs 977.1230330707217 (abs 1.5845044446678003e-1, rel 1.6213388582463352e-4) [BOUNDED_TIGHT]"
+
+[[row]]
+fixture = "acadsharp-ac1032"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:52"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1032 acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-ac1032"
+pair = "oracle/acadrust"
+verdict = "KNOWN:1"
+reason = "listed in parity/TABLES.toml"
+issue = "libviprs/libviprs-dep#112"
+first = "acadsharp-ac1032 oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: \"\" vs \"my multi line text for the attrrib\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112"
+
+[[row]]
+fixture = "acadsharp-ac1032"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-ac1032 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-aecobjects"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-aecobjects"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-aecobjects"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockalignmentparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockalignmentparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockalignmentparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockbasepointparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockbasepointparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockbasepointparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockflipparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockflipparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockflipparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blocklinearparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blocklinearparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blocklinearparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blocklookupparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blocklookupparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blocklookupparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockpointparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockpointparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockpointparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockpolarparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockpolarparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockpolarparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockrotationparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockrotationparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockrotationparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockvisibilityparameter"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:8"
+reason = "acadrust agrees with the oracle where the shim differs: the shim draws entities the drawing marks invisible (8 findings)"
+issue = "libviprs/acadsharp-rs-tests#60"
+first = "acadsharp-blockvisibilityparameter acadsharp-acadrust: view 0 a#7 A handles 349 polyline is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "acadsharp-blockvisibilityparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockvisibilityparameter"
+pair = "oracle/acadsharp"
+verdict = "DIFF:8"
+reason = "the shim draws entities the drawing marks invisible (8 findings)"
+issue = "libviprs/acadsharp-rs-tests#60"
+first = "acadsharp-blockvisibilityparameter oracle-acadsharp: view 0 b#7 B handles 349 polyline is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "acadsharp-blockxyparameter"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockxyparameter"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-blockxyparameter"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-empty"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-empty"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-empty"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-export-sample"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:52"
+reason = "acadrust agrees with the oracle where the shim differs: the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (28 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66, libviprs/acadsharp-rs-tests#65"
+first = "acadsharp-export-sample acadsharp-acadrust: view 0 b#24 B handles 347 polyline is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "acadsharp-export-sample"
+pair = "oracle/acadrust"
+verdict = "DIFF:9"
+reason = "acadrust reports z 0.0 for polylines the oracle puts at z 1.0 or -1.0, not adjudicated (11 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding); the oracle writes weights of 0.0 for a non-rational spline (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#56, libviprs/acadsharp-rs-tests#65, libviprs/acadsharp-rs-tests#67"
+first = "acadsharp-export-sample oracle-acadrust: view 7 a#173 b#173 B handles A16 polyline.points[0].z: 1.0 vs 0.0 (abs 1e0, rel 1e0) [BOUNDED]"
+
+[[row]]
+fixture = "acadsharp-export-sample"
+pair = "oracle/acadsharp"
+verdict = "DIFF:53"
+reason = "the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (28 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (2 findings); the oracle writes weights of 0.0 for a non-rational spline (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66, libviprs/acadsharp-rs-tests#65, libviprs/acadsharp-rs-tests#67"
+first = "acadsharp-export-sample oracle-acadsharp: view 0 a#24 polyline is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "acadsharp-geoloc"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-geoloc"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-geoloc"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "acadsharp-sample-base"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:52"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-sample-base acadsharp-acadrust: view 0 a#13 b#19 A handles 321 B handles 321 ellipse.start: 0.0 vs 3.141592653589793 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "acadsharp-sample-base"
+pair = "oracle/acadrust"
+verdict = "KNOWN:1"
+reason = "listed in parity/TABLES.toml"
+issue = "libviprs/libviprs-dep#112"
+first = "acadsharp-sample-base oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: \"\" vs \"my multi line text for the attrrib\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112"
+
+[[row]]
+fixture = "acadsharp-sample-base"
+pair = "oracle/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66"
+first = "acadsharp-sample-base oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-blockalignmentparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockalignmentparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockalignmentparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockbasepointparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockbasepointparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockbasepointparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockflipparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockflipparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockflipparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blocklinearparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blocklinearparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blocklinearparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blocklookupparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blocklookupparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blocklookupparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockpointparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockpointparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockpointparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockpolarparameter"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:4"
+reason = "ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#79"
+first = "dxf-blockpolarparameter ezdxf-acadrust: view 0 b#6 B handles 254/411 line is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "dxf-blockpolarparameter"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:4"
+reason = "ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#79"
+first = "dxf-blockpolarparameter ezdxf-acadsharp: view 0 b#6 B handles 411 line is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "dxf-blockpolarparameter"
+pair = "ezdxf/oracle"
+verdict = "DIFF:4"
+reason = "ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#79"
+first = "dxf-blockpolarparameter ezdxf-oracle: view 0 b#6 line is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "dxf-blockrotationparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockrotationparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockrotationparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockvisibilityparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockvisibilityparameter"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:8"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (8 findings)"
+issue = "libviprs/acadsharp-rs-tests#55"
+first = "dxf-blockvisibilityparameter ezdxf-acadsharp: view 0 b#7 B handles 349 polyline is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "dxf-blockvisibilityparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockxyparameter"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockxyparameter"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-blockxyparameter"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-geoloc"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-geoloc"
+pair = "ezdxf/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-geoloc"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:1"
+reason = "saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+issue = "libviprs/libviprs-dep#111"
+first = "dxf-sample-ac1015-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1015-ascii ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1015-ascii"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1015-binary"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:1"
+reason = "saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+issue = "libviprs/libviprs-dep#111"
+first = "dxf-sample-ac1015-binary ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1015-binary"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1015-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1015-binary"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:1"
+reason = "saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+issue = "libviprs/libviprs-dep#111"
+first = "dxf-sample-ac1018-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1018-ascii ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1018-ascii"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1018-binary"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:5"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = "dxf-sample-ac1018-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1018-binary"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:56"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1018-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1018-binary"
+pair = "ezdxf/oracle"
+verdict = "DIFF:4"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#24"
+first = "dxf-sample-ac1018-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1021-ascii ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1021-ascii"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1021-binary"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:4"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#24"
+first = "dxf-sample-ac1021-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1021-binary"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:56"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1021-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1021-binary"
+pair = "ezdxf/oracle"
+verdict = "DIFF:4"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#24"
+first = "dxf-sample-ac1021-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "ezdxf/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:52"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1024-ascii ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1024-ascii"
+pair = "ezdxf/oracle"
+verdict = "MATCH"
+
+[[row]]
+fixture = "dxf-sample-ac1024-binary"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:4"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#24"
+first = "dxf-sample-ac1024-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1024-binary"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:56"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
+first = "dxf-sample-ac1024-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1024-binary"
+pair = "ezdxf/oracle"
+verdict = "DIFF:4"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#24"
+first = "dxf-sample-ac1024-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:1"
+reason = "the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1027-ascii ezdxf-acadrust: view 0 a#52 b#52 A handles 434 B handles 434 spline.control_points.len: 4 vs 0 [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:53"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57, libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1027-ascii ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-ascii"
+pair = "ezdxf/oracle"
+verdict = "DIFF:1"
+reason = "the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1027-ascii ezdxf-oracle: view 0 a#52 b#52 A handles 434 spline.control_points.len: 4 vs 0 [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-binary"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:5"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1027-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-binary"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:57"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57, libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1027-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1027-binary"
+pair = "ezdxf/oracle"
+verdict = "DIFF:5"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1027-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:1"
+reason = "the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1032-ascii ezdxf-acadrust: view 0 a#52 b#52 A handles 434 B handles 434 spline.control_points.len: 4 vs 0 [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:53"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (10 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (5 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57, libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1032-ascii ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-ascii"
+pair = "ezdxf/oracle"
+verdict = "DIFF:2"
+reason = "the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (1 finding)"
+issue = "libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
+first = "dxf-sample-ac1032-ascii ezdxf-oracle: view 0 a#52 b#52 A handles 434 spline.control_points.len: 4 vs 0 [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-binary"
+pair = "ezdxf/acadrust"
+verdict = "DIFF:5"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1032-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-binary"
+pair = "ezdxf/acadsharp"
+verdict = "DIFF:57"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (10 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (5 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#24, libviprs/acadsharp-rs-tests#57, libviprs/libviprs-dep#150"
+first = "dxf-sample-ac1032-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
+
+[[row]]
+fixture = "dxf-sample-ac1032-binary"
+pair = "ezdxf/oracle"
+verdict = "DIFF:6"
+reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
+first = "dxf-sample-ac1032-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+
+[[row]]
+fixture = "g11_codepage"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g11_codepage"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g11_codepage"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g11_shapes"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g11_shapes"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g11_shapes"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_arc"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_arc"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_arc"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_bad_extents"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_bad_extents"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_bad_extents"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_circle"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_circle"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_circle"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_deep_blocks"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_deep_blocks"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_deep_blocks"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_dimension"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_dimension"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_dimension"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_dimension_deep"
+pair = "acadsharp/acadrust"
+verdict = "OPEN_FAILED"
+reason = "exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on"
+issue = "libviprs/acadsharp-rs-tests#68"
+
+[[row]]
+fixture = "g13_dimension_deep"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_dimension_deep"
+pair = "oracle/acadsharp"
+verdict = "OPEN_FAILED"
+reason = "exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on; wire 2's block depth bound refuses the whole drawing where schema 1 warns and carries on"
+issue = "libviprs/acadsharp-rs-tests#68"
+
+[[row]]
+fixture = "g13_dimension_shallow"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_dimension_shallow"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_dimension_shallow"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ellipse"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ellipse"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ellipse"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_empty_view"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_empty_view"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_empty_view"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_face3d"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_face3d"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_face3d"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_hatch"
+pair = "acadsharp/acadrust"
+verdict = "COUNT:4/16"
+reason = "acadrust agrees with the oracle where the shim differs: a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#59, libviprs/acadsharp-rs-tests#65"
+first = "g13_hatch acadsharp-acadrust: view 0 b#3 B handles 49 line is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "g13_hatch"
+pair = "oracle/acadrust"
+verdict = "KNOWN:1"
+reason = "listed in parity/TABLES.toml"
+issue = "libviprs/acadsharp-rs-tests#67"
+first = "g13_hatch oracle-acadrust: view 0 a#15 b#15 B handles 4C spline.weights.len: 4 vs 0 [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#67"
+
+[[row]]
+fixture = "g13_hatch"
+pair = "oracle/acadsharp"
+verdict = "COUNT:16/4"
+reason = "a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding); the oracle writes weights of 0.0 for a non-rational spline (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#59, libviprs/acadsharp-rs-tests#65, libviprs/acadsharp-rs-tests#67"
+first = "g13_hatch oracle-acadsharp: view 0 a#3 line is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "g13_insert"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_insert"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_insert"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_leader"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_leader"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_leader"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_line"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_line"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_line"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_long_text"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_long_text"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_long_text"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_many_inserts"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_many_inserts"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_many_inserts"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mesh"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mesh"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mesh"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mesh_bad_faces"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mesh_bad_faces"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mesh_bad_faces"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mirrored_bulge"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:1"
+reason = "acadrust agrees with the oracle where the shim differs: a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#63"
+first = "g13_mirrored_bulge acadsharp-acadrust: view 0 a#3 b#3 A handles 4C B handles 4D/4C polyline.nz: 1.0 vs -1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+
+[[row]]
+fixture = "g13_mirrored_bulge"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mirrored_bulge"
+pair = "oracle/acadsharp"
+verdict = "DIFF:1"
+reason = "a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#63"
+first = "g13_mirrored_bulge oracle-acadsharp: view 0 a#3 b#3 B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED_TIGHT]"
+
+[[row]]
+fixture = "g13_mline"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mline"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_mline"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_nonuniform"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:1"
+reason = "acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#64"
+first = "g13_nonuniform acadsharp-acadrust: view 0 a#3 b#3 A handles 4C B handles 4D/4C record kind differs: \"circle\" vs \"ellipse\" [EXACT]"
+
+[[row]]
+fixture = "g13_nonuniform"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_nonuniform"
+pair = "oracle/acadsharp"
+verdict = "DIFF:1"
+reason = "under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#64"
+first = "g13_nonuniform oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: \"ellipse\" vs \"circle\" [EXACT]"
+
+[[row]]
+fixture = "g13_ocs_mirror"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:3"
+reason = "acadrust agrees with the oracle where the shim differs: a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (11 findings)"
+issue = "libviprs/acadsharp-rs-tests#63"
+first = "g13_ocs_mirror acadsharp-acadrust: view 0 a#6 b#6 A handles 4C B handles 50/4C arc.cx: -10.0 vs 10.0 (abs 2e1, rel 2e0) [BOUNDED]"
+
+[[row]]
+fixture = "g13_ocs_mirror"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ocs_mirror"
+pair = "oracle/acadsharp"
+verdict = "DIFF:3"
+reason = "a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (11 findings)"
+issue = "libviprs/acadsharp-rs-tests#63"
+first = "g13_ocs_mirror oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED_TIGHT]"
+
+[[row]]
+fixture = "g13_ocs_plane"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:1"
+reason = "acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#64"
+first = "g13_ocs_plane acadsharp-acadrust: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: \"circle\" vs \"ellipse\" [EXACT]"
+
+[[row]]
+fixture = "g13_ocs_plane"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ocs_plane"
+pair = "oracle/acadsharp"
+verdict = "DIFF:1"
+reason = "under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#64"
+first = "g13_ocs_plane oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: \"ellipse\" vs \"circle\" [EXACT]"
+
+[[row]]
+fixture = "g13_ocs_rotated"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ocs_rotated"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ocs_rotated"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ocs_skew"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:1"
+reason = "acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#64"
+first = "g13_ocs_skew acadsharp-acadrust: view 0 a#3 b#3 A handles 4C B handles 52/51/4C record kind differs: \"circle\" vs \"ellipse\" [EXACT]"
+
+[[row]]
+fixture = "g13_ocs_skew"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ocs_skew"
+pair = "oracle/acadsharp"
+verdict = "DIFF:1"
+reason = "under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#64"
+first = "g13_ocs_skew oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: \"ellipse\" vs \"circle\" [EXACT]"
+
+[[row]]
+fixture = "g13_point"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_point"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_point"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_polyface_mesh"
+pair = "acadsharp/acadrust"
+verdict = "COUNT:7/3"
+reason = "acadrust agrees with the oracle where the shim differs: the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#62"
+first = "g13_polyface_mesh acadsharp-acadrust: view 0 a#3 A handles 49 polyline is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "g13_polyface_mesh"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_polyface_mesh"
+pair = "oracle/acadsharp"
+verdict = "COUNT:3/7"
+reason = "the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#62"
+first = "g13_polyface_mesh oracle-acadsharp: view 0 b#3 B handles 49 polyline is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "g13_polygon_mesh"
+pair = "acadsharp/acadrust"
+verdict = "COUNT:7/3"
+reason = "acadrust agrees with the oracle where the shim differs: the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#62"
+first = "g13_polygon_mesh acadsharp-acadrust: view 0 a#3 A handles 49 polyline is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "g13_polygon_mesh"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_polygon_mesh"
+pair = "oracle/acadsharp"
+verdict = "COUNT:3/7"
+reason = "the published archive (viprs.1) flattens polyface and polygon meshes as polylines, which the oracle warns about (4 findings)"
+issue = "libviprs/acadsharp-rs-tests#62"
+first = "g13_polygon_mesh oracle-acadsharp: view 0 b#3 B handles 49 polyline is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "g13_polyline"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_polyline"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_polyline"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ray_xline"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ray_xline"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_ray_xline"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_16x"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_16x"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_16x"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_1x"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_1x"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_1x"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_4x"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_4x"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_scale_4x"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_slot"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_slot"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_slot"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_slot_block"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_slot_block"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_slot_block"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_solid"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_solid"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_solid"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_spline"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_spline"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_spline"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_text"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_text"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_text"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_tolerance"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_tolerance"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_tolerance"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_two_entities"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_two_entities"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_two_entities"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_unsupported"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_unsupported"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_unsupported"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wide_polyline"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wide_polyline"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wide_polyline"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wide_spline"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wide_spline"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wide_spline"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wipeout"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wipeout"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_wipeout"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_xref"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_xref"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_xref"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_xref_long"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_xref_long"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "g13_xref_long"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_bulge"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_bulge"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_bulge"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_dimension_fields"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_dimension_fields"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_dimension_fields"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_hatch_loops"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:3"
+reason = "acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (3 findings)"
+issue = "libviprs/acadsharp-rs-tests#55"
+first = "regression_hatch_loops acadsharp-acadrust: view 0 b#3 B handles 49 polyline is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "regression_hatch_loops"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_hatch_loops"
+pair = "oracle/acadsharp"
+verdict = "DIFF:3"
+reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (3 findings)"
+issue = "libviprs/acadsharp-rs-tests#55"
+first = "regression_hatch_loops oracle-acadsharp: view 0 a#3 polyline is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "regression_insert_transform"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_insert_transform"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_insert_transform"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_large_entity_count"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_large_entity_count"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_large_entity_count"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_text_zero_height"
+pair = "acadsharp/acadrust"
+verdict = "DIFF:2"
+reason = "acadrust agrees with the oracle where the shim differs: acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#78"
+first = "regression_text_zero_height acadsharp-acadrust: view 0 b#3 B handles 49 text is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "regression_text_zero_height"
+pair = "oracle/acadrust"
+verdict = "DIFF:2"
+reason = "acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings)"
+issue = "libviprs/acadsharp-rs-tests#78"
+first = "regression_text_zero_height oracle-acadrust: view 0 b#3 B handles 49 text is in B and not in A [EXACT]"
+
+[[row]]
+fixture = "regression_text_zero_height"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_unsupported_entity"
+pair = "acadsharp/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_unsupported_entity"
+pair = "oracle/acadrust"
+verdict = "MATCH"
+
+[[row]]
+fixture = "regression_unsupported_entity"
+pair = "oracle/acadsharp"
+verdict = "MATCH"
+

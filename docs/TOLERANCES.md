@@ -63,8 +63,36 @@ own row.
 | `acadrust-ezdxf` | `BOUNDED` |
 | `ezdxf-ezdxf` | `BOUNDED` |
 
-What a later pair excludes or lists as a known divergence is that pair's rows,
-added with the run that found them, not something decided here.
+What a pair excludes or lists as a known divergence is that pair's rows, added
+with the run that found them, and they are data: `parity/TABLES.toml`, read by
+`src/tables.rs` into the comparator's class tables. Every row has a reason and an
+issue, and the loader refuses one without either. The rows as of the first parity
+run are below, and `tests/tables_doc.rs` holds this section to the file.
+
+### Pair rows
+
+| pair | row | class | issue |
+|---|---|---|---|
+| `oracle/acadsharp`, `acadsharp/acadrust` | record `point` | `EXCLUDED` | libviprs/libviprs-dep#104 |
+| `oracle/acadsharp`, `acadsharp/acadrust` | record `polygon` | `EXCLUDED` | libviprs/acadsharp-rs-tests#59 |
+| `oracle/acadsharp`, `acadsharp/acadrust` | `document.maintenance_version` | `EXCLUDED` | libviprs/acadsharp-rs-tests#61 |
+| `oracle/acadsharp`, `acadsharp/acadrust` | `spline.fit_points` | `EXCLUDED` | libviprs/acadsharp-rs-tests#58 |
+| `oracle/acadsharp`, `acadsharp/acadrust` | `text.width_factor`, `text.halign`, `text.valign`, `text.style` | `EXCLUDED` | libviprs/acadsharp-rs-tests#66 |
+| `oracle/acadrust` | `document.maintenance_version` | `EXCLUDED` | libviprs/acadsharp-rs-tests#23 |
+| `oracle/acadsharp` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#22 |
+| `oracle/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#23 |
+| `acadsharp/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#25 |
+| `ezdxf/oracle`, `ezdxf/acadsharp`, `ezdxf/acadrust` | `document.format`, `document.maintenance_version`, warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#24 |
+| `ezdxf/acadsharp` | the wire 2 gaps above (`point`, `polygon`, `spline.fit_points`, the four `text` fields) | `EXCLUDED` | as above |
+| `self/oracle`, `self/acadsharp`, `self/acadrust` | `document.acad_version`, `document.maintenance_version` (a save's version is what makes it a different save) | `EXCLUDED` | libviprs/acadsharp-rs-tests#24 |
+| `self/oracle`, `self/acadsharp`, `self/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#25 |
+| `self/oracle` | the differences `parity/oracle_invariance.toml` lists as exceptions | `KNOWN` (the verdict) | per row, in that file |
+| `oracle/acadrust` | `text.text` of `acadsharp-ac1014`, `ac1015`, `ac1018` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#111 |
+| `oracle/acadrust` | `text.text` of `acadsharp-ac1032`, `acadsharp-sample-base` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
+| `oracle/acadrust` | `spline.weights.len` of `g13_hatch` | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#67 |
+
+Everything else the run finds that no row lists is a `DIFF` or a `COUNT` in
+`parity/VERDICTS.toml`, with an issue, and is debt rather than an exception.
 
 ## What the comparator does not do
 

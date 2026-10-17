@@ -13,12 +13,16 @@ pub mod acadsharp_emit;
 pub mod canonical;
 pub mod census;
 pub mod compare;
+pub mod digest;
 pub mod emit;
 pub mod fixtures;
 pub mod fuzz_harness;
 pub mod invariance;
 pub mod ocs;
 pub mod parity;
+pub mod parity_run;
+pub mod tables;
+pub mod verdict;
 
 #[cfg(test)]
 mod tests {

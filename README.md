@@ -17,8 +17,9 @@ add one.
 
 The reference side is in too: a .NET JIT oracle that reads each fixture through
 ACadSharp and writes the canonical records the Rust side will later be compared
-against, plus frozen expected outputs for all seven versions. Nothing in this
-repository decodes a DWG in Rust yet; that is the next phase.
+against, plus frozen expected outputs for all seven versions. The Rust
+side now decodes them too (`emit-acadsharp`, through the safe API) and the parity
+run compares the two engines and the oracle.
 
 ## The reference oracle
 
@@ -190,9 +191,30 @@ pins stay on `main` commits, and each side moves on its own.
 Each engine is driven through its own emitter binary, which writes a schema 1
 stream, a sidecar naming each record's entity, and a `run.json` with the engine
 commit, the thread count and the fixture's sha. `emit-acadrust` (the `acadrust`
-feature) is the first; `docs/EMITTERS.md` says what it writes and where it
-differs from the oracle, and `src/emit.rs` and `src/canonical.rs` are the harness
-and the writer the others will go through.
+feature) and `emit-acadsharp` (no feature; it refuses at run time with
+`Error::Unlinked` when no native archive is linked) are the two;
+`docs/EMITTERS.md` says what each writes and where it differs from the oracle,
+and `src/emit.rs` and `src/canonical.rs` are the harness and the writer they go
+through.
+
+### The parity run, and the gate
+
+`tests/parity.rs` runs both emitters over the corpus, reads the oracle's frozen
+output, compares every pair under the tables in `parity/TABLES.toml` and holds the
+verdicts to `parity/VERDICTS.toml`; `parity/SUMMARY.md` is generated from it.
+`parity/emit/` holds a digest table per native archive and target.
+
+`tools/run-tests.sh` is the gate. `--plan` prints the three trees (this checkout,
+`../acadsharp-rs`, `../acadrust`, or `--acadsharp-rs PATH` and `--acadrust PATH`)
+with their shas beside the pins, the arch and the four REQUIRE variables, and
+exits. Without it the script runs the suite in a stock `rust` container (trees
+laid in as `git archive` of their commits, a named volume for the registry and the
+native archive), and `--in-ci` runs the same lines on the host, which is what the
+`Parity` job calls. `-- CMD...` runs one command in that environment instead of
+the lines. On the x64 host, point docker at it:
+`DOCKER_HOST=ssh://devshell@192.168.0.100 tools/run-tests.sh`. The pre-push hook
+libviprs-tests installs runs this script for a push from this repo, and for a push
+from `acadsharp-rs` or `acadrust` with that tree in its slot.
 
 ### The second sibling: acadrust
 
@@ -210,8 +232,8 @@ the `acadrust` feature, so a default `cargo test` compiles nothing from it. Carg
 still reads the manifest of every path dependency at resolve time, optional or
 not (rust-lang/cargo#4544), so `../acadrust` has to exist for any cargo command
 to work here, exactly as `../acadsharp-rs` does. On a laptop that means the fork
-beside this checkout under the name `acadrust`: the local clone is called
-`acadrust-fork` today, so symlink or rename it.
+beside this checkout under the name `acadrust`, which is also the directory name
+the pre-push hook keys its slot on.
 
 The suite's `Cargo.lock` is committed and CI builds with `--locked`: the
 emitters are built by this suite, so this lock, and not the fork's, decides

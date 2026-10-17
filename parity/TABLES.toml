@@ -1,0 +1,289 @@
+# The pair tables, as data. Read by src/tables.rs into R2.1's class tables.
+#
+# Every row says why and names an issue; a row without either is refused at
+# load. A pair is written a/b in the order parity/VERDICTS.toml uses. What a pair
+# excludes or lists as a known divergence is that pair's rows, added with the run
+# that found them, so every row below was put here by a measurement and says which.
+
+# ---- warnings: one explicit row per pair, never a default ---------------------------------
+
+[[warnings]]
+pair = "oracle/acadsharp"
+compare = false
+reason = "wire 2 names a kind by its DXF name and the oracle by its ACadSharp class, wire 2 and the oracle count differently (100 against 71 on acadsharp-ac1032), and reader_notification is a claim about one adapter. The warning stream is not scored."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[warnings]]
+pair = "oracle/acadrust"
+compare = false
+reason = "entity_type is an ACadSharp type name for the oracle and a DXF name for acadrust, and the reader notifications are each reader's own."
+issue = "libviprs/acadsharp-rs-tests#23"
+
+[[warnings]]
+pair = "acadsharp/acadrust"
+compare = false
+reason = "both sides name an entity kind by its DXF name, but they warn about different sets (wire 2 refuses what the shim does not flatten, acadrust what its mapping lacks), and the notifications are each reader's own."
+issue = "libviprs/acadsharp-rs-tests#25"
+
+# ---- oracle / acadsharp: what wire 2 cannot carry -------------------------------------------
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "point"
+reason = "wire 2 has no point record; a POINT arrives as warning 100."
+issue = "libviprs/libviprs-dep#104"
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "polygon"
+reason = "the wire carries no entity type, so a hatch loop and a SOLID are both a Polygon, and a hatch loop is one record per loop with bulges where schema 1 sends one analytic record per edge."
+issue = "libviprs/acadsharp-rs-tests#59"
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "document"
+field = "maintenance_version"
+reason = "wire 2's DocumentBegin carries view_count and drawing_version only."
+issue = "libviprs/acadsharp-rs-tests#61"
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "spline"
+field = "fit_points"
+reason = "fit points are not on wire 2."
+issue = "libviprs/acadsharp-rs-tests#58"
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "text"
+field = "width_factor"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "text"
+field = "halign"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "text"
+field = "valign"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+[[exclude]]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+record = "text"
+field = "style"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+# ---- oracle / acadrust ------------------------------------------------------------------------
+
+[[exclude]]
+pairs = ["oracle/acadrust"]
+record = "document"
+field = "maintenance_version"
+reason = "acadrust reports the file header byte (CadDocument.maintenance_version, 0 throughout the corpus), the oracle ACadSharp's Header.MaintenanceVersion (228 for the AC1032 save): different quantities, and acadrust does not decode the second."
+issue = "libviprs/acadsharp-rs-tests#23"
+
+# The two arguments for "Where acadrust is ahead of the oracle" (docs/EMITTERS.md),
+# now policed here: a row whose divergence goes away is red, and so is one that moves.
+
+[[known]]
+pair = "oracle/acadrust"
+fixture = "acadsharp-ac1014"
+record_type = "text"
+field = "text"
+oracle_index = 99
+a = '\U+220545,6'
+b = "∅45,6"
+reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that). The oracle keeps what the drawing stores, as the schema says the text field does; acadrust decodes the escape to the character."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "oracle/acadrust"
+fixture = "acadsharp-ac1015"
+record_type = "text"
+field = "text"
+oracle_index = 99
+a = '\U+220545,6'
+b = "∅45,6"
+reason = "The same text, the same MIF escape."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "oracle/acadrust"
+fixture = "acadsharp-ac1018"
+record_type = "text"
+field = "text"
+oracle_index = 99
+a = '\U+220545,6'
+b = "∅45,6"
+reason = "The same text, the same MIF escape."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "oracle/acadrust"
+fixture = "acadsharp-ac1032"
+record_type = "text"
+field = "text"
+oracle_index = 180
+a = ""
+b = "my multi line text for the attrrib"
+reason = "An ATTRIB whose value lives in an embedded MTEXT. The oracle emits an empty string; acadrust emits the MTEXT's value, which is what AutoCAD's own DXF twin holds."
+issue = "libviprs/libviprs-dep#112"
+
+[[known]]
+pair = "oracle/acadrust"
+fixture = "acadsharp-sample-base"
+record_type = "text"
+field = "text"
+oracle_index = 180
+a = ""
+b = "my multi line text for the attrrib"
+reason = "The same attribute."
+issue = "libviprs/libviprs-dep#112"
+
+[[known]]
+pair = "oracle/acadrust"
+fixture = "g13_hatch"
+record_type = "spline"
+field = "weights.len"
+oracle_index = 15
+a = 4
+b = 0
+reason = "A non-rational hatch boundary spline: the oracle emits four weights of 0.0, the schema says weights is empty for a non-rational curve and acadrust follows it. A zero weight is meaningless, so this is the oracle's artefact."
+issue = "libviprs/acadsharp-rs-tests#67"
+
+# ---- ezdxf, reading AutoCAD's own DXF: the ground truth for the three ---------------------------
+
+[[warnings]]
+pair = "ezdxf/oracle"
+compare = false
+reason = "ezdxf names an entity by its DXF name and warns about different things; the warning stream is not scored against a ground truth."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[warnings]]
+pair = "ezdxf/acadsharp"
+compare = false
+reason = "ezdxf names an entity by its DXF name and warns about different things; the warning stream is not scored against a ground truth."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[warnings]]
+pair = "ezdxf/acadrust"
+compare = false
+reason = "ezdxf names an entity by its DXF name and warns about different things; the warning stream is not scored against a ground truth."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exclude]]
+pairs = ["ezdxf/oracle", "ezdxf/acadsharp", "ezdxf/acadrust"]
+record = "document"
+field = "format"
+reason = "ezdxf reads a DXF and says so; the DWG engines say dwg. The container is the point of the pairing, not a finding."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exclude]]
+pairs = ["ezdxf/oracle", "ezdxf/acadsharp", "ezdxf/acadrust"]
+record = "document"
+field = "maintenance_version"
+reason = "a DXF header does not carry the DWG maintenance version."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exclude]]
+pairs = ["ezdxf/acadsharp"]
+record = "point"
+reason = "wire 2 has no point record; a POINT arrives as warning 100."
+issue = "libviprs/libviprs-dep#104"
+
+[[exclude]]
+pairs = ["ezdxf/acadsharp"]
+record = "polygon"
+reason = "the wire carries no entity type, so a hatch loop and a SOLID are both a Polygon."
+issue = "libviprs/acadsharp-rs-tests#59"
+
+[[exclude]]
+pairs = ["ezdxf/acadsharp"]
+record = "spline"
+field = "fit_points"
+reason = "fit points are not on wire 2."
+issue = "libviprs/acadsharp-rs-tests#58"
+
+[[exclude]]
+pairs = ["ezdxf/acadsharp"]
+record = "text"
+field = "width_factor"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+[[exclude]]
+pairs = ["ezdxf/acadsharp"]
+record = "text"
+field = "halign"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+[[exclude]]
+pairs = ["ezdxf/acadsharp"]
+record = "text"
+field = "valign"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+[[exclude]]
+pairs = ["ezdxf/acadsharp"]
+record = "text"
+field = "style"
+reason = "wire 2 text carries position, height, rotation and the string only."
+issue = "libviprs/acadsharp-rs-tests#66"
+
+# ---- each engine against itself across the seven saves --------------------------------------------
+
+[[warnings]]
+pair = "self/oracle"
+compare = false
+reason = "warnings are compared by the per-fixture pairs, as counts per category."
+issue = "libviprs/acadsharp-rs-tests#25"
+
+[[warnings]]
+pair = "self/acadsharp"
+compare = false
+reason = "warnings are compared by the per-fixture pairs, as counts per category."
+issue = "libviprs/acadsharp-rs-tests#25"
+
+[[warnings]]
+pair = "self/acadrust"
+compare = false
+reason = "warnings are compared by the per-fixture pairs, as counts per category."
+issue = "libviprs/acadsharp-rs-tests#25"
+
+[[exclude]]
+pairs = ["self/oracle", "self/acadsharp", "self/acadrust"]
+record = "document"
+field = "acad_version"
+reason = "a save's version is what makes it a different save."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exclude]]
+pairs = ["self/oracle", "self/acadsharp", "self/acadrust"]
+record = "document"
+field = "maintenance_version"
+reason = "a save's maintenance number is what makes it a different save."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+# The wire-2 exclusions apply to the shim against itself too: the same fields are
+# absent in every save, so they can neither agree nor differ.
+[[exclude]]
+pairs = ["self/acadsharp"]
+record = "point"
+reason = "wire 2 has no point record."
+issue = "libviprs/libviprs-dep#104"
+
+[[exclude]]
+pairs = ["self/acadsharp"]
+record = "polygon"
+reason = "the wire carries no entity type."
+issue = "libviprs/acadsharp-rs-tests#59"
