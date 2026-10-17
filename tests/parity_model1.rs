@@ -19,7 +19,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use acadsharp_rs_tests::model1::{
+use acadsharp_rs_tests::model1::{Value, 
     self, Disposition, FindingKind, Record, Report, Rules, Side, compare,
 };
 use acadsharp_rs_tests::verdict::{Row, Table};
@@ -510,8 +510,9 @@ fn one_changed_layer_colour_is_red_and_names_the_layer() {
     let name = oracle
         .iter()
         .find_map(|r| match r {
-            Record::Layer(l)
-                if l.color > 0
+            Record::Entry(l)
+                if l.kind == "layer"
+                    && matches!(l.get("color"), Some(Value::Int(c)) if *c > 0)
                     && before
                         .findings
                         .iter()
@@ -523,10 +524,15 @@ fn one_changed_layer_colour_is_red_and_names_the_layer() {
         })
         .expect("the save has a layer with an index colour that matches");
     for r in &mut oracle {
-        if let Record::Layer(l) = r
+        if let Record::Entry(l) = r
+            && l.kind == "layer"
             && l.name == name
         {
-            l.color = if l.color == 1 { 2 } else { 1 };
+            let was = l.get("color").cloned();
+            l.set(
+                "color",
+                Value::Int(if was == Some(Value::Int(1)) { 2 } else { 1 }),
+            );
         }
     }
     let after = compare(

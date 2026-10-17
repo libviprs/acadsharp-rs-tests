@@ -10,7 +10,7 @@
 use acadrust::document::CadDocument;
 use acadrust::types::Color;
 
-use crate::model1::{Header, Layer, Record, Value};
+use crate::model1::{Entry, Header, Record, Value};
 
 fn color(c: &Color) -> i64 {
     // The schema's rule for a colour held in an int variable: the AutoCAD colour
@@ -269,16 +269,19 @@ pub fn layer_records(doc: &CadDocument) -> Vec<Record> {
             let flags = i64::from(l.flags.frozen)
                 | (i64::from(l.flags.frozen_in_new_viewport) << 1)
                 | (i64::from(l.flags.locked) << 2);
-            Record::Layer(Layer {
-                name: l.name.clone(),
-                flags,
-                color,
-                true_color,
-                on: !l.flags.off,
-                linetype: l.line_type.clone(),
-                lineweight: i64::from(l.line_weight.value()),
-                plot: l.is_plottable,
-            })
+            Record::Entry(Entry::new(
+                "layer",
+                l.name.clone(),
+                vec![
+                    Value::Int(flags),
+                    Value::Int(color),
+                    Value::Int(true_color),
+                    Value::Bool(!l.flags.off),
+                    Value::Str(l.line_type.clone()),
+                    Value::Int(i64::from(l.line_weight.value())),
+                    Value::Bool(l.is_plottable),
+                ],
+            ))
         })
         .collect()
 }

@@ -76,7 +76,7 @@ EZDXF_INPUTS = [
 ]
 
 ORACLE_INPUTS = ORACLE_FIXTURES + EZDXF_INPUTS
-KINDS = ["header", "layer"]
+KINDS = ["header", "layer", "linetype", "textstyle", "dimstyle", "block_record", "layout", "dictionary", "xdata", "xrecord"]
 NL = b"\n"
 
 

@@ -18,7 +18,8 @@ namespace ACadSharp.Reference.Model1;
 /// <param name="Json">The line, without its trailing newline.</param>
 public sealed record Model1Record(string Kind, string Key, string Json)
 {
-    private static readonly string[] Kinds = ["header", "layer"];
+    private static readonly string[] Kinds =
+    ["header", "layer", "linetype", "textstyle", "dimstyle", "block_record", "layout", "dictionary", "xdata", "xrecord"];
 
     /// <summary>The kinds in stream order.</summary>
     public static IReadOnlyList<string> KindOrder => Kinds;
