@@ -120,6 +120,14 @@ output). `tools/lsan_cell.sh` runs the resource loops under LeakSanitizer, in th
 `Native (linux-x64, lsan)` job. The crate's `docs/THREADING.md` says what each of
 them does and does not establish.
 
+### The lane matrix
+
+Every published target runs the same decode, shared and, where the archive is
+certified, static, and a final job holds each target's two outputs byte-identical.
+`docs/DIFFERENTIAL.md` has the picture, the cell table and how to read a diff.
+Locally, one cell is `tools/native_cell.sh <target> <shared|static> <archive-dir>
+<out-dir>`, and `python3 tools/native_cells.py` prints the plan.
+
 ## How `acadsharp-rs` gets beside this one
 
 `Cargo.toml` depends on the crate as `{ path = "../acadsharp-rs" }`, so a

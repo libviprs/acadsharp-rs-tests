@@ -12,6 +12,18 @@
 # The hashes are the ones GitHub lists for the release's assets, and the fetch
 # tool has been run against every one of them (see the PR that added this file).
 #
+# `static_certified` is what each archive's own `metadata/LINKINFO.json` says,
+# copied here so the CI matrix can be planned without downloading five
+# archives, and checked against the archive on every fetch (a disagreement is a
+# refusal). It is a measurement the producer made, true only where it linked the
+# static archive into a probe program and ran it on that target. A target that
+# says `false` gets no static cell in the matrix, not a skipped one.
+#
+# `runner` is the GitHub runner that runs the target's cells. `container` is
+# set for the musl targets: there the cell builds inside that image
+# (`docker run`, not a job container, since the JavaScript actions cannot run in
+# an Alpine job container), because the native library is a musl build.
+#
 # To bump the release: change `release_tag` and every `sha256` together from
 # `gh release view <tag> -R libviprs/libviprs-dep --json assets`, and expect the
 # crate's `COMPAT.toml` to have an opinion about the new `artifact_version`.
@@ -22,23 +34,36 @@ release_tag = "acadsharp-3.7.1-viprs.1"
 name = "linux-x64"
 asset = "acadsharp-linux-x64.tgz"
 sha256 = "4cbdbbdd03c4431780ddca80a1d660e6940ff561734d666e162d6fb50438136e"
+static_certified = true
+runner = "ubuntu-latest"
 
 [[target]]
 name = "linux-arm64"
 asset = "acadsharp-linux-arm64.tgz"
 sha256 = "dd938ef919d437eedc1c243fd05c405c6b77a9343d3c478d3994e8c57808cf3d"
+static_certified = true
+runner = "ubuntu-24.04-arm"
 
 [[target]]
 name = "musl-x64"
 asset = "acadsharp-musl-x64.tgz"
 sha256 = "049964119a49fa9e71779bd00acf2b81a2be1faf78e5ea356656619346c2f149"
+static_certified = true
+runner = "ubuntu-latest"
+container = "rust:1-alpine"
 
 [[target]]
 name = "musl-arm64"
 asset = "acadsharp-musl-arm64.tgz"
 sha256 = "c39302d7de0bb2507130615e068465ab95851b1445b356faffb366c7831e48b3"
+static_certified = true
+runner = "ubuntu-24.04-arm"
+container = "rust:1-alpine"
 
 [[target]]
 name = "mac-arm64"
 asset = "acadsharp-mac-arm64.tgz"
 sha256 = "b809dc5e8a488f6bb71a065386225be9e706225873a244969165c374b8c59347"
+static_certified = false
+runner = "macos-15"
+

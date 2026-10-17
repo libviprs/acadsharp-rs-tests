@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import os
 import pathlib
 import re
@@ -88,6 +89,12 @@ def check_manifest(manifest: dict) -> dict[str, dict]:
             raise Refused(f"target {name}: asset {asset!r} is not named for its target")
         if not isinstance(digest, str) or not HEX64.match(digest):
             raise Refused(f"target {name}: sha256 must be 64 lowercase hex characters")
+        if not isinstance(row.get("static_certified"), bool):
+            raise Refused(f"target {name}: static_certified must be true or false")
+        if not isinstance(row.get("runner"), str) or not row["runner"]:
+            raise Refused(f"target {name}: runner must name a GitHub runner")
+        if "container" in row and (not isinstance(row["container"], str) or not row["container"]):
+            raise Refused(f"target {name}: container, when present, must be an image name")
         targets[name] = row
     return targets
 
@@ -128,6 +135,21 @@ def download(url: str, part: pathlib.Path) -> str:
     except urllib.error.URLError as e:
         raise Refused(f"could not download {url}: {e}") from e
     return h.hexdigest()
+
+
+def check_linkinfo(root: pathlib.Path, row: dict) -> None:
+    """The manifest copies what the archive says about itself; they must agree."""
+    try:
+        info = json.loads((root / "metadata" / "LINKINFO.json").read_text())
+    except (OSError, ValueError) as e:
+        raise Refused(f"{row['asset']}: metadata/LINKINFO.json is not readable JSON: {e}") from e
+    certified = info.get("static_certified")
+    if certified != row["static_certified"]:
+        raise Refused(
+            f"{row['asset']}: LINKINFO.json says static_certified={certified!r} and "
+            f"NATIVE_ARTIFACT.toml says {row['static_certified']!r}. The matrix is planned from the "
+            "manifest, so a disagreement would give the wrong cells."
+        )
 
 
 def extract(archive: pathlib.Path, dest: pathlib.Path) -> pathlib.Path:
@@ -203,6 +225,7 @@ def fetch(target: str, manifest_path: pathlib.Path, cache: pathlib.Path, base: s
         tops = [p for p in extracted.iterdir() if p.is_dir()]
         if len(tops) == 1:
             log(f"using the extracted archive already in {extracted}")
+            check_linkinfo(tops[0], row)
             return tops[0].resolve()
         shutil.rmtree(extracted)
 
@@ -215,6 +238,11 @@ def fetch(target: str, manifest_path: pathlib.Path, cache: pathlib.Path, base: s
     finally:
         shutil.rmtree(staging, ignore_errors=True)
     top = [p for p in extracted.iterdir() if p.is_dir()][0]
+    try:
+        check_linkinfo(top, row)
+    except Refused:
+        shutil.rmtree(extracted, ignore_errors=True)
+        raise
     return top.resolve()
 
 
