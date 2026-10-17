@@ -855,3 +855,203 @@ fn one_renamed_dictionary_entry_is_red_and_names_the_path() {
         after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
     );
 }
+
+// ---- xdata and xrecord (R5.5.7, docs/MODEL_1.md) ---------------------------------------
+
+/// The (code, value) pairs of the list field of the record `kind`/`key`.
+fn coded_values(records: &[Record], kind: &str, key: &str) -> Option<Vec<(i64, Value)>> {
+    records.iter().find_map(|r| match r {
+        Record::Entry(e) if e.kind == kind && e.name == key => {
+            let field = if kind == "xdata" { "values" } else { "entries" };
+            let Some(Value::List(items)) = e.get(field) else {
+                return None;
+            };
+            Some(
+                items
+                    .iter()
+                    .map(|item| match item.as_slice() {
+                        [Value::Int(c), v] => (*c, v.clone()),
+                        other => panic!("a pair that is not (code, value): {other:?}"),
+                    })
+                    .collect(),
+            )
+        }
+        _ => None,
+    })
+}
+
+/// Every value in every frozen xdata and xrecord is written in the form its
+/// group code gives, and the code is one the table knows.
+#[test]
+fn every_coded_value_is_written_in_the_form_its_group_code_gives() {
+    use acadsharp_rs_tests::model1::Form;
+    let mut seen = 0;
+    for (engine, id) in every_frozen_reading() {
+        let records = model1::load_frozen(engine, id).unwrap();
+        for r in &records {
+            let Record::Entry(e) = r else { continue };
+            if e.kind != "xdata" && e.kind != "xrecord" {
+                continue;
+            }
+            for (code, value) in coded_values(&records, e.kind, &e.name).unwrap() {
+                seen += 1;
+                let form = model1::value_form(code as i32)
+                    .unwrap_or_else(|why| panic!("{engine} {id} {} {code}: {why}", e.name));
+                let ok = match (form, &value) {
+                    (Form::Text, Value::Str(_)) | (Form::Real, Value::Double(_)) => true,
+                    (Form::Whole, Value::Int(_)) | (Form::Point, Value::Point3(_)) => true,
+                    (Form::Handle, Value::Str(s)) => {
+                        !s.is_empty()
+                            && s.chars().all(|c| c.is_ascii_digit() || ('A'..='F').contains(&c))
+                    }
+                    (Form::Binary, Value::Str(s)) => {
+                        s.len() % 2 == 0
+                            && s.chars().all(|c| c.is_ascii_digit() || ('A'..='F').contains(&c))
+                    }
+                    _ => false,
+                };
+                assert!(ok, "{engine} {id} {} code {code}: {form:?} but {value:?}", e.name);
+            }
+        }
+    }
+    assert!(seen > 0, "no xdata and no xrecord in any frozen reading");
+}
+
+/// The application xdata upstream's `ReadXData` asserts on (`3REAL_APP` on
+/// 0x915, `DIR_APP` on 0x916) is in every reading of every twin, as the reals and
+/// the direction it holds.
+#[test]
+fn the_application_xdata_upstream_asserts_on_is_in_every_twin_reading() {
+    for (twin, _) in TWINS {
+        for engine in ["oracle", "ezdxf"] {
+            let records = model1::load_frozen(engine, twin).unwrap();
+            let reals = coded_values(&records, "xdata", "entity/915|3REAL_APP")
+                .unwrap_or_else(|| panic!("{engine} {twin}: no 3REAL_APP on entity 915"));
+            assert!(
+                reals.iter().any(|(c, _)| *c == 1040),
+                "{engine} {twin}: 3REAL_APP holds no real: {reals:?}"
+            );
+            let dir = coded_values(&records, "xdata", "entity/916|DIR_APP")
+                .unwrap_or_else(|| panic!("{engine} {twin}: no DIR_APP on entity 916"));
+            assert!(
+                dir.iter().any(|(c, _)| *c == 1013),
+                "{engine} {twin}: DIR_APP holds no direction: {dir:?}"
+            );
+        }
+    }
+}
+
+/// An xdata record is red when one `1040` real changes, and the finding names the
+/// owner and the application.
+#[test]
+fn one_changed_real_in_xdata_is_red_and_names_the_owner_and_the_application() {
+    let rules = model1::committed_rules().unwrap();
+    let twin = "dxf-sample-ac1032-ascii";
+    let ez = model1::load_frozen("ezdxf", twin).unwrap();
+    let mut oracle = model1::load_frozen("oracle", twin).unwrap();
+    fn side<'a>(engine: &'a str, id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: id,
+            records,
+        }
+    }
+    let before = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    )
+    .red()
+    .len();
+    let mut touched = 0;
+    for r in &mut oracle {
+        if let Record::Entry(e) = r
+            && e.kind == "xdata"
+            && e.name == "entity/915|3REAL_APP"
+            && let Some(Value::List(items)) = e.get("values").cloned()
+        {
+            let mut items = items;
+            for item in &mut items {
+                if item[0] == Value::Int(1040)
+                    && let Value::Double(d) = item[1]
+                    && touched == 0
+                {
+                    item[1] = Value::Double(d + 1.0);
+                    touched += 1;
+                }
+            }
+            e.set("values", Value::List(items));
+        }
+    }
+    assert_eq!(touched, 1, "the twin has a 1040 real on 3REAL_APP");
+    let after = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    );
+    assert_eq!(after.red().len(), before + 1, "{}", after.first());
+    assert!(
+        after
+            .red()
+            .iter()
+            .any(|f| f.key.starts_with("xdata/entity/915|3REAL_APP.values[")),
+        "{:?}",
+        after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
+    );
+}
+
+/// An XRECORD is red when one entry is removed, and the finding names the path.
+#[test]
+fn one_removed_xrecord_entry_is_red_and_names_the_path() {
+    let rules = model1::committed_rules().unwrap();
+    let twin = "dxf-sample-ac1032-ascii";
+    let ez = model1::load_frozen("ezdxf", twin).unwrap();
+    let mut oracle = model1::load_frozen("oracle", twin).unwrap();
+    fn side<'a>(engine: &'a str, id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: id,
+            records,
+        }
+    }
+    let before = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    )
+    .red()
+    .len();
+    let path = "ACAD_LAST_SAVED_VERSION_INFO";
+    let mut touched = 0;
+    for r in &mut oracle {
+        if let Record::Entry(e) = r
+            && e.kind == "xrecord"
+            && e.name == path
+            && let Some(Value::List(items)) = e.get("entries").cloned()
+        {
+            let mut items = items;
+            items.pop();
+            touched += 1;
+            e.set("entries", Value::List(items));
+        }
+    }
+    assert_eq!(touched, 1, "the twin has the xrecord {path}");
+    let after = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    );
+    assert!(after.red().len() > before, "{}", after.first());
+    assert!(
+        after
+            .red()
+            .iter()
+            .any(|f| f.key == format!("xrecord/{path}.entries.len")),
+        "{:?}",
+        after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
+    );
+}

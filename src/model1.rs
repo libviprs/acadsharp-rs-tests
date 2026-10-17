@@ -76,6 +76,10 @@ pub enum Ty {
     Bool,
     Point2,
     Point3,
+    /// One scalar whose type is not fixed by the schema but by the group code
+    /// written beside it (xdata and xrecord values): a string, an integer, a
+    /// double or a 3D point, told apart by the shape of the JSON.
+    Scalar,
     /// A list whose elements are records of these fields.
     List(&'static [(&'static str, Ty)]),
 }
@@ -143,9 +147,72 @@ const DICTIONARY: Schema = Schema {
     ],
 };
 
+/// One `(group code, value)` pair of an xdata list or an XRECORD: the code is
+/// always written beside the value, and the written form of the value is the one
+/// [`value_form`] gives for that code.
+const CODED_VALUE: &[(&str, Ty)] = &[("code", Ty::Int), ("value", Ty::Scalar)];
+
+/// The extended data of one application on one owner. The key is
+/// `<owner>|<appid>`, and both halves are fields as well.
+const XDATA: Schema = Schema {
+    kind: "xdata",
+    fields: &[
+        ("owner", Ty::Str),
+        ("appid", Ty::Str),
+        ("values", Ty::List(CODED_VALUE)),
+    ],
+};
+
+/// An XRECORD, keyed by the dictionary path that reaches it.
+const XRECORD: Schema = Schema {
+    kind: "xrecord",
+    fields: &[
+        ("cloning", Ty::Int),
+        ("entries", Ty::List(CODED_VALUE)),
+    ],
+};
+
 /// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
 /// and one name here, so a new kind never touches the others.
-pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE, DICTIONARY];
+pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE, DICTIONARY, XDATA, XRECORD];
+
+/// The written form of a value, decided by its group code. One table for xdata
+/// and for XRECORDs, written three times on purpose (here,
+/// `Model1Extractor.ValueForm` and `value_form` in `tools/model1.py`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Form {
+    /// A JSON string: the text, a control string, a layer name.
+    Text,
+    /// A JSON string of the handle digits, upper case, no prefix.
+    Handle,
+    /// A JSON string of the bytes in upper case hex.
+    Binary,
+    /// A JSON array of three doubles.
+    Point,
+    /// A JSON double.
+    Real,
+    /// A JSON integer (a byte, a short, an int, a long, and a bool as 0 or 1).
+    Whole,
+}
+
+/// The written form of a group code, or the reason there is none.
+pub fn value_form(code: i32) -> Result<Form, String> {
+    Ok(match code {
+        0..=4 | 6..=9 | 100..=102 | 300..=309 | 410..=419 | 430..=439 | 470..=479 | 999 => {
+            Form::Text
+        }
+        1000 | 1002 | 1003 => Form::Text,
+        5 | 105 | 320..=369 | 390..=399 | 480..=481 | 1005 => Form::Handle,
+        310..=319 | 1004 => Form::Binary,
+        10..=37 | 1010..=1013 => Form::Point,
+        38..=59 | 110..=149 | 210..=239 | 460..=469 | 1040..=1042 => Form::Real,
+        60..=99 | 150..=179 | 270..=299 | 370..=389 | 400..=409 | 420..=429 | 440..=459 => {
+            Form::Whole
+        }
+        1070 | 1071 => Form::Whole,
+        _ => return Err(format!("no written form is defined for group code {code}")),
+    })
+}
 
 /// One segment of a linetype's pattern, in file order.
 const SEGMENT: &[(&str, Ty)] = &[
@@ -298,7 +365,10 @@ fn render_typed(v: &Value, ty: &Ty) -> Result<String, String> {
         | (Ty::Double, Value::Double(_))
         | (Ty::Bool, Value::Bool(_))
         | (Ty::Point2, Value::Point2(_))
-        | (Ty::Point3, Value::Point3(_)) => v.render(),
+        | (Ty::Point3, Value::Point3(_))
+        | (Ty::Scalar, Value::Str(_) | Value::Int(_) | Value::Double(_) | Value::Point3(_)) => {
+            v.render()
+        }
         (Ty::List(fields), Value::List(items)) => {
             let mut parts = Vec::new();
             for item in items {
@@ -383,6 +453,15 @@ fn parse_typed(j: &Json, ty: &Ty, what: &str) -> Result<Value, String> {
                 _ => return Err(format!("{what}: {} components", a.len())),
             }
         }
+        Ty::Scalar => match j {
+            Json::String(s) => Value::Str(s.clone()),
+            Json::Number(n) if n.is_i64() => Value::Int(n.as_i64().unwrap_or_default()),
+            Json::Number(n) => Value::Double(n.as_f64().ok_or(format!("{what}: not a number"))?),
+            Json::Array(a) if a.len() == 3 => {
+                Value::Point3([num(&a[0])?, num(&a[1])?, num(&a[2])?])
+            }
+            _ => return Err(format!("{what}: not a string, a number or a 3D point")),
+        },
         Ty::List(fields) => {
             let a = j.as_array().ok_or(format!("{what}: not an array"))?;
             let mut items = Vec::new();
