@@ -86,7 +86,10 @@ fn acadrust(id: &str, out: &Path) -> Result<Result<Vec<Record>, String>, String>
         let stderr = String::from_utf8_lossy(&run.stderr);
         if stderr.contains("could not read") {
             let line = stderr.lines().find(|l| !l.trim().is_empty()).unwrap_or("");
-            return Ok(Err(format!("exit {}: {line}", run.status.code().unwrap_or(-1))));
+            return Ok(Err(format!(
+                "exit {}: {line}",
+                run.status.code().unwrap_or(-1)
+            )));
         }
         return Err(format!("emit-acadrust failed on {id}: {stderr}"));
     }
@@ -131,8 +134,16 @@ fn compute(rules: &Rules) -> Result<Run, String> {
             Ok(r) => put(
                 s,
                 "oracle/acadrust",
-                Side { engine: "oracle", fixture: s, records: &o },
-                Side { engine: "acadrust", fixture: s, records: r },
+                Side {
+                    engine: "oracle",
+                    fixture: s,
+                    records: &o,
+                },
+                Side {
+                    engine: "acadrust",
+                    fixture: s,
+                    records: r,
+                },
             ),
             Err(why) => fail(s, "oracle/acadrust", why),
         }
@@ -145,14 +156,38 @@ fn compute(rules: &Rules) -> Result<Run, String> {
         let ez = model1::load_frozen("ezdxf", twin)?;
         let o = model1::load_frozen("oracle", twin)?;
         let o_dwg = model1::load_frozen("oracle", save)?;
-        let side = |engine: &'static str, records| Side { engine, fixture: twin, records };
+        let side = |engine: &'static str, records| Side {
+            engine,
+            fixture: twin,
+            records,
+        };
         put(twin, "ezdxf/oracle", side("ezdxf", &ez), side("oracle", &o));
-        put(twin, "dxf-dwg:oracle", side("oracle", &o), side("oracle", &o_dwg));
+        put(
+            twin,
+            "dxf-dwg:oracle",
+            side("oracle", &o),
+            side("oracle", &o_dwg),
+        );
         match (&rust[twin], &rust[save]) {
             (Ok(r), Ok(r_dwg)) => {
-                put(twin, "ezdxf/acadrust", side("ezdxf", &ez), side("acadrust", r));
-                put(twin, "oracle/acadrust", side("oracle", &o), side("acadrust", r));
-                put(twin, "dxf-dwg:acadrust", side("acadrust", r), side("acadrust", r_dwg));
+                put(
+                    twin,
+                    "ezdxf/acadrust",
+                    side("ezdxf", &ez),
+                    side("acadrust", r),
+                );
+                put(
+                    twin,
+                    "oracle/acadrust",
+                    side("oracle", &o),
+                    side("acadrust", r),
+                );
+                put(
+                    twin,
+                    "dxf-dwg:acadrust",
+                    side("acadrust", r),
+                    side("acadrust", r_dwg),
+                );
             }
             (a, b) => {
                 let why = a.as_ref().err().or(b.as_ref().err()).unwrap();
