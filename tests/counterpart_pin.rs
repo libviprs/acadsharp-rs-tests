@@ -745,7 +745,7 @@ pin_matrix!(
     acadsharp_rs,
     name: "acadsharp-rs",
     file: "COUNTERPART_REV",
-    today: "ae89e80977561bfe98c12660bbf47963d7c87206",
+    today: "f23f37bd453e02e660ef655faa381c45509d8ac1",
     require: "VIPRS_REQUIRE_COUNTERPART",
     expected: "VIPRS_COUNTERPART_EXPECTED_SHA",
 );

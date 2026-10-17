@@ -18,9 +18,6 @@ For a fixture `<id>`, `emit-<engine> --fixture <id> --out <dir>` writes
   and the one actually beside it, the fixture's sha256, the target, and
   `RAYON_NUM_THREADS` as the process saw it.
 
-The adapter for the other engine, `emit-acadsharp`, is R3.1 and gets its own
-section here when it lands.
-
 ## acadrust
 
 `emit-acadrust` needs the `acadrust` feature and `../acadrust` at
@@ -92,3 +89,141 @@ corpus exercises them:
 - a hatch boundary spline carries its weights only when it is rational, taken from
   the control points' third coordinate, which is where acadrust's own DWG writer
   puts them.
+
+## acadsharp-rs
+
+`emit-acadsharp` has no cargo feature. `acadsharp-rs` is a normal dependency of
+this suite and builds with no archive, so the binary exists everywhere and
+refuses at run time: `Decoder::new()` answering `Error::Unlinked` is exit 1 with
+the message, and nothing is written. Under `ACADSHARP_REQUIRE_NATIVE=1` the
+crate's `build.rs` stops the build when no archive resolves, so there is no
+build of this binary that can print nothing and exit 0.
+
+```
+ACADSHARP_NATIVE_DIR=/path/to/unpacked/acadsharp-linux-x64 \
+  cargo run --bin emit-acadsharp -- --fixture acadsharp-ac1032 --out /tmp/out
+```
+
+The suite's own `build.rs` emits the rpath that finds the shared library
+(`DEP_ACADSHARP_NATIVE_LIB_DIR`, the three lines the crate's documentation gives);
+without it the binary links and then dies before `main` with exit 127. On a
+target whose `LINKINFO.json` says `static_certified: true`, build with
+`--features acadsharp-rs/link-static` instead and there is nothing to find.
+
+The adapter is `src/acadsharp_emit.rs`. The walk is
+`Decoder -> Document::open_bytes -> views() -> decode(i) -> PrimitiveStream`, with
+`is_complete()` checked per view (an incomplete stream is a failure, not a short
+output). Bytes come from `fixtures::load(id)` and never from a path. The mapping is
+a pure function of what a walk saw ([`map_walk`]), so every row below is tested on
+hand-built items with no native library, and the native lane is tested on top.
+
+`run.json` for this engine adds what the archive says about itself, all read from
+the unpacked archive the binary was linked against: `native_artifact_version`,
+`native_acadsharp_version`, `native_target`, `native_abi_header_sha256`,
+`native_library_sha256` (from the archive's own `CHECKSUMS.txt`, which is what
+tells two archives apart that both call themselves `3.7.1-viprs.N`),
+`native_viprs_dep_commit` and `native_shim_sha256` where `LINKINFO.json` has them
+(the published `acadsharp-3.7.1-viprs.1` does not), `native_driver_commit` from
+`BUILDINFO.json`, and `native_archive_sha256`, which the gate sets after it has
+verified the download. Nothing in it moves between two runs on one machine.
+
+The sidecar from this side is partial and says so: wire 2 carries one
+`item_handle` plus a from-insert flag, so `h` is `[leaf]`, `t` is absent (there
+is no entity type on the wire), and `"x": true` marks a record that was expanded
+out of an insert. A nested entity carries its own handle and not the insert's,
+and a hatch edge carries the hatch's.
+
+### Wire 2 onto schema 1
+
+Wire 2 and schema 1 are two flatteners over the same reader, not two spellings of
+one. Every gap is a row in `parity/TABLES.toml` with its class and an issue (or,
+where the comparator cannot hold it, a `DIFF` row in `parity/VERDICTS.toml` whose
+issue is where it gets decided), never a silent absence. The pair tables are in
+`docs/TOLERANCES.md`; the verdicts are in `parity/SUMMARY.md`.
+
+What the wire cannot carry, and so the adapter cannot write, is `EXCLUDED` for the
+two pairs that have acadsharp-rs in them (`oracle/acadsharp`, `acadsharp/acadrust`):
+
+| gap | wire 2 | schema 1 | issue |
+|---|---|---|---|
+| `point` | no record; a POINT arrives as warning 100 (`acadsharp-ac1032` has 40) | a `point` record | libviprs-dep#104 (wire 3) |
+| hatch boundaries and `polygon` | one `Polygon` with bulges per loop; no entity type, so a hatch polygon and a SOLID polygon look the same (160 polygons against 15 on `acadsharp-ac1032`) | one analytic record per edge | acadsharp-rs-tests#59 |
+| `document.maintenance_version` | `DocumentBegin` has `view_count` and `drawing_version` only | the header's maintenance version | acadsharp-rs-tests#61 |
+| `spline.fit_points` | not on the wire | carried | acadsharp-rs-tests#58 |
+| `text.width_factor`, `halign`, `valign`, `style` | position, height, rotation, the string | all four | acadsharp-rs-tests#66 |
+
+What the adapter writes for those is the schema's default (`0`, `[]`, `left`,
+`baseline`, `Standard`, `1.0`), so the stream is well formed and the field is
+excluded from the comparison rather than compared against an invention.
+
+What the run found that the adapter cannot fix, measured over the corpus with the
+published archive (`parity/SUMMARY.md` has the rows, each with its issue). None of
+these is hidden by an exclusion; each is a `DIFF` or `COUNT` and the
+`acadsharp/acadrust` pair shows acadrust agreeing with the oracle in every one:
+
+| what | where | wire 2 | schema 1 | issue |
+|---|---|---|---|---|
+| dimension blocks | the seven saves, `sample-base`, `export-sample` (30 lines and 5 polylines on `acadsharp-ac1032`) | `Flattener.cs` skips every INSERT inside a dimension's block, which is where the arrowheads live | expands them | acadsharp-rs-tests#55 |
+| ATTDEF | the same (78 text records against 69 on `acadsharp-ac1032`) | the `TextEntity` arm takes `AttributeDefinition` too, so one inside a block is emitted; an insert's ATTRIBs come before the block body | skipped inside a block; ATTRIBs after | acadsharp-rs-tests#54 |
+| text anchor | `acadsharp-ac1032` (1.72 off in y), `export-sample` | the insertion point | the alignment point for anything but left/baseline | acadsharp-rs-tests#66 |
+| non-uniform insert scale | `g13_nonuniform`, `g13_ocs_plane`, `g13_ocs_skew` | keeps the circle, warning 106; no transform on the wire | an `ellipse` | acadsharp-rs-tests#64 |
+| mirrored insert | `g13_ocs_mirror`, `g13_mirrored_bulge` | reflects the geometry, normal stays +Z | keeps `nz: -1` and the OCS coordinates | acadsharp-rs-tests#63 |
+| full ellipse | one per save, 14 in `export-sample` | start 0, end 2pi | the stored start (pi, 3pi) | acadsharp-rs-tests#57 |
+| invisible entities | `acadsharp-blockvisibilityparameter` (8 records) | drawn | skipped | acadsharp-rs-tests#60 |
+| mesh edges | `g13_polyface_mesh`, `g13_polygon_mesh` | polylines (viprs.1 predates libviprs-dep#82) | a warning | acadsharp-rs-tests#62 |
+| block depth | `g13_dimension_deep` | the decode stops at `max_block_depth` | warns and carries on | acadsharp-rs-tests#68 |
+| spline flags and weights | `export-sample`, `g13_hatch` | `closed` and `periodic` disagree three ways; the oracle writes weights of 0.0 | | acadsharp-rs-tests#65, #67 |
+
+What this adapter converts, with the rule it applies:
+
+- a polyline's vertices and a circle's, arc's and ellipse's centre (and the
+  ellipse's major axis, as a vector) go from world space into the OCS the normal
+  implies, with the arbitrary axis algorithm (`src/ocs.rs`, the one the oracle
+  runs and the one `emit-acadrust` shares). `line`, `spline` and `polygon` carry no
+  normal and stay in world space;
+- an arc's `start` is reduced into `[0, 2pi)` and its `end` is made strictly
+  greater (an in-range angle is bit-identical to the wire's); an ellipse likewise;
+- a text's rotation is reduced into `[0, 2pi)` and its line endings to LF;
+- a polyline's `bulges` is always present, one per vertex (`bulge_count` of 0 is
+  every span straight); a spline's `weights` is empty unless the rational flag is
+  set; `closed` and `periodic` come from the flags;
+- warnings: 100 and 109 are `unsupported_entity` (the entity type is the
+  message's first token), 105 `missing_reference`, 106 `malformed_geometry`, 107
+  `invalid_entity`, 101 `reader_notification`, anything else `unknown`; the detail
+  is `wire_<code>` and never the message, which can carry a handle. The library's
+  own forward-compatibility probe (record 32512 and up, in every stream by design)
+  is skipped, and any other unknown record is a warning, never dropped;
+- views come in tab order already; their names and kinds are the wire's.
+
+### Two archives
+
+The runs are labelled by the archive that produced them and never confused. The
+file name of a digest table says which (`parity/emit/<artifact_version>+<library
+sha8>.<target>.tsv`), and so does `run.json`.
+
+- **The published `acadsharp-3.7.1-viprs.1`** (`acadsharp-linux-x64.tgz`, sha256
+  `4cbdbbdd...`; `acadsharp-linux-arm64.tgz`, sha256 `dd938ef9...`) is what a
+  consumer gets, and it is the archive the committed verdict table is about.
+- **The rebuilt one** is libviprs-dep `bc351a9` built on MARS with the recipe in
+  `acadsharp-rs`'s `tests/data/linkinfo/REBUILD.md` (R3.3). It calls itself
+  `3.7.1-viprs.2`, which is the string a future release will carry too, so the
+  label is `native_artifact_version` plus `native_library_sha256` (`670cd1e7...`,
+  which is the shared library `docs/AOT_PARITY.md` names) and the commit passed as
+  `--dep-commit`. The tarball built here is `bec5fdc1...`, and a rebuild is not
+  promised to be byte-identical, so that digest labels this build only.
+
+The header is byte-identical at `8bf5ad2`, `bc351a9` and `main` (`0502ac0f...`),
+so both archives pass the crate's handshake. They diverge from the oracle on
+different kinds, so a verdict table belongs to one archive. Against the rebuilt
+archive 24 rows of the published archive's table move, 12 in each acadsharp pair:
+
+- `g13_leader` and `g13_mline` go from `MATCH` to `COUNT`, because the rebuild lowers
+  LEADER and MLINE onto polylines and the oracle warns about both;
+- `g13_polyface_mesh` and `g13_polygon_mesh` go from `COUNT` to `MATCH`, because the
+  rebuild refuses them as the oracle does;
+- the seven saves and `sample-base` go from `DIFF:52` to `DIFF:54` (`DIFF:53` to
+  `DIFF:55` in the `acadsharp/acadrust` pair for `acadsharp-ac1014` to `ac1018`),
+  two more differing records than the published archive has.
+
+The committed table stays the published archive's. The rebuilt lane is held by its
+digest table, which is what a change to either archive has to move.

@@ -68,12 +68,16 @@ pub struct RunInfo {
     pub target: String,
     /// `RAYON_NUM_THREADS` as the process saw it, or `None` when unset.
     pub rayon_num_threads: Option<String>,
+    /// Provenance only one engine has (the native archive acadsharp-rs ran
+    /// against), as `(key, value)`. Empty for acadrust. Keys sort with the
+    /// rest, so the file stays a function of the run.
+    pub extra: Vec<(String, Option<String>)>,
 }
 
 impl RunInfo {
     pub fn to_json(&self) -> String {
         // Keys sort, so the file is a function of the run and nothing else.
-        let value = serde_json::json!({
+        let mut value = serde_json::json!({
             "engine": self.engine,
             "engine_pin": self.engine_pin,
             "engine_head": self.engine_head,
@@ -82,6 +86,11 @@ impl RunInfo {
             "target": self.target,
             "rayon_num_threads": self.rayon_num_threads,
         });
+        if let Some(map) = value.as_object_mut() {
+            for (k, v) in &self.extra {
+                map.insert(k.clone(), serde_json::json!(v));
+            }
+        }
         let mut text = serde_json::to_string_pretty(&value).unwrap_or_default();
         text.push('\n');
         text
@@ -103,6 +112,7 @@ impl RunInfo {
             fixture_sha256: fixture.sha256.clone(),
             target: format!("{}-{}", std::env::consts::ARCH, std::env::consts::OS),
             rayon_num_threads: std::env::var("RAYON_NUM_THREADS").ok(),
+            extra: Vec::new(),
         }
     }
 }
@@ -160,4 +170,80 @@ pub fn write_emission(
         std::fs::write(path, text).map_err(|e| format!("{}: {e}", path.display()))?;
     }
     Ok(paths)
+}
+
+/// What `run.json` says about the native archive an `acadsharp` run decoded
+/// with, read from the unpacked archive the binary was linked against
+/// (`metadata/LINKINFO.json`, `BUILDINFO.json`, `CHECKSUMS.txt`).
+///
+/// Two archives can claim the same `artifact_version`: a rebuilt one calls
+/// itself `3.7.1-viprs.2`, which is the string a future release will carry too.
+/// So the label that tells them apart is the version plus the commit and shim
+/// hash where the archive has them, and the shared library's own sha256 from its
+/// checksum list where it does not. `ACADSHARP_ARCHIVE_SHA256`, which the gate
+/// sets after verifying the download, adds the tarball's hash. Everything here is
+/// a function of the archive, so two runs on one machine write the same bytes.
+pub fn native_provenance(dir: Option<&str>) -> Vec<(String, Option<String>)> {
+    let mut out: Vec<(String, Option<String>)> = Vec::new();
+    let read = |rel: &str| {
+        dir.and_then(|d| std::fs::read_to_string(Path::new(d).join(rel)).ok())
+            .and_then(|t| serde_json::from_str::<serde_json::Value>(&t).ok())
+    };
+    let link = read("metadata/LINKINFO.json");
+    let build = read("metadata/BUILDINFO.json");
+    let field = |v: &Option<serde_json::Value>, k: &str| {
+        v.as_ref()
+            .and_then(|v| v.get(k))
+            .and_then(|v| v.as_str())
+            .map(str::to_string)
+    };
+    let lib_sha = link
+        .as_ref()
+        .and_then(|l| l.get("shared_library"))
+        .and_then(|v| v.as_str())
+        .and_then(|lib| {
+            let sums =
+                std::fs::read_to_string(Path::new(dir?).join("metadata/CHECKSUMS.txt")).ok()?;
+            sums.lines().find_map(|l| {
+                let (sha, name) = l.split_once("  ")?;
+                (name.trim() == lib).then(|| sha.to_string())
+            })
+        });
+    out.push((
+        "native_abi_header_sha256".into(),
+        field(&link, "abi_header_sha256"),
+    ));
+    out.push((
+        "native_acadsharp_version".into(),
+        field(&link, "acadsharp_version"),
+    ));
+    out.push((
+        "native_archive_sha256".into(),
+        std::env::var("ACADSHARP_ARCHIVE_SHA256")
+            .ok()
+            .filter(|s| !s.is_empty()),
+    ));
+    out.push((
+        "native_artifact_version".into(),
+        field(&link, "artifact_version"),
+    ));
+    out.push((
+        "native_driver_commit".into(),
+        field(&build, "driver_commit"),
+    ));
+    out.push(("native_library_sha256".into(), lib_sha));
+    out.push(("native_shim_sha256".into(), field(&link, "shim_sha256")));
+    out.push(("native_target".into(), field(&link, "target")));
+    // A rebuilt archive built from `git archive` cannot read its own commit, so
+    // the gate can say which one it is (`--dep-commit`); an archive that knows
+    // wins.
+    out.push((
+        "native_viprs_dep_commit".into(),
+        field(&link, "viprs_dep_commit").or_else(|| {
+            std::env::var("ACADSHARP_VIPRS_DEP_COMMIT")
+                .ok()
+                .filter(|s| !s.is_empty())
+        }),
+    ));
+    out
 }
