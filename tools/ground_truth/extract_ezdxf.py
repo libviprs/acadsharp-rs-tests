@@ -485,6 +485,8 @@ class Extractor:
             self.insert(e, view, xf, depth, path, here)
         elif t == "DIMENSION":
             self.dimension(e, view, xf, depth, here)
+        elif t == "ACAD_TABLE":
+            self.table(e, view, xf, depth, here)
         else:
             self.warn("unsupported_entity", t, "no_canonical_mapping", here)
 
@@ -724,6 +726,34 @@ class Extractor:
         # The insert's own ATTRIBs sit in the space that contains the insert.
         for attrib in e.attribs:
             self.extract(attrib, view, xf, depth, False, here)
+
+    def table(self, e, view, xf, depth, here):
+        """A table is drawn as its block, placed by the insertion point and the
+        rotation of its horizontal direction in the plane of its normal. There is
+        no scale. (ACadSharp types a Table as an Insert; ezdxf as one too.)"""
+        name = str(e.dxf.geometry) if e.dxf.hasattr("geometry") else ""
+        block = self.doc.blocks.get(name) if name else None
+        if block is None:
+            self.warn("missing_reference", "Insert", "block_record_missing", here)
+            return
+        key = self.enter(name, depth, here)
+        if key is None:
+            return
+        try:
+            normal = (0.0, 0.0, 1.0)  # ezdxf does not read a table's normal; +Z is assumed
+            ax, ay, _n = arbitrary_axis(normal)
+            h = p3(e.dxf.horizontal_direction) if e.dxf.hasattr("horizontal_direction") else (1.0, 0.0, 0.0)
+            dx, dy = dot(h, ax), dot(h, ay)
+            ln = math.hypot(dx, dy)
+            c, s = (1.0, 0.0) if ln < 1e-12 else (dx / ln, dy / ln)
+            local = Xf(((c, -s, 0.0), (s, c, 0.0), (0.0, 0.0, 1.0)), p3(e.dxf.insert))
+            base = p3(block.block.dxf.base_point)
+            local = Xf.compose(local, Xf.translation((-base[0], -base[1], -base[2])))
+            child = Xf.compose(xf, Xf.compose(Xf.ocs(normal), local))
+            for sub in block:
+                self.extract(sub, view, child, depth + 1, True, here)
+        finally:
+            self.active.discard(key)
 
     def dimension(self, e, view, xf, depth, here):
         name = e.dxf.geometry if e.dxf.hasattr("geometry") else ""

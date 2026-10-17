@@ -7,6 +7,6 @@
   "input_file": "dxf/sample_AC1027_ascii.dxf",
   "input_sha256": "4f26752008643642c37f7bab410b23cfd8b6dd9ee3aaa19746b612ea956b61e6",
   "python": "3.14.8",
-  "records": 286,
+  "records": 337,
   "requirements_sha256": "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
 }

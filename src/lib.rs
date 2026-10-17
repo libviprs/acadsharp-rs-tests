@@ -23,6 +23,7 @@ pub mod census;
 pub mod compare;
 pub mod emit;
 pub mod fixtures;
+pub mod invariance;
 pub mod parity;
 
 #[cfg(test)]
