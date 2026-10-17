@@ -375,11 +375,11 @@ fn one_changed_header_value_is_one_diff_and_names_the_variable() {
     let mut touched = 0;
     for r in &mut oracle {
         let Record::Header(h) = r;
-        if h.name == name {
-            if let model1::Value::Double(d) = &mut h.value {
-                *d *= 1.001;
-                touched += 1;
-            }
+        if h.name == name
+            && let model1::Value::Double(d) = &mut h.value
+        {
+            *d *= 1.001;
+            touched += 1;
         }
     }
     assert_eq!(touched, 1);
