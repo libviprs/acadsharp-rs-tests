@@ -1176,6 +1176,42 @@ impl Run<'_> {
         }
         for row in self
             .table
+            .known_missing
+            .iter()
+            .filter(|k| k.fixture == self.fixture)
+        {
+            for &idx in &row.indices {
+                let hit = self.report.findings.iter().position(|f| {
+                    f.kind == FindingKind::OnlyInA
+                        && f.disposition == Disposition::Open
+                        && f.record_type == row.record_type
+                        && f.index_a == Some(idx)
+                });
+                match hit {
+                    Some(at) => {
+                        let f = &mut self.report.findings[at];
+                        f.class = Class::KnownDivergence;
+                        f.disposition = Disposition::Known {
+                            issue: row.issue.clone(),
+                        };
+                    }
+                    None => {
+                        let mut f = self.finding(
+                            FindingKind::StaleKnownRow,
+                            Some(idx),
+                            None,
+                            &row.record_type,
+                            "(missing)".to_string(),
+                        );
+                        f.class = Class::KnownDivergence;
+                        f.disposition = Disposition::KnownVanished;
+                        self.report.findings.push(f);
+                    }
+                }
+            }
+        }
+        for row in self
+            .table
             .dual_oracle
             .iter()
             .filter(|d| d.fixture == self.fixture)
