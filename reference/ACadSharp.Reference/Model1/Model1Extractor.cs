@@ -125,7 +125,11 @@ public static class Model1Extractor
             // The colour index (DXF 62; its sign is `on`), or -1 for a true colour
             // (DXF 420), which has no index.
             long index = color.IsTrueColor ? -1 : Math.Abs((long)color.Index);
-            long trueColor = color.IsTrueColor ? color.TrueColor & 0xFFFFFF : -1;
+            // Packed 0xRRGGBB from the components, because the packed value ACadSharp
+            // exposes (Color.TrueColor) is blue first.
+            long trueColor = color.IsTrueColor
+                ? ((long)color.R << 16) | ((long)color.G << 8) | color.B
+                : -1;
 
             records.Add(Model1Record.Of(
                 "layer",
