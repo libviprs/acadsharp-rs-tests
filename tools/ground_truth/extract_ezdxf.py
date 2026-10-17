@@ -586,7 +586,7 @@ class Extractor:
         use_align = ha != 0 or va != 0
         anchor = p3(e.dxf.align_point) if use_align and e.dxf.hasattr("align_point") else p3(e.dxf.insert)
         value = e.dxf.text
-        if dxf in ("ATTRIB", "ATTDEF") and hasattr(e, "has_embedded_mtext_entity") and e.has_embedded_mtext_entity():
+        if dxf in ("ATTRIB", "ATTDEF") and getattr(e, "has_embedded_mtext_entity", False):
             value = e.virtual_mtext_entity().text
         self.text_common(
             view, xf, p3(e.dxf.extrusion), anchor, float(e.dxf.height),
@@ -607,7 +607,7 @@ class Extractor:
             self.warn("invalid_entity", "HATCH", "no_boundary_paths", here)
             return
         for path in e.paths:
-            if path.PATH_TYPE == "PolylinePath":
+            if type(path).__name__ == "PolylinePath":
                 pts = [(float(x), float(y), elev) for x, y, *_ in path.vertices]
                 bul = [float(b[2]) if len(b) > 2 else 0.0 for b in path.vertices]
                 self.polyline(view, to_world, (0.0, 0.0, 1.0), pts, bul, bool(path.is_closed), here, "HATCH")
@@ -618,7 +618,7 @@ class Extractor:
                 self.hatch_edge(edge, view, to_world, elev, here)
 
     def hatch_edge(self, edge, view, to_world, elev, here):
-        kind = edge.EDGE_TYPE
+        kind = type(edge).__name__
         if kind == "LineEdge":
             self.emit({"record": "line", "view": view,
                        "a": to_world.apply((float(edge.start[0]), float(edge.start[1]), elev)),
@@ -704,7 +704,7 @@ class Extractor:
             self.active.discard(key)
         # The insert's own ATTRIBs sit in the space that contains the insert.
         for attrib in e.attribs:
-            self.extract(attrib, view, xf, depth, False, path + [hexh(e)] if False else here[:-1] + [hexh(e)])
+            self.extract(attrib, view, xf, depth, False, here)
 
     def dimension(self, e, view, xf, depth, here):
         name = e.dxf.geometry if e.dxf.hasattr("geometry") else ""
@@ -800,6 +800,7 @@ def command_extract(args) -> int:
     image = os.environ.get("GT_IMAGE", "")
     wanted = set(args.only or [])
     done = 0
+    failed = 0
     for row in inputs(manifest):
         if wanted and row["id"] not in wanted:
             continue
@@ -808,8 +809,16 @@ def command_extract(args) -> int:
         if sha256(data) != row["sha256"]:
             print(f"{row['id']}: {path} is not the file the manifest froze", file=sys.stderr)
             return 1
-        doc = ezdxf.readfile(str(path))
-        records, sidecar = extract_document(doc, doc.dxfversion)
+        try:
+            doc = ezdxf.readfile(str(path))
+            records, sidecar = extract_document(doc, doc.dxfversion)
+        except Exception:  # report every input's failure, then fail the run
+            import traceback
+
+            print(f"{row['id']}: FAILED", file=sys.stderr)
+            traceback.print_exc()
+            failed += 1
+            continue
         jsonl, src = emit_texts(records, sidecar)
         run = {
             "engine": ENGINE,
@@ -830,6 +839,8 @@ def command_extract(args) -> int:
             json.dumps(run, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
         done += 1
         print(f"{row['id']}: {len(records)} records")
+    if failed:
+        return 1
     if wanted and done != len(wanted):
         print("some --only ids are not in the manifest", file=sys.stderr)
         return 1
@@ -964,9 +975,27 @@ def stage_rows(files: dict[str, bytes], manifest: dict, image: str) -> tuple[lis
     return rows, store
 
 
+def extract_locally(image: str) -> dict[str, bytes]:
+    """The same extraction, in this process (already inside the pinned image)."""
+    import tempfile
+
+    os.environ["GT_IMAGE"] = image
+    with tempfile.TemporaryDirectory() as tmp:
+        ns = argparse.Namespace(
+            manifest=str(MANIFEST), dxf_root=str(FIXTURES), out=tmp, only=None,
+            requirements_sha256=None,
+        )
+        if command_extract(ns) != 0:
+            sys.exit("extraction failed")
+        return {p.name: p.read_bytes() for p in pathlib.Path(tmp).iterdir()}
+
+
 def command_freeze(args) -> int:
     manifest = load_manifest()
-    files = run_extract_in_container(args.image, None)
+    if args.runner == "local":
+        files = extract_locally(args.image)
+    else:
+        files = run_extract_in_container(args.image, None)
     rows, store = stage_rows(files, manifest, args.image)
     committed = {r["id"]: r for r in manifest.get("ground_truth", [])}
     moved = []
@@ -1045,6 +1074,10 @@ def main(argv=None) -> int:
     p = sub.add_parser("freeze")
     p.add_argument("--accept", action="store_true")
     p.add_argument("--image", default=IMAGE)
+    p.add_argument(
+        "--runner", choices=("docker", "local"), default="docker",
+        help="docker: drive the pinned image; local: this process is already inside it",
+    )
     p.set_defaults(fn=command_freeze)
     p = sub.add_parser("verify")
     p.set_defaults(fn=command_verify)
