@@ -1027,3 +1027,30 @@ fn a_known_missing_row_with_no_reason_or_no_issue_is_red() {
         Err(TableError::NoIssue(_))
     ));
 }
+
+#[test]
+fn a_cell_whose_every_difference_is_listed_or_explained_counts_both_kinds_as_known() {
+    use acadsharp_rs_tests::parity_run::{Side, judge_self};
+    use acadsharp_rs_tests::verdict::Verdict;
+    use std::collections::BTreeMap;
+    let mut b = base();
+    b.remove(5);
+    set(&mut b, 4, "\"radius\":5.0", "\"radius\":5.5");
+    let table = with_missing(missing("arc", &[5]));
+    let tables = BTreeMap::from([("oracle/acadrust".to_string(), table)]);
+    let side = |label: &str, lines: &[String]| Side {
+        label: label.into(),
+        stream: stream(lines),
+    };
+    let j = judge_self(
+        "fixture",
+        "oracle/acadrust",
+        &side("a", &base()),
+        &side("b", &b),
+        &tables,
+        &|f| f.record_type == "circle",
+    )
+    .unwrap();
+    // one record explained by the caller, one listed in the table: two, not one
+    assert_eq!(j.verdict, Verdict::Known(2), "{}", j.first);
+}
