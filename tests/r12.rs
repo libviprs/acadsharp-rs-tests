@@ -40,8 +40,8 @@ fn readings(input: &str) -> BTreeMap<&'static str, Vec<String>> {
         .iter()
         .find(|i| i.id == input)
         .unwrap();
-    let oracle = parse_stream(&String::from_utf8(row.load_reference_jsonl().unwrap()).unwrap())
-        .unwrap();
+    let oracle =
+        parse_stream(&String::from_utf8(row.load_reference_jsonl().unwrap()).unwrap()).unwrap();
     out.insert("oracle", the_strings(&oracle));
     // acadrust, live.
     let emission = extract_dxf_bytes(&row.load().unwrap()).unwrap();
@@ -78,7 +78,10 @@ fn each_reader_returns_what_the_record_says_for_the_callout_and_the_degree_texts
                 .iter()
                 .find(|r| r.input == input && r.reader == engine)
                 .unwrap_or_else(|| panic!("no row for {engine} on {input}"));
-            assert!(!row.assumed.trim().is_empty(), "{engine} {input}: which code page?");
+            assert!(
+                !row.assumed.trim().is_empty(),
+                "{engine} {input}: which code page?"
+            );
             assert_eq!(
                 got[engine], row.strings,
                 "{engine} on {input} returns other strings than the record says (the code page, the raw bytes and both decodings are in parity/r12_codepage.toml)"
@@ -147,7 +150,10 @@ fn run_emitter(bin: &str, name: &str, bytes: &[u8]) -> (bool, String) {
 
 /// What each engine must say about the six-byte `AC1009` stub, written out. The
 /// oracle's is the manifest's own (`oracle_exit`, frozen by `regenerate_reference.py`).
-const REFUSALS: [(&str, &str); 2] = [("acadrust", "AC1009"), ("acadsharp", "does not read that drawing format")];
+const REFUSALS: [(&str, &str); 2] = [
+    ("acadrust", "AC1009"),
+    ("acadsharp", "does not read that drawing format"),
+];
 
 #[test]
 fn the_ac1009_dwg_stub_is_refused_by_every_engine_that_is_asked() {
@@ -175,7 +181,10 @@ fn the_ac1009_dwg_stub_is_refused_by_every_engine_that_is_asked() {
         if std::env::var("R12_PRINT").as_deref() == Ok("1") {
             println!("REFUSAL {engine}: {said}");
         }
-        assert!(said.contains(must), "{engine} refused it, but said {said:?}");
+        assert!(
+            said.contains(must),
+            "{engine} refused it, but said {said:?}"
+        );
     }
 }
 
@@ -184,5 +193,8 @@ fn the_refusal_harness_reads_a_good_drawing_so_a_refusal_means_something() {
     // The positive control: the same path, a real AC1032 DWG, is read by acadrust.
     let good = fixtures::load("g13_line").unwrap();
     let (read, said) = run_emitter(env!("CARGO_BIN_EXE_emit-acadrust"), "control", &good);
-    assert!(read, "acadrust must read g13_line through the same door: {said}");
+    assert!(
+        read,
+        "acadrust must read g13_line through the same door: {said}"
+    );
 }
