@@ -79,6 +79,7 @@ public static class Model1Extractor
         ExtractLayers(document, records);
         ExtractLinetypes(document, records);
         ExtractTextStyles(document, records);
+        ExtractDimensionStyles(document, records);
         Dictionary<object, string> owners = ExtractDictionaries(document, records);
         ExtractXData(document, records, owners);
         return records;
@@ -204,6 +205,136 @@ public static class Model1Extractor
                 // field is written as false and left out of the comparison
                 // (excluded for the oracle in parity/MODEL1.toml).
                 ("annotative", "false")));
+        }
+    }
+
+    /// <summary>
+    /// The fields of a <c>dimstyle</c> record in the order docs/MODEL_1.md gives
+    /// them: the <c>$DIM*</c> name, its written type and the group code the
+    /// DIMSTYLE table stores it under.
+    /// </summary>
+    private static readonly (string Name, char Kind, int Code)[] DimensionFields =
+    [
+        ("$DIMPOST", 's', 3),
+        ("$DIMAPOST", 's', 4),
+        ("$DIMSCALE", 'd', 40),
+        ("$DIMASZ", 'd', 41),
+        ("$DIMEXO", 'd', 42),
+        ("$DIMDLI", 'd', 43),
+        ("$DIMEXE", 'd', 44),
+        ("$DIMRND", 'd', 45),
+        ("$DIMDLE", 'd', 46),
+        ("$DIMTP", 'd', 47),
+        ("$DIMTM", 'd', 48),
+        ("$DIMFXL", 'd', 49),
+        ("$DIMJOGANG", 'd', 50),
+        ("$DIMTFILL", 'i', 69),
+        ("$DIMTOL", 'i', 71),
+        ("$DIMLIM", 'i', 72),
+        ("$DIMTIH", 'i', 73),
+        ("$DIMTOH", 'i', 74),
+        ("$DIMSE1", 'i', 75),
+        ("$DIMSE2", 'i', 76),
+        ("$DIMTAD", 'i', 77),
+        ("$DIMZIN", 'i', 78),
+        ("$DIMAZIN", 'i', 79),
+        ("$DIMARCSYM", 'i', 90),
+        ("$DIMTXT", 'd', 140),
+        ("$DIMCEN", 'd', 141),
+        ("$DIMTSZ", 'd', 142),
+        ("$DIMALTF", 'd', 143),
+        ("$DIMLFAC", 'd', 144),
+        ("$DIMTVP", 'd', 145),
+        ("$DIMTFAC", 'd', 146),
+        ("$DIMGAP", 'd', 147),
+        ("$DIMALTRND", 'd', 148),
+        ("$DIMALT", 'i', 170),
+        ("$DIMALTD", 'i', 171),
+        ("$DIMTOFL", 'i', 172),
+        ("$DIMSAH", 'i', 173),
+        ("$DIMTIX", 'i', 174),
+        ("$DIMSOXD", 'i', 175),
+        ("$DIMCLRD", 'i', 176),
+        ("$DIMCLRE", 'i', 177),
+        ("$DIMCLRT", 'i', 178),
+        ("$DIMADEC", 'i', 179),
+        ("$DIMUNIT", 'i', 270),
+        ("$DIMDEC", 'i', 271),
+        ("$DIMTDEC", 'i', 272),
+        ("$DIMALTU", 'i', 273),
+        ("$DIMALTTD", 'i', 274),
+        ("$DIMAUNIT", 'i', 275),
+        ("$DIMFRAC", 'i', 276),
+        ("$DIMLUNIT", 'i', 277),
+        ("$DIMDSEP", 'i', 278),
+        ("$DIMTMOVE", 'i', 279),
+        ("$DIMJUST", 'i', 280),
+        ("$DIMSD1", 'i', 281),
+        ("$DIMSD2", 'i', 282),
+        ("$DIMTOLJ", 'i', 283),
+        ("$DIMTZIN", 'i', 284),
+        ("$DIMALTZ", 'i', 285),
+        ("$DIMALTTZ", 'i', 286),
+        ("$DIMFIT", 'i', 287),
+        ("$DIMUPT", 'i', 288),
+        ("$DIMATFIT", 'i', 289),
+        ("$DIMFXLON", 'i', 290),
+        ("$DIMTXTDIRECTION", 'i', 295),
+        ("$DIMTXSTY", 's', 340),
+        ("$DIMLDRBLK", 's', 341),
+        ("$DIMBLK", 's', 342),
+        ("$DIMBLK1", 's', 343),
+        ("$DIMBLK2", 's', 344),
+        ("$DIMLTYPE", 's', 345),
+        ("$DIMLTEX1", 's', 346),
+        ("$DIMLTEX2", 's', 347),
+        ("$DIMLWD", 'i', 371),
+        ("$DIMLWE", 'i', 372),
+    ];
+
+    private static void ExtractDimensionStyles(CadDocument document, List<Model1Record> records)
+    {
+        // ACadSharp names its DIMSTYLE properties in words and records the DXF
+        // group code each one is stored under, which is the one thing it shares
+        // with the other two readers, so the properties are found by code.
+        var byCode = new Dictionary<int, System.Reflection.PropertyInfo>();
+        foreach (System.Reflection.PropertyInfo property in typeof(DimensionStyle).GetProperties())
+        {
+            var attribute = (ACadSharp.Attributes.DxfCodeValueAttribute?)Attribute.GetCustomAttribute(
+                property, typeof(ACadSharp.Attributes.DxfCodeValueAttribute));
+            if (attribute is not null && attribute.ValueCodes.Length > 0)
+            {
+                byCode[(int)attribute.ValueCodes[0]] = property;
+            }
+        }
+
+        foreach (DimensionStyle style in document.DimensionStyles)
+        {
+            string name = style.Name ?? string.Empty;
+            if (name.Length == 0)
+            {
+                continue;
+            }
+
+            var fields = new List<(string, string)> { ("name", NumericFormatting.Quoted(name)) };
+            foreach ((string field, char kind, int code) in DimensionFields)
+            {
+                object? raw = byCode.TryGetValue(code, out System.Reflection.PropertyInfo? property)
+                    ? property.GetValue(style)
+                    : null;
+                string value = kind switch
+                {
+                    'd' => NumericFormatting.Real(raw is null ? 0.0 : AsDouble(field, raw)),
+                    'i' => NumericFormatting.Whole(raw is null ? 0 : AsInt(field, raw)),
+                    _ => NumericFormatting.Quoted(AsString(field, raw)),
+                };
+                fields.Add((field, value));
+            }
+
+            // ACadSharp 3.7.1 does not type the AcadAnnotative xdata: written as
+            // false and left out of the comparison (parity/MODEL1.toml).
+            fields.Add(("annotative", "false"));
+            records.Add(Model1Record.Of("dimstyle", name, [.. fields]));
         }
     }
 
