@@ -54,6 +54,16 @@ fn out_dir() -> PathBuf {
     }
 }
 
+const VERDICTS_HEADER: &str = "# parity/MODEL1_VERDICTS.toml: one row per (fixture, pair) of the model-1 stream.\n\
+#\n\
+# The words are the ones src/verdict.rs defines and parity/VERDICTS.toml uses.\n\
+# `tests/parity_model1.rs` recomputes every verdict from a real run and is red on\n\
+# any row that moved, better or worse, until this file changes. A row that is not\n\
+# MATCH has a reason and an issue; for KNOWN the reason is that every difference\n\
+# is a row of parity/MODEL1.toml, and the issues are the ones those rows name.\n\
+#\n\
+# `MODEL1_REGEN=1 cargo test --features acadrust --test parity_model1` rewrites it.\n\n";
+
 fn verdicts_path() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("parity")
@@ -165,27 +175,29 @@ fn the_run_agrees_with_the_committed_verdicts() {
         .iter()
         .map(|(k, r)| (k.clone(), (r.verdict().to_string(), r.first())))
         .collect();
+    let issues: BTreeMap<(String, String), String> =
+        run.reports.iter().map(|(k, r)| (k.clone(), r.issues())).collect();
 
     if regen {
-        let old = committed.by_key();
-        let mut table = Table { runs: committed.runs.clone(), rows: Vec::new() };
+                let mut table = Table { runs: committed.runs.clone(), rows: Vec::new() };
         for ((fixture, pair), (verdict, first)) in &actual {
-            let kept = old.get(&(fixture.clone(), pair.clone()));
-            let moved = kept.is_some_and(|r| &r.verdict != verdict);
-            let needs = verdict != "MATCH";
+                        let needs = verdict != "MATCH";
             table.rows.push(Row {
                 fixture: fixture.clone(),
                 pair: pair.clone(),
                 verdict: verdict.clone(),
-                reason: if needs && !moved { kept.map(|r| r.reason.clone()).unwrap_or_default() } else { String::new() },
-                issue: if needs && !moved { kept.map(|r| r.issue.clone()).unwrap_or_default() } else { String::new() },
+                reason: if needs { "listed in parity/MODEL1.toml".to_string() } else { String::new() },
+                issue: if needs { issues[&(fixture.clone(), pair.clone())].clone() } else { String::new() },
                 first: first.clone(),
             });
         }
-        std::fs::write(verdicts_path(), table.render()).unwrap();
+        let rendered = table.render();
+        let body = rendered.split_once("\n\n").map_or(rendered.as_str(), |(_, b)| b);
+        let rendered = format!("{VERDICTS_HEADER}{body}");
+        std::fs::write(verdicts_path(), &rendered).unwrap();
         // The run may be in a container whose tree is thrown away, so the table
         // is printed too, between two markers.
-        println!("==MODEL1_VERDICTS==\n{}==END==", table.render());
+        println!("==MODEL1_VERDICTS==\n{rendered}==END==");
         eprintln!("rewrote {}", verdicts_path().display());
         return;
     }

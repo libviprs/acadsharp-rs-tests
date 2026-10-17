@@ -387,6 +387,8 @@ pub struct Finding {
     pub key: String,
     pub detail: String,
     pub disposition: Disposition,
+    /// The issue of the row that lists it, when one does.
+    pub issue: String,
 }
 
 impl fmt::Display for Finding {
@@ -423,6 +425,17 @@ impl Report {
         } else {
             Verdict::Match
         }
+    }
+
+    /// The issues of the rows that listed a difference, in order, once each.
+    pub fn issues(&self) -> String {
+        let mut seen: Vec<&str> = Vec::new();
+        for f in self.findings.iter().filter(|f| f.disposition == Disposition::Known) {
+            if !f.issue.is_empty() && !seen.contains(&f.issue.as_str()) {
+                seen.push(&f.issue);
+            }
+        }
+        seen.join(", ")
     }
 
     /// The first finding that counts, rendered, for the verdict file.
@@ -486,6 +499,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                     key: name.clone(),
                     detail,
                     disposition: if known.is_some() { Disposition::Known } else { Disposition::Red },
+                    issue: known.map(|k| k.issue.clone()).unwrap_or_default(),
                 });
             }
             (Some(x), None) => report.findings.push(Finding {
@@ -497,6 +511,10 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 } else {
                     Disposition::Red
                 },
+                issue: rules
+                    .excluded_for(b.engine, b.fixture, name)
+                    .map(|e| e.issue.clone())
+                    .unwrap_or_default(),
             }),
             (None, Some(y)) => report.findings.push(Finding {
                 kind: FindingKind::OnlyInB,
@@ -507,6 +525,10 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 } else {
                     Disposition::Red
                 },
+                issue: rules
+                    .excluded_for(a.engine, a.fixture, name)
+                    .map(|e| e.issue.clone())
+                    .unwrap_or_default(),
             }),
             (None, None) => unreachable!("a name comes from one of the two"),
         }
