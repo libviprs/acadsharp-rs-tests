@@ -675,3 +675,100 @@ fn every_file_has_a_style_called_standard() {
         );
     }
 }
+
+/// The dimstyle control, on a DXF twin: `$DIMASZ` of `ISO-25` changed in a
+/// scratch copy of the oracle's reading of the AC1032 twin turns that twin's
+/// ezdxf row one finding worse, naming the style and the field.
+#[test]
+fn one_changed_dimasz_is_red_and_names_the_style_and_the_field() {
+    let rules = model1::committed_rules().unwrap();
+    let twin = "dxf-sample-ac1032-ascii";
+    let ez = model1::load_frozen("ezdxf", twin).unwrap();
+    let mut oracle = model1::load_frozen("oracle", twin).unwrap();
+    fn side<'a>(engine: &'a str, id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: id,
+            records,
+        }
+    }
+    let before = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    )
+    .red()
+    .len();
+    let mut touched = 0;
+    for r in &mut oracle {
+        if let Record::Entry(e) = r
+            && e.kind == "dimstyle"
+            && e.name == "ISO-25"
+            && let Some(Value::Double(v)) = e.get("$DIMASZ").cloned()
+        {
+            e.set("$DIMASZ", Value::Double(v * 1.5));
+            touched += 1;
+        }
+    }
+    assert_eq!(touched, 1, "the twin has a style ISO-25");
+    let after = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    );
+    assert_eq!(after.red().len(), before + 1, "{}", after.first());
+    assert!(
+        after
+            .red()
+            .iter()
+            .any(|f| f.key == "dimstyle/ISO-25.$DIMASZ")
+    );
+}
+
+/// Every handle-valued field of the `Standard` style of the AC1032 save comes out
+/// as a name on both DWG readers, and the names are ones the drawing's own tables
+/// carry (the empty string is "no reference").
+#[test]
+fn the_handle_valued_dimstyle_fields_of_standard_are_names_the_tables_carry() {
+    let id = "acadsharp-ac1032";
+    let Some(run) = gate(the_run().as_ref().map_err(String::clone)) else {
+        return;
+    };
+    let oracle = model1::load_frozen("oracle", id).unwrap();
+    let rust = run.rust[id].as_ref().expect("acadrust reads this save");
+    for (who, records) in [("oracle", &oracle), ("acadrust", rust)] {
+        let names = |kind: &str| -> Vec<String> {
+            records
+                .iter()
+                .filter(|r| r.kind() == kind)
+                .map(|r| r.key().to_string())
+                .collect()
+        };
+        let (styles, linetypes) = (names("textstyle"), names("linetype"));
+        let Some(Record::Entry(std)) = records
+            .iter()
+            .find(|r| r.kind() == "dimstyle" && r.key() == "Standard")
+        else {
+            panic!("{who}: no dimstyle Standard");
+        };
+        let text = |f: &str| match std.get(f) {
+            Some(Value::Str(s)) => s.clone(),
+            other => panic!("{who}: {f} is {other:?}"),
+        };
+        assert!(styles.contains(&text("$DIMTXSTY")), "{who} $DIMTXSTY");
+        for f in ["$DIMLTYPE", "$DIMLTEX1", "$DIMLTEX2"] {
+            let v = text(f);
+            assert!(v.is_empty() || linetypes.contains(&v), "{who} {f} = {v:?}");
+        }
+        for f in ["$DIMBLK", "$DIMBLK1", "$DIMBLK2", "$DIMLDRBLK"] {
+            let v = text(f);
+            // A handle is hexadecimal digits and nothing else.
+            assert!(
+                v.is_empty() || !v.chars().all(|c| c.is_ascii_hexdigit()) || v.len() < 2,
+                "{who} {f} looks like a handle: {v:?}"
+            );
+        }
+    }
+}

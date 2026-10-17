@@ -181,6 +181,82 @@ pairs = ["dxf-dwg:oracle", "ezdxf/acadrust", "oracle/acadrust"]
 reason = "DXF 74 of an embedded text segment: ACadSharp's DWG reader gives 10 where the DXF holds 2 (to AC1024) or 10 (from AC1027), and acadrust rebuilds 2 from typed data and drops the bit 8"
 issue = "libviprs/acadsharp-rs-tests#116"
 
+# ---- known: dimstyle version default
+[[known]]
+names = [
+  "dimstyle/*.$DIMFXL", "dimstyle/*.$DIMJOGANG"
+]
+pairs = ["dxf-dwg:acadrust", "oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "dxf-sample-ac1015-ascii"
+]
+reason = "the DWG of this version does not store the value, so ACadSharp and acadrust each report their own default"
+issue = "libviprs/acadsharp-rs-tests#122"
+
+# ---- known: dimstyle version default
+[[known]]
+names = [
+  "dimstyle/*.$DIMTIH"
+]
+pairs = ["dxf-dwg:acadrust", "oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014", "dxf-sample-ac1015-ascii"
+]
+reason = "the DWG of this version does not store the value, so ACadSharp and acadrust each report their own default"
+issue = "libviprs/acadsharp-rs-tests#122"
+
+# ---- known: dimstyle version default
+[[known]]
+names = [
+  "dimstyle/*.$DIMBLK", "dimstyle/*.$DIMLWD", "dimstyle/*.$DIMLWE", "dimstyle/*.$DIMSE1"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014"
+]
+reason = "the DWG of this version does not store the value, so ACadSharp and acadrust each report their own default"
+issue = "libviprs/acadsharp-rs-tests#122"
+
+# ---- known: dimstyle $DIMFIT
+[[known]]
+names = [
+  "dimstyle/*.$DIMFIT"
+]
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "ACadSharp's DWG reader gives 3 for the R13 variable $DIMFIT that R2000 replaced by $DIMATFIT, and every other reader gives 0"
+issue = "libviprs/acadsharp-rs-tests#122"
+
+# ---- known: dimstyle DXF defaults
+[[known]]
+names = [
+  "dimstyle/*.$DIMALTD", "dimstyle/*.$DIMALTTD", "dimstyle/*.$DIMCLRD", "dimstyle/*.$DIMCLRE",
+  "dimstyle/*.$DIMCLRT", "dimstyle/*.$DIMDEC", "dimstyle/*.$DIMDLI", "dimstyle/*.$DIMEXE",
+  "dimstyle/*.$DIMEXO", "dimstyle/*.$DIMGAP", "dimstyle/*.$DIMPOST", "dimstyle/*.$DIMTAD",
+  "dimstyle/*.$DIMTDEC", "dimstyle/*.$DIMTIH", "dimstyle/*.$DIMTOH", "dimstyle/*.$DIMTOLJ",
+  "dimstyle/*.$DIMTZIN", "dimstyle/*.$DIMZIN"
+]
+pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle"]
+reason = "AutoCAD writes only the codes that differ from a default, and ACadSharp's and acadrust's DXF readers substitute their own (the ISO set) where the DWG of the same drawing holds AutoCAD's"
+issue = "libviprs/acadsharp-rs-tests#122"
+
+# ---- known: dimstyle DXF defaults
+[[known]]
+names = [
+  "dimstyle/*.$DIMSAH"
+]
+pairs = ["dxf-dwg:acadrust", "oracle/acadrust"]
+reason = "AutoCAD writes only the codes that differ from a default, and ACadSharp's and acadrust's DXF readers substitute their own (the ISO set) where the DWG of the same drawing holds AutoCAD's"
+issue = "libviprs/acadsharp-rs-tests#122"
+
+# ---- known: dimstyle DXF defaults
+[[known]]
+names = [
+  "dimstyle/*.$DIMAPOST"
+]
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "AutoCAD writes only the codes that differ from a default, and ACadSharp's and acadrust's DXF readers substitute their own (the ISO set) where the DWG of the same drawing holds AutoCAD's"
+issue = "libviprs/acadsharp-rs-tests#122"
+
 # ---- known: AC1014 upper case
 [[known]]
 names = [
@@ -255,6 +331,15 @@ names = [
 ]
 reason = "ACadSharp 3.7.1 has no annotative property on TextStyle (acadrust reads it from the AcadAnnotative xdata of the style), so the oracle writes false and the field is left out; the xdata itself is compared by the xdata kind (#40)"
 issue = "libviprs/acadsharp-rs-tests#35"
+
+# ---- excluded: oracle, a field it cannot produce
+[[excluded]]
+engine = "oracle"
+names = [
+  "dimstyle/*.annotative"
+]
+reason = "ACadSharp 3.7.1 does not type the AcadAnnotative xdata of a DIMSTYLE (acadrust reads it from the xdata), so the oracle writes false and the field is left out; the xdata itself is compared by the xdata kind (#40)"
+issue = "libviprs/acadsharp-rs-tests#36"
 
 # ---- excluded: ezdxf, not written by the DXF of these versions
 [[excluded]]

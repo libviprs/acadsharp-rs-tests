@@ -25,6 +25,7 @@ side is `tools/model1.py`.
 | `layer` | this document | the entry name |
 | `linetype` | this document | the entry name |
 | `textstyle` | this document | the entry name |
+| `dimstyle` | this document | the entry name |
 
 The rest of the table kinds (`linetype`, `textstyle`, `dimstyle`,
 `block_record`, `layout`), `dictionary`, and `xdata` with `xrecord` are each
@@ -253,6 +254,29 @@ would substitute for a zero), `oblique_angle` (50, radians), `backward` and
   left out of the comparison by an `excluded` row naming it
   (`textstyle/*.annotative` for the oracle: ACadSharp 3.7.1 has no such property).
   The report counts what was left out, and a row the run never needed is stale.
+
+## `dimstyle`
+
+One record per DIMSTYLE entry, keyed by the name; `Standard` is in every file. The
+fields are the `$DIM*` names themselves (`"$DIMASZ"`), in the order of
+`DIMENSION_FIELDS` in `tools/model1.py`, which is the order of the schema in
+`src/model1.rs` (the parser refuses a line whose fields are in another order).
+They are the 75 DIMSTYLE group codes ACadSharp types, and the written form of each
+is the one the header table gives the variable of the same name: a reference is the
+**name** (`$DIMTXSTY`, `$DIMBLK`, `$DIMBLK1`, `$DIMBLK2`, `$DIMLDRBLK`, `$DIMLTYPE`,
+`$DIMLTEX1`, `$DIMLTEX2`), the empty string being no reference; a colour is the
+colour index, or -1 for a true colour; a flag is the integer 0 or 1; an angle
+(`$DIMJOGANG`) is in radians. A last field, `annotative`, is the
+`AcadAnnotative` xdata flag.
+
+- **null.** AutoCAD writes a DIMSTYLE code only when it differs from a default, so a
+  `Standard` style in a DXF carries nine codes. A reader of a DXF cannot say what
+  the rest are, so ezdxf writes `null` for a field the entry does not store and the
+  comparison leaves it out, counted. ACadSharp and acadrust write the value they
+  supply for an omitted code, and holding that against the DWG of the same drawing
+  is the `dxf-dwg:` rows.
+- **annotative** is `excluded` for the oracle, as for the text style.
+- An entry with no name has no record.
 
 ## Comparing
 
