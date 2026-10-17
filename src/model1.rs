@@ -693,666 +693,450 @@ pub fn load_frozen(engine: &str, id: &str) -> Result<Vec<Record>, String> {
     let f = files
         .iter()
         .find(|f| f.engine == engine && f.id == id)
-        .ok_or_else(|| format!("no frozen {engine} model-1 stream for {id}"))?;
-    let path = model1_dir().join(&f.path);
-    let bytes = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
-    let got: String = {
-        use sha2::{Digest, Sha256};
-        Sha256::digest(&bytes)
-            .iter()
-            .map(|b| format!("{b:02x}"))
-            .collect()
-    };
-    if got != f.sha256 {
-        return Err(format!(
-            "{}: hashes to {got}, the manifest froze {}",
-            path.display(),
-            f.sha256
-        ));
-    }
-    let text = String::from_utf8(bytes).map_err(|e| e.to_string())?;
-    parse_stream(&text).map_err(|e| format!("{}: {e}", path.display()))
-}
+       >­ën®x›Ú×ÛÜ—Ù[ÙJ›Ü›X]J››Èœ›Ş™[ˆÙ[™Ú[™_H[Ù[LHİ™X[H›ÜˆÚYHŠJOÎÂˆ]]H[Ù[WÙ\Š
+Kš›Ú[Š	™‹œ]
+NÂˆ]]\ÈHİ™œÎœ™XY
+	œ]
+K›X\Ù\œŠ_›Ü›X]JßNˆÙ_H‹]™\Ü^J
+JJOÎÂˆ]Ûİˆİš[™ÈHÂˆ\ÙHÚLÑYÙ\İÚLMŸNÂˆÚLM™YÙ\İ
+	˜]\ÊBˆš]\Š
+Bˆ›X\
+Ÿ›Ü›X]JØŒHŠJBˆ˜ÛÛXİ
 
-/// The committed `parity/MODEL1.toml`.
-pub fn committed_rules() -> Result<Rules, String> {
-    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("parity")
-        .join("MODEL1.toml");
-    let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
-    Rules::parse(&text)
-}
+BˆNÂˆYˆÛİOH‹œÚLMˆÂˆ™]\›ˆ\œŠ›Ü›X]JˆßNˆ\Ú\ÈÈÙÛİKHX[šY™\İœ›Ş™HßH‹ˆ]™\Ü^J
+Kˆ‹œÚLM‚ˆ
+JNÂˆBˆ]^Hİš[™Î™œ›ÛWİ]
+]\ÊK›X\Ù\œŠ_K×Üİš[™Ê
+JOÎÂˆ\œÙWÜİ™X[J	^
+K›X\Ù\œŠ_›Ü›X]JßNˆÙ_H‹]™\Ü^J
+JJBŸB‚‹ËËÈHÛÛ[Z]Y\š]KÓSÑSKÛ[‚œXˆ›ˆÛÛ[Z]YÜ[\Ê
+HOˆ™\İ[[\Ëİš[™ÏˆÂˆ]]Hİœ]”]›™]Ê[ˆJĞT‘Ó×ÓPS’Q‘TÕÑTˆŠJBˆš›Ú[Šœ\š]HŠBˆš›Ú[Š“SÑSKÛ[ŠNÂˆ]^Hİ™œÎœ™XYİ×Üİš[™Ê	œ]
+K›X\Ù\œŠ_›Ü›X]JßNˆÙ_H‹]™\Ü^J
+JJOÎÂˆ[\Îœ\œÙJ	^
+BŸB‚‹ËÈKKKHÛÛ\\š[™ÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‚‹ËËÈÚ]Ú[™ÙˆY™™\™[˜ÙHHš[™[™È\Ë‚ˆÖÙ\š]™JXYËÛÛ™K\X[\K\JWBœXˆ[[Hš[™[™ÒÚ[™ÂˆÛ›R[KˆÛ›R[‹ˆ\Kˆ˜[YKŸB‚‹ËËÈÚ]Hš[™[™È[[İ[ÈÈÛ˜ÙHH[\È]™H™Y[ˆ\YY‚ˆÖÙ\š]™JXYËÛÛ™K\X[\K\JWBœXˆ[[H\ÜÜÚ][ÛˆÂˆËËÈ›İ[™È^Z[œÈ]ˆX‚ˆ™YˆËËÈH\İYY™™\™[˜ÙHHÛÛœİXİ[Û‹‚ˆÛ›İÛ‹ˆËËÈH˜[YHÛ™H[™Ú[™HØ[››İ›ÙXÙK\İY‚ˆ^ÛYYŸB‚ˆÖÙ\š]™JXYËÛÛ™JWBœXˆİXİš[™[™ÈÂˆXˆÚ[™ˆš[™[™ÒÚ[™ˆXˆÙ^Nˆİš[™ËˆXˆ]Z[ˆİš[™ËˆXˆ\ÜÜÚ][Ûˆ\ÜÜÚ][Û‹ˆËËÈH\ÜİYHÙˆH›İÈ]\İÈ]Ú[ˆÛ™HÙ\Ë‚ˆXˆ\ÜİYNˆİš[™ËˆËËÈ›Üˆ[ˆ^ÛYYš[™[™ËH[™Ú[™HH›İÈ^ÛY\Ë‚ˆXˆ^ÛYYˆÜ[Ûİš[™Ï‹ŸB‚š[\›]‘\Ü^H›Üˆš[™[™ÈÂˆ›ˆ›]
+	œÙ[‹ˆ	›]]›]‘›Ü›X]\	×ÏŠHOˆ›]”™\İ[ÂˆÜš]HJˆ‹ˆšXY\ˆßHßHŞÎßWH‹ˆÙ[‹šÙ^KÙ[‹™]Z[Ù[‹™\ÜÜÚ][Û‚ˆ
+BˆBŸB‚‹ËËÈÚ]Û™HÛÛ\\š\ÛÛˆØ[YHË‚ˆÖÙ\š]™JXYËÛÛ™KY˜][
+WBœXˆİXİ™\ÜÂˆXˆš[™[™ÜÎˆ™XÏš[™[™Ï‹ˆËËÈİÈX[H˜[Y\ÈÙ\™HÛˆ›İÚY\È[™ÛÛ\\™Y‚ˆXˆÛÛ\\™Yˆ\Ú^™KŸB‚š[\™\ÜÂˆXˆ›ˆ™Y
+	œÙ[ŠHOˆ™XÏ	‘š[™[™ÏˆÂˆÙ[‹™š[™[™ÜÂˆš]\Š
+Bˆ™š[\ŠŸ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][Û”™Y
+Bˆ˜ÛÛXİ
 
-// ---- comparing ----------------------------------------------------------------------
+BˆB‚ˆXˆ›ˆ™\™Xİ
+	œÙ[ŠHOˆ™\™XİÂˆ]™YHÙ[‹œ™Y
 
-/// What kind of difference a finding is.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum FindingKind {
-    OnlyInA,
-    OnlyInB,
-    Type,
-    Value,
-}
+K›[Š
+NÂˆYˆ™YˆÂˆ™]\›ˆ™\™Xİ‘Y™Š™Y
+NÂˆBˆ]Û›İÛˆHÙ[‚ˆ™š[™[™ÜÂˆš]\Š
+Bˆ™š[\ŠŸ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][Û’Û›İÛŠBˆ˜Ûİ[
 
-/// What a finding amounts to once the rules have been applied.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Disposition {
-    /// Nothing explains it: debt.
-    Red,
-    /// A listed difference by construction.
-    Known,
-    /// A name one engine cannot produce, listed.
-    Excluded,
-}
+NÂˆYˆÛ›İÛˆˆÂˆ™\™Xİ’Û›İÛŠÛ›İÛŠBˆH[ÙHÂˆ™\™Xİ“X]ÚˆBˆB‚ˆËËÈH\ÜİY\ÈÙˆH›İÜÈ]\İYHY™™\™[˜ÙK[ˆÜ™\‹Û˜ÙHXXÚ‚ˆXˆ›ˆ\ÜİY\Ê	œÙ[ŠHOˆİš[™ÈÂˆ]]]ÙY[ˆ™XÏ	œİˆH™XÎ›™]Ê
+NÂˆ›Üˆˆ[ˆÙ[‚ˆ™š[™[™ÜÂˆš]\Š
+Bˆ™š[\ŠŸ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][Û’Û›İÛŠBˆÂˆYˆY‹š\ÜİYKš\×Ù[\J
+H	‰ˆ\ÙY[‹˜ÛÛZ[œÊ	™‹š\ÜİYK˜\×ÜİŠ
+JHÂˆÙY[‹œ\Ú
+	™‹š\ÜİYJNÂˆBˆBˆÙY[‹š›Ú[Š‹ŠBˆB‚ˆËËÈHš\œİš[™[™È]Ûİ[Ë™[™\™Y›ÜˆH™\™Xİš[K‚ˆXˆ›ˆš\œİ
+	œÙ[ŠHOˆİš[™ÈÂˆÙ[‹œ™Y
 
-#[derive(Debug, Clone)]
-pub struct Finding {
-    pub kind: FindingKind,
-    pub key: String,
-    pub detail: String,
-    pub disposition: Disposition,
-    /// The issue of the row that lists it, when one does.
-    pub issue: String,
-    /// For an `Excluded` finding, the engine the row excludes.
-    pub excluded: Option<String>,
-}
+Bˆ™š\œİ
 
-impl fmt::Display for Finding {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "header {} {} [{:?}]",
-            self.key, self.detail, self.disposition
-        )
-    }
-}
+Bˆ›X\
+Ÿ‹×Üİš[™Ê
+JBˆ›Ü—Ù[ÙJÂˆÙ[‹™š[™[™ÜÂˆš]\Š
+Bˆ™š[™
+Ÿ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][Û’Û›İÛŠBˆ›X\
+Ÿ‹×Üİš[™Ê
+JBˆJBˆ[Ü˜\ÛÜ—ÙY˜][
 
-/// What one comparison came to.
-#[derive(Debug, Clone, Default)]
-pub struct Report {
-    pub findings: Vec<Finding>,
-    /// How many names were on both sides and compared.
-    pub compared: usize,
-}
+BˆBŸB‚™›ˆØ[YJNˆ	•˜[YKˆ	•˜[YJHOˆ›ÛÛÂˆ]HˆNˆ“ÕS‘QÚ][ŠJNÂˆX]Ú
+KŠHÂˆ
+˜[YN‘İX›J
+K˜[YN‘İX›JJJHOˆ
 
-impl Report {
-    pub fn red(&self) -> Vec<&Finding> {
-        self.findings
-            .iter()
-            .filter(|f| f.disposition == Disposition::Red)
-            .collect()
-    }
+
+JKˆ
+˜[YN”Ú[Š
+K˜[YN”Ú[ŠJJHOˆš]\Š
+Kš\
+JK˜[
+
+J_
 
-    pub fn verdict(&self) -> Verdict {
-        let red = self.red().len();
-        if red > 0 {
-            return Verdict::Diff(red);
-        }
-        let known = self
-            .findings
-            .iter()
-            .filter(|f| f.disposition == Disposition::Known)
-            .count();
-        if known > 0 {
-            Verdict::Known(known)
-        } else {
-            Verdict::Match
-        }
-    }
+œ
+œJJKˆ
+˜[YN”Ú[Ê
+K˜[YN”Ú[ÊJJHOˆš]\Š
+Kš\
+JK˜[
+
+J_
 
-    /// The issues of the rows that listed a difference, in order, once each.
-    pub fn issues(&self) -> String {
-        let mut seen: Vec<&str> = Vec::new();
-        for f in self
-            .findings
-            .iter()
-            .filter(|f| f.disposition == Disposition::Known)
-        {
-            if !f.issue.is_empty() && !seen.contains(&f.issue.as_str()) {
-                seen.push(&f.issue);
-            }
-        }
-        seen.join(", ")
-    }
+œ
+œJJKˆÈOˆHOH‹ˆBŸB‚‹ËËÈÛ™HÚYHÙˆHÛÛ\\š\ÛÛ‹‚œXˆİXİÚYO	ØOˆÂˆXˆ[™Ú[™Nˆ	‰ØHİ‹ˆXˆš^\™Nˆ	‰ØHİ‹ˆXˆ™XÛÜ™Îˆ	‰ØHÔ™XÛÜ™KŸB‚‹ËËÈH™XÛÜ™\ÈHÛÛ\\˜]ÜˆÙY\È]ˆÛ™H˜[YH
+HXY\ˆ˜\šXX›JHÜˆH\İ‹ËËÈÙˆ˜[YYØØ[\ˆX]™\È
+HX›H[KÚ]]È\İÈ[œ›ÛY
+K‚™[[H][HÂˆØØ[\Š˜[YJKˆšY[Ê™XÏ
+İš[™Ë˜[YJOŠKŸB‚š[\][HÂˆ›ˆÚİÊ	œÙ[ŠHOˆİš[™ÈÂˆX]ÚÙ[ˆÂˆÙ[”ØØ[\ŠŠHOˆ‹œÚİÊ
+KˆÙ[‘šY[ÊŠHOˆ‚ˆš]\Š
+Bˆ›X\
+
+‹Š_›Ü›X]JÛŸO^ßH‹‹œÚİÊ
+JJBˆ˜ÛÛXİ™XÏÏŠ
+Bˆš›Ú[ŠˆŠKˆBˆBŸB‚‹ËËÈHÙ^HH™XÛÜ™\ÈÛÛ\\™Y[™\İY[™\ˆHˆ˜[YH›ÜˆHXY\‚‹ËËÈ˜\šXX›KÚ[™‹Ï˜[YO˜›Üˆ[][™È[ÙK‚™›ˆ][WÚÙ^Jˆ	”™XÛÜ™
+HOˆİš[™ÈÂˆX]ÚˆÂˆ™XÛÜ™’XY\Š
+HOˆ›˜[YK˜ÛÛ™J
+Kˆ™XÛÜ™‘[JJHOˆ›Ü›X]JßKŞßH‹KšÚ[™K›˜[YJKˆBŸB‚‹ËËÈ[œ›ÛH˜[YH[ÈØØ[\ˆX]™\ÎˆH\İ\È]È[™İ˜[YK›[˜[™[‚‹ËËÈ˜[YVÚWK™šY[›ÜˆXXÚ[[Y[‚™›ˆX]™\Ê™Yš^ˆ	œİ‹Nˆ	•Kˆ	•˜[YKİ]ˆ	›]]™XÏ
+İš[™Ë˜[YJOŠHÂˆX]Ú
+KŠHÂˆ
+N“\İ
+šY[ÊK˜[YN“\İ
+][\ÊJHOˆÂˆİ]œ\Ú
 
-    /// The first finding that counts, rendered, for the verdict file.
-    pub fn first(&self) -> String {
-        self.red()
-            .first()
-            .map(|f| f.to_string())
-            .or_else(|| {
-                self.findings
-                    .iter()
-                    .find(|f| f.disposition == Disposition::Known)
-                    .map(|f| f.to_string())
-            })
-            .unwrap_or_default()
-    }
-}
+›Ü›X]JÜ™Yš^K›[ˆŠK˜[YN’[
+][\Ë›[Š
+H\ÈM
+JJNÂˆ›Üˆ
+K][JH[ˆ][\Ëš]\Š
+K™[[Y\˜]J
+HÂˆ›Üˆ
 
-fn same(a: &Value, b: &Value) -> bool {
-    let t = |x: f64, y: f64| BOUNDED.within(x, y);
-    match (a, b) {
-        (Value::Double(x), Value::Double(y)) => t(*x, *y),
-        (Value::Point2(x), Value::Point2(y)) => x.iter().zip(y).all(|(p, q)| t(*p, *q)),
-        (Value::Point3(x), Value::Point3(y)) => x.iter().zip(y).all(|(p, q)| t(*p, *q)),
-        _ => a == b,
-    }
-}
+˜[YKJKŠH[ˆšY[Ëš]\Š
+Kš\
+][JHÂˆX]™\Ê	™›Ü›X]JÜ™Yš^VŞÚ_WKÛ˜[Y_HŠKK‹İ]
+NÂˆBˆBˆBˆÈOˆİ]œ\Ú
 
-/// One side of a comparison.
-pub struct Side<'a> {
-    pub engine: &'a str,
-    pub fixture: &'a str,
-    pub records: &'a [Record],
-}
+™Yš^×Üİš[™Ê
+K‹˜ÛÛ™J
+JJKˆBŸB‚™›ˆ][WÛÙŠˆ	”™XÛÜ™
+HOˆ][HÂˆX]ÚˆÂˆ™XÛÜ™’XY\Š
+HOˆ][N”ØØ[\Š˜[YK˜ÛÛ™J
+JKˆ™XÛÜ™‘[JJHOˆÂˆ]]]İ]H™XÎ›™]Ê
+NÂˆYˆ]ÛÛYJÊHHØÚ[XJKšÚ[™
+HÂˆ›Üˆ
 
-/// A record as the comparator sees it: one value (a header variable) or a list
-/// of named scalar leaves (a table entry, with its lists unrolled).
-enum Item {
-    Scalar(Value),
-    Fields(Vec<(String, Value)>),
-}
+˜[YKJKŠH[ˆË™šY[Ëš]\Š
+Kš\
+	™K˜[Y\ÊHÂˆX]™\Ê˜[YKK‹	›]]İ]
+NÂˆBˆBˆ][N‘šY[Êİ]
+BˆBˆBŸB‚‹ËËÈÙ\È]\›˜
+ÚXÚX^HÛ
+˜İ[™[™È›Üˆ[H[ˆÙˆÚ\˜Xİ\œÊHX]Ú‹ËËÈ^ÈH^Y\ˆ˜[YH\È]KÛÈH[HX›İ]]™\H^Y\‰ÜÈÛÛİ\ˆ\Â‹ËËÈ^Y\‹Ê‹˜ÛÛÜ˜‚œXˆ›ˆÛØŠ]\›ˆ	œİ‹^ˆ	œİŠHOˆ›ÛÛÂˆ]\Îˆ™XÏ	œİˆH]\›‹œÜ]
+	Ê‰ÊK˜ÛÛXİ
 
-impl Item {
-    fn show(&self) -> String {
-        match self {
-            Self::Scalar(v) => v.show(),
-            Self::Fields(f) => f
-                .iter()
-                .map(|(n, v)| format!("{n}={}", v.show()))
-                .collect::<Vec<_>>()
-                .join(" "),
-        }
-    }
-}
+NÂˆYˆ\Ë›[Š
+HOHHÂˆ™]\›ˆ]\›ˆOH^ÂˆBˆ]]]™\İH^Âˆ›Üˆ
+K\
+H[ˆ\Ëš]\Š
+K™[[Y\˜]J
+HÂˆYˆHOHÂˆX]Ú™\İœİš\Ü™Yš^
+\
+HÂˆÛÛYJŠHOˆ™\İH‹ˆ›Û™HOˆ™]\›ˆ˜[ÙKˆBˆH[ÙHYˆHOH\Ë›[Š
+HHHÂˆ™]\›ˆ™\İ™[™×İÚ]
+\
+NÂˆH[ÙHÂˆX]Ú™\İ™š[™
+\
+HÂˆÛÛYJ]
+HOˆ™\İH	œ™\İØ]
+È\›[Š
+K‹—Kˆ›Û™HOˆ™]\›ˆ˜[ÙKˆBˆBˆBˆYBŸB‚‹ËËÈÛÛ\\™HÛÈİ™X[\ÈHÙ^KˆZ\˜\ÈÜ˜XÛKØXØY\İ[™ÛÈÛ‹H˜[YB‹ËËÈ\š]KÓSÑSKÛ[›İÜÈ\ÙK‚œXˆ›ˆÛÛ\\™JZ\ˆ	œİ‹Nˆ	”ÚYKˆ	”ÚYK[\Îˆ	”[\ÊHOˆ™\ÜÂˆ][™^HÎˆ	”ÚY_Oˆ•™YSX\İš[™Ë][OˆÂˆËœ™XÛÜ™Âˆš]\Š
+Bˆ›X\
+Ÿ
+][WÚÙ^JŠK][WÛÙŠŠJJBˆ˜ÛÛXİ
 
-/// The key a record is compared and listed under: the DXF name for a header
-/// variable, `<kind>/<name>` for anything else.
-fn item_key(r: &Record) -> String {
-    match r {
-        Record::Header(h) => h.name.clone(),
-        Record::Entry(e) => format!("{}/{}", e.kind, e.name),
-    }
-}
+BˆNÂˆ]
+XKXŠHH
+[™^
+JK[™^
+ŠJNÂˆ]˜[Y\Îˆ•™YTÙ]	”İš[™ÏˆHXKšÙ^\Ê
+K˜ÚZ[ŠX‹šÙ^\Ê
+JK˜ÛÛXİ
 
-/// Unroll a value into scalar leaves: a list is its length, `name.len`, and then
-/// `name[i].field` for each element.
-fn leaves(prefix: &str, ty: &Ty, v: &Value, out: &mut Vec<(String, Value)>) {
-    match (ty, v) {
-        (Ty::List(fields), Value::List(items)) => {
-            out.push((format!("{prefix}.len"), Value::Int(items.len() as i64)));
-            for (i, item) in items.iter().enumerate() {
-                for ((name, fty), fv) in fields.iter().zip(item) {
-                    leaves(&format!("{prefix}[{i}].{name}"), fty, fv, out);
-                }
-            }
-        }
-        _ => out.push((prefix.to_string(), v.clone())),
-    }
-}
+NÂˆ]]]™\ÜH™\Ü™Y˜][
 
-fn item_of(r: &Record) -> Item {
-    match r {
-        Record::Header(h) => Item::Scalar(h.value.clone()),
-        Record::Entry(e) => {
-            let mut out = Vec::new();
-            if let Some(s) = schema(e.kind) {
-                for ((name, ty), v) in s.fields.iter().zip(&e.values) {
-                    leaves(name, ty, v, &mut out);
-                }
-            }
-            Item::Fields(out)
-        }
-    }
-}
+NÂˆ]\ÚH™\Üˆ	›]]™\ÜÚ[™ˆš[™[™ÒÚ[™Ù^Nˆİš[™Ë]Z[ˆİš[™ßÂˆ]Û›İÛˆH[\ËšÛ›İÛ—Ù›ÜŠZ\‹K™š^\™K	šÙ^JNÂˆ™\Ü™š[™[™ÜËœ\Ú
+š[™[™ÈÂˆÚ[™ˆÙ^Kˆ]Z[ˆ\ÜÜÚ][ÛˆYˆÛ›İÛ‹š\×ÜÛÛYJ
+HÂˆ\ÜÜÚ][Û’Û›İÛ‚ˆH[ÙHÂˆ\ÜÜÚ][Û”™YˆKˆ\ÜİYNˆÛ›İÛ‹›X\
+ßËš\ÜİYK˜ÛÛ™J
+JK[Ü˜\ÛÜ—ÙY˜][
 
-/// Does `pattern` (which may hold `*`, standing for any run of characters) match
-/// `text`? A layer name is data, so a rule about every layer's colour is
-/// `layer/*.color`.
-pub fn glob(pattern: &str, text: &str) -> bool {
-    let parts: Vec<&str> = pattern.split('*').collect();
-    if parts.len() == 1 {
-        return pattern == text;
-    }
-    let mut rest = text;
-    for (i, part) in parts.iter().enumerate() {
-        if i == 0 {
-            match rest.strip_prefix(part) {
-                Some(r) => rest = r,
-                None => return false,
-            }
-        } else if i == parts.len() - 1 {
-            return rest.ends_with(part);
-        } else {
-            match rest.find(part) {
-                Some(at) => rest = &rest[at + part.len()..],
-                None => return false,
-            }
-        }
-    }
-    true
-}
+Kˆ^ÛYYˆ›Û™KˆJNÂˆNÂˆ]ÛÛ\\™Wİ˜[Y\ÈHˆ	•˜[YKNˆ	•˜[Y_OˆÜ[Û
+š[™[™ÒÚ[™İš[™ÊOˆÂˆYˆ\WÛ˜[YJ
+HOHK\WÛ˜[YJ
+HÂˆÛÛYJ
+ˆš[™[™ÒÚ[™•\Kˆ›Ü›X]J\HßHœÈßH‹\WÛ˜[YJ
+KK\WÛ˜[YJ
+JKˆ
+JBˆH[ÙHYˆ\Ø[YJJHÂˆÛÛYJ
+š[™[™ÒÚ[™•˜[YK›Ü›X]JßHœÈßH‹œÚİÊ
+KKœÚİÊ
+JJJBˆH[ÙHÂˆ›Û™BˆBˆNÂˆ›Üˆ˜[YH[ˆ˜[Y\ÈÂˆX]Ú
+XK™Ù]
+˜[YJKX‹™Ù]
+˜[YJJHÂˆ
+ÛÛYJ][N”ØØ[\Š
+JKÛÛYJ][N”ØØ[\ŠJJJHOˆÂˆ™\Ü˜ÛÛ\\™Y
+ÏHNÂˆYˆ]ÛÛYJ
+Ú[™]Z[
+JHHÛÛ\\™Wİ˜[Y\ÊJHÂˆ\Ú
+	›]]™\ÜÚ[™˜[YK˜ÛÛ™J
+K]Z[
+NÂˆBˆBˆ
+ÛÛYJ][N‘šY[Ê
+JKÛÛYJ][N‘šY[ÊJJJHOˆÂˆ™\Ü˜ÛÛ\\™Y
+ÏHNÂˆ]Z\œÎˆ•™YSX\	œİ‹	•˜[YOˆBˆKš]\Š
+K›X\
+
+ËŠ_
+Ë˜\×ÜİŠ
+KŠJK˜ÛÛXİ
 
-/// Compare two streams by key. `pair` is `oracle/acadrust` and so on, the name
-/// `parity/MODEL1.toml` rows use.
-pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
-    let index = |s: &Side| -> BTreeMap<String, Item> {
-        s.records
-            .iter()
-            .map(|r| (item_key(r), item_of(r)))
-            .collect()
-    };
-    let (ia, ib) = (index(a), index(b));
-    let names: BTreeSet<&String> = ia.keys().chain(ib.keys()).collect();
-    let mut report = Report::default();
-    let push = |report: &mut Report, kind: FindingKind, key: String, detail: String| {
-        let known = rules.known_for(pair, a.fixture, &key);
-        report.findings.push(Finding {
-            kind,
-            key,
-            detail,
-            disposition: if known.is_some() {
-                Disposition::Known
-            } else {
-                Disposition::Red
-            },
-            issue: known.map(|k| k.issue.clone()).unwrap_or_default(),
-            excluded: None,
-        });
-    };
-    let compare_values = |x: &Value, y: &Value| -> Option<(FindingKind, String)> {
-        if x.type_name() != y.type_name() {
-            Some((
-                FindingKind::Type,
-                format!("type {} vs {}", x.type_name(), y.type_name()),
-            ))
-        } else if !same(x, y) {
-            Some((FindingKind::Value, format!("{} vs {}", x.show(), y.show())))
-        } else {
-            None
-        }
-    };
-    for name in names {
-        match (ia.get(name), ib.get(name)) {
-            (Some(Item::Scalar(x)), Some(Item::Scalar(y))) => {
-                report.compared += 1;
-                if let Some((kind, detail)) = compare_values(x, y) {
-                    push(&mut report, kind, name.clone(), detail);
-                }
-            }
-            (Some(Item::Fields(x)), Some(Item::Fields(y))) => {
-                report.compared += 1;
-                let theirs: BTreeMap<&str, &Value> =
-                    y.iter().map(|(k, v)| (k.as_str(), v)).collect();
-                for (field, vx) in x {
-                    // A leaf the other side does not have is an element of a
-                    // longer list, which its `.len` finding already says.
-                    let Some(vy) = theirs.get(field.as_str()) else {
-                        continue;
-                    };
-                    // A field the file does not store is not a value to compare.
-                    if matches!(vx, Value::Absent) || matches!(vy, Value::Absent) {
-                        let engine = if matches!(vx, Value::Absent) {
-                            a.engine
-                        } else {
-                            b.engine
-                        };
-                        report.findings.push(Finding {
-                            kind: FindingKind::Value,
-                            key: format!("{name}.{field}"),
-                            detail: format!("left out: the file {engine} read does not store it"),
-                            disposition: Disposition::Excluded,
-                            issue: String::new(),
-                            excluded: Some(engine.to_string()),
-                        });
-                        continue;
-                    }
-                    // A field an engine cannot produce is written as its zero
-                    // value there and left out of the comparison, and the
-                    // report counts it.
-                    let leaf = format!("{name}.{field}");
-                    let left_out = [a, b].into_iter().find_map(|side| {
-                        rules
-                            .excluded_for(side.engine, side.fixture, &leaf)
-                            .map(|e| (side.engine, e.issue.clone()))
-                    });
-                    if let Some((engine, issue)) = left_out {
-                        report.findings.push(Finding {
-                            kind: FindingKind::Value,
-                            key: leaf,
-                            detail: format!("left out: {engine} cannot produce it"),
-                            disposition: Disposition::Excluded,
-                            issue,
-                            excluded: Some(engine.to_string()),
-                        });
-                        continue;
-                    }
-                    if let Some((kind, detail)) = compare_values(vx, vy) {
-                        push(&mut report, kind, format!("{name}.{field}"), detail);
-                    }
-                }
-            }
-            (Some(x), None) => {
-                let excluded = rules.excluded_for(b.engine, b.fixture, name);
-                report.findings.push(Finding {
-                    kind: FindingKind::OnlyInA,
-                    key: name.clone(),
-                    detail: format!("{name} = {} on {}, not on {}", x.show(), a.engine, b.engine),
-                    disposition: if excluded.is_some() {
-                        Disposition::Excluded
-                    } else {
-                        Disposition::Red
-                    },
-                    issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
-                    excluded: excluded.map(|_| b.engine.to_string()),
-                });
-            }
-            (None, Some(y)) => {
-                let excluded = rules.excluded_for(a.engine, a.fixture, name);
-                report.findings.push(Finding {
-                    kind: FindingKind::OnlyInB,
-                    key: name.clone(),
-                    detail: format!("{name} = {} on {}, not on {}", y.show(), b.engine, a.engine),
-                    disposition: if excluded.is_some() {
-                        Disposition::Excluded
-                    } else {
-                        Disposition::Red
-                    },
-                    issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
-                    excluded: excluded.map(|_| a.engine.to_string()),
-                });
-            }
-            _ => unreachable!("one key is one kind of record"),
-        }
-    }
-    report
-}
+NÂˆ›Üˆ
+šY[
+H[ˆÂˆËÈHXYˆHİ\ˆÚYHÙ\È›İ]™H\È[ˆ[[Y[ÙˆBˆËÈÛ™Ù\ˆ\İÚXÚ]È›[˜š[™[™È[™XYHØ^\Ë‚ˆ]ÛÛYJJHHZ\œË™Ù]
+šY[˜\×ÜİŠ
+JH[ÙHÂˆÛÛ[YNÂˆNÂˆËÈHšY[Hš[HÙ\È›İİÜ™H\È›İH˜[YHÈÛÛ\\™K‚ˆYˆX]Ú\ÈJ˜[YNXœÙ[
+HX]Ú\ÈJK˜[YNXœÙ[
+HÂˆ][™Ú[™HHYˆX]Ú\ÈJ˜[YNXœÙ[
+HÂˆK™[™Ú[™BˆH[ÙHÂˆ‹™[™Ú[™BˆNÂˆ™\Ü™š[™[™ÜËœ\Ú
+š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™•˜[YKˆÙ^Nˆ›Ü›X]JÛ˜[Y_KÙšY[HŠKˆ]Z[ˆ›Ü›X]J›Yİ]ˆHš[HÙ[™Ú[™_H™XYÙ\È›İİÜ™H]ŠKˆ\ÜÜÚ][Ûˆ\ÜÜÚ][Û‘^ÛYYˆ\ÜİYNˆİš[™Î›™]Ê
+Kˆ^ÛYYˆÛÛYJ[™Ú[™K×Üİš[™Ê
+JKˆJNÂˆÛÛ[YNÂˆBˆËÈHšY[[ˆ[™Ú[™HØ[››İ›ÙXÙH\ÈÜš][ˆ\È]È™\›ÂˆËÈ˜[YH\™H[™Yİ]ÙˆHÛÛ\\š\ÛÛ‹[™BˆËÈ™\ÜÛİ[È]‚ˆ]XYˆH›Ü›X]JÛ˜[Y_KÙšY[HŠNÂˆ]YÛİ]HØK—Kš[×Ú]\Š
+K™š[™ÛX\
+ÚY_Âˆ[\Âˆ™^ÛYYÙ›ÜŠÚYK™[™Ú[™KÚYK™š^\™K	›XYŠBˆ›X\
+_
+ÚYK™[™Ú[™KKš\ÜİYK˜ÛÛ™J
+JJBˆJNÂˆYˆ]ÛÛYJ
+[™Ú[™K\ÜİYJJHHYÛİ]Âˆ™\Ü™š[™[™ÜËœ\Ú
+š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™•˜[YKˆÙ^NˆXY‹ˆ]Z[ˆ›Ü›X]J›Yİ]ˆÙ[™Ú[™_HØ[››İ›ÙXÙH]ŠKˆ\ÜÜÚ][Ûˆ\ÜÜÚ][Û‘^ÛYYˆ\ÜİYKˆ^ÛYYˆÛÛYJ[™Ú[™K×Üİš[™Ê
+JKˆJNÂˆÛÛ[YNÂˆBˆYˆ]ÛÛYJ
+Ú[™]Z[
+JHHÛÛ\\™Wİ˜[Y\ÊJHÂˆ\Ú
+	›]]™\ÜÚ[™›Ü›X]JÛ˜[Y_KÙšY[HŠK]Z[
+NÂˆBˆBˆBˆ
+ÛÛYJ
+K›Û™JHOˆÂˆ]^ÛYYH[\Ë™^ÛYYÙ›ÜŠ‹™[™Ú[™K‹™š^\™K˜[YJNÂˆ™\Ü™š[™[™ÜËœ\Ú
+š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™“Û›R[KˆÙ^Nˆ˜[YK˜ÛÛ™J
+Kˆ]Z[ˆ›Ü›X]JÛ˜[Y_HHßHÛˆßK›İÛˆßH‹œÚİÊ
+KK™[™Ú[™K‹™[™Ú[™JKˆ\ÜÜÚ][ÛˆYˆ^ÛYYš\×ÜÛÛYJ
+HÂˆ\ÜÜÚ][Û‘^ÛYYˆH[ÙHÂˆ\ÜÜÚ][Û”™YˆKˆ\ÜİYNˆ^ÛYY›X\
+_Kš\ÜİYK˜ÛÛ™J
+JK[Ü˜\ÛÜ—ÙY˜][
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+Kˆ^ÛYYˆ^ÛYY›X\
+ß‹™[™Ú[™K×Üİš[™Ê
+JKˆJNÂˆBˆ
+›Û™KÛÛYJJJHOˆÂˆ]^ÛYYH[\Ë™^ÛYYÙ›ÜŠK™[™Ú[™KK™š^\™K˜[YJNÂˆ™\Ü™š[™[™ÜËœ\Ú
+š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™“Û›R[‹ˆÙ^Nˆ˜[YK˜ÛÛ™J
+Kˆ]Z[ˆ›Ü›X]JÛ˜[Y_HHßHÛˆßK›İÛˆßH‹KœÚİÊ
+K‹™[™Ú[™KK™[™Ú[™JKˆ\ÜÜÚ][ÛˆYˆ^ÛYYš\×ÜÛÛYJ
+HÂˆ\ÜÜÚ][Û‘^ÛYYˆH[ÙHÂˆ\ÜÜÚ][Û”™YˆKˆ\ÜİYNˆ^ÛYY›X\
+_Kš\ÜİYK˜ÛÛ™J
+JK[Ü˜\ÛÜ—ÙY˜][
 
-    fn h(name: &str, v: Value) -> Record {
-        Record::Header(Header {
-            name: name.into(),
-            value: v,
-        })
-    }
+Kˆ^ÛYYˆ^ÛYY›X\
+ßK™[™Ú[™K×Üİš[™Ê
+JKˆJNÂˆBˆÈOˆ[œ™XXÚX›HJ›Û™HÙ^H\ÈÛ™HÚ[™Ùˆ™XÛÜ™ŠKˆBˆBˆ™\ÜŸB‚ˆÖØÙ™Ê\İ
+WB›[Ù\İÈÂˆ\ÙHİ\\ŠÂ‚ˆ›ˆ
+˜[YNˆ	œİ‹ˆ˜[YJHOˆ™XÛÜ™Âˆ™XÛÜ™’XY\ŠXY\ˆÂˆ˜[YNˆ˜[YKš[Ê
+Kˆ˜[YNˆ‹ˆJBˆB‚ˆÖİ\İBˆ›ˆWÜİ™X[WÜ›İ[™İš\×Ø[™Ú\×ÜÛÜYØWÛ˜[YJ
+HÂˆ]™XÜÈH™XÈVÂˆ
+‰ĞĞSH‹˜[YN‘İX›JKŒ
+JKˆ
+‰VRSˆ‹˜[YN”Ú[ÊÌŒLKK‹ŒJJKˆ
+‰ÓVQTˆ‹˜[YN”İŠŒ‹š[Ê
+JJKˆ
+‰Ô•ÓSÑH‹˜[YN›ÛÛ
+˜[ÙJJKˆ
+‰ÔÓSÑH‹˜[YN’[
+LÊJKˆ
+‰SSRSˆ‹˜[YN”Ú[ŠÌŒŒJJKˆNÂˆ]^H™[™\—Üİ™X[J	œ™XÜÊK[Ü˜\
 
-    #[test]
-    fn a_stream_round_trips_and_is_sorted_by_name() {
-        let recs = vec![
-            h("$LTSCALE", Value::Double(1.0)),
-            h("$EXTMIN", Value::Point3([0.0, -1.5, 2.0])),
-            h("$CLAYER", Value::Str("0".into())),
-            h("$ORTHOMODE", Value::Bool(false)),
-            h("$OSMODE", Value::Int(-3)),
-            h("$LIMMIN", Value::Point2([0.0, 0.0])),
-        ];
-        let text = render_stream(&recs).unwrap();
-        let back = parse_stream(&text).unwrap();
-        let names: Vec<&str> = back.iter().map(Record::key).collect();
-        assert_eq!(
-            names,
-            [
-                "$CLAYER",
-                "$EXTMIN",
-                "$LIMMIN",
-                "$LTSCALE",
-                "$ORTHOMODE",
-                "$OSMODE"
-            ]
-        );
-        assert_eq!(render_stream(&back).unwrap(), text);
-        assert!(text.starts_with("{\"model\":1,\"record\":\"header\",\"name\":\"$CLAYER\""));
-    }
+NÂˆ]˜XÚÈH\œÙWÜİ™X[J	^
+K[Ü˜\
 
-    #[test]
-    fn the_parser_is_strict() {
-        let ok =
-            "{\"model\":1,\"record\":\"header\",\"name\":\"$A\",\"type\":\"int\",\"value\":1}\n";
-        assert!(parse_stream(ok).is_ok());
-        // a double spelled without its point
-        assert!(parse_stream(&ok.replace("int", "double")).is_err());
-        // wrong type for the shape
-        assert!(parse_stream(&ok.replace("\"value\":1", "\"value\":\"x\"")).is_err());
-        // not model 1
-        assert!(parse_stream(&ok.replace("\"model\":1", "\"model\":2")).is_err());
-        // a schema 1 record
-        assert!(parse_stream("{\"schema\":1,\"record\":\"line\"}\n").is_err());
-        // no final newline
-        assert!(parse_stream(ok.trim_end()).is_err());
-        // out of order
-        let two = format!("{}{}", ok.replace("$A", "$B"), ok);
-        assert!(parse_stream(&two).is_err());
-        // a duplicate key
-        assert!(parse_stream(&format!("{ok}{ok}")).is_err());
-    }
+NÂˆ]˜[Y\Îˆ™XÏ	œİˆH˜XÚËš]\Š
+K›X\
+™XÛÜ™šÙ^JK˜ÛÛXİ
 
-    #[test]
-    fn the_type_follows_the_group_code() {
-        assert_eq!(header_type("$X", &[70]).unwrap(), "int");
-        assert_eq!(header_type("$X", &[40]).unwrap(), "double");
-        assert_eq!(header_type("$X", &[1]).unwrap(), "string");
-        assert_eq!(header_type("$X", &[290]).unwrap(), "bool");
-        assert_eq!(header_type("$X", &[280]).unwrap(), "int");
-        assert_eq!(header_type("$X", &[10, 20]).unwrap(), "point2");
-        assert_eq!(header_type("$X", &[10, 20, 30]).unwrap(), "point3");
-        assert!(header_type("$X", &[347]).is_err());
-        assert!(is_handle_code(347));
-    }
+NÂˆ\ÜÙ\Ù\HJˆ˜[Y\ËˆÂˆ‰ÓVQTˆ‹ˆ‰VRSˆ‹ˆ‰SSRSˆ‹ˆ‰ĞĞSH‹ˆ‰Ô•ÓSÑH‹ˆ‰ÔÓSÑH‚ˆBˆ
+NÂˆ\ÜÙ\Ù\HJ™[™\—Üİ™X[J	˜˜XÚÊK[Ü˜\
 
-    fn side<'a>(engine: &'a str, records: &'a [Record]) -> Side<'a> {
-        Side {
-            engine,
-            fixture: "f",
-            records,
-        }
-    }
+K^
+NÂˆ\ÜÙ\J^œİ\×İÚ]
+×›[Ù[ŒKœ™XÛÜ™—šXY\—‹›˜[YW—‰ÓVQT—ˆŠJNÂˆB‚ˆÖİ\İBˆ›ˆWÜ\œÙ\—Ú\×ÜİšXİ
 
-    #[test]
-    fn names_compare_by_key_not_by_position() {
-        let a = vec![h("$A", Value::Int(1)), h("$B", Value::Int(2))];
-        let b = vec![h("$B", Value::Int(2)), h("$A", Value::Int(1))];
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &b),
-            &Rules::default(),
-        );
-        assert_eq!(r.verdict(), Verdict::Match);
-        assert_eq!(r.compared, 2);
-    }
+HÂˆ]ÚÈBˆ×›[Ù[ŒKœ™XÛÜ™—šXY\—‹›˜[YW—‰W‹\W—š[‹˜[YWŒ_WˆÂˆ\ÜÙ\J\œÙWÜİ™X[JÚÊKš\×ÛÚÊ
+JNÂˆËÈHİX›HÜ[YÚ]İ]]ÈÚ[ˆ\ÜÙ\J\œÙWÜİ™X[J	›ÚËœ™\XÙJš[‹™İX›HŠJKš\×Ù\œŠ
+JNÂˆËÈÜ›Û™È\H›ÜˆHÚ\Bˆ\ÜÙ\J\œÙWÜİ™X[J	›ÚËœ™\XÙJ—˜[YWŒH‹—˜[YW—ˆŠJKš\×Ù\œŠ
+JNÂˆËÈ›İ[Ù[Bˆ\ÜÙ\J\œÙWÜİ™X[J	›ÚËœ™\XÙJ—›[Ù[ŒH‹—›[Ù[ŒˆŠJKš\×Ù\œŠ
+JNÂˆËÈHØÚ[XHH™XÛÜ™ˆ\ÜÙ\J\œÙWÜİ™X[J×œØÚ[XWŒKœ™XÛÜ™—›[™WŸWˆŠKš\×Ù\œŠ
+JNÂˆËÈ›Èš[˜[™]Û[™Bˆ\ÜÙ\J\œÙWÜİ™X[JÚËš[WÙ[™
 
-    #[test]
-    fn a_double_inside_the_bound_matches_and_outside_it_is_one_diff() {
-        let a = vec![h("$LTSCALE", Value::Double(1.0))];
-        let near = vec![h("$LTSCALE", Value::Double(1.0 + 1e-8))];
-        let far = vec![h("$LTSCALE", Value::Double(1.001))];
-        let rules = Rules::default();
-        let m = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &near),
-            &rules,
-        );
-        assert_eq!(m.verdict(), Verdict::Match);
-        let d = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &far),
-            &rules,
-        );
-        assert_eq!(d.verdict(), Verdict::Diff(1));
-        assert!(d.first().contains("$LTSCALE"));
-    }
+JKš\×Ù\œŠ
+JNÂˆËÈİ]ÙˆÜ™\‚ˆ]ÛÈH›Ü›X]Jß^ßH‹ÚËœ™\XÙJ‰H‹‰ˆŠKÚÊNÂˆ\ÜÙ\J\œÙWÜİ™X[J	ÛÊKš\×Ù\œŠ
+JNÂˆËÈH\XØ]HÙ^Bˆ\ÜÙ\J\œÙWÜİ™X[J	™›Ü›X]JÛÚß^ÛÚßHŠJKš\×Ù\œŠ
+JNÂˆB‚ˆÖİ\İBˆ›ˆWİ\WÙ›ÛİÜ×İWÙÜ›İ\ØÛÙJ
+HÂˆ\ÜÙ\Ù\HJXY\—İ\J‰‹	–ÍÌJK[Ü˜\
 
-    #[test]
-    fn a_name_on_one_side_is_red_unless_the_rules_exclude_it_for_that_engine() {
-        let a = vec![h("$A", Value::Int(1)), h("$B", Value::Int(2))];
-        let b = vec![h("$A", Value::Int(1))];
-        let none = Rules::default();
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &b),
-            &none,
-        );
-        assert_eq!(r.verdict(), Verdict::Diff(1));
-        let rules = Rules::parse(
-            "[[excluded]]\nengine = \"acadrust\"\nnames = [\"$B\"]\nreason = \"no field\"\nissue = \"x#1\"\n",
-        )
-        .unwrap();
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &b),
-            &rules,
-        );
-        assert_eq!(r.verdict(), Verdict::Match);
-        assert_eq!(r.findings.len(), 1);
-        // and the same row does not excuse the oracle lacking a name acadrust has
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &b),
-            &side("acadrust", &a),
-            &rules,
-        );
-        assert_eq!(r.verdict(), Verdict::Diff(1));
-    }
+Kš[ŠNÂˆ\ÜÙ\Ù\HJXY\—İ\J‰‹	–ÍJK[Ü˜\
 
-    #[test]
-    fn a_known_row_applies_to_its_pairs_only() {
-        let a = vec![h("$TDCREATE", Value::Double(1.0))];
-        let b = vec![h("$TDCREATE", Value::Double(2.0))];
-        let rules = Rules::parse(
-            "[[known]]\nnames = [\"$TDCREATE\"]\npairs = [\"ezdxf/oracle\"]\nreason = \"saved at another moment\"\nissue = \"x#1\"\n",
-        )
-        .unwrap();
-        let r = compare(
-            "ezdxf/oracle",
-            &side("ezdxf", &a),
-            &side("oracle", &b),
-            &rules,
-        );
-        assert_eq!(r.verdict(), Verdict::Known(1));
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &b),
-            &rules,
-        );
-        assert_eq!(r.verdict(), Verdict::Diff(1));
-    }
+K™İX›HŠNÂˆ\ÜÙ\Ù\HJXY\—İ\J‰‹	–ÌWJK[Ü˜\
 
-    #[test]
-    fn a_rule_without_a_reason_or_an_issue_is_refused() {
-        assert!(
-            Rules::parse("[[known]]\nnames = [\"$A\"]\nreason = \"\"\nissue = \"x\"\n").is_err()
-        );
-        assert!(Rules::parse("[[excluded]]\nengine = \"oracle\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"\"\n").is_err());
-        assert!(Rules::parse("[[excluded]]\nengine = \"nobody\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"i\"\n").is_err());
-    }
+Kœİš[™ÈŠNÂˆ\ÜÙ\Ù\HJXY\—İ\J‰‹	–ÌLJK[Ü˜\
 
-    fn layer(name: &str, color: i64) -> Record {
-        Record::Entry(Entry::new(
-            "layer",
-            name,
-            vec![
-                Value::Int(0),
-                Value::Int(color),
-                Value::Int(-1),
-                Value::Bool(true),
-                Value::Str("Continuous".into()),
-                Value::Int(-3),
-                Value::Bool(true),
-            ],
-        ))
-    }
+K˜›ÛÛŠNÂˆ\ÜÙ\Ù\HJXY\—İ\J‰‹	–ÌJK[Ü˜\
 
-    #[test]
-    fn a_layer_round_trips_and_sorts_after_the_header() {
-        let recs = vec![
-            layer("Walls", 1),
-            h("$LTSCALE", Value::Double(1.0)),
-            layer("0", 7),
-        ];
-        let text = render_stream(&recs).unwrap();
-        let back = parse_stream(&text).unwrap();
-        let keys: Vec<(&str, &str)> = back.iter().map(|r| (r.kind(), r.key())).collect();
-        assert_eq!(
-            keys,
-            [("header", "$LTSCALE"), ("layer", "0"), ("layer", "Walls")]
-        );
-        assert_eq!(render_stream(&back).unwrap(), text);
-        assert!(text.contains(
-            "{\"model\":1,\"record\":\"layer\",\"name\":\"0\",\"flags\":0,\"color\":7,\"true_color\":-1,\"on\":true,\"linetype\":\"Continuous\",\"lineweight\":-3,\"plot\":true}"
-        ));
-    }
+Kš[ŠNÂˆ\ÜÙ\Ù\HJXY\—İ\J‰‹	–ÌLŒJK[Ü˜\
 
-    #[test]
-    fn a_layer_line_with_a_field_missing_or_out_of_order_is_refused() {
-        let ok = render_stream(&[layer("0", 7)]).unwrap();
-        assert!(parse_stream(&ok).is_ok());
-        assert!(parse_stream(&ok.replace("\"plot\":true", "\"plot\":1")).is_err());
-        assert!(parse_stream(&ok.replace(",\"plot\":true", "")).is_err());
-        let swapped = ok.replace("\"flags\":0,\"color\":7", "\"color\":7,\"flags\":0");
-        assert!(parse_stream(&swapped).is_err());
-        // a layer sorted before a header
-        let two = format!("{ok}{}", render_stream(&[h("$A", Value::Int(1))]).unwrap());
-        assert!(parse_stream(&two).is_err());
-    }
+KœÚ[ˆŠNÂˆ\ÜÙ\Ù\HJXY\—İ\J‰‹	–ÌLŒÌJK[Ü˜\
 
-    #[test]
-    fn a_changed_layer_colour_is_one_finding_naming_the_layer_and_the_field() {
-        let a = vec![layer("0", 7), layer("Walls", 1)];
-        let b = vec![layer("0", 7), layer("Walls", 2)];
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &b),
-            &Rules::default(),
-        );
-        assert_eq!(r.verdict(), Verdict::Diff(1));
-        assert_eq!(r.red()[0].key, "layer/Walls.color");
-        assert_eq!(r.compared, 2);
-    }
+KœÚ[ÈŠNÂˆ\ÜÙ\JXY\—İ\J‰‹	–ÌÍ×JKš\×Ù\œŠ
+JNÂˆ\ÜÙ\J\×Ú[™WØÛÙJÍÊJNÂˆB‚ˆ›ˆÚYO	ØOŠ[™Ú[™Nˆ	‰ØHİ‹™XÛÜ™Îˆ	‰ØHÔ™XÛÜ™JHOˆÚYO	ØOˆÂˆÚYHÂˆ[™Ú[™Kˆš^\™Nˆ™ˆ‹ˆ™XÛÜ™ËˆBˆB‚ˆÖİ\İBˆ›ˆ˜[Y\×ØÛÛ\\™WØWÚÙ^WÛ›İØWÜÜÚ][ÛŠ
+HÂˆ]HH™XÈVÚ
+‰H‹˜[YN’[
+JJK
+‰ˆ‹˜[YN’[
+ŠJWNÂˆ]ˆH™XÈVÚ
+‰ˆ‹˜[YN’[
+ŠJK
+‰H‹˜[YN’[
+JJWNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	˜ŠKˆ	”[\Î™Y˜][
 
-    #[test]
-    fn a_layer_on_one_side_is_red_and_a_rule_can_name_layers_with_a_star() {
-        let a = vec![layer("0", 7), layer("Walls", 1)];
-        let b = vec![layer("0", 7)];
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &b),
-            &Rules::default(),
-        );
-        assert_eq!(r.verdict(), Verdict::Diff(1));
-        assert_eq!(r.red()[0].key, "layer/Walls");
-        let rules = Rules::parse(
-            "[[excluded]]\nengine = \"acadrust\"\nnames = [\"layer/W*\"]\nreason = \"r\"\nissue = \"i\"\n",
-        )
-        .unwrap();
-        let r = compare(
-            "oracle/acadrust",
-            &side("oracle", &a),
-            &side("acadrust", &b),
-            &rules,
-        );
-        assert_eq!(r.verdict(), Verdict::Match);
-    }
+Kˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
 
-    #[test]
-    fn a_star_matches_any_run_and_nothing_else() {
-        assert!(glob("layer/*.color", "layer/Walls.color"));
-        assert!(glob("layer/*.color", "layer/.color"));
-        assert!(!glob("layer/*.color", "layer/Walls.flags"));
-        assert!(glob("$A", "$A"));
-        assert!(!glob("$A", "$AB"));
-        assert!(glob("*", "anything"));
-        assert!(glob("a*b*c", "aXbYc"));
-        assert!(!glob("a*b*c", "aXcYb"));
-    }
-}
+K™\™Xİ“X]Ú
+NÂˆ\ÜÙ\Ù\HJ‹˜ÛÛ\\™YŠNÂˆB‚ˆÖİ\İBˆ›ˆWÙİX›WÚ[œÚYWİWØ›İ[™ÛX]Ú\×Ø[™Ûİ]ÚYWÚ]Ú\×ÛÛ™WÙY™Š
+HÂˆ]HH™XÈVÚ
+‰ĞĞSH‹˜[YN‘İX›JKŒ
+JWNÂˆ]™X\ˆH™XÈVÚ
+‰ĞĞSH‹˜[YN‘İX›JKŒ
+ÈYKN
+JWNÂˆ]˜\ˆH™XÈVÚ
+‰ĞĞSH‹˜[YN‘İX›JKŒJJWNÂˆ][\ÈH[\Î™Y˜][
+
+NÂˆ]HHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	›™X\ŠKˆ	œ[\Ëˆ
+NÂˆ\ÜÙ\Ù\HJK™\™Xİ
+
+K™\™Xİ“X]Ú
+NÂˆ]HÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	™˜\ŠKˆ	œ[\Ëˆ
+NÂˆ\ÜÙ\Ù\HJ™\™Xİ
+
+K™\™Xİ‘Y™ŠJJNÂˆ\ÜÙ\J™š\œİ
+
+K˜ÛÛZ[œÊ‰ĞĞSHŠJNÂˆB‚ˆÖİ\İBˆ›ˆWÛ˜[YWÛÛ—ÛÛ™WÜÚYWÚ\×Ü™Yİ[›\Ü×İWÜ[\×Ù^ÛYWÚ]Ù›Ü—İ]Ù[™Ú[™J
+HÂˆ]HH™XÈVÚ
+‰H‹˜[YN’[
+JJK
+‰ˆ‹˜[YN’[
+ŠJWNÂˆ]ˆH™XÈVÚ
+‰H‹˜[YN’[
+JJWNÂˆ]›Û™HH[\Î™Y˜][
+
+NÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	˜ŠKˆ	››Û™Kˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ‘Y™ŠJJNÂˆ][\ÈH[\Îœ\œÙJˆ–ÖÙ^ÛYYWW™[™Ú[™HH˜XØY\İ—›˜[Y\ÈH×‰——Wœ™X\ÛÛˆH››ÈšY[—š\ÜİYHHÌW—ˆ‹ˆ
+Bˆ[Ü˜\
+
+NÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	˜ŠKˆ	œ[\Ëˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ“X]Ú
+NÂˆ\ÜÙ\Ù\HJ‹™š[™[™ÜË›[Š
+KJNÂˆËÈ[™HØ[YH›İÈÙ\È›İ^İ\ÙHHÜ˜XÛHXÚÚ[™ÈH˜[YHXØY\İ\Âˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜ŠKˆ	œÚYJ˜XØY\İ‹	˜JKˆ	œ[\Ëˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ‘Y™ŠJJNÂˆB‚ˆÖİ\İBˆ›ˆWÚÛ›İÛ—Ü›İ×Ø\Y\×İ×Ú]×ÜZ\œ×ÛÛ›J
+HÂˆ]HH™XÈVÚ
+‰Ô‘PUH‹˜[YN‘İX›JKŒ
+JWNÂˆ]ˆH™XÈVÚ
+‰Ô‘PUH‹˜[YN‘İX›J‹Œ
+JWNÂˆ][\ÈH[\Îœ\œÙJˆ–ÖÚÛ›İÛ—WW›˜[Y\ÈH×‰Ô‘PUW—WœZ\œÈH×™^™‹ÛÜ˜XÛW—Wœ™X\ÛÛˆHœØ]™Y][›İ\ˆ[ÛY[—š\ÜİYHHÌW—ˆ‹ˆ
+Bˆ[Ü˜\
+
+NÂˆ]ˆHÛÛ\\™Jˆ™^™‹ÛÜ˜XÛH‹ˆ	œÚYJ™^™ˆ‹	˜JKˆ	œÚYJ›Ü˜XÛH‹	˜ŠKˆ	œ[\Ëˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ’Û›İÛŠJJNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	˜ŠKˆ	œ[\Ëˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ‘Y™ŠJJNÂˆB‚ˆÖİ\İBˆ›ˆWÜ[WİÚ]İ]ØWÜ™X\ÛÛ—ÛÜ—Ø[—Ú\ÜİYWÚ\×Ü™Y\ÙY
+
+HÂˆ\ÜÙ\Jˆ[\Îœ\œÙJ–ÖÚÛ›İÛ—WW›˜[Y\ÈH×‰W—Wœ™X\ÛÛˆH——š\ÜİYHH—ˆŠKš\×Ù\œŠ
+Bˆ
+NÂˆ\ÜÙ\J[\Îœ\œÙJ–ÖÙ^ÛYYWW™[™Ú[™HH›Ü˜XÛW—›˜[Y\ÈH×‰W—Wœ™X\ÛÛˆHœ——š\ÜİYHH——ˆŠKš\×Ù\œŠ
+JNÂˆ\ÜÙ\J[\Îœ\œÙJ–ÖÙ^ÛYYWW™[™Ú[™HH››Ø›ÙW—›˜[Y\ÈH×‰W—Wœ™X\ÛÛˆHœ——š\ÜİYHHšW—ˆŠKš\×Ù\œŠ
+JNÂˆB‚ˆ›ˆ^Y\Š˜[YNˆ	œİ‹ÛÛÜˆM
+HOˆ™XÛÜ™Âˆ™XÛÜ™‘[J[N›™]Êˆ›^Y\ˆ‹ˆ˜[YKˆ™XÈVÂˆ˜[YN’[
+
+Kˆ˜[YN’[
+ÛÛÜŠKˆ˜[YN’[
+LJKˆ˜[YN›ÛÛ
+YJKˆ˜[YN”İŠÛÛ[[İ\È‹š[Ê
+JKˆ˜[YN’[
+LÊKˆ˜[YN›ÛÛ
+YJKˆKˆ
+JBˆB‚ˆÖİ\İBˆ›ˆWÛ^Y\—Ü›İ[™İš\×Ø[™ÜÛÜ×ØY\—İWÚXY\Š
+HÂˆ]™XÜÈH™XÈVÂˆ^Y\Š•Ø[È‹JKˆ
+‰ĞĞSH‹˜[YN‘İX›JKŒ
+JKˆ^Y\ŠŒ‹ÊKˆNÂˆ]^H™[™\—Üİ™X[J	œ™XÜÊK[Ü˜\
+
+NÂˆ]˜XÚÈH\œÙWÜİ™X[J	^
+K[Ü˜\
+
+NÂˆ]Ù^\Îˆ™XÏ
+	œİ‹	œİŠOˆH˜XÚËš]\Š
+K›X\
+Ÿ
+‹šÚ[™
+
+K‹šÙ^J
+JJK˜ÛÛXİ
+
+NÂˆ\ÜÙ\Ù\HJˆÙ^\ËˆÊšXY\ˆ‹‰ĞĞSHŠK
+›^Y\ˆ‹ŒŠK
+›^Y\ˆ‹•Ø[ÈŠWBˆ
+NÂˆ\ÜÙ\Ù\HJ™[™\—Üİ™X[J	˜˜XÚÊK[Ü˜\
+
+K^
+NÂˆ\ÜÙ\J^˜ÛÛZ[œÊˆ×›[Ù[ŒKœ™XÛÜ™—›^Y\—‹›˜[YW—Œ‹™›YÜ×Œ˜ÛÛÜ—ËYWØÛÛÜ—‹LK›Û—YK›[™]\W—ÛÛ[[İ\×‹›[™]ÙZYÚ‹LËœİY_H‚ˆ
+JNÂˆB‚ˆÖİ\İBˆ›ˆWÛ^Y\—Û[™WİÚ]ØWÙšY[ÛZ\ÜÚ[™×ÛÜ—Ûİ]ÛÙ—ÛÜ™\—Ú\×Ü™Y\ÙY
+
+HÂˆ]ÚÈH™[™\—Üİ™X[J	–Û^Y\ŠŒ‹ÊWJK[Ü˜\
+
+NÂˆ\ÜÙ\J\œÙWÜİ™X[J	›ÚÊKš\×ÛÚÊ
+JNÂˆ\ÜÙ\J\œÙWÜİ™X[J	›ÚËœ™\XÙJ—œİYH‹—œİŒHŠJKš\×Ù\œŠ
+JNÂˆ\ÜÙ\J\œÙWÜİ™X[J	›ÚËœ™\XÙJ‹œİYH‹ˆŠJKš\×Ù\œŠ
+JNÂˆ]İØ\YHÚËœ™\XÙJ—™›YÜ×Œ˜ÛÛÜ—È‹—˜ÛÛÜ—Ë™›YÜ×ŒŠNÂˆ\ÜÙ\J\œÙWÜİ™X[J	œİØ\Y
+Kš\×Ù\œŠ
+JNÂˆËÈH^Y\ˆÛÜY™Y›Ü™HHXY\‚ˆ]ÛÈH›Ü›X]JÛÚß^ßH‹™[™\—Üİ™X[J	–Ú
+‰H‹˜[YN’[
+JJWJK[Ü˜\
+
+JNÂˆ\ÜÙ\J\œÙWÜİ™X[J	ÛÊKš\×Ù\œŠ
+JNÂˆB‚ˆÖİ\İBˆ›ˆWØÚ[™ÙYÛ^Y\—ØÛÛİ\—Ú\×ÛÛ™WÙš[™[™×Û˜[Z[™×İWÛ^Y\—Ø[™İWÙšY[
+
+HÂˆ]HH™XÈVÛ^Y\ŠŒ‹ÊK^Y\Š•Ø[È‹JWNÂˆ]ˆH™XÈVÛ^Y\ŠŒ‹ÊK^Y\Š•Ø[È‹ŠWNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	˜ŠKˆ	”[\Î™Y˜][
+
+Kˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ‘Y™ŠJJNÂˆ\ÜÙ\Ù\HJ‹œ™Y
+
+VÌKšÙ^K›^Y\‹ÕØ[Ë˜ÛÛÜˆŠNÂˆ\ÜÙ\Ù\HJ‹˜ÛÛ\\™YŠNÂˆB‚ˆÖİ\İBˆ›ˆWÛ^Y\—ÛÛ—ÛÛ™WÜÚYWÚ\×Ü™YØ[™ØWÜ[WØØ[—Û˜[YWÛ^Y\œ×İÚ]ØWÜİ\Š
+HÂˆ]HH™XÈVÛ^Y\ŠŒ‹ÊK^Y\Š•Ø[È‹JWNÂˆ]ˆH™XÈVÛ^Y\ŠŒ‹ÊWNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	˜ŠKˆ	”[\Î™Y˜][
+
+Kˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ‘Y™ŠJJNÂˆ\ÜÙ\Ù\HJ‹œ™Y
+
+VÌKšÙ^K›^Y\‹ÕØ[ÈŠNÂˆ][\ÈH[\Îœ\œÙJˆ–ÖÙ^ÛYYWW™[™Ú[™HH˜XØY\İ—›˜[Y\ÈH×›^Y\‹ÕÊ——Wœ™X\ÛÛˆHœ——š\ÜİYHHšW—ˆ‹ˆ
+Bˆ[Ü˜\
+
+NÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\İ‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\İ‹	˜ŠKˆ	œ[\Ëˆ
+NÂˆ\ÜÙ\Ù\HJ‹™\™Xİ
+
+K™\™Xİ“X]Ú
+NÂˆB‚ˆÖİ\İBˆ›ˆWÜİ\—ÛX]Ú\×Ø[WÜ[—Ø[™Û›İ[™×Ù[ÙJ
+HÂˆ\ÜÙ\JÛØŠ›^Y\‹Ê‹˜ÛÛÜˆ‹›^Y\‹ÕØ[Ë˜ÛÛÜˆŠJNÂˆ\ÜÙ\JÛØŠ›^Y\‹Ê‹˜ÛÛÜˆ‹›^Y\‹Ë˜ÛÛÜˆŠJNÂˆ\ÜÙ\JYÛØŠ›^Y\‹Ê‹˜ÛÛÜˆ‹›^Y\‹ÕØ[Ë™›YÜÈŠJNÂˆ\ÜÙ\JÛØŠ‰H‹‰HŠJNÂˆ\ÜÙ\JYÛØŠ‰H‹‰PˆŠJNÂˆ\ÜÙ\JÛØŠŠˆ‹˜[][™ÈŠJNÂˆ\ÜÙ\JÛØŠ˜J˜Š˜È‹˜V–XÈŠJNÂˆ\ÜÙ\JYÛØŠ˜J˜Š˜È‹˜VÖXˆŠJNÂˆ

@@ -443,7 +443,7 @@ def dimstyle_lines(doc) -> list[tuple[str, str, str]]:
             continue
         fields = [("name", quote(name))]
         for field, kind in DIMENSION_FIELDS:
-            attr = field[1:].lower() if field.startswith("$") else field.lower()
+            attr = field.lower()
             if not d.hasattr(attr):
                 text = "null"
             else:
@@ -455,7 +455,7 @@ def dimstyle_lines(doc) -> list[tuple[str, str, str]]:
                 else:
                     f = float(v)
                     text = real(math.radians(f) if attr == "dimjogang" else f)
-            fields.append((field, text))
+            fields.append(("$" + field, text))
         fields.append(("annotative", "true" if annotative(ds) else "false"))
         out.append(line("dimstyle", name, fields))
     return out
