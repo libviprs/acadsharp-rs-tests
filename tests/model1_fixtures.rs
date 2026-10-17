@@ -50,7 +50,7 @@ fn every_frozen_stream_is_the_file_the_manifest_froze_and_parses_strictly() {
 }
 
 #[test]
-fn the_oracle_enumerates_all_of_cadheaders_249_variables_on_every_save() {
+fn the_oracle_writes_cadheaders_variables_less_the_two_it_cannot_freeze_on_every_save() {
     let mut first: Option<BTreeSet<String>> = None;
     for s in SAVES {
         let names: BTreeSet<String> = model1::load_frozen("oracle", s)
@@ -58,7 +58,10 @@ fn the_oracle_enumerates_all_of_cadheaders_249_variables_on_every_save() {
             .iter()
             .map(|r| r.key().to_string())
             .collect();
-        assert_eq!(names.len(), 249, "{s}");
+        // CadHeader.GetHeaderMap() has 249; $TDUCREATE and $TDUUPDATE are the time
+        // of the read and are not written (docs/MODEL_1.md).
+        assert_eq!(names.len(), 247, "{s}");
+        assert!(!names.contains("$TDUCREATE") && !names.contains("$TDUUPDATE"), "{s}");
         if let Some(f) = &first {
             assert_eq!(
                 f, &names,
