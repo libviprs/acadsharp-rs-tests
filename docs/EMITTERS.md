@@ -13,7 +13,8 @@ For a fixture `<id>`, `emit-<engine> --fixture <id> --out <dir>` writes
   `{"i": <index>, "h": ["<insert handle>", ..., "<entity handle>"], "t": "<record type>"}`,
   handles as uppercase hex with no prefix. It names entities in a diff and is not
   part of the contract. Records with no entity behind them (the document, the
-  views, the warnings) carry the handle `0`;
+  views, a warning about the document) carry the handle `0`; a warning raised for an
+  entity carries that entity's handle path, so the census check can count it;
 - `<id>.<engine>.run.json`, the provenance: the engine commit the suite pins
   and the one actually beside it, the fixture's sha256, the target, and
   `RAYON_NUM_THREADS` as the process saw it.
