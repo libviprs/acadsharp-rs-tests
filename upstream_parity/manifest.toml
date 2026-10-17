@@ -120,33 +120,33 @@ acadrust = { status = "not_applicable", reason = "tests ACadSharp's own DXF prop
 
 [[test_file]]
 path = "Entities/ArcTests.cs"
-status = "differential"
-planned_rust = "tests/entities/arc.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/arc.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/AttributeDefinitionTests.cs"
-status = "differential"
-planned_rust = "tests/entities/attribute.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/text.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/AttributeEntityTests.cs"
-status = "differential"
-planned_rust = "tests/entities/attribute.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/text.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/CircleTests.cs"
-status = "differential"
-planned_rust = "tests/entities/circle.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/circle.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/CommonDimensionTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/CommonEntityTests.cs"
@@ -156,33 +156,33 @@ reason = "a rendering-contract entity suite. It is covered end to end by the JSO
 
 [[test_file]]
 path = "Entities/CommonPolylineTests.cs"
-status = "differential"
-planned_rust = "tests/entities/polyline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/polyline.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/CommonVertexTests.cs"
-status = "differential"
-planned_rust = "tests/entities/polyline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/polyline.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/DimensionAlignedTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/DimensionAngular2LineTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/DimensionAngular3PtTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/DimensionArcTests.cs"
@@ -192,63 +192,63 @@ reason = "a rendering-contract entity suite. It is covered end to end by the JSO
 
 [[test_file]]
 path = "Entities/DimensionDiameterTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/DimensionDimensionLinearTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/DimensionOrdinateTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/DimensionRadiusTests.cs"
-status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/dimensions.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/EllipseTests.cs"
-status = "differential"
-planned_rust = "tests/entities/ellipse.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/ellipse.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/HatchTests.cs"
-status = "differential"
-planned_rust = "tests/entities/hatch.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/hatch.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/InsertTest.cs"
-status = "differential"
-planned_rust = "tests/entities/insert.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/insert.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/LineTests.cs"
-status = "differential"
-planned_rust = "tests/entities/line.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/line.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/LwPolylineTest.cs"
-status = "differential"
-planned_rust = "tests/entities/polyline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/polyline.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/MTextTests.cs"
-status = "differential"
-planned_rust = "tests/entities/text.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/text.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/MeshTests.cs"
@@ -272,15 +272,15 @@ reason = "mesh geometry, which the canonical schema has no record for. Checked a
 
 [[test_file]]
 path = "Entities/Polyline2DTests.cs"
-status = "differential"
-planned_rust = "tests/entities/polyline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/polyline.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/Polyline3DTests.cs"
-status = "differential"
-planned_rust = "tests/entities/polyline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/polyline.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/SeqendTests.cs"
@@ -289,15 +289,15 @@ reason = "SEQEND is a structural marker rather than drawable geometry; it never 
 
 [[test_file]]
 path = "Entities/SplineTests.cs"
-status = "differential"
-planned_rust = "tests/entities/spline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/spline.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/TextTests.cs"
-status = "differential"
-planned_rust = "tests/entities/text.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/text.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "Entities/Vertex2DTests.cs"
@@ -323,9 +323,9 @@ reason = "mesh geometry, which the canonical schema has no record for. Checked a
 
 [[test_file]]
 path = "Entities/ViewportTests.cs"
-status = "differential"
-planned_rust = "tests/entities/viewport.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+status = "mirrored"
+rust = ["tests/upstream_parity/viewport.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "GroupCodeValueTests.cs"
@@ -351,9 +351,9 @@ reason = "AEC custom objects, which must surface as warning rows rather than bei
 
 [[test_file]]
 path = "IO/CadReaderTestsBase.cs"
-status = "differential"
-planned_rust = "tests/io/reader.rs"
-reason = "the reader contract itself, exercised on every fixture by the JSONL comparison"
+status = "mirrored"
+rust = ["tests/upstream_parity/reader.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "IO/ColorTests.cs"
@@ -362,9 +362,9 @@ reason = "colour resolution through the reader; the SVG reference does no colour
 
 [[test_file]]
 path = "IO/DWG/DwgReaderTests.cs"
-status = "differential"
-planned_rust = "tests/io/dwg_reader.rs"
-reason = "the DWG reader suite, which is the closest thing upstream has to a specification of what we are reimplementing"
+status = "mirrored"
+rust = ["tests/upstream_parity/reader.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "IO/DWG/DwgWriterSingleObjectTests.cs"
@@ -410,9 +410,9 @@ acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.
 
 [[test_file]]
 path = "IO/DynamicBlockTests.cs"
-status = "differential"
-planned_rust = "tests/io/blocks.rs"
-reason = "dynamic blocks, where the transformed world-space geometry is the whole comparison"
+status = "mirrored"
+rust = ["tests/upstream_parity/insert.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "IO/GeoDataTests.cs"
@@ -427,9 +427,9 @@ reason = "reads every sample and asserts integrity, which is what the JSONL comp
 
 [[test_file]]
 path = "IO/IOTestsBase.cs"
-status = "differential"
-planned_rust = "tests/io/reader.rs"
-reason = "the shared reader fixture plumbing behind every IO suite"
+status = "mirrored"
+rust = ["tests/upstream_parity/reader.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "IO/LoadPatternsTests.cs"
@@ -466,9 +466,9 @@ reason = "the ACAD_TABLE entity, no canonical record yet, so it must surface as 
 
 [[test_file]]
 path = "IO/ViewportTests.cs"
-status = "differential"
-planned_rust = "tests/entities/viewport.rs"
-reason = "viewports as read from a file, which decide what a layout view record contains"
+status = "mirrored"
+rust = ["tests/upstream_parity/viewport.rs"]
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
 
 [[test_file]]
 path = "IO/WriterSingleObjectTests.cs"

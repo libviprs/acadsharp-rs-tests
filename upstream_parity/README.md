@@ -85,6 +85,24 @@ Burn-down at `d7dc111`, as `tools/parity_inventory.py` prints it:
 | acadsharp | 112   | 29             | 83         | 0         | 83          |
 | acadrust  | 112   | 22             | 90         | 0         | 90          |
 
+## What is mirrored (H4.2)
+
+Thirty rows are `mirrored`, by twelve files under `tests/upstream_parity/` that run
+as one binary behind `feature = "native"`: `reader`, `arc`, `circle`, `ellipse`,
+`spline`, `line`, `polyline`, `text`, `insert`, `hatch`, `dimensions` and
+`viewport`. At `d7dc111` that is 30 of the 83 applicable rows for acadsharp-rs and
+0 of 90 for acadrust: every mirrored row carries an `acadrust` override saying the
+mirrored test goes through acadsharp-rs's safe API and the oracle comparison is what
+covers acadrust, so the tool's number for acadrust does not claim a Rust mirror it
+does not have (`tests/parity_manifest.rs` holds one override per mirrored row).
+
+Each test asserts a value the generator wrote
+(`reference/ACadSharp.Generator`), never only that decoding worked, and says in a
+comment where wire 2 cannot carry what the upstream suite asserts (text alignment
+and style, a hatch's entity type, a bulge as an arc). `Objects/LayoutTests.cs` is
+not among them: it is an object-model suite, `native_conformance`, and the layout
+behaviour that is observable through the safe API is `viewport.rs`'s.
+
 ## `planned_rust`, and why it is not `rust`
 
 A row that will become `mirrored` carries `planned_rust` pointing at where the
