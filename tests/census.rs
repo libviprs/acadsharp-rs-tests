@@ -39,25 +39,46 @@ fn text(view: u32) -> String {
     )
 }
 
-/// A reader's stream and sidecar from (record json, sidecar json) pairs.
-fn reader(rows: &[(String, String)]) -> (Vec<Record>, Sidecar) {
-    let stream: String = rows.iter().map(|(r, _)| format!("{r}\n")).collect();
-    let side: String = rows.iter().map(|(_, s)| format!("{s}\n")).collect();
+/// One record and its sidecar line, numbered when the reader is built.
+struct Row {
+    record: String,
+    handles: String,
+    kind: &'static str,
+    dxf: Option<&'static str>,
+    from_insert: Option<bool>,
+}
+
+fn reader(rows: &[Row]) -> (Vec<Record>, Sidecar) {
+    let stream: String = rows.iter().map(|r| format!("{}\n", r.record)).collect();
+    let side: String = rows
+        .iter()
+        .enumerate()
+        .map(|(i, r)| {
+            let mut out = format!(r#"{{"i":{i},"h":[{}],"t":"{}""#, r.handles, r.kind);
+            if let Some(x) = r.from_insert {
+                out.push_str(&format!(r#","x":{x}"#));
+            }
+            if let Some(d) = r.dxf {
+                out.push_str(&format!(r#","d":"{d}""#));
+            }
+            out.push_str("}\n");
+            out
+        })
+        .collect();
     let records = parse_stream(&stream).expect("test stream parses");
     let sidecar = Sidecar::parse(&side, &records).expect("test sidecar parses");
     (records, sidecar)
 }
 
-fn framing() -> Vec<(String, String)> {
-    vec![
-        (DOC.into(), r#"{"i":0,"h":["0"],"t":"document"}"#.into()),
-        (MODEL.into(), r#"{"i":1,"h":["0"],"t":"view"}"#.into()),
-        (LAYOUT.into(), r#"{"i":2,"h":["0"],"t":"view"}"#.into()),
-    ]
+fn framing() -> Vec<Row> {
+    [(DOC, "document"), (MODEL, "view"), (LAYOUT, "view")]
+        .into_iter()
+        .map(|(r, k)| Row { record: r.into(), handles: r#""0""#.into(), kind: k, dxf: None, from_insert: None })
+        .collect()
 }
 
-fn row(rec: String, i: usize, handles: &str, t: &str, d: &str) -> (String, String) {
-    (rec, format!(r#"{{"i":{i},"h":[{handles}],"t":"{t}","d":"{d}"}}"#))
+fn row(record: String, handles: &str, kind: &'static str, dxf: &'static str) -> Row {
+    Row { record, handles: handles.into(), kind, dxf: Some(dxf), from_insert: None }
 }
 
 // handles: 0x1A = 26, 0x1B = 27, 0x1C = 28
@@ -70,13 +91,13 @@ fn census3() -> Census {
     .unwrap()
 }
 
-fn good_rows() -> Vec<(String, String)> {
+fn good_rows() -> Vec<Row> {
     let mut rows = framing();
-    rows.push(row(line(0), 3, r#""1A""#, "line", "LINE"));
-    rows.push(row(text(0), 4, r#""1B""#, "text", "TEXT"));
-    rows.push(row(line(0), 5, r#""1C""#, "line", "LINE"));
+    rows.push(row(line(0), r#""1A""#, "line", "LINE"));
+    rows.push(row(text(0), r#""1B""#, "text", "TEXT"));
+    rows.push(row(line(0), r#""1C""#, "line", "LINE"));
     // paper space is not model space and must not count
-    rows.push(row(line(1), 6, r#""FF""#, "line", "LINE"));
+    rows.push(row(line(1), r#""FF""#, "line", "LINE"));
     rows
 }
 
@@ -110,15 +131,7 @@ fn a_reader_that_found_exactly_the_census_is_clean() {
 fn a_reader_one_short_is_red_and_names_the_handle() {
     let mut rows = good_rows();
     rows.remove(5); // the entity 0x1C
-    let (records, sidecar) = {
-        // keep the index run gapless
-        let renumbered: Vec<(String, String)> = rows
-            .into_iter()
-            .enumerate()
-            .map(|(i, (r, s))| (r, s.replacen(&format!("\"i\":{}", i + (i >= 5) as usize), &format!("\"i\":{i}"), 1)))
-            .collect();
-        reader(&renumbered)
-    };
+    let (records, sidecar) = reader(&rows);
     let findings = check_full(&census3(), &records, &sidecar);
     assert_eq!(
         findings,
@@ -131,7 +144,7 @@ fn a_reader_one_short_is_red_and_names_the_handle() {
 #[test]
 fn a_reader_with_one_too_many_is_red_and_names_the_handle() {
     let mut rows = good_rows();
-    rows.push(row(line(0), 7, r#""AA""#, "line", "LINE"));
+    rows.push(row(line(0), r#""AA""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
     let findings = check_full(&census3(), &records, &sidecar);
     assert_eq!(findings, [Finding::Unexpected { handle: 0xAA }], "{findings:?}");
@@ -142,8 +155,8 @@ fn a_reader_with_one_too_many_is_red_and_names_the_handle() {
 fn an_expanded_insert_counts_once_by_its_outermost_handle() {
     let c = Census::parse(&census_json(&[("BlockReference", 26, false)])).unwrap();
     let mut rows = framing();
-    rows.push(row(line(0), 3, r#""1A","50""#, "line", "LINE"));
-    rows.push(row(line(0), 4, r#""1A","51""#, "line", "LINE"));
+    rows.push(row(line(0), r#""1A","50""#, "line", "LINE"));
+    rows.push(row(line(0), r#""1A","51""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_full(&c, &records, &sidecar), []);
 }
@@ -151,9 +164,9 @@ fn an_expanded_insert_counts_once_by_its_outermost_handle() {
 #[test]
 fn a_wrong_class_is_red_for_a_top_level_record() {
     let mut rows = framing();
-    rows.push(row(line(0), 3, r#""1A""#, "line", "LINE"));
-    rows.push(row(text(0), 4, r#""1B""#, "text", "MTEXT")); // census says DBText
-    rows.push(row(line(0), 5, r#""1C""#, "line", "LINE"));
+    rows.push(row(line(0), r#""1A""#, "line", "LINE"));
+    rows.push(row(text(0), r#""1B""#, "text", "MTEXT")); // census says DBText
+    rows.push(row(line(0), r#""1C""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
     let findings = check_full(&census3(), &records, &sidecar);
     assert_eq!(
@@ -167,7 +180,7 @@ fn a_wrong_class_is_red_for_a_top_level_record() {
 fn an_invisible_entity_may_be_absent_and_a_visible_one_may_not() {
     let c = Census::parse(&census_json(&[("Line", 26, false), ("Line", 27, true)])).unwrap();
     let mut rows = framing();
-    rows.push(row(line(0), 3, r#""1A""#, "line", "LINE"));
+    rows.push(row(line(0), r#""1A""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_full(&c, &records, &sidecar), [], "the invisible one is allowed to be missing");
 
@@ -189,7 +202,7 @@ fn an_empty_model_space_in_the_reader_is_refused_as_vacuous() {
 fn a_class_the_name_map_does_not_know_is_a_finding_not_a_pass() {
     let c = Census::parse(&census_json(&[("SomethingNew", 26, false)])).unwrap();
     let mut rows = framing();
-    rows.push(row(line(0), 3, r#""1A""#, "line", "LINE"));
+    rows.push(row(line(0), r#""1A""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
     assert!(
         check_full(&c, &records, &sidecar)
@@ -197,14 +210,17 @@ fn a_class_the_name_map_does_not_know_is_a_finding_not_a_pass() {
     );
 }
 
-fn weak_rows(entities: &[(&str, &str)]) -> Vec<(String, String)> {
-    // acadsharp-rs sidecars: `h` is [leaf], no `t`-independent type, `x` marks an expansion.
+fn weak_rows(entities: &[(&str, bool)]) -> Vec<Row> {
+    // acadsharp-rs sidecars: `h` is [leaf], no DXF name, and `x` marks an expansion.
     let mut rows = framing();
-    for (i, (handle, x)) in entities.iter().enumerate() {
-        rows.push((
-            line(0),
-            format!(r#"{{"i":{},"h":["{handle}"],"t":"line","x":{x}}}"#, i + 3),
-        ));
+    for (handle, x) in entities {
+        rows.push(Row {
+            record: line(0),
+            handles: format!(r#""{handle}""#),
+            kind: "line",
+            dxf: None,
+            from_insert: Some(*x),
+        });
     }
     rows
 }
@@ -213,7 +229,7 @@ fn weak_rows(entities: &[(&str, &str)]) -> Vec<(String, String)> {
 fn the_weak_check_passes_when_top_level_handles_are_in_and_cover_the_census() {
     // 1A and 1C top level; 1B is a block reference's expansion leaf (x true)
     let c = Census::parse(&census_json(&[("Line", 26, false), ("BlockReference", 27, false), ("Line", 28, false)])).unwrap();
-    let rows = weak_rows(&[("1A", "false"), ("50", "true"), ("1C", "false")]);
+    let rows = weak_rows(&[("1A", false), ("50", true), ("1C", false)]);
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_weak(&c, &records, &sidecar), []);
 }
@@ -221,7 +237,7 @@ fn the_weak_check_passes_when_top_level_handles_are_in_and_cover_the_census() {
 #[test]
 fn the_weak_check_is_red_for_a_top_level_handle_the_census_lacks() {
     let c = census3();
-    let rows = weak_rows(&[("1A", "false"), ("1B", "false"), ("1C", "false"), ("EE", "false")]);
+    let rows = weak_rows(&[("1A", false), ("1B", false), ("1C", false), ("EE", false)]);
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_weak(&c, &records, &sidecar), [Finding::Unexpected { handle: 0xEE }]);
 }
@@ -229,7 +245,7 @@ fn the_weak_check_is_red_for_a_top_level_handle_the_census_lacks() {
 #[test]
 fn the_weak_check_is_red_for_a_census_entity_it_never_saw() {
     let c = census3();
-    let rows = weak_rows(&[("1A", "false"), ("1C", "false")]);
+    let rows = weak_rows(&[("1A", false), ("1C", false)]);
     let (records, sidecar) = reader(&rows);
     assert_eq!(
         check_weak(&c, &records, &sidecar),
@@ -240,7 +256,7 @@ fn the_weak_check_is_red_for_a_census_entity_it_never_saw() {
 #[test]
 fn the_weak_check_does_not_ask_for_block_references_or_dimensions() {
     let c = Census::parse(&census_json(&[("Line", 26, false), ("BlockReference", 27, false), ("RotatedDimension", 28, false)])).unwrap();
-    let rows = weak_rows(&[("1A", "false")]);
+    let rows = weak_rows(&[("1A", false)]);
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_weak(&c, &records, &sidecar), []);
 }
@@ -248,7 +264,7 @@ fn the_weak_check_does_not_ask_for_block_references_or_dimensions() {
 #[test]
 fn the_expansion_leaves_of_an_insert_are_not_unexpected_for_the_weak_check() {
     let c = Census::parse(&census_json(&[("Line", 26, false)])).unwrap();
-    let rows = weak_rows(&[("1A", "false"), ("7777", "true")]);
+    let rows = weak_rows(&[("1A", false), ("7777", true)]);
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_weak(&c, &records, &sidecar), []);
 }
