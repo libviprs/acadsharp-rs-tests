@@ -254,6 +254,10 @@ jobs:
       # `--all-targets` skips doctests, so they need their own line or the
       # examples in the public API documentation are compiled by nothing.
       - run: cargo test --locked --doc
+      # The fuzz corpus, replayed through the same bodies the fuzz targets run.
+      # `--all-targets` above already runs it; this line names it so a PR that
+      # breaks a committed corpus entry says so by step.
+      - run: cargo test --locked --test fuzz_corpus_replay --test alloc_cap
       # `emit-acadrust` and its tests, behind the `acadrust` feature, which needs
       # `../acadrust` (laid down above) and builds it. Deterministic output, one
       # thread against the default, the per-row mapping tests, and the comparison
@@ -281,3 +285,43 @@ jobs:
       # decides what it means, which is the whole point of the manifest.
       - name: Upstream test parity is classified
         run: python3 tools/parity_inventory.py
+
+  miri:
+    # Plain, for the same reason as MSRV and Docs: a name that carries a flag
+    # renames the required check the day the flag moves.
+    name: Miri
+    runs-on: ubuntu-latest
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
+      # Strict provenance, and isolation off because the corpus replay reads its
+      # entries from disk. Miri interprets pure Rust only: it does not see the
+      # native library, and this job does not claim to validate NativeAOT or the
+      # ABI. The leak and sanitizer harnesses for that boundary are H4.3's.
+      MIRIFLAGS: -Zmiri-strict-provenance -Zmiri-disable-isolation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/clone-counterpart
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: miri
+      - uses: Swatinem/rust-cache@v2
+      # The list is `miri-allowlist.txt` and nothing else. `tests/miri_allowlist.rs`
+      # refuses a target on it that reaches the native library.
+      - name: Miri over the pure-Rust parsers
+        run: |
+          set -eu
+          cargo miri setup
+          sed -e 's/#.*//' miri-allowlist.txt | while read -r target skips; do
+            [ -n "$target" ] || continue
+            args=""
+            for s in $skips; do args="$args --skip $s"; done
+            if [ "$target" = lib ]; then
+              cargo miri test --lib -- $args
+            else
+              cargo miri test --test "$target" -- $args
+            fi
+          done

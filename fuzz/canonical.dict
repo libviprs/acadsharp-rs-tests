@@ -1,0 +1,24 @@
+# Tokens for the canonical_parser target. libFuzzer splices these in, so it
+# reaches the schema's edge cases (negative zero, a second schema number, the
+# record names) without having to spell them out one random byte at a time.
+# Pass it with: cargo fuzz run canonical_parser -- -dict=fuzz/canonical.dict
+"-0.0"
+"-0"
+"0.0"
+"1e999"
+"NaN"
+"{\"schema\":1,\"record\":\"line\",\"view\":0,"
+"{\"schema\":1,\"record\":\"circle\",\"view\":0,"
+"{\"schema\":1,\"record\":\"polyline\",\"view\":0,"
+"{\"schema\":1,\"record\":\"point\",\"view\":0,"
+"{\"schema\":1,\"record\":\"warning\","
+"\"x1\":-0.0"
+"\"bulges\":[0.0]"
+"\"points\":[[0.0,0.0,0.0]]"
+"\"schema\":2"
+"\\u0000"
+"\\r"
+"\\\\"
+"\\\""
+"\"text\":\"a\\\\b\""
+"\"record\":\"text\""

@@ -13,6 +13,9 @@ use acadsharp_rs_tests::fuzz_harness::{CappedAlloc, TARGETS};
 #[global_allocator]
 static ALLOC: CappedAlloc = CappedAlloc;
 
+/// Largest corpus entry the Miri job replays.
+const MIRI_MAX_ENTRY: usize = 16 * 1024;
+
 const EXPECTED: [&str; 5] = [
     "batch_reader",
     "canonical_parser",
@@ -40,7 +43,10 @@ fn entries(target: &str) -> Vec<PathBuf> {
 fn the_five_targets_are_registered() {
     let mut names: Vec<&str> = TARGETS.iter().map(|t| t.0).collect();
     names.sort_unstable();
-    assert_eq!(names, EXPECTED, "TARGETS and the issue's five targets differ");
+    assert_eq!(
+        names, EXPECTED,
+        "TARGETS and the issue's five targets differ"
+    );
 }
 
 #[test]
@@ -62,12 +68,25 @@ fn every_corpus_entry_replays_clean() {
     for (name, body) in TARGETS {
         for path in entries(name) {
             let data = std::fs::read(&path).expect("read corpus entry");
+            // The interpreter is a few hundred times slower than the machine, and
+            // the multi-hundred-kilobyte manifest seeds took most of a quarter hour.
+            // They still run natively on every PR; Miri gets the small ones.
+            if cfg!(miri) && data.len() > MIRI_MAX_ENTRY {
+                continue;
+            }
             replayed += 1;
             if catch_unwind(AssertUnwindSafe(|| body(&data))).is_err() {
                 failures.push(format!("{name}: {}", path.display()));
             }
         }
     }
-    assert!(replayed > 0, "no corpus entry was replayed; this test proved nothing");
-    assert!(failures.is_empty(), "these corpus entries panic:\n{}", failures.join("\n"));
+    assert!(
+        replayed > 0,
+        "no corpus entry was replayed; this test proved nothing"
+    );
+    assert!(
+        failures.is_empty(),
+        "these corpus entries panic:\n{}",
+        failures.join("\n")
+    );
 }

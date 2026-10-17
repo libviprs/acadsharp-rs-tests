@@ -1,0 +1,12 @@
+{"schema":1,"record":"document","format":"dwg","acad_version":"AC1014","maintenance_version":"0}
+{"schema":1,"record":"view","index":0,"name":"Model","kind":"model"}
+{"schema":1,"record":"view","index":1,"name":"Layout1","kind":"layout"}
+{"schema":1,"record":"view","index":2,"name":"Layout2","kind":"layout"}
+{"schema":1,"record":"view","index":3,"name":"MyLayout","kind":"layout"}
+{"schema":1,"record":"point","view":0,"x":1.4944041501368517,"y":1.4913258986784363,"z":0.0}
+{"schema":1,"record":"point","view":0,"x":1.4944041501368517,"y":2.24147314439643,"z":0.0}
+{"schema":1,"record":"point","view":0,"x":1.4944041501368517,"y":3.0050158458197203,"z":0.0}
+{"schema":1,"record":"point","view":0,"x":1.4944041501368517,"y":3.7149766178649486,"z":0.0}
+{"schema":1,"record":"point","view":0,"x":1.4944041501368517,"y":4.4115419128935045,"z":0.0}
+{"schema":1,"record":"point","view":0,"x":1.4944041501368521,"y":5.121502684938733,"z":0.0}
+{"schema":1,"record":"line","view":0,"x1":3.5925339989093885,"y1":1.477241896180196,"z1":0.0,"x2":6.8635470339795575,"y2":1.477241896180196,"z2":0.0}

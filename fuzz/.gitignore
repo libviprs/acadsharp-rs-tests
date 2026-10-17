@@ -1,0 +1,6 @@
+target/
+artifacts/
+coverage/
+# The corpus directory holds the committed seeds. A fuzzer run adds files to it;
+# only add the ones that reproduced a bug or reached something new.
+Cargo.lock.bak

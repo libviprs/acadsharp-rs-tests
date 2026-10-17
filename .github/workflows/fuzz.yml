@@ -1,0 +1,64 @@
+name: Fuzz
+
+# Weekly and on demand, and not part of ci.yml: it is slow, and cargo-fuzz needs
+# a nightly toolchain that the required checks should not depend on.
+#
+# What it covers is the pure-Rust parsers only (the wire batch reader, the
+# canonical stream parser, the comparator and the two manifest readers). It says
+# nothing about the native library. Leak and sanitizer runs for that boundary
+# belong to the native lane (H4.3).
+#
+# The cheap half of this lives in ci.yml: `tests/fuzz_corpus_replay.rs` replays
+# every committed corpus entry on stable on every PR, so a crash found here and
+# added to `fuzz/corpus/<target>/` fails there from then on.
+
+on:
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      seconds:
+        description: Seconds per target
+        default: '600'
+
+env:
+  CARGO_TERM_COLOR: always
+  # Ten minutes each to start.
+  FUZZ_SECONDS: ${{ inputs.seconds || '600' }}
+
+jobs:
+  fuzz:
+    name: Fuzz (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [batch_reader, canonical_parser, fixture_manifest, parity_manifest, comparator]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/clone-counterpart
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: fuzz
+      - run: cargo install cargo-fuzz --locked
+      # New units go to a scratch directory, not the committed corpus: only an
+      # input that reproduced a bug or reached something new gets added by hand.
+      - name: Fuzz
+        run: |
+          mkdir -p "$RUNNER_TEMP/work"
+          cargo fuzz run ${{ matrix.target }} "$RUNNER_TEMP/work" fuzz/corpus/${{ matrix.target }} \
+            -- -max_total_time="$FUZZ_SECONDS" -rss_limit_mb=4096
+      - name: Upload any crash
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-crash-${{ matrix.target }}
+          path: fuzz/artifacts/${{ matrix.target }}
+          if-no-files-found: ignore

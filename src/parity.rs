@@ -263,6 +263,13 @@ pub fn validate(m: &Manifest, crate_root: &Path) -> Vec<String> {
     problems
 }
 
+/// Parses any text as a parity manifest and returns how many test files it
+/// classifies, or the parse error. The fuzz target calls this.
+pub fn parse_manifest_text(text: &str) -> Result<usize, toml::de::Error> {
+    let m: Manifest = toml::from_str(text)?;
+    Ok(m.test_files.len() + m.baselines.len())
+}
+
 fn parsed() -> &'static Manifest {
     static M: OnceLock<Manifest> = OnceLock::new();
     M.get_or_init(|| {

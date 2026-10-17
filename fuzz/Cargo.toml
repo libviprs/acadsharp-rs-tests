@@ -1,0 +1,52 @@
+[package]
+name = "acadsharp-rs-tests-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+description = "cargo-fuzz targets for the pure-Rust parsers in acadsharp-rs-tests"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+acadsharp-rs-tests = { path = ".." }
+
+# Its own workspace, so `cargo test` at the root never builds a fuzz target and
+# the fuzz build never rewrites the root lockfile.
+[workspace]
+
+[[bin]]
+name = "batch_reader"
+path = "fuzz_targets/batch_reader.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "canonical_parser"
+path = "fuzz_targets/canonical_parser.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fixture_manifest"
+path = "fuzz_targets/fixture_manifest.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "parity_manifest"
+path = "fuzz_targets/parity_manifest.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "comparator"
+path = "fuzz_targets/comparator.rs"
+test = false
+doc = false
+bench = false

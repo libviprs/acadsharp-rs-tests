@@ -20,7 +20,11 @@ fn an_allocation_past_the_cap_aborts_the_process() {
         return;
     }
     let out = std::process::Command::new(std::env::current_exe().unwrap())
-        .args(["--exact", "an_allocation_past_the_cap_aborts_the_process", "--nocapture"])
+        .args([
+            "--exact",
+            "an_allocation_past_the_cap_aborts_the_process",
+            "--nocapture",
+        ])
         .env(PROBE, "1")
         .output()
         .unwrap();
@@ -29,7 +33,10 @@ fn an_allocation_past_the_cap_aborts_the_process() {
         "a 128 MiB allocation went through; the cap is not live"
     );
     let err = String::from_utf8_lossy(&out.stderr);
-    assert!(err.contains("allocation cap exceeded"), "aborted for another reason: {err}");
+    assert!(
+        err.contains("allocation cap exceeded"),
+        "aborted for another reason: {err}"
+    );
 }
 
 #[test]
