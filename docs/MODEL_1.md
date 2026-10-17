@@ -23,6 +23,7 @@ side is `tools/model1.py`.
 |---|---|---|
 | `header` | this document | the DXF `$NAME` |
 | `layer` | this document | the entry name |
+| `linetype` | this document | the entry name |
 
 The rest of the table kinds (`linetype`, `textstyle`, `dimstyle`,
 `block_record`, `layout`), `dictionary`, and `xdata` with `xrecord` are each
@@ -200,6 +201,31 @@ can name every layer's field with a star, `layer/*.lineweight`. A layer's colour
 is packed from its red, green and blue components in all three producers: the
 packed value ACadSharp exposes is blue first, which is a library convention and
 not a property of the layer.
+
+## `linetype`
+
+```json
+{"model":1,"record":"linetype","name":"BATTING","description":"Batting SSSS","alignment":65,"pattern_length":0.4001,"segments":[{"length":0.0001,"flags":0,"shape_number":0,"scale":1.0,"rotation":0.0,"offset":[0.0,0.0],"text":"","style":""}]}
+```
+
+One record per LTYPE entry, keyed by the entry name. `ByBlock`, `ByLayer` and
+`Continuous` are in every file, so the set is never empty and a missing one is a
+finding. The fields are by DXF code: `description` (3), `alignment` (72, the
+character's code), `pattern_length` (40), and `segments`, a list in file order,
+each with `length` (49), `flags` (74), `shape_number` (75), `scale` (46),
+`rotation` (50, **radians**, like every angle in schema 1; the DXF writes
+degrees), `offset` (44, 45), `text` (9) and `style` (340).
+
+- `style` is the text style's **name**, never its handle. A segment with no
+  style has the empty string.
+- A code a segment does not write has its default: flags 0, shape number 0, scale
+  1.0, rotation 0.0, offset (0, 0), empty text and style.
+- Entry names compare exactly, case included. AC1014 stores table names in upper
+  case, so its three fixed names read `BYBLOCK`, `BYLAYER` and `CONTINUOUS`.
+
+The comparator unrolls the list: `linetype/<name>.segments.len` and then
+`linetype/<name>.segments[i].<field>`. A rule that covers a field of every
+segment of every linetype is `linetype/*.segments[*].style`.
 
 ## Comparing
 
