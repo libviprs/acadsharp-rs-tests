@@ -52,6 +52,22 @@ class TestStrings(unittest.TestCase):
         self.assertEqual(tool.normalize_newlines("a\r\nb\rc\n"), "a\nb\nc\n")
 
 
+class TestCaretNotation(unittest.TestCase):
+    """AutoCAD's own DXF writes a line feed in an MTEXT as `^J`."""
+
+    def test_caret_j_is_a_line_feed(self):
+        self.assertEqual(tool.decode_caret("a^Jb"), "a\nb")
+
+    def test_caret_space_is_a_caret(self):
+        self.assertEqual(tool.decode_caret("2^ 3"), "2^3")
+
+    def test_text_without_a_caret_is_untouched(self):
+        self.assertEqual(tool.decode_caret("94\\U+00B0"), "94\\U+00B0")
+
+    def test_a_trailing_caret_is_kept(self):
+        self.assertEqual(tool.decode_caret("a^"), "a^")
+
+
 class TestRender(unittest.TestCase):
     """The writer's output against the exact text `src/canonical.rs` writes."""
 

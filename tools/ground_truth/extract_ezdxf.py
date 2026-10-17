@@ -117,6 +117,25 @@ def normalize_newlines(text: str) -> str:
     return text.replace("\r\n", "\n").replace("\r", "\n")
 
 
+def decode_caret(text: str) -> str:
+    """DXF writes a control character as `^` and the character XOR 0x40, because
+    a real line feed would break the line structure of the file: `^J` is a line
+    feed, `^I` a tab, and `^ ` (caret, space) is a caret. The schema carries the
+    character, so it is decoded here. ezdxf hands the raw form back."""
+    out = []
+    i = 0
+    while i < len(text):
+        c = text[i]
+        if c == "^" and i + 1 < len(text):
+            n = text[i + 1]
+            out.append("^" if n == " " else chr(ord(n) ^ 0x40))
+            i += 2
+        else:
+            out.append(c)
+            i += 1
+    return "".join(out)
+
+
 def _triple(names, v) -> str:
     return ",".join(f'"{n}":{real(x)}' for n, x in zip(names, v))
 
@@ -578,7 +597,7 @@ class Extractor:
         self.emit({
             "record": "text", "view": view, "at": pos, "height": out_h, "rotation": out_rot,
             "width_factor": out_w, "halign": h, "valign": v, "style": style,
-            "text": normalize_newlines(value or ""),
+            "text": normalize_newlines(decode_caret(value or "")),
         }, here, dxf)
 
     def text(self, e, view, xf, here, dxf):
