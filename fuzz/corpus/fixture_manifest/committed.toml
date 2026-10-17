@@ -1,0 +1,2741 @@
+# Canonical DWG fixture manifest.
+#
+# This file is the single source of truth. The fetch tool reads it, the Rust
+# integrity test reads it, and CI reads it. Nothing else records a sha256, so
+# there is no second copy to drift.
+#
+# One corpus for every engine that reads it. A `[[fixture]]` row is a DWG the
+# oracle reads, which is what four things iterate and expect (the oracle's own
+# manifest reader, tools/regenerate_reference.py, src/fixtures.rs and the fetch
+# tool's signature check), so it stays exactly that. Every other role has a
+# sibling table with the same provenance fields:
+#
+#   [[fixture]]      a drawing the oracle reads and freezes; `tier` is A
+#                    (AutoCAD-authored, decision grade), B (regression grade,
+#                    written by ACadSharp's own DwgWriter) or C (stress: both
+#                    engines open it and agree on counts)
+#   [[refusal]]      a drawing the oracle is expected to refuse, with the exit
+#                    code it refuses it with
+#   [[recording]]    libviprs-dep's six-decimal `.txt` recording of a drawing
+#   [[oracle_input]] AutoCAD's own DXF twins
+#   [[census]]       AutoCAD's recorded object census (one row per distinct
+#                    blob: upstream stores five of the saves' trees as the same
+#                    bytes under five names, and those are `also_source_*`)
+#
+# Every row names its `source`, and each source has its own commit and host
+# prefix under [sources.*]. A drawing meant to hold no geometry carries
+# `no_primitives = "<reason>"`; without it a reference holding none is refused.
+#
+# Vendored, all of it. A fetched tier would make `tests/fixture_integrity.rs`
+# need the network or skip, and a skip is the thing this corpus is removing. The
+# total under fixtures/ is 42 MB (30 MB of it the 26 DXF twins and the census),
+# against the 50 MB threshold fixtures/README.md sets for moving to LFS. When
+# that threshold is reached the drawings move; the DXF twins are the first thing
+# to ask whether they need to be here at all.
+#
+# Nothing here is generated at run time. `tools/fetch_acadsharp_fixtures.py`
+# will verify against these values and will never rewrite them: a changed hash
+# upstream is a decision for a human, not a silent update.
+
+[upstream]
+repository = "https://github.com/DomCR/ACadSharp"
+version = "v3.7.1"
+commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+license = "MIT"
+license_file = "LICENSE-ACadSharp.txt"
+# Tagged 2026-08-17. Every source_url below is pinned to this commit, never to
+# a branch: a branch URL would make the corpus change under us without a diff.
+
+# Where each kind of row comes from. Every row names its `source`, and the
+# fetch tool's host and URL-prefix allowlist is per source: a row cannot borrow
+# another source's commit or another source's host.
+[sources.acadsharp]
+repository = "https://github.com/DomCR/ACadSharp"
+commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+url_prefix = "https://raw.githubusercontent.com/DomCR/ACadSharp/"
+license = "MIT"
+license_file = "LICENSE-ACadSharp.txt"
+
+[sources.libviprs_dep]
+repository = "https://github.com/libviprs/libviprs-dep"
+# On libviprs-dep's main (`git merge-base --is-ancestor` says so in a fresh
+# clone). 0d475bf is the commit this was before main was rewritten with
+# identical trees; it is not pinned anywhere.
+commit = "bc351a906d9085f256fb2226fd6050f72e2d3325"
+url_prefix = "https://raw.githubusercontent.com/libviprs/libviprs-dep/"
+license = "MIT"
+license_file = "LICENSE-libviprs-dep.txt"
+
+[[fixture]]
+id = "acadsharp-ac1014"
+file = "dwg/sample_AC1014.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1014"
+autocad_generation = "AutoCAD R14"
+source_path = "samples/sample_AC1014.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1014.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1312281
+sha256 = "d1ec4519be14ac49ecab5ec024ad951271e00261a1851f623a784a97ba6ede73"
+reference_jsonl = "expected/acadsharp-ac1014.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c4b0c373bd727a279d61f572a617a6bad4dd235e30921e943feebebc6e91a30a"
+reference_svg = "expected/acadsharp-ac1014.reference.svg"
+reference_svg_sha256 = "51bdf3b965de50ee48d5e0362b67e32b0bfed087a111daa70ecb6ab6a72db25e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-ac1015"
+file = "dwg/sample_AC1015.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1015"
+autocad_generation = "AutoCAD 2000/2000i/2002"
+source_path = "samples/sample_AC1015.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1015.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1297511
+sha256 = "8ffbdc713f5838cbbb1596a8422e2b607e5c9e79921e852cbb5abee4af76ea4e"
+reference_jsonl = "expected/acadsharp-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "90dafe905d358404d2da6db83f25f7635403c590e394648372b69a6ed9fc6799"
+reference_svg = "expected/acadsharp-ac1015.reference.svg"
+reference_svg_sha256 = "cf2c4b0f9820c2b24bf8bf958f1512bd3c05dd0cacceb7e931d8b2d2c6cfb65e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-ac1018"
+file = "dwg/sample_AC1018.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1018"
+autocad_generation = "AutoCAD 2004/2005/2006"
+source_path = "samples/sample_AC1018.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1018.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1097214
+sha256 = "7d26f908516ec5fb89cc8054af33aff233b68a7b63208bbc5b7f9f4d9bff9866"
+reference_jsonl = "expected/acadsharp-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "baf61bcdad3fe5bc835619f83a9e1809a9872f725a2acf540a7a58c16b9f7395"
+reference_svg = "expected/acadsharp-ac1018.reference.svg"
+reference_svg_sha256 = "605c97fec8099e3ce3f0d989518f9366905d60f7d858180682770f379db4aba5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-ac1021"
+file = "dwg/sample_AC1021.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1021"
+autocad_generation = "AutoCAD 2007/2008/2009"
+source_path = "samples/sample_AC1021.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1021.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1063168
+sha256 = "70b5efec9a3c230a9892e810154a760fe72311b1e730fb582f22950135da770a"
+reference_jsonl = "expected/acadsharp-ac1021.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d6096706f6c94df36dd0a7fd085fd698b837d6176d1eb341a9db35f23eeb8d18"
+reference_svg = "expected/acadsharp-ac1021.reference.svg"
+reference_svg_sha256 = "2f9c03d36f0c51da121bcbab80e1d1d33d676f2c9e143eac7dce37eec8886545"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-ac1024"
+file = "dwg/sample_AC1024.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1024"
+autocad_generation = "AutoCAD 2010/2011/2012"
+source_path = "samples/sample_AC1024.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1024.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1122389
+sha256 = "53ecc28e54ff0bbfb022989c47fd1cb16eb07a98825309b66cdf316d900fe4ce"
+reference_jsonl = "expected/acadsharp-ac1024.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "395b4ac0054cc888ed05cc1cf811c0664a9243c17a204f33da13021d5937c94b"
+reference_svg = "expected/acadsharp-ac1024.reference.svg"
+reference_svg_sha256 = "2f9c03d36f0c51da121bcbab80e1d1d33d676f2c9e143eac7dce37eec8886545"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-ac1027"
+file = "dwg/sample_AC1027.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1027"
+autocad_generation = "AutoCAD 2013-2017"
+source_path = "samples/sample_AC1027.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1027.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1091959
+sha256 = "4c63508dd794d5cdfb56c60aded47928999b02619ea8c2ef435a4b74e60d24d6"
+reference_jsonl = "expected/acadsharp-ac1027.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "93c53da4d467f51a34b4cd273b0ef637e5a168156f4c656d5af136db49602739"
+reference_svg = "expected/acadsharp-ac1027.reference.svg"
+reference_svg_sha256 = "f6e84c47fc60ddb4e85f604669597056b175bc1d940e4c844bcb3b33500206d7"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-ac1032"
+file = "dwg/sample_AC1032.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/sample_AC1032.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1032.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1081979
+sha256 = "0e8faaca949c9429c92240082d9ea4d3524aca5baf7c7815ec439245c321b528"
+reference_jsonl = "expected/acadsharp-ac1032.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "a19a3a0f7644ac86aee9514adb5748d8736c00b286608359919a2971d9e3736b"
+reference_svg = "expected/acadsharp-ac1032.reference.svg"
+reference_svg_sha256 = "25e37db69adeb6f0290b4f608f5c17b5f923bc2cc43b151ae3b1194834163dc0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-aecobjects"
+file = "dwg/AecObjects.dwg"
+source = "acadsharp"
+tier = "A"
+no_primitives = "AEC custom objects: none of its entities is a kind schema 1 has a record for, so the stream is the warnings that say so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/aec_objects/AecObjects.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/aec_objects/AecObjects.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 423600
+sha256 = "dc196e99b8944d169493c9f3205d45f8a579c0c96e81dbc7fc2f90cd971f7a7e"
+reference_jsonl = "expected/acadsharp-aecobjects.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "aa1dec644b2a5c9642ffba2b7ea0dddd4de50fd13027c119aa7f8ba27b304e2a"
+reference_svg = "expected/acadsharp-aecobjects.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockalignmentparameter"
+file = "dwg/BLOCKALIGNMENTPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKALIGNMENTPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKALIGNMENTPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 35214
+sha256 = "d7aa1418c6ed4af5930b6ea1b45a8343803b64b3985ceb188edf8cabb6e80c92"
+reference_jsonl = "expected/acadsharp-blockalignmentparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "028cd88edd8b5edf6ed38b491b7ca058007c66758f2acd5643ed43cef8b5f9b6"
+reference_svg = "expected/acadsharp-blockalignmentparameter.reference.svg"
+reference_svg_sha256 = "7acd7c32300b2a3647f12022a939c3f4c7da2170d9b35b36ae07c933c452f7e3"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockbasepointparameter"
+file = "dwg/BLOCKBASEPOINTPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKBASEPOINTPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKBASEPOINTPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 34575
+sha256 = "04374431ecb1df0ec1c63ed49289d06f2d82a620b0c70c4993527eede7a622d9"
+reference_jsonl = "expected/acadsharp-blockbasepointparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "1c4d06da9e064e84d861e74f8f7d1d381113219d87dcb4de8f77049966309707"
+reference_svg = "expected/acadsharp-blockbasepointparameter.reference.svg"
+reference_svg_sha256 = "c605b6c559c4a40404676adaafb0f05fdfa177ac881182b76ebce1c511f89aeb"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockflipparameter"
+file = "dwg/BLOCKFLIPPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKFLIPPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKFLIPPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 37232
+sha256 = "a1e6ebbe7a858e0def9822d31fea51c8ef35dedd687a6ef81cfc1f8b6d177019"
+reference_jsonl = "expected/acadsharp-blockflipparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "888088dbb54075f1fb82599ad9ebd2951bb10537fdced4be613ce719c890de6b"
+reference_svg = "expected/acadsharp-blockflipparameter.reference.svg"
+reference_svg_sha256 = "5de09b1e12a61e5b477af0f31383f90d2aa67756c65fb49c42089e25c6e630f1"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blocklinearparameter"
+file = "dwg/BLOCKLINEARPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKLINEARPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKLINEARPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 37071
+sha256 = "36dc72bad541b911b051936287eeb8abf9a9e80e92f371033dfc1d49a0e965bf"
+reference_jsonl = "expected/acadsharp-blocklinearparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "7ffc6c851604d7d3cc97c22f2010c84ba751dd1f5210805643d04e096a55c81e"
+reference_svg = "expected/acadsharp-blocklinearparameter.reference.svg"
+reference_svg_sha256 = "ce1fcafef7667a04884ae75a667512c7282b87cbaaa38c7f0dd0935cf2a704a8"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blocklookupparameter"
+file = "dwg/BLOCKLOOKUPPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKLOOKUPPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKLOOKUPPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 40492
+sha256 = "290a8696fff1328f29769dda2c5106fdc9b1f7373d010790271606dbf008df69"
+reference_jsonl = "expected/acadsharp-blocklookupparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "8074404909e89aaa31ca20355f80ff6ad0854177fa25d196eb940dd60854d6fe"
+reference_svg = "expected/acadsharp-blocklookupparameter.reference.svg"
+reference_svg_sha256 = "688bb3ff1460960e0431d6c6bc8c6b57619cfc94be223676e7a6753e14067f5c"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockpointparameter"
+file = "dwg/BLOCKPOINTPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKPOINTPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKPOINTPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 35951
+sha256 = "808f0a0d7ad029c6a23fed4fd87323fd03d6938f4feee2d8ab64c2e70e21f232"
+reference_jsonl = "expected/acadsharp-blockpointparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "bb77079cf83c9e2da641911409f86f1c18f71e868bc3223e449ea6c9df5087f7"
+reference_svg = "expected/acadsharp-blockpointparameter.reference.svg"
+reference_svg_sha256 = "8e85a16ba283705df97883baa9862dbb5aee777a142e382314624ec5faaa9c5d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockpolarparameter"
+file = "dwg/BLOCKPOLARPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKPOLARPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKPOLARPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 38219
+sha256 = "8bdea037b2a59e33be11c5b0267530f0c48123746981007f738affc8d34b67b8"
+reference_jsonl = "expected/acadsharp-blockpolarparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "4f58a3783d51f6f1a249f966965e28271b0ddb036bd19ee37f9a89b3155eae5f"
+reference_svg = "expected/acadsharp-blockpolarparameter.reference.svg"
+reference_svg_sha256 = "55e49d17f10da88b5ebbd3ca5b8532ab2891c3d28567f71a3997bc5304172d01"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockrotationparameter"
+file = "dwg/BLOCKROTATIONPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKROTATIONPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKROTATIONPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 38027
+sha256 = "143376a25fc02ae6ecaa172c74faf132b344995dd445dd1e672092be44559850"
+reference_jsonl = "expected/acadsharp-blockrotationparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b76542e297b7a0e43312a2ec4df99817a8ac40de8ee7c3b1b0adc9f499eb73ad"
+reference_svg = "expected/acadsharp-blockrotationparameter.reference.svg"
+reference_svg_sha256 = "6bb729dd6b66a2bcb54b545761ae0839a08b0102dccd6270287f79b929ff125a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockvisibilityparameter"
+file = "dwg/BLOCKVISIBILITYPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKVISIBILITYPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKVISIBILITYPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 38641
+sha256 = "be1e24ea0cd5194d0c57935b5018123b7cc981331172a1a2ca7cecc2d9a18e4f"
+reference_jsonl = "expected/acadsharp-blockvisibilityparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "22cd55ec67a3688ba2867be7a59a71acca1a4f77a43860227f15471232cf2434"
+reference_svg = "expected/acadsharp-blockvisibilityparameter.reference.svg"
+reference_svg_sha256 = "bc41613a10e40b90d637fbfe4834e03af2e556c2b6bc9a05fe243d231aafaa48"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-blockxyparameter"
+file = "dwg/BLOCKXYPARAMETER.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/dynamic-blocks/BLOCKXYPARAMETER.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKXYPARAMETER.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 37905
+sha256 = "044844db69865b22dbe8a9407e3d94abe15af416ad9a03f56765c3e28d7df983"
+reference_jsonl = "expected/acadsharp-blockxyparameter.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "e1b1704c3efb9623fbac7324df6d2c22f16ba7b92d0f2a792488f7c3545265d7"
+reference_svg = "expected/acadsharp-blockxyparameter.reference.svg"
+reference_svg_sha256 = "aef4d3ee9b7c642ab1e56a578454dafdf7f5c52ad612f0783738c1dc9c91ccf9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-geoloc"
+file = "dwg/geoloc.dwg"
+source = "acadsharp"
+tier = "A"
+no_primitives = "a geolocation sample: its content is geodata, which schema 1 has no record for"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/geolocation/geoloc.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/geolocation/geoloc.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 46960
+sha256 = "2dbed5bb66ae0e730cec80b70c0ef27c87633647503bf850a331448f9585cf95"
+reference_jsonl = "expected/acadsharp-geoloc.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2e86fc001378790fdb7c4fc905eb0a55c384baaa0a78ca52972f194c248cd16d"
+reference_svg = "expected/acadsharp-geoloc.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-empty"
+file = "dwg/empty.dwg"
+source = "acadsharp"
+tier = "A"
+no_primitives = "ACadSharp's empty drawing: nothing is drawn, by design"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/sample_base/empty.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_base/empty.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 30639
+sha256 = "ac65283f3e078a8828e0df594b15a0f54498d04b0c88c85476278c8d3bc1acfb"
+reference_jsonl = "expected/acadsharp-empty.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "cda7507f6cf49f38c6fd320305c949e4b36a73ad84b983a5b786b5d8e03c752d"
+reference_svg = "expected/acadsharp-empty.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-sample-base"
+file = "dwg/sample_base.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/sample_base/sample_base.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_base/sample_base.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1095707
+sha256 = "2fd52de87040d2b74922579e5e49b7f72943a436b8a11dc1d7f00244aed7da21"
+reference_jsonl = "expected/acadsharp-sample-base.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "a19a3a0f7644ac86aee9514adb5748d8736c00b286608359919a2971d9e3736b"
+reference_svg = "expected/acadsharp-sample-base.reference.svg"
+reference_svg_sha256 = "25e37db69adeb6f0290b4f608f5c17b5f923bc2cc43b151ae3b1194834163dc0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "acadsharp-export-sample"
+file = "dwg/export_sample.dwg"
+source = "acadsharp"
+tier = "A"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+"
+source_path = "samples/svg/export_sample.dwg"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/svg/export_sample.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 94819
+sha256 = "b60b4a7242e43b34ca35561b105b2dda30f2e373602ab5a12900ebc25b1e499b"
+reference_jsonl = "expected/acadsharp-export-sample.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2abd98230b848030489037b484867e4443ca8180f462db7d400faa5d97d3abd0"
+reference_svg = "expected/acadsharp-export-sample.reference.svg"
+reference_svg_sha256 = "a086b63854316a2c15767ca857fdc5ab66ac7c56b7a98ed4c945134a6350e745"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g11_codepage"
+file = "libviprs-dep/dwg/g11_codepage.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1018"
+autocad_generation = "AutoCAD 2004/2005/2006, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g11_codepage.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g11_codepage.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 9643
+sha256 = "04ae1bca9e384c9604aff632b838a3497236daf9d79be7b073148a696d12b089"
+reference_jsonl = "expected/g11_codepage.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "4abe99aa708cb28a9d00605ea99c97d7cee8a02286e09b92b662ae6470b6e629"
+reference_svg = "expected/g11_codepage.reference.svg"
+reference_svg_sha256 = "7d6c13817ae13de81753e5d5e761c273a122927c741c5b907a5b4109bbf0b8fe"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g11_shapes"
+file = "libviprs-dep/dwg/g11_shapes.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g11_shapes.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g11_shapes.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10891
+sha256 = "e54abbe4b4b24499783edc1d5c7251db66fa1683fb0197f2f3704b3eeee45813"
+reference_jsonl = "expected/g11_shapes.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0088f11bbd152cc7cd03a2d440cb7492552f45f07ae21665e024bb4b3a39124b"
+reference_svg = "expected/g11_shapes.reference.svg"
+reference_svg_sha256 = "da5afb6f0b866d7519c188fdb5c6b9cb03288f24066a50dd02e5fa75613dfe95"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_arc"
+file = "libviprs-dep/dwg/g13_arc.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_arc.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_arc.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10539
+sha256 = "c3b09b470908d35265ef50e2aa70db9551533286778dc9182018cd4f059785b1"
+reference_jsonl = "expected/g13_arc.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "e272a4cc3309de787f2eabd49473e34d58077add7e56de9097802e8451b53799"
+reference_svg = "expected/g13_arc.reference.svg"
+reference_svg_sha256 = "5916e956dac682f26e1ac39e8722e96ae9e83e8767d7abde369b96ff6407592e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_bad_extents"
+file = "libviprs-dep/dwg/g13_bad_extents.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_bad_extents.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_bad_extents.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10539
+sha256 = "a5abb97b569dfde20a17676f330dc010a7279269d18bcc6dc2a263059d00f1f4"
+reference_jsonl = "expected/g13_bad_extents.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b48be7a61bc4bdc5f5037b1595e85dc76d38db192ec7dbbf2045ed7894574daa"
+reference_svg = "expected/g13_bad_extents.reference.svg"
+reference_svg_sha256 = "86642bebc38ce7afe705c4b3d26efb723ca0332006b2da15f39ed4b537b152f6"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_circle"
+file = "libviprs-dep/dwg/g13_circle.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_circle.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_circle.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10539
+sha256 = "6122b77ff962a84e7b18a07c7a3b92da9934ec82044ca363032d53c45167a523"
+reference_jsonl = "expected/g13_circle.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0ef16fb148f0ee6f0f4163a00dfc388c26b9ee615bd0cc35502816fd19f1352b"
+reference_svg = "expected/g13_circle.reference.svg"
+reference_svg_sha256 = "918f1eb996424c2a4a8dee9536ffbbb9cc79e5fd37402a4cc32547f0aeb2c052"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_deep_blocks"
+file = "libviprs-dep/dwg/g13_deep_blocks.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_deep_blocks.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_deep_blocks.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 11051
+sha256 = "2749f007a82dd4156b61c151ebb6097cb1d36d4551d6e31611b8d39e86fb0f19"
+reference_jsonl = "expected/g13_deep_blocks.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "398bb7b5cd92dd8c83bc8b0b30f96a98d8ba7939be5123acc4c12a0fc94d9a1a"
+reference_svg = "expected/g13_deep_blocks.reference.svg"
+reference_svg_sha256 = "32a2845d9366ffb855f6566aa843ac2771cf38cfc56dc5b3ba593f5cf7294abd"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_dimension"
+file = "libviprs-dep/dwg/g13_dimension.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_dimension.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_dimension.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 11019
+sha256 = "1460af678540fef90a9514d020fce2ea9c085e5cc4dacc4bc64f81e96b7bd6d4"
+reference_jsonl = "expected/g13_dimension.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "57e07b7f95d6663aa29d8541f789276f6c096b2fa2a13dcaeb1c8f26334b10b5"
+reference_svg = "expected/g13_dimension.reference.svg"
+reference_svg_sha256 = "d91867357193429f1e63c30145b9c804f99058ba871119e170ee773b4a0e4da6"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_dimension_deep"
+file = "libviprs-dep/dwg/g13_dimension_deep.dwg"
+source = "libviprs_dep"
+tier = "C"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_dimension_deep.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_dimension_deep.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 991240
+sha256 = "9cf367a3d2de9c1ab80e4716dc48a3db02f0c4105e6adac5b6e70e484c21fd1d"
+reference_jsonl = "expected/g13_dimension_deep.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "7bac5086bfcc23b5b9b47f180029bef5f08f079ea45f62e08d246332ff969b6f"
+reference_svg = "expected/g13_dimension_deep.reference.svg"
+reference_svg_sha256 = "c21121d04d949ed19dae18598ce950889639a5de797143b01e8879886c8687fd"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_dimension_shallow"
+file = "libviprs-dep/dwg/g13_dimension_shallow.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_dimension_shallow.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_dimension_shallow.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 11979
+sha256 = "f62d9df1588434447b034dc0fd4c76e806973c63bc83aea2146ebf0d9aca4a36"
+reference_jsonl = "expected/g13_dimension_shallow.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "5359232de349c7096a14b3a533f62b7d2b79dea8f9d80d1af084e93f53a636ef"
+reference_svg = "expected/g13_dimension_shallow.reference.svg"
+reference_svg_sha256 = "394a513e46eeb20f2bf1be043252e5c0fe7be716eaf53bd4d171189ab432c406"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_ellipse"
+file = "libviprs-dep/dwg/g13_ellipse.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_ellipse.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_ellipse.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10539
+sha256 = "253a70252949dd6521e520dd97effa51c976882e6b9395cb1931d575cb0e677b"
+reference_jsonl = "expected/g13_ellipse.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c71495eb76def91f647383f6f06877e39ff8a8699a9033aed008b9d673e56832"
+reference_svg = "expected/g13_ellipse.reference.svg"
+reference_svg_sha256 = "bbc9c9aead3d1b76974e24baf1d8a94032cffa9dbba67d075a6151d254e8ab4d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_empty_view"
+file = "libviprs-dep/dwg/g13_empty_view.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "an empty view, by design"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_empty_view.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_empty_view.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10507
+sha256 = "4183049d5a6272f15ca020437094fc6645c31e68a9b55f3fc025044379add414"
+reference_jsonl = "expected/g13_empty_view.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "29c1889cbb00d9dbe5a719d3617a862e8dbc8f9c530df6efca3e06a610fc2d5e"
+reference_svg = "expected/g13_empty_view.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_face3d"
+file = "libviprs-dep/dwg/g13_face3d.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_face3d.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_face3d.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10923
+sha256 = "025e5769c0efcedaca4e0286e69e7848539c681ede41854ae1a30da18df4c3f5"
+reference_jsonl = "expected/g13_face3d.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3ecc3bc4d2dff4a2c6ea07d90fc41630dc5865c253b1356e7d3cb93184aeb2fc"
+reference_svg = "expected/g13_face3d.reference.svg"
+reference_svg_sha256 = "c2e2141966d70a196f72186b9580330ddc6838d17174d596eb12441d8577123d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_hatch"
+file = "libviprs-dep/dwg/g13_hatch.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_hatch.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_hatch.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10827
+sha256 = "c8697b49ce3eed4bffee80d60c69963d44bf3aa5c1661a33021737b153970da9"
+reference_jsonl = "expected/g13_hatch.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "abad19894cbfb92fb6a2d63276b66a8e9677327c20f130db971e880aac945f44"
+reference_svg = "expected/g13_hatch.reference.svg"
+reference_svg_sha256 = "ae7a890ced89aacc67a52b441f2ff17a814886ee8a1e14b23ba249c244e380ac"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_insert"
+file = "libviprs-dep/dwg/g13_insert.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_insert.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_insert.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10795
+sha256 = "c8c1fcb0bdbd34c634c64ffc36421ffac7c59332e310018d9549986f7d5c86d1"
+reference_jsonl = "expected/g13_insert.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "20fcaf4ec66e4f93ed19c475a4a0d6aa3dd4537d90d3a0f274d899a1e16b4a93"
+reference_svg = "expected/g13_insert.reference.svg"
+reference_svg_sha256 = "756f5fd24c3510f0982fe94d595ca57487366c8b6df7c4a9dad51347bfa3a3d9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_leader"
+file = "libviprs-dep/dwg/g13_leader.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_leader.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_leader.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10923
+sha256 = "6fbf1b031622a8df6bdff1d755e139391f29fe38575d81a0453dc4f58bb5603a"
+reference_jsonl = "expected/g13_leader.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "04338a9db090520eddc113283d1d5a6f9aa41376bf3ef55107412bddfbfbce0a"
+reference_svg = "expected/g13_leader.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_line"
+file = "libviprs-dep/dwg/g13_line.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_line.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_line.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10539
+sha256 = "9e914e1c1cf03c55b88813679e1aa594b35b9c7c039c6debec799a8bc87c1476"
+reference_jsonl = "expected/g13_line.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f93c9536aee44563e69552b53e5c6957aa6b0623fa0d330ee75542a716a43038"
+reference_svg = "expected/g13_line.reference.svg"
+reference_svg_sha256 = "6bac704f8dd5fd8d736b7eb689de23e21fddadd0c830b7c325d902eede7d8bc8"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_long_text"
+file = "libviprs-dep/dwg/g13_long_text.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_long_text.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_long_text.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10571
+sha256 = "b9c8b8f42779c6785ff9d19e8f8dfc48384739423978dc41065f8d722c126775"
+reference_jsonl = "expected/g13_long_text.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "9db1988a633e1c4d64e9ecc9d1d25aafefc29758f0a6fc4450f09b00393b5dc0"
+reference_svg = "expected/g13_long_text.reference.svg"
+reference_svg_sha256 = "2d86081a22565c7d603fa58f262904b2f7f0bbfd4e6e8e3742c831692f6c4693"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_many_inserts"
+file = "libviprs-dep/dwg/g13_many_inserts.dwg"
+source = "libviprs_dep"
+tier = "C"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_many_inserts.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_many_inserts.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 179150
+sha256 = "72bb475c6071a567d7c672005518bc7e7323b0450cdbca00ebe9404e38047387"
+reference_jsonl = "expected/g13_many_inserts.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "57809e9bb46ac611ebf5e8da44b62fedaaf47efa36784eb5a25667c5fd3d14b4"
+reference_svg = "expected/g13_many_inserts.reference.svg"
+reference_svg_sha256 = "416a7ec79a99e435cd5ce41334797ced439257a9bedcb41dabdf9f94c4c26269"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_mesh"
+file = "libviprs-dep/dwg/g13_mesh.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_mesh.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_mesh.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10763
+sha256 = "962b4ecde6653787467fc4467e2eb7b08a60027f20a85141c1e6f829e1f12517"
+reference_jsonl = "expected/g13_mesh.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "11d59749a6fba7bdbcf30f2042f27bd8156e8b2c6b74903b4899e49debbd0e6f"
+reference_svg = "expected/g13_mesh.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_mesh_bad_faces"
+file = "libviprs-dep/dwg/g13_mesh_bad_faces.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_mesh_bad_faces.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_mesh_bad_faces.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10571
+sha256 = "5e3c636aea9cdba44869caa68f01ad7caff27a45e3f0c0f02b9b407d87ee98e9"
+reference_jsonl = "expected/g13_mesh_bad_faces.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "462ba089e7ff1dd6697f26199a81b91e736443d47af5ca0429dc174ecd0ec749"
+reference_svg = "expected/g13_mesh_bad_faces.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_mirrored_bulge"
+file = "libviprs-dep/dwg/g13_mirrored_bulge.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_mirrored_bulge.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_mirrored_bulge.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10699
+sha256 = "4f947ae65e647dbca558eb1d67ba961a38733718f20c8be66b8e197ffd39faaf"
+reference_jsonl = "expected/g13_mirrored_bulge.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "18f9610cd458523aecd5b1e718750b0bf4a5a7ae90a83d7e409d08522ed651a6"
+reference_svg = "expected/g13_mirrored_bulge.reference.svg"
+reference_svg_sha256 = "27d7b76eee0654c8e7ed3456650ddf0fb05836c6d66fbe4de4544abd73565d13"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_mline"
+file = "libviprs-dep/dwg/g13_mline.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_mline.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_mline.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 11531
+sha256 = "68b999799207002f2ed1ca3c60654e8c109bc01a3b31111938929da23349ce55"
+reference_jsonl = "expected/g13_mline.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d5eb4e6ba007bd6c93401c33d0b989560b4051c974d48ef1fd1d3b0ccf1154e0"
+reference_svg = "expected/g13_mline.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_nonuniform"
+file = "libviprs-dep/dwg/g13_nonuniform.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_nonuniform.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_nonuniform.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10699
+sha256 = "e6175bd09a45f390085521c55b42837f049af1f2a3225bf1f1620782150aac7b"
+reference_jsonl = "expected/g13_nonuniform.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "9efc09e9c9aeca60282a7d7cb5fad7b272fd90d8d9bb44ba22349a3fc69f4a1c"
+reference_svg = "expected/g13_nonuniform.reference.svg"
+reference_svg_sha256 = "d402802b5a0283c2fd9233e35694e7cb184892a92e674ec38d7183772fd26d44"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_ocs_mirror"
+file = "libviprs-dep/dwg/g13_ocs_mirror.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_ocs_mirror.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_ocs_mirror.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10795
+sha256 = "b0fd5629a7fa9f9007f8cfe47df084b310eee3461d9fef208ebe98f562002c5f"
+reference_jsonl = "expected/g13_ocs_mirror.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "5c65e12e76b0be3c2b88d7f379a8b87af0e10cb3c8406fc8289b8caa063a8378"
+reference_svg = "expected/g13_ocs_mirror.reference.svg"
+reference_svg_sha256 = "6607525f3845f03f5cd615c3dc09bc048148dc373a025bf41a2e423c12b6f74e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_ocs_plane"
+file = "libviprs-dep/dwg/g13_ocs_plane.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_ocs_plane.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_ocs_plane.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10892
+sha256 = "ec548ccabd14ad4fc785cf7f948d53ebc8ef07cbc05156349f58ef28ef8fe587"
+reference_jsonl = "expected/g13_ocs_plane.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d6745e6295f686cf35529214216996aee03cfc82fc2a4acc4ad1066d7d7f3d4f"
+reference_svg = "expected/g13_ocs_plane.reference.svg"
+reference_svg_sha256 = "3db955e55359e0fbd6bf12fb90571c9d7e8fc3cd2d87ae744db8636b042757f6"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_ocs_rotated"
+file = "libviprs-dep/dwg/g13_ocs_rotated.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_ocs_rotated.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_ocs_rotated.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10731
+sha256 = "b981e5c5770ea29d23c0b329a153bb2a72fff9c20c7758348084ac688307ba4c"
+reference_jsonl = "expected/g13_ocs_rotated.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "beb90ecbbf14b3245c4ad84a6847b21ede370caa71df992c8f90de98d800b43c"
+reference_svg = "expected/g13_ocs_rotated.reference.svg"
+reference_svg_sha256 = "0f07b0f1bf62ad42eab913054766b91c3308fe155c17901fafa8c4c0b911bbda"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_ocs_skew"
+file = "libviprs-dep/dwg/g13_ocs_skew.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_ocs_skew.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_ocs_skew.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10828
+sha256 = "5d5242f2914922521e9bafff42e98700a2f3d62f64f1158fdffa2204747a8c90"
+reference_jsonl = "expected/g13_ocs_skew.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d15451c7d4185e6d44094979482268f04bd147438c91d16cb6dfc5109a4d59b3"
+reference_svg = "expected/g13_ocs_skew.reference.svg"
+reference_svg_sha256 = "a6a2b837aa4a9504ec873cda487cd80cb44f88b4b36cb1236726ae82fb3be05c"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_point"
+file = "libviprs-dep/dwg/g13_point.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_point.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_point.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10828
+sha256 = "80fb91f9ae02317dac8fe9e9d234caf29e2bf0152dc030812a488f4157fdcd4e"
+reference_jsonl = "expected/g13_point.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "7bde71dd3a0813af9e1c5fad7e3cc174e01093c8e334a6ebac60a5ac4b8b863f"
+reference_svg = "expected/g13_point.reference.svg"
+reference_svg_sha256 = "25ecc7187033c9fe39ffb68d056cd69ce893605d3619538bbfd086b06a6f25d1"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_polyface_mesh"
+file = "libviprs-dep/dwg/g13_polyface_mesh.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_polyface_mesh.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_polyface_mesh.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 11243
+sha256 = "ccd27150f2a135ded937e02b2ca10a04c58ce250850267e8537839026e1d3c8e"
+reference_jsonl = "expected/g13_polyface_mesh.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "da532957a9b31debb7995cf32b9352b4043ef8d7f248bd7697900f10511720fc"
+reference_svg = "expected/g13_polyface_mesh.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_polygon_mesh"
+file = "libviprs-dep/dwg/g13_polygon_mesh.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_polygon_mesh.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_polygon_mesh.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 11404
+sha256 = "de3286f404c9a39f707a33b4294f0bdbd433ebdc8f821c3a93afa6535170f322"
+reference_jsonl = "expected/g13_polygon_mesh.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3179eba3098aa0b2b233fd6c04e54a00a3a57686f819ac38e59fbeb682e2fc2f"
+reference_svg = "expected/g13_polygon_mesh.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_polyline"
+file = "libviprs-dep/dwg/g13_polyline.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_polyline.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_polyline.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10731
+sha256 = "815bf452eb40b0c5f75049e3155f13c0c2f3272b2d3464b92d01ee3636635bd3"
+reference_jsonl = "expected/g13_polyline.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3468ea59215a097a360cfd19e4a84f1f2d05b29f5c34f3a511899fe29cf6b59e"
+reference_svg = "expected/g13_polyline.reference.svg"
+reference_svg_sha256 = "20a1134295850b78fc126f52b99ecae941446afb7dcf35eced64e66ec71464cd"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_ray_xline"
+file = "libviprs-dep/dwg/g13_ray_xline.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_ray_xline.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_ray_xline.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10828
+sha256 = "332411ca8ee2e05fce04520594ac87952ff7c36d18c3c279ff5abda03a49cdae"
+reference_jsonl = "expected/g13_ray_xline.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "28bc6f3737dff87be929b74b7fd957d132c31890ec6ceeac1bab0c0c9b4aabe1"
+reference_svg = "expected/g13_ray_xline.reference.svg"
+reference_svg_sha256 = "f8cb696464ea00ab1158c7d28ba16d743bee42e7088334732d5957edfaa91c2a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_scale_16x"
+file = "libviprs-dep/dwg/g13_scale_16x.dwg"
+source = "libviprs_dep"
+tier = "C"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_scale_16x.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_scale_16x.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 41345
+sha256 = "a88ecd131e361a1db298d2fef7d20caeb2157cb2edb38456675cdb54b63414cd"
+reference_jsonl = "expected/g13_scale_16x.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "9725afabfdb9a5881a6465482914da967f337ac40434e4359b16166e0a78c12d"
+reference_svg = "expected/g13_scale_16x.reference.svg"
+reference_svg_sha256 = "6078fb0a57605f6678b946aec1269d1dcb97c46f7ee22edb05c7e398509b8309"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_scale_1x"
+file = "libviprs-dep/dwg/g13_scale_1x.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_scale_1x.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_scale_1x.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 12235
+sha256 = "b01dd0ad9a175400e6ba6d1c033e8df862a3a85264efda9dfbe362531617a087"
+reference_jsonl = "expected/g13_scale_1x.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "68c5d8c8fbd1cba6ab6c6094d61d0676c20fec7b27de900665ec286edca0a281"
+reference_svg = "expected/g13_scale_1x.reference.svg"
+reference_svg_sha256 = "96c4eaf3770a886e9e42a5a2080aec648e79c3925d62010f1f954408a763691d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_scale_4x"
+file = "libviprs-dep/dwg/g13_scale_4x.dwg"
+source = "libviprs_dep"
+tier = "C"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_scale_4x.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_scale_4x.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 17771
+sha256 = "99ded530c49c5f23c2d7a02c62fdb9296cb647f0a1c32c09b849a7ab4a1641c1"
+reference_jsonl = "expected/g13_scale_4x.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "e27ab90b99ee0ccdd64d9a97861b63e4e7d3f2bd7dd70adf3345c8c6f006164a"
+reference_svg = "expected/g13_scale_4x.reference.svg"
+reference_svg_sha256 = "bbbb7f0aad7d86811f2e8c735c82948fb5e7c2cfb956ce7e7392818ebc797516"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_slot"
+file = "libviprs-dep/dwg/g13_slot.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_slot.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_slot.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10539
+sha256 = "db6c6facccbce67169329528279cba795d4ddb0aaec26bbb8fe04f6475c68ee6"
+reference_jsonl = "expected/g13_slot.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "5b765fc5fbc2e03091db2cf97069a2d092be2009c5e0fce4f54ffe6554d0bb79"
+reference_svg = "expected/g13_slot.reference.svg"
+reference_svg_sha256 = "ae066e102ba4c32df38936fe24e93c8564ff67865979b64a8f316f8d319d8e3e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_slot_block"
+file = "libviprs-dep/dwg/g13_slot_block.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_slot_block.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_slot_block.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10731
+sha256 = "41245b50e234db83f45be266a88539665b77f21833a14d2fd05a050fb91f933d"
+reference_jsonl = "expected/g13_slot_block.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "9f8d1ef9b392657c8a61320016b085ecc11616bb0fc0e09c688bf1f7a3f965fc"
+reference_svg = "expected/g13_slot_block.reference.svg"
+reference_svg_sha256 = "084afcdf1d33365aab8362e29b2896a83df75640a4ef08983916b5892b35e923"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_solid"
+file = "libviprs-dep/dwg/g13_solid.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_solid.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_solid.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10889
+sha256 = "dea64a63b283585bb38b4d5a311ff1aadb9eb57cb399380e180294fe7ceafca1"
+reference_jsonl = "expected/g13_solid.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6110179049a98bd8991b25c0a3dbe5a883f26bcf4a51a845e7492ae506201d42"
+reference_svg = "expected/g13_solid.reference.svg"
+reference_svg_sha256 = "5c7ea3aea207a23e4463187bd93fddd637d46e1df8d6ef53b030eb2b457127af"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_spline"
+file = "libviprs-dep/dwg/g13_spline.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_spline.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_spline.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10571
+sha256 = "e2540a81ed652694385e89fba90eec7462c6a67e7d47cb3af45f4edd879b1a5a"
+reference_jsonl = "expected/g13_spline.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "a12f14391a59f6500e053289d1124e07cdb968206b3f76e729dc8c697aa0dc94"
+reference_svg = "expected/g13_spline.reference.svg"
+reference_svg_sha256 = "596e9acdde09f138fd537557794671c132e24dbf58d65384e7f754f901dbe033"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_text"
+file = "libviprs-dep/dwg/g13_text.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_text.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_text.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10699
+sha256 = "c791143334c6d2ccda33a72e7e85fc2fd93e2c1b8e8acd5a75e1b2254aa54e0f"
+reference_jsonl = "expected/g13_text.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6615ccc0b4ec08096258d5e6a1f89c8753f916cc5d4520710a0f062b0e02c51c"
+reference_svg = "expected/g13_text.reference.svg"
+reference_svg_sha256 = "a3ff9eb66a0e4b50bc171141fd4acc739a1df22a6247e428e86e09d4c847c5db"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_tolerance"
+file = "libviprs-dep/dwg/g13_tolerance.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_tolerance.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_tolerance.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10889
+sha256 = "28f3d76765aaf05bac62a0cb7d5fbd9652756fa1caed0506211d3c8a4918f799"
+reference_jsonl = "expected/g13_tolerance.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "bbec82a582510aa1e815fb9c90a38231647105310dc127d833fb42ee4f17a634"
+reference_svg = "expected/g13_tolerance.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_two_entities"
+file = "libviprs-dep/dwg/g13_two_entities.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_two_entities.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_two_entities.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10571
+sha256 = "d2955fa942a735f18c57a6cacf3e46175de2f6e2e76e0eea4d5697a3faaee757"
+reference_jsonl = "expected/g13_two_entities.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f974d3538357cd491552701e9902db95eb1c24611a76b1549a78dea1a81c0607"
+reference_svg = "expected/g13_two_entities.reference.svg"
+reference_svg_sha256 = "166b0d5f32ca3d02ea21b5afbea4f2ec835cef0be1ddb264b246d2b03f7f401b"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_unsupported"
+file = "libviprs-dep/dwg/g13_unsupported.dwg"
+source = "libviprs_dep"
+tier = "B"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_unsupported.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_unsupported.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10571
+sha256 = "1a0387b575f894ac8315a1075b0e2399bd3473d24d3eb5b72a2a08f7f62df365"
+reference_jsonl = "expected/g13_unsupported.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c8fda79cd7750097aba7b73aa472d0fe82da256ee47a8c08dc3e92e1dfd42602"
+reference_svg = "expected/g13_unsupported.reference.svg"
+reference_svg_sha256 = "50e9e11bc74008524eed249204d614f0759950935b93b27a992129bf5fe67361"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_wide_polyline"
+file = "libviprs-dep/dwg/g13_wide_polyline.dwg"
+source = "libviprs_dep"
+tier = "C"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_wide_polyline.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_wide_polyline.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 23320
+sha256 = "63495a02a7ef1f359f4be91b1964652ac099b6ac352c986367938882aecd1761"
+reference_jsonl = "expected/g13_wide_polyline.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "20f6da2dfdd59e6d3df187facbb7519159ca738ecf2d593d3c8166abcca8b5b6"
+reference_svg = "expected/g13_wide_polyline.reference.svg"
+reference_svg_sha256 = "2268cdef71bd34096575d5fa97a7b45c832d4e17ba04c9f67596e0eea76ed364"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_wide_spline"
+file = "libviprs-dep/dwg/g13_wide_spline.dwg"
+source = "libviprs_dep"
+tier = "C"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_wide_spline.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_wide_spline.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 208892
+sha256 = "dfd4283a4f67ec1a63897e6a9e94a2bc898c7b5123736eccea5b8117ee4fd6f8"
+reference_jsonl = "expected/g13_wide_spline.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "a882039f9b202c2deeba4b404aabab50db918f335432f0a56c5c9f9d0d5d2111"
+reference_svg = "expected/g13_wide_spline.reference.svg"
+reference_svg_sha256 = "ec86f5ac59d72650651fab7a9767d9315ad6cd84522b2878b9cbb494a8697379"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_wipeout"
+file = "libviprs-dep/dwg/g13_wipeout.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "refused-entity fixture: the entity is a kind schema 1 has no record for, so the stream is the warning that says so"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_wipeout.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_wipeout.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10923
+sha256 = "272b7d95c2e3fb8923087866353ecf8a2e967fb96a29eb42667e9f643ee45d22"
+reference_jsonl = "expected/g13_wipeout.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c5f342f4ff8f15895448dfeafb1cc39af6880766c3ad4e1856069482d3a2df3c"
+reference_svg = "expected/g13_wipeout.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_xref"
+file = "libviprs-dep/dwg/g13_xref.dwg"
+source = "libviprs_dep"
+tier = "B"
+no_primitives = "an external reference: the geometry lives in another file the oracle does not open"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_xref.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_xref.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10667
+sha256 = "4e78ce6186919f14ccfe47a442a787c918391070760d5de27962c76887f363ae"
+reference_jsonl = "expected/g13_xref.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "29c1889cbb00d9dbe5a719d3617a862e8dbc8f9c530df6efca3e06a610fc2d5e"
+reference_svg = "expected/g13_xref.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[fixture]]
+id = "g13_xref_long"
+file = "libviprs-dep/dwg/g13_xref_long.dwg"
+source = "libviprs_dep"
+tier = "C"
+no_primitives = "an external reference with a long path: the geometry lives in another file the oracle does not open"
+acad_version = "AC1032"
+autocad_generation = "AutoCAD 2018+, written by ACadSharp 3.7.1"
+source_path = "acadsharp/tests/fixtures/g13_xref_long.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_xref_long.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10699
+sha256 = "dbd8b31faf5c6dda27c61de9923179cd01c825389aac223844758624abe1f8b4"
+reference_jsonl = "expected/g13_xref_long.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "29c1889cbb00d9dbe5a719d3617a862e8dbc8f9c530df6efca3e06a610fc2d5e"
+reference_svg = "expected/g13_xref_long.reference.svg"
+reference_svg_sha256 = "0246f5f88b1026c09e738b1d0b425ddafde6b9b754afdbf3d0aa4b6e2679af25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+svg_schema = 1
+
+[[refusal]]
+id = "g13_ac1009"
+file = "libviprs-dep/dwg/g13_ac1009.dwg"
+source = "libviprs_dep"
+acad_version = "AC1009"
+oracle_exit = "UnsupportedVersion"
+oracle_exit_code = 4
+source_path = "acadsharp/tests/fixtures/g13_ac1009.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_ac1009.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 512
+sha256 = "0f7c1ae8358511b569895fd84f9d79cedccda520a8a9a762aeff7ae67223265d"
+
+[[refusal]]
+id = "g13_nan_bulge"
+file = "libviprs-dep/dwg/g13_nan_bulge.dwg"
+source = "libviprs_dep"
+acad_version = "AC1032"
+oracle_exit = "CanonicalSerializationFailure"
+oracle_exit_code = 6
+source_path = "acadsharp/tests/fixtures/g13_nan_bulge.dwg"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/g13_nan_bulge.dwg"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 10604
+sha256 = "85e3873b3ba01f03e1451e4dc2e941c432b69b39b03c8ce5e3e502d9e50c39ae"
+
+[[recording]]
+id = "rec-g11_codepage"
+file = "libviprs-dep/recordings/g11_codepage.txt"
+drawing = "g11_codepage"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g11_codepage.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g11_codepage.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1242
+sha256 = "72eae6ec7a2be4a87539cbf9c043f8acbe1f6da520d568bfb096ba54499c2980"
+
+[[recording]]
+id = "rec-g11_shapes"
+file = "libviprs-dep/recordings/g11_shapes.txt"
+drawing = "g11_shapes"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g11_shapes.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g11_shapes.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1328
+sha256 = "34223644d28c32f046cac660a822e6bda136cccee684591c8e648154247fbd65"
+
+[[recording]]
+id = "rec-g13_arc"
+file = "libviprs-dep/recordings/g13_arc.txt"
+drawing = "g13_arc"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_arc.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_arc.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 910
+sha256 = "f33882d66b11aaca907a4f7c0ef6aa4f212bbe962483af9408211fbe0f9ab5a5"
+
+[[recording]]
+id = "rec-g13_bad_extents"
+file = "libviprs-dep/recordings/g13_bad_extents.txt"
+drawing = "g13_bad_extents"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_bad_extents.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_bad_extents.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 870
+sha256 = "df1a837df8032788f119f03dbd987de46ec7210df78feb41fa108d62b4df0c9b"
+
+[[recording]]
+id = "rec-g13_circle"
+file = "libviprs-dep/recordings/g13_circle.txt"
+drawing = "g13_circle"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_circle.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_circle.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 890
+sha256 = "1b27551149f5d7becc6f6e503c550c48d1b049f565b4a32ee55273285a0c8fe3"
+
+[[recording]]
+id = "rec-g13_deep_blocks"
+file = "libviprs-dep/recordings/g13_deep_blocks.txt"
+drawing = "g13_deep_blocks"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_deep_blocks.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_deep_blocks.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 871
+sha256 = "c85b82f9345a9f2a207cff488075bf8b10807b38d81a412abbd6570564997076"
+
+[[recording]]
+id = "rec-g13_dimension"
+file = "libviprs-dep/recordings/g13_dimension.txt"
+drawing = "g13_dimension"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_dimension.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_dimension.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1980
+sha256 = "4112a1beea84ae9f7d6d65634124b2771b85d9d51257d3d06373e67ef04c40d8"
+
+[[recording]]
+id = "rec-g13_dimension_shallow"
+file = "libviprs-dep/recordings/g13_dimension_shallow.txt"
+drawing = "g13_dimension_shallow"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_dimension_shallow.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_dimension_shallow.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 5631
+sha256 = "ac295207b880979326d567a9c332a3fc71b87fbf2f507b47e186e89fe069ec4b"
+
+[[recording]]
+id = "rec-g13_ellipse"
+file = "libviprs-dep/recordings/g13_ellipse.txt"
+drawing = "g13_ellipse"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_ellipse.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_ellipse.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 956
+sha256 = "a29b5980f4a6e73ae81f7a3759172242b3dd3e3df5e8671161977c6a592cc511"
+
+[[recording]]
+id = "rec-g13_empty_view"
+file = "libviprs-dep/recordings/g13_empty_view.txt"
+drawing = "g13_empty_view"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_empty_view.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_empty_view.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 861
+sha256 = "5345fda8d6c7df700540880d0e7811ed0668b67f78af258cae79eeb8d8337ec1"
+
+[[recording]]
+id = "rec-g13_face3d"
+file = "libviprs-dep/recordings/g13_face3d.txt"
+drawing = "g13_face3d"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_face3d.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_face3d.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 2313
+sha256 = "e88d3c3783f5064afbe0ad6d0c6dc3380c4f9cf55089790fc332f6691460fb53"
+
+[[recording]]
+id = "rec-g13_hatch"
+file = "libviprs-dep/recordings/g13_hatch.txt"
+drawing = "g13_hatch"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_hatch.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_hatch.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 2121
+sha256 = "aaec1f415163d62c4c433464f35698fcc5134f36d05446732727820527366acd"
+
+[[recording]]
+id = "rec-g13_insert"
+file = "libviprs-dep/recordings/g13_insert.txt"
+drawing = "g13_insert"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_insert.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_insert.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 988
+sha256 = "846a5f7b7c75d16afa66b6e3410d2384aba89f95354ca838235e89661c3feb10"
+
+[[recording]]
+id = "rec-g13_leader"
+file = "libviprs-dep/recordings/g13_leader.txt"
+drawing = "g13_leader"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_leader.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_leader.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 2599
+sha256 = "9cf69a335b239fc225ab29385abaf1cd455681897008c2ca50b8b1b8fbdd96f0"
+
+[[recording]]
+id = "rec-g13_line"
+file = "libviprs-dep/recordings/g13_line.txt"
+drawing = "g13_line"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_line.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_line.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 871
+sha256 = "a29436a6f20987f6acd1b01750efb7ab45e44e9612eaf1a595bc76521e85ae81"
+
+[[recording]]
+id = "rec-g13_long_text"
+file = "libviprs-dep/recordings/g13_long_text.txt"
+drawing = "g13_long_text"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_long_text.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_long_text.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 9063
+sha256 = "ba211740edafd4059754e8476095de5e2d10652b6185b8d32683adcc3601fb59"
+
+[[recording]]
+id = "rec-g13_mesh"
+file = "libviprs-dep/recordings/g13_mesh.txt"
+drawing = "g13_mesh"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_mesh.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_mesh.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 2967
+sha256 = "32ddb7757db7699d6b7364e63f17d04e9090f554e4c831db717ec752e5087cce"
+
+[[recording]]
+id = "rec-g13_mesh_bad_faces"
+file = "libviprs-dep/recordings/g13_mesh_bad_faces.txt"
+drawing = "g13_mesh_bad_faces"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_mesh_bad_faces.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_mesh_bad_faces.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1588
+sha256 = "f6312924af9ecf35ecc5adf8efccf3db68c5611362496256792cc36ebb9fbc53"
+
+[[recording]]
+id = "rec-g13_mirrored_bulge"
+file = "libviprs-dep/recordings/g13_mirrored_bulge.txt"
+drawing = "g13_mirrored_bulge"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_mirrored_bulge.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_mirrored_bulge.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 995
+sha256 = "472d189813e73e4bc4960a3919fbba6807ac999286f7c613e0412cde4c6b7e5c"
+
+[[recording]]
+id = "rec-g13_mline"
+file = "libviprs-dep/recordings/g13_mline.txt"
+drawing = "g13_mline"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_mline.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_mline.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 5025
+sha256 = "596d28d3c9f70c6b482984ef1f992f49883aff8b40d030b58f6cf707cce9e28e"
+
+[[recording]]
+id = "rec-g13_nan_bulge"
+file = "libviprs-dep/recordings/g13_nan_bulge.txt"
+drawing = "g13_nan_bulge"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_nan_bulge.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_nan_bulge.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1273
+sha256 = "cb510deb40a9c4ecb161d6b91d393203092621b97e8be9d5354cc56dd15916e4"
+
+[[recording]]
+id = "rec-g13_nonuniform"
+file = "libviprs-dep/recordings/g13_nonuniform.txt"
+drawing = "g13_nonuniform"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_nonuniform.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_nonuniform.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1202
+sha256 = "52949b6f1913697041e9e9efb726593519d4e4189e1fd2e31d1fedbae8621594"
+
+[[recording]]
+id = "rec-g13_ocs_mirror"
+file = "libviprs-dep/recordings/g13_ocs_mirror.txt"
+drawing = "g13_ocs_mirror"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_ocs_mirror.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_ocs_mirror.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1643
+sha256 = "b47d862ec5f78445dd37c09f898f1a36a69d6a057a6f2b7440209ae49bc643e2"
+
+[[recording]]
+id = "rec-g13_ocs_plane"
+file = "libviprs-dep/recordings/g13_ocs_plane.txt"
+drawing = "g13_ocs_plane"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_ocs_plane.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_ocs_plane.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1746
+sha256 = "63e7dc11e32f97f9428fffb7ef6abe7012730c19264aec7928587f87d1a47f20"
+
+[[recording]]
+id = "rec-g13_ocs_rotated"
+file = "libviprs-dep/recordings/g13_ocs_rotated.txt"
+drawing = "g13_ocs_rotated"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_ocs_rotated.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_ocs_rotated.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1242
+sha256 = "c13c43b948e8e780704b84d93e67ee52ad06ad1920492bac554e367ae09eeda2"
+
+[[recording]]
+id = "rec-g13_ocs_skew"
+file = "libviprs-dep/recordings/g13_ocs_skew.txt"
+drawing = "g13_ocs_skew"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_ocs_skew.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_ocs_skew.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1732
+sha256 = "f3bc4f778a87c65e792855295b9c168fe4a905ced3671cdfe2642de2c6307879"
+
+[[recording]]
+id = "rec-g13_point"
+file = "libviprs-dep/recordings/g13_point.txt"
+drawing = "g13_point"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_point.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_point.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1765
+sha256 = "13398bd7e4ccae792e95668e7fc9fcb29ef8f904ce56bc211d2c3896fd6b87b9"
+
+[[recording]]
+id = "rec-g13_polyface_mesh"
+file = "libviprs-dep/recordings/g13_polyface_mesh.txt"
+drawing = "g13_polyface_mesh"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_polyface_mesh.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_polyface_mesh.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1345
+sha256 = "bd97b1be5faaafdc9b65acc289896b4339fb06a6b6c7f4c551fd88c9128de3c4"
+
+[[recording]]
+id = "rec-g13_polygon_mesh"
+file = "libviprs-dep/recordings/g13_polygon_mesh.txt"
+drawing = "g13_polygon_mesh"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_polygon_mesh.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_polygon_mesh.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1341
+sha256 = "74d3ee56ccc3027913082055afed0542f5481c36e6b44ad92cfa8777a23e459d"
+
+[[recording]]
+id = "rec-g13_polyline"
+file = "libviprs-dep/recordings/g13_polyline.txt"
+drawing = "g13_polyline"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_polyline.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_polyline.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1373
+sha256 = "4e25dc365f724dc514048907d6960f248a9c36b2587367d35191fa22516d3974"
+
+[[recording]]
+id = "rec-g13_ray_xline"
+file = "libviprs-dep/recordings/g13_ray_xline.txt"
+drawing = "g13_ray_xline"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_ray_xline.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_ray_xline.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 2450
+sha256 = "4eb78824ba14079debe7eb13f83ca3a6e7aa22355b5a7d38a53897bf916c36bf"
+
+[[recording]]
+id = "rec-g13_scale_1x"
+file = "libviprs-dep/recordings/g13_scale_1x.txt"
+drawing = "g13_scale_1x"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_scale_1x.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_scale_1x.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 14092
+sha256 = "17e5ce4bbd2c8f75acaa0217398d6279fe73adea7a59c16401ab9246a4f41f8e"
+
+[[recording]]
+id = "rec-g13_slot"
+file = "libviprs-dep/recordings/g13_slot.txt"
+drawing = "g13_slot"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_slot.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_slot.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1031
+sha256 = "987d0468c0efdf4712a908d2d0f9d9ac47de81bb0fb2282e06ad0915d2589dcf"
+
+[[recording]]
+id = "rec-g13_slot_block"
+file = "libviprs-dep/recordings/g13_slot_block.txt"
+drawing = "g13_slot_block"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_slot_block.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_slot_block.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1545
+sha256 = "835370709a4e667bfbd06a6573b828da18478188c4553c3dc8893b901d37342f"
+
+[[recording]]
+id = "rec-g13_solid"
+file = "libviprs-dep/recordings/g13_solid.txt"
+drawing = "g13_solid"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_solid.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_solid.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1840
+sha256 = "9f2818ce64542c3ab7da5105850ffb8bab553a86654d792cbc607836a5b1f46e"
+
+[[recording]]
+id = "rec-g13_spline"
+file = "libviprs-dep/recordings/g13_spline.txt"
+drawing = "g13_spline"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_spline.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_spline.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1048
+sha256 = "8c2c632a96c788eaefa278a7777c6565de17ecea6e5efb6fb732a15ba07b5b62"
+
+[[recording]]
+id = "rec-g13_text"
+file = "libviprs-dep/recordings/g13_text.txt"
+drawing = "g13_text"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_text.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_text.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 997
+sha256 = "ff79424f7aa732985056c18cd96283913dec25e4316cc6d962cf6aeaaa481df6"
+
+[[recording]]
+id = "rec-g13_tolerance"
+file = "libviprs-dep/recordings/g13_tolerance.txt"
+drawing = "g13_tolerance"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_tolerance.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_tolerance.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1329
+sha256 = "d37095f56efd57b8b7a34b4216827662bed4a6d29356fbef299c06b943abacc5"
+
+[[recording]]
+id = "rec-g13_two_entities"
+file = "libviprs-dep/recordings/g13_two_entities.txt"
+drawing = "g13_two_entities"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_two_entities.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_two_entities.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 962
+sha256 = "7ac4dc3948fb497fbc2a1cc024c9d15442cfe359fe34dda56ec792c4dea35927"
+
+[[recording]]
+id = "rec-g13_unsupported"
+file = "libviprs-dep/recordings/g13_unsupported.txt"
+drawing = "g13_unsupported"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_unsupported.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_unsupported.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1075
+sha256 = "44f799feb8beae0489fe035a791337b969d6572cd3feff79cd3cc644bb1d8d83"
+
+[[recording]]
+id = "rec-g13_wide_polyline"
+file = "libviprs-dep/recordings/g13_wide_polyline.txt"
+drawing = "g13_wide_polyline"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_wide_polyline.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_wide_polyline.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 129731
+sha256 = "801158e5ca4f06caaf91bd7caa5e8a7fe9ce3ba21b23697fd4b845d1ed934e56"
+
+[[recording]]
+id = "rec-g13_wipeout"
+file = "libviprs-dep/recordings/g13_wipeout.txt"
+drawing = "g13_wipeout"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_wipeout.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_wipeout.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 3995
+sha256 = "e536c79a40e45ff54a6b0dd8ad1c1b037808f04143a79159885eb0050daee239"
+
+[[recording]]
+id = "rec-g13_xref"
+file = "libviprs-dep/recordings/g13_xref.txt"
+drawing = "g13_xref"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/g13_xref.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/g13_xref.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 1023
+sha256 = "021a370bc32d1c3117c3fb6f94b925d23a8434a7358e846d9123d1a14aaaf58b"
+
+[[recording]]
+id = "rec-real_AC1018"
+file = "libviprs-dep/recordings/real_AC1018.txt"
+drawing = "acadsharp-ac1018"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/real_AC1018.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/real_AC1018.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 79842
+sha256 = "26b9384ff0b620d8e955e00d9a9cbeb14878d362aee001cb2c6764ae3720d2cd"
+
+[[recording]]
+id = "rec-real_AC1032"
+file = "libviprs-dep/recordings/real_AC1032.txt"
+drawing = "acadsharp-ac1032"
+source = "libviprs_dep"
+source_path = "acadsharp/tests/expectations/real_AC1032.txt"
+source_url = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/expectations/real_AC1032.txt"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/LICENSE"
+provenance_evidence = "https://raw.githubusercontent.com/libviprs/libviprs-dep/bc351a906d9085f256fb2226fd6050f72e2d3325/acadsharp/tests/fixtures/PROVENANCE.md"
+bytes = 81229
+sha256 = "c25b6ad374c3481141ba6b1f3ea91cee76b171d4c9fe67a59d72985259d39839"
+
+[[oracle_input]]
+id = "dxf-blockalignmentparameter"
+file = "dxf/BLOCKALIGNMENTPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockalignmentparameter"
+source_path = "samples/dynamic-blocks/BLOCKALIGNMENTPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKALIGNMENTPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 122834
+sha256 = "16aa86c500cb79a42f0fa0fe956b5465b790f0f8c747f8046ee7f3a95dbd0c3a"
+
+[[oracle_input]]
+id = "dxf-blockbasepointparameter"
+file = "dxf/BLOCKBASEPOINTPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockbasepointparameter"
+source_path = "samples/dynamic-blocks/BLOCKBASEPOINTPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKBASEPOINTPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 120189
+sha256 = "0ddbc5cb7dd1541bd6dd651f29a0b78e41c921f1f387acafea92d3668eaea84b"
+
+[[oracle_input]]
+id = "dxf-blockflipparameter"
+file = "dxf/BLOCKFLIPPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockflipparameter"
+source_path = "samples/dynamic-blocks/BLOCKFLIPPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKFLIPPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 129746
+sha256 = "ac09b4818f3693add2a3af77c365a2ef1a5fd27b28be54e445cef929e52ed259"
+
+[[oracle_input]]
+id = "dxf-blocklinearparameter"
+file = "dxf/BLOCKLINEARPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blocklinearparameter"
+source_path = "samples/dynamic-blocks/BLOCKLINEARPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKLINEARPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 127990
+sha256 = "3cfccf336a6836bacb01b5d1b42fbedb75cf059bfaac55fb82739642e7b56f4f"
+
+[[oracle_input]]
+id = "dxf-blocklookupparameter"
+file = "dxf/BLOCKLOOKUPPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blocklookupparameter"
+source_path = "samples/dynamic-blocks/BLOCKLOOKUPPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKLOOKUPPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 165429
+sha256 = "f3824e5e5657cc35468095964ebe90e91790e1953a83fdc56aa6c4304b2a15e5"
+
+[[oracle_input]]
+id = "dxf-blockpointparameter"
+file = "dxf/BLOCKPOINTPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockpointparameter"
+source_path = "samples/dynamic-blocks/BLOCKPOINTPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKPOINTPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 120415
+sha256 = "18affa306920f8b72354131aaf2038a131468445c74a2a1be152326bd4eb99b6"
+
+[[oracle_input]]
+id = "dxf-blockpolarparameter"
+file = "dxf/BLOCKPOLARPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockpolarparameter"
+source_path = "samples/dynamic-blocks/BLOCKPOLARPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKPOLARPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 128895
+sha256 = "e63ac17a67f437a3bd7ee021fae7dde9d271d3d41b779316cd485cb5edfd3bf0"
+
+[[oracle_input]]
+id = "dxf-blockrotationparameter"
+file = "dxf/BLOCKROTATIONPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockrotationparameter"
+source_path = "samples/dynamic-blocks/BLOCKROTATIONPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKROTATIONPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 132809
+sha256 = "f2796c4e3c7e87da37dfcce7ba1b038343a62981aeac8b7e64668607b128a81a"
+
+[[oracle_input]]
+id = "dxf-blockvisibilityparameter"
+file = "dxf/BLOCKVISIBILITYPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockvisibilityparameter"
+source_path = "samples/dynamic-blocks/BLOCKVISIBILITYPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKVISIBILITYPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 139719
+sha256 = "c615664945db8ccc91b55f77e6359a15da4f7e6f30dbd8800d2d2b94029dffac"
+
+[[oracle_input]]
+id = "dxf-blockxyparameter"
+file = "dxf/BLOCKXYPARAMETER.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-blockxyparameter"
+source_path = "samples/dynamic-blocks/BLOCKXYPARAMETER.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/dynamic-blocks/BLOCKXYPARAMETER.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 138079
+sha256 = "f2d1284d2d3cc5e1419e25a6a6af0f2a99d781a9fc1d27ad652cf596cd227448"
+
+[[oracle_input]]
+id = "dxf-geoloc"
+file = "dxf/geoloc.dxf"
+source = "acadsharp"
+for_fixture = "acadsharp-geoloc"
+source_path = "samples/geolocation/geoloc.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/geolocation/geoloc.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 114942
+sha256 = "30d1985e3838494ed8968287933294ffac4896cd0b43e77b2ffea946551e539e"
+
+[[oracle_input]]
+id = "dxf-geoloc-ac1021"
+file = "dxf/geoloc_AC1021.dxf"
+source = "acadsharp"
+source_path = "samples/geolocation/geoloc_AC1021.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/geolocation/geoloc_AC1021.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 196798
+sha256 = "bbfc534edcfcb7bb9a39d5bb8aa5808fe8fad97425708623f7e6b0bb2261d2c1"
+
+[[oracle_input]]
+id = "dxf-sample-ac1009-ascii"
+file = "dxf/sample_AC1009_ascii.dxf"
+source = "acadsharp"
+acad_version = "AC1009"
+encoding = "ascii"
+source_path = "samples/sample_AC1009_ascii.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1009_ascii.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 596016
+sha256 = "d0039feca2eda1ead9a7135854c62e0818d0ae0af842a44e1645cf8c8523fd75"
+
+[[oracle_input]]
+id = "dxf-sample-ac1009-binary"
+file = "dxf/sample_AC1009_binary.dxf"
+source = "acadsharp"
+acad_version = "AC1009"
+encoding = "binary"
+source_path = "samples/sample_AC1009_binary.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1009_binary.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 321864
+sha256 = "dc8612a2670d8bbb0697d6a4e51b197b6bf2055c08c95b8c646515bb63ca947f"
+
+[[oracle_input]]
+id = "dxf-sample-ac1015-ascii"
+file = "dxf/sample_AC1015_ascii.dxf"
+source = "acadsharp"
+acad_version = "AC1015"
+encoding = "ascii"
+for_fixture = "acadsharp-ac1015"
+source_path = "samples/sample_AC1015_ascii.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1015_ascii.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 2632305
+sha256 = "4f7d7f0d3957d4d32c6c43e4c600eea8e90fc0fcb1b36b11256095a9789a923f"
+
+[[oracle_input]]
+id = "dxf-sample-ac1015-binary"
+file = "dxf/sample_AC1015_binary.dxf"
+source = "acadsharp"
+acad_version = "AC1015"
+encoding = "binary"
+for_fixture = "acadsharp-ac1015"
+source_path = "samples/sample_AC1015_binary.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1015_binary.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1422751
+sha256 = "a3b3d56311371355b0fc01c50c2fa8ac741ed87429114fe9fcdfb3d2ad15d535"
+
+[[oracle_input]]
+id = "dxf-sample-ac1018-ascii"
+file = "dxf/sample_AC1018_ascii.dxf"
+source = "acadsharp"
+acad_version = "AC1018"
+encoding = "ascii"
+for_fixture = "acadsharp-ac1018"
+source_path = "samples/sample_AC1018_ascii.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1018_ascii.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 2629015
+sha256 = "71117bafa8f0d9816607768c8fb21676c83f99892c537711a68c24aa7e06e798"
+
+[[oracle_input]]
+id = "dxf-sample-ac1018-binary"
+file = "dxf/sample_AC1018_binary.dxf"
+source = "acadsharp"
+acad_version = "AC1018"
+encoding = "binary"
+for_fixture = "acadsharp-ac1018"
+source_path = "samples/sample_AC1018_binary.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1018_binary.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1419360
+sha256 = "d659b8e7964eb30700660eea34454696bbbfc927726c3417d93df8776e88e225"
+
+[[oracle_input]]
+id = "dxf-sample-ac1021-ascii"
+file = "dxf/sample_AC1021_ascii.dxf"
+source = "acadsharp"
+acad_version = "AC1021"
+encoding = "ascii"
+for_fixture = "acadsharp-ac1021"
+source_path = "samples/sample_AC1021_ascii.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1021_ascii.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 2633018
+sha256 = "39ebdd9a48fef7a6240a04e3b5ca6d45ba5bb30b560fb9dadf26774e1af83731"
+
+[[oracle_input]]
+id = "dxf-sample-ac1021-binary"
+file = "dxf/sample_AC1021_binary.dxf"
+source = "acadsharp"
+acad_version = "AC1021"
+encoding = "binary"
+for_fixture = "acadsharp-ac1021"
+source_path = "samples/sample_AC1021_binary.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1021_binary.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1421120
+sha256 = "9650c4f2b44f064e09c8ba10ccf558f9438bf7779bed18e6144887930ddb7cb1"
+
+[[oracle_input]]
+id = "dxf-sample-ac1024-ascii"
+file = "dxf/sample_AC1024_ascii.dxf"
+source = "acadsharp"
+acad_version = "AC1024"
+encoding = "ascii"
+for_fixture = "acadsharp-ac1024"
+source_path = "samples/sample_AC1024_ascii.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1024_ascii.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 2591600
+sha256 = "c97e857047ad4cecd84754ea1a8638e47508e339fd489f1e895ee7332127b372"
+
+[[oracle_input]]
+id = "dxf-sample-ac1024-binary"
+file = "dxf/sample_AC1024_binary.dxf"
+source = "acadsharp"
+acad_version = "AC1024"
+encoding = "binary"
+for_fixture = "acadsharp-ac1024"
+source_path = "samples/sample_AC1024_binary.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1024_binary.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1388371
+sha256 = "6a99aed5d669235a12f592d5cce426c6fba29b5462bae8d76f98187a2fdda22f"
+
+[[oracle_input]]
+id = "dxf-sample-ac1027-ascii"
+file = "dxf/sample_AC1027_ascii.dxf"
+source = "acadsharp"
+acad_version = "AC1027"
+encoding = "ascii"
+for_fixture = "acadsharp-ac1027"
+source_path = "samples/sample_AC1027_ascii.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1027_ascii.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 2572072
+sha256 = "4f26752008643642c37f7bab410b23cfd8b6dd9ee3aaa19746b612ea956b61e6"
+
+[[oracle_input]]
+id = "dxf-sample-ac1027-binary"
+file = "dxf/sample_AC1027_binary.dxf"
+source = "acadsharp"
+acad_version = "AC1027"
+encoding = "binary"
+for_fixture = "acadsharp-ac1027"
+source_path = "samples/sample_AC1027_binary.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1027_binary.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1352863
+sha256 = "9a8c4dc15828f62b587273f41cfac2a63ce7614841844a15a15248b49cab7e14"
+
+[[oracle_input]]
+id = "dxf-sample-ac1032-ascii"
+file = "dxf/sample_AC1032_ascii.dxf"
+source = "acadsharp"
+acad_version = "AC1032"
+encoding = "ascii"
+for_fixture = "acadsharp-ac1032"
+source_path = "samples/sample_AC1032_ascii.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1032_ascii.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 2566547
+sha256 = "c2934f616ecd7097e773b85e5d6e0548d21ccc635abcc8e7276f7d4a585a7ae2"
+
+[[oracle_input]]
+id = "dxf-sample-ac1032-binary"
+file = "dxf/sample_AC1032_binary.dxf"
+source = "acadsharp"
+acad_version = "AC1032"
+encoding = "binary"
+for_fixture = "acadsharp-ac1032"
+source_path = "samples/sample_AC1032_binary.dxf"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_AC1032_binary.dxf"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 1348777
+sha256 = "e2c59abecc7bc0fd0ace7b9b6f083d2a16d36077b7a7d7ceccd2aa7edfb348e1"
+
+[[census]]
+id = "census-sample-base-tree"
+file = "census/sample_base_tree.json"
+source = "acadsharp"
+for_fixtures = ["acadsharp-sample-base"]
+source_path = "samples/sample_base/sample_base_tree.json"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/samples/sample_base/sample_base_tree.json"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 290560
+sha256 = "17f6710b76cdeb165fcfc3ea5d602afdaa0d672a718ac10020d95594619b8492"
+
+[[census]]
+id = "census-sample-ac1014-tree"
+file = "census/sample_AC1014_tree.json"
+source = "acadsharp"
+for_fixtures = ["acadsharp-ac1014"]
+source_path = "src/ACadSharp.Tests/Data/sample_AC1014_tree.json"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/src/ACadSharp.Tests/Data/sample_AC1014_tree.json"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 293799
+sha256 = "3f68a207617af1a34bef2a94890e8b86691ac9fd05dfebfda2fa390820e752c9"
+
+[[census]]
+id = "census-sample-ac1015-tree"
+file = "census/sample_AC1015_tree.json"
+source = "acadsharp"
+also_source_paths = ["src/ACadSharp.Tests/Data/sample_AC1018_tree.json", "src/ACadSharp.Tests/Data/sample_AC1021_tree.json", "src/ACadSharp.Tests/Data/sample_AC1027_tree.json", "src/ACadSharp.Tests/Data/sample_AC1032_tree.json"]
+also_source_urls = ["https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/src/ACadSharp.Tests/Data/sample_AC1018_tree.json", "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/src/ACadSharp.Tests/Data/sample_AC1021_tree.json", "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/src/ACadSharp.Tests/Data/sample_AC1027_tree.json", "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/src/ACadSharp.Tests/Data/sample_AC1032_tree.json"]
+for_fixtures = ["acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021", "acadsharp-ac1027", "acadsharp-ac1032"]
+source_path = "src/ACadSharp.Tests/Data/sample_AC1015_tree.json"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/src/ACadSharp.Tests/Data/sample_AC1015_tree.json"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 290560
+sha256 = "b28230beb8feec5451135210d771fee3ea9c492c08185025539d9b5e3510825b"
+
+[[census]]
+id = "census-sample-ac1024-tree"
+file = "census/sample_AC1024_tree.json"
+source = "acadsharp"
+for_fixtures = ["acadsharp-ac1024"]
+source_path = "src/ACadSharp.Tests/Data/sample_AC1024_tree.json"
+source_url = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/src/ACadSharp.Tests/Data/sample_AC1024_tree.json"
+license = "MIT"
+license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
+bytes = 291512
+sha256 = "558f130caa4cfc30443907f9a3feb4b746d0dfa1109bfc298e92848ed1e74fa7"

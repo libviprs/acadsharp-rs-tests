@@ -77,6 +77,11 @@ ruzstd = "0.9"
 # and a parse. The strict reader has to give back the double that was written.
 serde_json = { version = "1", features = ["float_roundtrip"] }
 
+# Building typed records for the comparator fuzz target, from the bytes the fuzzer
+# hands over. Library code because `src/fuzz_harness.rs` is what the targets, the
+# stable corpus replay and the Miri job all call.
+arbitrary = "1"
+
 [dev-dependencies]
 # Parsing `.github/workflows/ci.yml` and the clone action as YAML rather than as
 # text. `tests/counterpart_pin.rs` asserts things about jobs, steps and step

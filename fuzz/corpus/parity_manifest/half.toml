@@ -1,0 +1,296 @@
+# Upstream test parity manifest.
+#
+# ACadSharp's own test suite is the closest thing to a specification of what a
+# DWG reader has to do, so this records where every one of its test files
+# stands relative to this suite. It classifies; it does not port. H4.2
+# (libviprs/acadsharp-rs-tests#10) turns rows into real Rust tests.
+#
+# The point is that upstream coverage stops drifting silently. A bump that adds
+# a test file fails `tools/parity_inventory.py` until somebody decides what that
+# file means for us, which is the gate H3.4 wires into every proposed bump.
+#
+# Statuses, explained in full in README.md:
+#   mirrored            a Rust test reproduces it; `rust` lists the files
+#   differential        covered end to end by the JSONL comparison with the oracle
+#   native_conformance  checked against ACadSharp itself, not through rendering
+#   not_applicable      out of scope, with the reason why
+#
+# `not_applicable` never counts toward coverage. That is the whole reason the
+# status exists separately from the other three: writer suites and DXF suites
+# are not gaps, and a coverage number that counted them would drift downward
+# every time upstream added a writer test and tell nobody anything.
+
+[upstream]
+repository = "https://github.com/DomCR/ACadSharp"
+version = "v3.7.1"
+commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+# Test files live here, relative to the repository root. Everything below is
+# relative to this prefix.
+test_root = "src/ACadSharp.Tests"
+
+# Upstream's own recorded document trees, one per DWG generation, sitting
+# alongside the test sources rather than under `samples/`. They are a second
+# oracle: a baseline ACadSharp itself is held to. The reference generator may
+# consult them, which is why they are recorded here rather than left implicit.
+[[baseline]]
+kind = "document_tree"
+files = [
+  "Data/sample_AC1014_tree.json",
+  "Data/sample_AC1015_tree.json",
+  "Data/sample_AC1018_tree.json",
+  "Data/sample_AC1021_tree.json",
+  "Data/sample_AC1024_tree.json",
+  "Data/sample_AC1027_tree.json",
+  "Data/sample_AC1032_tree.json",
+]
+status = "native_conformance"
+reason = "upstream's own expected document structure per generation, usable as a second oracle for the .NET reference"
+
+[[test_file]]
+path = "CadDocumentTests.cs"
+status = "native_conformance"
+reason = "document object model: the oracle walks the same structure, so this is checked against ACadSharp itself rather than mirrored in Rust"
+
+[[test_file]]
+path = "CadObjectTests.cs"
+status = "native_conformance"
+reason = "object-model identity and ownership, checked through the oracle"
+
+[[test_file]]
+path = "ColorTests.cs"
+status = "native_conformance"
+reason = "the colour model. The SVG reference deliberately does no source colour fidelity, so colour is an oracle-side contract, not a rendering one"
+
+[[test_file]]
+path = "Common/AssertUtils.cs"
+status = "native_conformance"
+reason = "defines upstream's numeric tolerance conventions, which the comparator in H1.4 has to match or consciously diverge from"
+
+[[test_file]]
+path = "Common/CSMathRandom.cs"
+status = "not_applicable"
+reason = "test infrastructure with no assertions of its own"
+
+[[test_file]]
+path = "Common/CadObjectTestUtils.cs"
+status = "not_applicable"
+reason = "test infrastructure with no assertions of its own"
+
+[[test_file]]
+path = "Common/DataFactory.cs"
+status = "not_applicable"
+reason = "test infrastructure with no assertions of its own"
+
+[[test_file]]
+path = "Common/DocumentIntegrity.cs"
+status = "native_conformance"
+reason = "structural invariants every read document must satisfy (handles resolve, owners agree, tables populated); the oracle asserts the same set"
+
+[[test_file]]
+path = "Common/EntityComparator.cs"
+status = "native_conformance"
+reason = "upstream's entity equality semantics, which is exactly what H1.4's comparator reimplements independently"
+
+[[test_file]]
+path = "Common/EntityFactory.cs"
+status = "not_applicable"
+reason = "test infrastructure with no assertions of its own"
+
+[[test_file]]
+path = "Common/Factory.cs"
+status = "not_applicable"
+reason = "test infrastructure with no assertions of its own"
+
+[[test_file]]
+path = "Common/TableEntryFactory.cs"
+status = "not_applicable"
+reason = "test infrastructure with no assertions of its own"
+
+[[test_file]]
+path = "DxfMapTests.cs"
+status = "not_applicable"
+reason = "DXF, and the crate opens only DWG"
+
+[[test_file]]
+path = "DxfPropertyTests.cs"
+status = "not_applicable"
+reason = "DXF, and the crate opens only DWG"
+
+[[test_file]]
+path = "Entities/ArcTests.cs"
+status = "differential"
+planned_rust = "tests/entities/arc.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/AttributeDefinitionTests.cs"
+status = "differential"
+planned_rust = "tests/entities/attribute.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/AttributeEntityTests.cs"
+status = "differential"
+planned_rust = "tests/entities/attribute.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/CircleTests.cs"
+status = "differential"
+planned_rust = "tests/entities/circle.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/CommonDimensionTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/CommonEntityTests.cs"
+status = "differential"
+planned_rust = "tests/entities/common.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/CommonPolylineTests.cs"
+status = "differential"
+planned_rust = "tests/entities/polyline.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/CommonVertexTests.cs"
+status = "differential"
+planned_rust = "tests/entities/polyline.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionAlignedTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionAngular2LineTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionAngular3PtTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionArcTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionDiameterTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionDimensionLinearTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionOrdinateTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/DimensionRadiusTests.cs"
+status = "differential"
+planned_rust = "tests/entities/dimension.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/EllipseTests.cs"
+status = "differential"
+planned_rust = "tests/entities/ellipse.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/HatchTests.cs"
+status = "differential"
+planned_rust = "tests/entities/hatch.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/InsertTest.cs"
+status = "differential"
+planned_rust = "tests/entities/insert.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/LineTests.cs"
+status = "differential"
+planned_rust = "tests/entities/line.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/LwPolylineTest.cs"
+status = "differential"
+planned_rust = "tests/entities/polyline.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/MTextTests.cs"
+status = "differential"
+planned_rust = "tests/entities/text.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/MeshTests.cs"
+status = "native_conformance"
+reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+
+[[test_file]]
+path = "Entities/PointTests.cs"
+status = "native_conformance"
+reason = "POINT has no canonical record in the schema, so there is nothing for a rendering comparison to assert. It reaches the oracle as a warning row"
+
+[[test_file]]
+path = "Entities/PolyfaceMeshTests.cs"
+status = "native_conformance"
+reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+
+[[test_file]]
+path = "Entities/PolygonMeshTests.cs"
+status = "native_conformance"
+reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+
+[[test_file]]
+path = "Entities/Polyline2DTests.cs"
+status = "differential"
+planned_rust = "tests/entities/polyline.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/Polyline3DTests.cs"
+status = "differential"
+planned_rust = "tests/entities/polyline.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/SeqendTests.cs"
+status = "native_conformance"
+reason = "SEQEND is a structural marker rather than drawable geometry; it never reaches a canonical record"
+
+[[test_file]]
+path = "Entities/SplineTests.cs"
+status = "differential"
+planned_rust = "tests/entities/spline.rs"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+
+[[test_file]]
+path = "Entities/TextTests.cs"
+status = "differential"

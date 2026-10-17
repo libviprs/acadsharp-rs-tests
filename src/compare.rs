@@ -816,7 +816,7 @@ fn compat(a: &Key, b: &Key) -> bool {
         && a.view == b.view
         && a.ident == b.ident
         && match (&a.at, &b.at) {
-            (Some(x), Some(y)) => x.iter().zip(y).all(|(p, q)| (p - q).abs() <= 1),
+            (Some(x), Some(y)) => x.iter().zip(y).all(|(p, q)| p.abs_diff(*q) <= 1),
             _ => true,
         }
 }
@@ -1255,7 +1255,17 @@ pub fn compare(
             vec![[0, 0, 0]]
         };
         'search: for o in offsets {
-            let at = k.at.map(|p| [p[0] + o[0], p[1] + o[1], p[2] + o[2]]);
+            // Saturating: a quantised coordinate can sit at the end of the i64
+            // range (a 1e300 coordinate casts there), and `+ 1` on it is an
+            // overflow panic in a debug build. Found by the comparator fuzz
+            // target.
+            let at = k.at.map(|p| {
+                [
+                    p[0].saturating_add(o[0]),
+                    p[1].saturating_add(o[1]),
+                    p[2].saturating_add(o[2]),
+                ]
+            });
             if let Some(list) = pool.get_mut(&(k.kind, k.view, k.ident.clone(), at))
                 && let Some(pos) = list.iter().position(|j| !moved_b.contains(j))
             {

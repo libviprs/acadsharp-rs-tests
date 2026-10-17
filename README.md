@@ -65,6 +65,14 @@ passes it. An ACadSharp upgrade therefore arrives as a diff somebody read.
 ACadSharp: the frozen artefacts are committed and the Rust suite checks them
 against the manifest offline.
 
+## Fuzzing and Miri
+
+The pure-Rust parsers (the wire batch reader, the canonical stream parser, the
+comparator and the two manifest readers) have `cargo-fuzz` targets, a committed
+seed corpus that `cargo test` replays on every run, and a Miri job. Miri does not
+see foreign code, so none of it says anything about the native library. See
+[`fuzz/README.md`](fuzz/README.md).
+
 ## Requirements
 
 - **Rust 1.99+** (edition 2024)

@@ -707,6 +707,18 @@ struct Manifest {
     ground_truths: Vec<GroundTruth>,
 }
 
+/// Parses any text as a corpus manifest and returns how many rows it holds, or
+/// the parse error. The fuzz target for the manifest reader calls this, so the
+/// reader is exercised on bytes that are not the committed file.
+pub fn parse_manifest_text(text: &str) -> Result<usize, toml::de::Error> {
+    let m: Manifest = toml::from_str(text)?;
+    Ok(m.fixtures.len()
+        + m.recordings.len()
+        + m.oracle_inputs.len()
+        + m.censuses.len()
+        + m.refusals.len())
+}
+
 fn manifest() -> &'static Manifest {
     static PARSED: OnceLock<Manifest> = OnceLock::new();
     PARSED.get_or_init(|| toml::from_str(MANIFEST_TOML).expect("fixtures/manifest.toml must parse"))

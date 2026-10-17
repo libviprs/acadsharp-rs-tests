@@ -1,0 +1,23 @@
+# The test targets the `Miri` job in .github/workflows/ci.yml runs.
+#
+# One target per line, then optionally the names of tests to skip. A skip is a
+# substring handed to the test harness as `--skip`, and the tests named below
+# read multi-megabyte frozen outputs through the zstd decoder, which the
+# interpreter turns from seconds into hours. They still run natively on every
+# PR, and the parsers they cover are exercised under Miri by the fuzz corpus
+# replay and the unit tests.
+#
+# Explicit on purpose. Miri cannot run foreign code, so a target that links the
+# native library or a stub of it must not be here, and a job that skipped such a
+# target quietly would be a false green. tests/miri_allowlist.rs reads this file,
+# refuses a target whose source reaches the native side, and checks the CI job
+# runs exactly this list.
+#
+# `lib` (the crate's own unit tests) is not on the list: src/ now holds the
+# emitter that drives the native library, and the guard refuses a lib target
+# whose sources reach it. The pure-Rust modules are covered through the test
+# targets below, which use them.
+canonical_parser every_frozen_stream_parses_and_matches_its_summary
+canonical_writer every_frozen_stream_survives_a_parse_a_render_and_a_parse
+comparator
+fuzz_corpus_replay
