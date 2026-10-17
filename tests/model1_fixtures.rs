@@ -33,12 +33,18 @@ fn every_frozen_stream_is_the_file_the_manifest_froze_and_parses_strictly() {
     assert_eq!(files.len(), SAVES.len() + TWINS.len());
     for s in SAVES {
         let r = model1::load_frozen("oracle", s).unwrap();
-        let f = files.iter().find(|f| f.engine == "oracle" && f.id == s).unwrap();
+        let f = files
+            .iter()
+            .find(|f| f.engine == "oracle" && f.id == s)
+            .unwrap();
         assert_eq!(r.len(), f.records, "{s}");
     }
     for t in TWINS {
         let r = model1::load_frozen("ezdxf", t).unwrap();
-        let f = files.iter().find(|f| f.engine == "ezdxf" && f.id == t).unwrap();
+        let f = files
+            .iter()
+            .find(|f| f.engine == "ezdxf" && f.id == t)
+            .unwrap();
         assert_eq!(r.len(), f.records, "{t}");
     }
 }
@@ -54,7 +60,10 @@ fn the_oracle_enumerates_all_of_cadheaders_249_variables_on_every_save() {
             .collect();
         assert_eq!(names.len(), 249, "{s}");
         if let Some(f) = &first {
-            assert_eq!(f, &names, "{s}: the set of names does not depend on the file");
+            assert_eq!(
+                f, &names,
+                "{s}: the set of names does not depend on the file"
+            );
         }
         first = Some(names);
     }
@@ -98,7 +107,10 @@ fn the_ezdxf_streams_hold_no_handle_valued_variable() {
         .unwrap();
         let r = model1::load_frozen("ezdxf", t).unwrap();
         for name in skipped.lines() {
-            assert!(r.iter().all(|x| x.key() != name), "{t}: {name} is both skipped and written");
+            assert!(
+                r.iter().all(|x| x.key() != name),
+                "{t}: {name} is both skipped and written"
+            );
         }
     }
 }

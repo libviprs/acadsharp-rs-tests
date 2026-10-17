@@ -50,7 +50,9 @@ fn require() -> bool {
 fn out_dir() -> PathBuf {
     match std::env::var("MODEL1_OUT") {
         Ok(p) if !p.is_empty() => PathBuf::from(p),
-        _ => Path::new(env!("CARGO_TARGET_TMPDIR")).join("..").join("model1"),
+        _ => Path::new(env!("CARGO_TARGET_TMPDIR"))
+            .join("..")
+            .join("model1"),
     }
 }
 
@@ -106,8 +108,16 @@ fn compute(rules: &Rules) -> Result<Run, String> {
     for s in SAVES {
         let r = compare(
             "oracle/acadrust",
-            &Side { engine: "oracle", fixture: s, records: &oracle[s] },
-            &Side { engine: "acadrust", fixture: s, records: &rust[s] },
+            &Side {
+                engine: "oracle",
+                fixture: s,
+                records: &oracle[s],
+            },
+            &Side {
+                engine: "acadrust",
+                fixture: s,
+                records: &rust[s],
+            },
             rules,
         );
         reports.insert((s.to_string(), "oracle/acadrust".to_string()), r);
@@ -116,15 +126,31 @@ fn compute(rules: &Rules) -> Result<Run, String> {
         let ez = model1::load_frozen("ezdxf", twin)?;
         let r = compare(
             "ezdxf/oracle",
-            &Side { engine: "ezdxf", fixture: twin, records: &ez },
-            &Side { engine: "oracle", fixture: save, records: &oracle[save] },
+            &Side {
+                engine: "ezdxf",
+                fixture: twin,
+                records: &ez,
+            },
+            &Side {
+                engine: "oracle",
+                fixture: save,
+                records: &oracle[save],
+            },
             rules,
         );
         reports.insert((twin.to_string(), "ezdxf/oracle".to_string()), r);
         let r = compare(
             "ezdxf/acadrust",
-            &Side { engine: "ezdxf", fixture: twin, records: &ez },
-            &Side { engine: "acadrust", fixture: save, records: &rust[save] },
+            &Side {
+                engine: "ezdxf",
+                fixture: twin,
+                records: &ez,
+            },
+            &Side {
+                engine: "acadrust",
+                fixture: save,
+                records: &rust[save],
+            },
             rules,
         );
         reports.insert((twin.to_string(), "ezdxf/acadrust".to_string()), r);
@@ -146,11 +172,17 @@ fn gate<T>(r: Result<T, String>) -> Option<T> {
 #[test]
 fn the_run_agrees_with_the_committed_verdicts() {
     let rules = model1::committed_rules().unwrap();
-    let Some(run) = gate(compute(&rules)) else { return };
+    let Some(run) = gate(compute(&rules)) else {
+        return;
+    };
 
     if std::env::var("MODEL1_EXPLAIN").as_deref() == Ok("1") {
         for ((fixture, pair), r) in &run.reports {
-            for f in r.findings.iter().filter(|f| f.disposition != Disposition::Excluded) {
+            for f in r
+                .findings
+                .iter()
+                .filter(|f| f.disposition != Disposition::Excluded)
+            {
                 println!("EXPLAIN {fixture} {pair} {f}");
             }
             let ex: Vec<&str> = r
@@ -159,7 +191,11 @@ fn the_run_agrees_with_the_committed_verdicts() {
                 .filter(|f| f.disposition == Disposition::Excluded)
                 .map(|f| f.key.as_str())
                 .collect();
-            println!("EXCLUDED {fixture} {pair} {} names: {}", ex.len(), ex.join(" "));
+            println!(
+                "EXCLUDED {fixture} {pair} {} names: {}",
+                ex.len(),
+                ex.join(" ")
+            );
         }
     }
 
@@ -175,24 +211,40 @@ fn the_run_agrees_with_the_committed_verdicts() {
         .iter()
         .map(|(k, r)| (k.clone(), (r.verdict().to_string(), r.first())))
         .collect();
-    let issues: BTreeMap<(String, String), String> =
-        run.reports.iter().map(|(k, r)| (k.clone(), r.issues())).collect();
+    let issues: BTreeMap<(String, String), String> = run
+        .reports
+        .iter()
+        .map(|(k, r)| (k.clone(), r.issues()))
+        .collect();
 
     if regen {
-                let mut table = Table { runs: committed.runs.clone(), rows: Vec::new() };
+        let mut table = Table {
+            runs: committed.runs.clone(),
+            rows: Vec::new(),
+        };
         for ((fixture, pair), (verdict, first)) in &actual {
-                        let needs = verdict != "MATCH";
+            let needs = verdict != "MATCH";
             table.rows.push(Row {
                 fixture: fixture.clone(),
                 pair: pair.clone(),
                 verdict: verdict.clone(),
-                reason: if needs { "listed in parity/MODEL1.toml".to_string() } else { String::new() },
-                issue: if needs { issues[&(fixture.clone(), pair.clone())].clone() } else { String::new() },
+                reason: if needs {
+                    "listed in parity/MODEL1.toml".to_string()
+                } else {
+                    String::new()
+                },
+                issue: if needs {
+                    issues[&(fixture.clone(), pair.clone())].clone()
+                } else {
+                    String::new()
+                },
                 first: first.clone(),
             });
         }
         let rendered = table.render();
-        let body = rendered.split_once("\n\n").map_or(rendered.as_str(), |(_, b)| b);
+        let body = rendered
+            .split_once("\n\n")
+            .map_or(rendered.as_str(), |(_, b)| b);
         let rendered = format!("{VERDICTS_HEADER}{body}");
         std::fs::write(verdicts_path(), &rendered).unwrap();
         // The run may be in a container whose tree is thrown away, so the table
@@ -210,7 +262,11 @@ fn the_run_agrees_with_the_committed_verdicts() {
         moved.join("\n  ")
     );
     let refusals = committed.refusals();
-    assert!(refusals.is_empty(), "parity/MODEL1_VERDICTS.toml:\n  {}", refusals.join("\n  "));
+    assert!(
+        refusals.is_empty(),
+        "parity/MODEL1_VERDICTS.toml:\n  {}",
+        refusals.join("\n  ")
+    );
 }
 
 /// An exclusion row is a claim that an engine cannot produce a name for a file.
@@ -220,11 +276,17 @@ fn the_run_agrees_with_the_committed_verdicts() {
 #[test]
 fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
     let rules = model1::committed_rules().unwrap();
-    let Some(run) = gate(compute(&rules)) else { return };
+    let Some(run) = gate(compute(&rules)) else {
+        return;
+    };
     let mut used: BTreeSet<(String, String, String)> = BTreeSet::new();
     for ((fixture, pair), r) in &run.reports {
         let (a, b) = pair.split_once('/').unwrap();
-        for f in r.findings.iter().filter(|f| f.disposition == Disposition::Excluded) {
+        for f in r
+            .findings
+            .iter()
+            .filter(|f| f.disposition == Disposition::Excluded)
+        {
             // OnlyInA: the name is missing from b; OnlyInB: missing from a.
             let engine = if f.kind == FindingKind::OnlyInA { b } else { a };
             used.insert((engine.to_string(), fixture.clone(), f.key.clone()));
@@ -241,7 +303,11 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
             }
         }
     }
-    assert!(stale.is_empty(), "exclusions the run never needed:\n  {}", stale.join("\n  "));
+    assert!(
+        stale.is_empty(),
+        "exclusions the run never needed:\n  {}",
+        stale.join("\n  ")
+    );
 }
 
 /// The same for `known`: a listed difference that no longer happens is red and
@@ -249,7 +315,9 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
 #[test]
 fn every_known_row_is_still_a_difference_the_run_finds() {
     let rules = model1::committed_rules().unwrap();
-    let Some(run) = gate(compute(&rules)) else { return };
+    let Some(run) = gate(compute(&rules)) else {
+        return;
+    };
     let mut stale = Vec::new();
     for k in &rules.known {
         for n in &k.names {
@@ -267,7 +335,11 @@ fn every_known_row_is_still_a_difference_the_run_finds() {
             }
         }
     }
-    assert!(stale.is_empty(), "known rows the run never needed:\n  {}", stale.join("\n  "));
+    assert!(
+        stale.is_empty(),
+        "known rows the run never needed:\n  {}",
+        stale.join("\n  ")
+    );
 }
 
 /// The control: the run's own wiring, with one value changed in a scratch copy
@@ -276,12 +348,22 @@ fn every_known_row_is_still_a_difference_the_run_finds() {
 fn one_changed_header_value_is_one_diff_and_names_the_variable() {
     let rules = model1::committed_rules().unwrap();
     let id = "acadsharp-ac1032";
-    let Some(mine) = gate(acadrust(id, &out_dir())) else { return };
+    let Some(mine) = gate(acadrust(id, &out_dir())) else {
+        return;
+    };
     let mut oracle = model1::load_frozen("oracle", id).unwrap();
     let untouched = compare(
         "oracle/acadrust",
-        &Side { engine: "oracle", fixture: id, records: &oracle },
-        &Side { engine: "acadrust", fixture: id, records: &mine },
+        &Side {
+            engine: "oracle",
+            fixture: id,
+            records: &oracle,
+        },
+        &Side {
+            engine: "acadrust",
+            fixture: id,
+            records: &mine,
+        },
         &rules,
     );
     // Pick a variable both sides hold and agree on, so the control starts clean.
@@ -303,8 +385,16 @@ fn one_changed_header_value_is_one_diff_and_names_the_variable() {
     assert_eq!(touched, 1);
     let after = compare(
         "oracle/acadrust",
-        &Side { engine: "oracle", fixture: id, records: &oracle },
-        &Side { engine: "acadrust", fixture: id, records: &mine },
+        &Side {
+            engine: "oracle",
+            fixture: id,
+            records: &oracle,
+        },
+        &Side {
+            engine: "acadrust",
+            fixture: id,
+            records: &mine,
+        },
         &rules,
     );
     let red = after.red().len();

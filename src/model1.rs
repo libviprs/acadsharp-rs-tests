@@ -106,7 +106,11 @@ pub fn header_type(name: &str, codes: &[u16]) -> Result<&'static str, String> {
         40..=59 | 140..=149 => "double",
         60..=79 | 90..=99 | 160..=179 | 270..=289 | 370..=389 => "int",
         290..=299 => "bool",
-        _ => return Err(format!("{name}: no written form is defined for DXF code {code}")),
+        _ => {
+            return Err(format!(
+                "{name}: no written form is defined for DXF code {code}"
+            ));
+        }
     })
 }
 
@@ -132,7 +136,8 @@ pub fn render_stream(records: &[Record]) -> Result<String, String> {
     sorted.sort_by(|a, b| {
         let ka = KIND_ORDER.iter().position(|k| *k == a.kind());
         let kb = KIND_ORDER.iter().position(|k| *k == b.kind());
-        ka.cmp(&kb).then_with(|| a.key().as_bytes().cmp(b.key().as_bytes()))
+        ka.cmp(&kb)
+            .then_with(|| a.key().as_bytes().cmp(b.key().as_bytes()))
     });
     let mut out = String::new();
     let mut prev: Option<(&str, &str)> = None;
@@ -188,14 +193,23 @@ pub fn parse_stream(text: &str) -> Result<Vec<Record>, String> {
         }
         let order = "{\"model\":1,\"record\":\"header\",\"name\":";
         if !l.starts_with(order) || !l.contains(",\"type\":\"") || !l.contains(",\"value\":") {
-            return Err(format!("line {n}: fields are not in the order the document gives"));
+            return Err(format!(
+                "line {n}: fields are not in the order the document gives"
+            ));
         }
-        let name = obj["name"].as_str().ok_or(format!("line {n}: name"))?.to_string();
+        let name = obj["name"]
+            .as_str()
+            .ok_or(format!("line {n}: name"))?
+            .to_string();
         let ty = obj["type"].as_str().ok_or(format!("line {n}: type"))?;
         let val = &obj["value"];
         let f = |j: &Json| j.as_f64().ok_or(format!("line {n}: not a number"));
         let value = match ty {
-            "string" => Value::Str(val.as_str().ok_or(format!("line {n}: not a string"))?.into()),
+            "string" => Value::Str(
+                val.as_str()
+                    .ok_or(format!("line {n}: not a string"))?
+                    .into(),
+            ),
             "int" => Value::Int(val.as_i64().ok_or(format!("line {n}: not an integer"))?),
             "double" => Value::Double(f(val)?),
             "bool" => Value::Bool(val.as_bool().ok_or(format!("line {n}: not a bool"))?),
@@ -219,7 +233,10 @@ pub fn parse_stream(text: &str) -> Result<Vec<Record>, String> {
         // Round trip: the line must be the one the writer would write.
         let again = render_stream(std::slice::from_ref(&r))?;
         if again.trim_end() != l {
-            return Err(format!("line {n}: not in canonical form; the writer gives {}", again.trim_end()));
+            return Err(format!(
+                "line {n}: not in canonical form; the writer gives {}",
+                again.trim_end()
+            ));
         }
         out.push(r);
     }
@@ -270,12 +287,18 @@ impl Rules {
         let r: Rules = toml::from_str(text).map_err(|e| e.to_string())?;
         for k in &r.known {
             if k.reason.trim().is_empty() || k.issue.trim().is_empty() {
-                return Err(format!("known row {:?} needs a reason and an issue", k.names));
+                return Err(format!(
+                    "known row {:?} needs a reason and an issue",
+                    k.names
+                ));
             }
         }
         for e in &r.excluded {
             if e.reason.trim().is_empty() || e.issue.trim().is_empty() {
-                return Err(format!("excluded row {} {:?} needs a reason and an issue", e.engine, e.names));
+                return Err(format!(
+                    "excluded row {} {:?} needs a reason and an issue",
+                    e.engine, e.names
+                ));
             }
             if !["oracle", "acadrust", "ezdxf"].contains(&e.engine.as_str()) {
                 return Err(format!("excluded row names the engine {:?}", e.engine));
@@ -328,7 +351,9 @@ fn model1_dir() -> std::path::PathBuf {
 pub fn frozen_files() -> Result<Vec<FrozenFile>, String> {
     let path = model1_dir().join("MANIFEST.toml");
     let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
-    Ok(toml::from_str::<FrozenManifest>(&text).map_err(|e| e.to_string())?.file)
+    Ok(toml::from_str::<FrozenManifest>(&text)
+        .map_err(|e| e.to_string())?
+        .file)
 }
 
 /// The frozen stream for `engine` (`oracle` or `ezdxf`) over `id`, after the
@@ -343,10 +368,17 @@ pub fn load_frozen(engine: &str, id: &str) -> Result<Vec<Record>, String> {
     let bytes = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
     let got: String = {
         use sha2::{Digest, Sha256};
-        Sha256::digest(&bytes).iter().map(|b| format!("{b:02x}")).collect()
+        Sha256::digest(&bytes)
+            .iter()
+            .map(|b| format!("{b:02x}"))
+            .collect()
     };
     if got != f.sha256 {
-        return Err(format!("{}: hashes to {got}, the manifest froze {}", path.display(), f.sha256));
+        return Err(format!(
+            "{}: hashes to {got}, the manifest froze {}",
+            path.display(),
+            f.sha256
+        ));
     }
     let text = String::from_utf8(bytes).map_err(|e| e.to_string())?;
     parse_stream(&text).map_err(|e| format!("{}: {e}", path.display()))
@@ -354,7 +386,9 @@ pub fn load_frozen(engine: &str, id: &str) -> Result<Vec<Record>, String> {
 
 /// The committed `parity/MODEL1.toml`.
 pub fn committed_rules() -> Result<Rules, String> {
-    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("parity").join("MODEL1.toml");
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("parity")
+        .join("MODEL1.toml");
     let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
     Rules::parse(&text)
 }
@@ -393,7 +427,11 @@ pub struct Finding {
 
 impl fmt::Display for Finding {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "header {} {} [{:?}]", self.key, self.detail, self.disposition)
+        write!(
+            f,
+            "header {} {} [{:?}]",
+            self.key, self.detail, self.disposition
+        )
     }
 }
 
@@ -407,7 +445,10 @@ pub struct Report {
 
 impl Report {
     pub fn red(&self) -> Vec<&Finding> {
-        self.findings.iter().filter(|f| f.disposition == Disposition::Red).collect()
+        self.findings
+            .iter()
+            .filter(|f| f.disposition == Disposition::Red)
+            .collect()
     }
 
     pub fn verdict(&self) -> Verdict {
@@ -430,7 +471,11 @@ impl Report {
     /// The issues of the rows that listed a difference, in order, once each.
     pub fn issues(&self) -> String {
         let mut seen: Vec<&str> = Vec::new();
-        for f in self.findings.iter().filter(|f| f.disposition == Disposition::Known) {
+        for f in self
+            .findings
+            .iter()
+            .filter(|f| f.disposition == Disposition::Known)
+        {
             if !f.issue.is_empty() && !seen.contains(&f.issue.as_str()) {
                 seen.push(&f.issue);
             }
@@ -488,7 +533,10 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 report.compared += 1;
                 let known = rules.known_for(pair, a.fixture, name);
                 let (kind, detail) = if x.type_name() != y.type_name() {
-                    (FindingKind::Type, format!("type {} vs {}", x.type_name(), y.type_name()))
+                    (
+                        FindingKind::Type,
+                        format!("type {} vs {}", x.type_name(), y.type_name()),
+                    )
                 } else if !same(x, y) {
                     (FindingKind::Value, format!("{} vs {}", x.show(), y.show()))
                 } else {
@@ -498,14 +546,24 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                     kind,
                     key: name.clone(),
                     detail,
-                    disposition: if known.is_some() { Disposition::Known } else { Disposition::Red },
+                    disposition: if known.is_some() {
+                        Disposition::Known
+                    } else {
+                        Disposition::Red
+                    },
                     issue: known.map(|k| k.issue.clone()).unwrap_or_default(),
                 });
             }
             (Some(x), None) => report.findings.push(Finding {
                 kind: FindingKind::OnlyInA,
                 key: name.clone(),
-                detail: format!("{} = {} on {}, not on {}", name, x.show(), a.engine, b.engine),
+                detail: format!(
+                    "{} = {} on {}, not on {}",
+                    name,
+                    x.show(),
+                    a.engine,
+                    b.engine
+                ),
                 disposition: if rules.excluded_for(b.engine, b.fixture, name).is_some() {
                     Disposition::Excluded
                 } else {
@@ -519,7 +577,13 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
             (None, Some(y)) => report.findings.push(Finding {
                 kind: FindingKind::OnlyInB,
                 key: name.clone(),
-                detail: format!("{} = {} on {}, not on {}", name, y.show(), b.engine, a.engine),
+                detail: format!(
+                    "{} = {} on {}, not on {}",
+                    name,
+                    y.show(),
+                    b.engine,
+                    a.engine
+                ),
                 disposition: if rules.excluded_for(a.engine, a.fixture, name).is_some() {
                     Disposition::Excluded
                 } else {
@@ -541,7 +605,10 @@ mod tests {
     use super::*;
 
     fn h(name: &str, v: Value) -> Record {
-        Record::Header(Header { name: name.into(), value: v })
+        Record::Header(Header {
+            name: name.into(),
+            value: v,
+        })
     }
 
     #[test]
@@ -557,14 +624,25 @@ mod tests {
         let text = render_stream(&recs).unwrap();
         let back = parse_stream(&text).unwrap();
         let names: Vec<&str> = back.iter().map(Record::key).collect();
-        assert_eq!(names, ["$CLAYER", "$EXTMIN", "$LIMMIN", "$LTSCALE", "$ORTHOMODE", "$OSMODE"]);
+        assert_eq!(
+            names,
+            [
+                "$CLAYER",
+                "$EXTMIN",
+                "$LIMMIN",
+                "$LTSCALE",
+                "$ORTHOMODE",
+                "$OSMODE"
+            ]
+        );
         assert_eq!(render_stream(&back).unwrap(), text);
         assert!(text.starts_with("{\"model\":1,\"record\":\"header\",\"name\":\"$CLAYER\""));
     }
 
     #[test]
     fn the_parser_is_strict() {
-        let ok = "{\"model\":1,\"record\":\"header\",\"name\":\"$A\",\"type\":\"int\",\"value\":1}\n";
+        let ok =
+            "{\"model\":1,\"record\":\"header\",\"name\":\"$A\",\"type\":\"int\",\"value\":1}\n";
         assert!(parse_stream(ok).is_ok());
         // a double spelled without its point
         assert!(parse_stream(&ok.replace("int", "double")).is_err());
@@ -577,11 +655,7 @@ mod tests {
         // no final newline
         assert!(parse_stream(ok.trim_end()).is_err());
         // out of order
-        let two = format!(
-            "{}{}",
-            ok.replace("$A", "$B"),
-            ok
-        );
+        let two = format!("{}{}", ok.replace("$A", "$B"), ok);
         assert!(parse_stream(&two).is_err());
         // a duplicate key
         assert!(parse_stream(&format!("{ok}{ok}")).is_err());
@@ -601,14 +675,23 @@ mod tests {
     }
 
     fn side<'a>(engine: &'a str, records: &'a [Record]) -> Side<'a> {
-        Side { engine, fixture: "f", records }
+        Side {
+            engine,
+            fixture: "f",
+            records,
+        }
     }
 
     #[test]
     fn names_compare_by_key_not_by_position() {
         let a = vec![h("$A", Value::Int(1)), h("$B", Value::Int(2))];
         let b = vec![h("$B", Value::Int(2)), h("$A", Value::Int(1))];
-        let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &Rules::default());
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
         assert_eq!(r.verdict(), Verdict::Match);
         assert_eq!(r.compared, 2);
     }
@@ -619,9 +702,19 @@ mod tests {
         let near = vec![h("$LTSCALE", Value::Double(1.0 + 1e-8))];
         let far = vec![h("$LTSCALE", Value::Double(1.001))];
         let rules = Rules::default();
-        let m = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &near), &rules);
+        let m = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &near),
+            &rules,
+        );
         assert_eq!(m.verdict(), Verdict::Match);
-        let d = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &far), &rules);
+        let d = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &far),
+            &rules,
+        );
         assert_eq!(d.verdict(), Verdict::Diff(1));
         assert!(d.first().contains("$LTSCALE"));
     }
@@ -631,17 +724,32 @@ mod tests {
         let a = vec![h("$A", Value::Int(1)), h("$B", Value::Int(2))];
         let b = vec![h("$A", Value::Int(1))];
         let none = Rules::default();
-        let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &none);
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &none,
+        );
         assert_eq!(r.verdict(), Verdict::Diff(1));
         let rules = Rules::parse(
             "[[excluded]]\nengine = \"acadrust\"\nnames = [\"$B\"]\nreason = \"no field\"\nissue = \"x#1\"\n",
         )
         .unwrap();
-        let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &rules);
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &rules,
+        );
         assert_eq!(r.verdict(), Verdict::Match);
         assert_eq!(r.findings.len(), 1);
         // and the same row does not excuse the oracle lacking a name acadrust has
-        let r = compare("oracle/acadrust", &side("oracle", &b), &side("acadrust", &a), &rules);
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &b),
+            &side("acadrust", &a),
+            &rules,
+        );
         assert_eq!(r.verdict(), Verdict::Diff(1));
     }
 
@@ -653,15 +761,27 @@ mod tests {
             "[[known]]\nnames = [\"$TDCREATE\"]\npairs = [\"ezdxf/oracle\"]\nreason = \"saved at another moment\"\nissue = \"x#1\"\n",
         )
         .unwrap();
-        let r = compare("ezdxf/oracle", &side("ezdxf", &a), &side("oracle", &b), &rules);
+        let r = compare(
+            "ezdxf/oracle",
+            &side("ezdxf", &a),
+            &side("oracle", &b),
+            &rules,
+        );
         assert_eq!(r.verdict(), Verdict::Known(1));
-        let r = compare("oracle/acadrust", &side("oracle", &a), &side("acadrust", &b), &rules);
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &rules,
+        );
         assert_eq!(r.verdict(), Verdict::Diff(1));
     }
 
     #[test]
     fn a_rule_without_a_reason_or_an_issue_is_refused() {
-        assert!(Rules::parse("[[known]]\nnames = [\"$A\"]\nreason = \"\"\nissue = \"x\"\n").is_err());
+        assert!(
+            Rules::parse("[[known]]\nnames = [\"$A\"]\nreason = \"\"\nissue = \"x\"\n").is_err()
+        );
         assert!(Rules::parse("[[excluded]]\nengine = \"oracle\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"\"\n").is_err());
         assert!(Rules::parse("[[excluded]]\nengine = \"nobody\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"i\"\n").is_err());
     }

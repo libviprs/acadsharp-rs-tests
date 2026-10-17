@@ -57,10 +57,15 @@ fn main() -> ExitCode {
         }
     };
     // model-1 (docs/MODEL_1.md): the header variables, in a file beside the others.
-    let doc = match acadrust::io::dwg::DwgReader::from_stream(std::io::Cursor::new(bytes.clone())).read() {
+    let doc = match acadrust::io::dwg::DwgReader::from_stream(std::io::Cursor::new(bytes.clone()))
+        .read()
+    {
         Ok(d) => d,
         Err(e) => {
-            eprintln!("emit-acadrust: {}: acadrust could not read this file: {e}", fixture.id);
+            eprintln!(
+                "emit-acadrust: {}: acadrust could not read this file: {e}",
+                fixture.id
+            );
             return ExitCode::from(1);
         }
     };
@@ -74,8 +79,14 @@ fn main() -> ExitCode {
         }
     };
     let model1_path = acadsharp_rs_tests::model1::output_path(&args.out, &fixture.id, "acadrust");
-    if let Err(e) = std::fs::create_dir_all(&args.out).and_then(|()| std::fs::write(&model1_path, model1)) {
-        eprintln!("emit-acadrust: {}: {}: {e}", fixture.id, model1_path.display());
+    if let Err(e) =
+        std::fs::create_dir_all(&args.out).and_then(|()| std::fs::write(&model1_path, model1))
+    {
+        eprintln!(
+            "emit-acadrust: {}: {}: {e}",
+            fixture.id,
+            model1_path.display()
+        );
         return ExitCode::from(1);
     }
     let sibling = Path::new(env!("CARGO_MANIFEST_DIR"))
