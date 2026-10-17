@@ -159,8 +159,9 @@ fn every_file_has_the_three_fixed_linetypes_and_one_complex_one_is_compared() {
         for name in ["ByBlock", "ByLayer", "Continuous"] {
             // AC1014 spells table names in upper case.
             assert!(
-                records.iter().any(|r| r.kind() == "linetype"
-                    && r.key().eq_ignore_ascii_case(name)),
+                records
+                    .iter()
+                    .any(|r| r.kind() == "linetype" && r.key().eq_ignore_ascii_case(name)),
                 "{label}: no linetype {name}"
             );
         }
