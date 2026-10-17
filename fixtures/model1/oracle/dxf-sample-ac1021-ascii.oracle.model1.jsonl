@@ -245,3 +245,24 @@
 {"model":1,"record":"header","name":"$WORLDVIEW","type":"int","value":1}
 {"model":1,"record":"header","name":"$XCLIPFRAME","type":"int","value":0}
 {"model":1,"record":"header","name":"$XEDIT","type":"bool","value":true}
+{"model":1,"record":"layer","name":"0","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"0 @ 1","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Defpoints","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":false}
+{"model":1,"record":"layer","name":"Layer1","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer2","flags":0,"color":65,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_Freeze","flags":1,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_Lock","flags":4,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_Lt_dash","flags":0,"color":10,"true_color":-1,"on":true,"linetype":"ACAD_ISO02W100","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_NoPlot","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":false}
+{"model":1,"record":"layer","name":"Layer_Off","flags":0,"color":7,"true_color":-1,"on":false,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_color_80","flags":0,"color":80,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_color_80 @ 1","flags":0,"color":80,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_color_book","flags":0,"color":-1,"true_color":8897020,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_desc","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_lw_035","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":35,"plot":true}
+{"model":1,"record":"layer","name":"Layer_lw_050","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":50,"plot":true}
+{"model":1,"record":"layer","name":"Layer_transp_70","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_true_color","flags":0,"color":-1,"true_color":15634961,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"Layer_vp_freeze","flags":2,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"app_layer","flags":0,"color":7,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+{"model":1,"record":"layer","name":"color_125_33_79","flags":0,"color":-1,"true_color":5185917,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
