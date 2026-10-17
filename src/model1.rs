@@ -259,7 +259,9 @@ const XRECORD: Schema = Schema {
 
 /// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
 /// and one name here, so a new kind never touches the others.
-pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE, DIMSTYLE, DICTIONARY, XDATA, XRECORD];
+pub const SCHEMAS: &[Schema] = &[
+    LAYER, LINETYPE, TEXTSTYLE, DIMSTYLE, DICTIONARY, XDATA, XRECORD,
+];
 
 /// The written form of a value, decided by its group code. One table for xdata
 /// and for XRECORDs, written three times on purpose (here,
