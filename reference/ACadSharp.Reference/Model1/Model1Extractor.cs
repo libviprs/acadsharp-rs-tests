@@ -60,6 +60,7 @@ public static class Model1Extractor
         ExtractHeader(document, records);
         ExtractLayers(document, records);
         ExtractLinetypes(document, records);
+        ExtractTextStyles(document, records);
         return records;
     }
 
@@ -143,6 +144,32 @@ public static class Model1Extractor
                 ("linetype", NumericFormatting.Quoted(layer.LineType?.Name ?? string.Empty)),
                 ("lineweight", NumericFormatting.Whole((short)layer.LineWeight)),
                 ("plot", layer.PlotFlag ? "true" : "false")));
+        }
+    }
+
+    private static void ExtractTextStyles(CadDocument document, List<Model1Record> records)
+    {
+        foreach (TextStyle style in document.TextStyles)
+        {
+            string name = style.Name ?? string.Empty;
+            long mirror = (long)style.MirrorFlag;
+            long flags = (long)(short)style.Flags;
+
+            records.Add(Model1Record.Of(
+                "textstyle",
+                name,
+                ("name", NumericFormatting.Quoted(name)),
+                ("font_file", NumericFormatting.Quoted(style.Filename ?? string.Empty)),
+                ("big_font_file", NumericFormatting.Quoted(style.BigFontFilename ?? string.Empty)),
+                ("height", NumericFormatting.Real(style.Height)),
+                ("width_factor", NumericFormatting.Real(style.Width)),
+                ("last_height", NumericFormatting.Real(style.LastHeight)),
+                ("oblique_angle", NumericFormatting.Real(style.ObliqueAngle)),
+                ("backward", (mirror & 2) != 0 ? "true" : "false"),
+                ("upside_down", (mirror & 4) != 0 ? "true" : "false"),
+                ("is_shape", (flags & 1) != 0 ? "true" : "false"),
+                ("is_vertical", (flags & 4) != 0 ? "true" : "false"),
+                ("xref_dependent", (flags & 16) != 0 ? "true" : "false")));
         }
     }
 

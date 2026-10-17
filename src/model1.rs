@@ -110,9 +110,26 @@ const LINETYPE: Schema = Schema {
     ],
 };
 
+const TEXTSTYLE: Schema = Schema {
+    kind: "textstyle",
+    fields: &[
+        ("font_file", Ty::Str),
+        ("big_font_file", Ty::Str),
+        ("height", Ty::Double),
+        ("width_factor", Ty::Double),
+        ("last_height", Ty::Double),
+        ("oblique_angle", Ty::Double),
+        ("backward", Ty::Bool),
+        ("upside_down", Ty::Bool),
+        ("is_shape", Ty::Bool),
+        ("is_vertical", Ty::Bool),
+        ("xref_dependent", Ty::Bool),
+    ],
+};
+
 /// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
 /// and one name here, so a new kind never touches the others.
-pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE];
+pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE];
 
 /// One segment of a linetype's pattern, in file order.
 const SEGMENT: &[(&str, Ty)] = &[
