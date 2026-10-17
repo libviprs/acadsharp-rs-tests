@@ -1,1 +1,1243 @@
+# What may differ between the oracle's output for the AC1032 save and the other
+# saves of the same drawing (R3.4, acadsharp-rs-tests#24).
+#
+# Read by `src/invariance.rs`, held by `tests/oracle_invariance.rs`: every
+# difference the comparator finds has a row here, and every row is still a
+# difference. A row with no reason, or no issue (`owner/repo#N`), is refused.
+#
+# `[[exception]]` is where the format cannot carry the same thing, so the saves
+# are right to differ. When AutoCAD's own DXF of the save holds the value, the
+# row names it in `ground_truth` and the test checks the twin really does.
+# `[[failure]]` is a reader bug, pinned so it cannot move unseen. It is not an
+# excuse: the fix retires the row.
+#
+# Records are named by their index in the AC1032 stream, which is the one
+# coordinate that cannot shift. `a` is the AC1032 value, `b` the other save's.
+#
+# Written by `cargo test --test oracle_invariance print_the_list -- --ignored
+# --nocapture`, then read by a person; regenerate it only on purpose.
+
 baseline = "acadsharp-ac1032"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 42
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 43
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 44
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 45
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 46
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 46
+record_type = "text"
+field = "text"
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext\\Pwith multiple lines in it"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 47
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 47
+record_type = "text"
+field = "text"
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext\\Pwith multiple lines in it"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 48
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 48
+record_type = "text"
+field = "text"
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext\\Pwith multiple lines in it"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 53
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 59
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 68
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 78
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 93
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 99
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 99
+record_type = "text"
+field = "text"
+a = "∅45,6"
+b = "\\U+220545,6"
+reason = "Saves before 2007 keep text in the code page's MIF form, and the character the code page cannot hold stays an escape (\\U+2205). AutoCAD's own DXF of this save holds the same escape, so it is in the file, and AutoCAD resolved it only when it converted to R2007 and later."
+issue = "libviprs/libviprs-dep#111"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 106
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 113
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 122
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 127
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 128
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 129
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 130
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 131
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 132
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 133
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 134
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 172
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 173
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 174
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 175
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 176
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 177
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 177
+record_type = "text"
+field = "text"
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext\\Pbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 180
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 181
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 182
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 183
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 184
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 185
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 186
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 187
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 188
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 189
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 190
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 191
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 192
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 193
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 194
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 195
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 197
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 201
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 209
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 213
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 214
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 215
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 216
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 217
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 218
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 219
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 220
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 221
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 222
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 223
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 225
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 240
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 242
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 246
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 259
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 274
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 284
+record_type = "text"
+field = "style"
+a = "Standard"
+b = "STANDARD"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 290
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1014"
+record = 292
+record_type = "text"
+field = "style"
+a = "custom_text_style"
+b = "CUSTOM_TEXT_STYLE"
+reason = "AC1014 stores table names upper-cased, so the style of a text reads STANDARD where later saves read Standard. The format cannot carry the case. AC1014 has no DXF twin, so this one is argued from the format and not shown."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[exception]]
+fixture = "acadsharp-ac1015"
+record = 46
+record_type = "text"
+field = "text"
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext\\Pwith multiple lines in it"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[exception]]
+fixture = "acadsharp-ac1015"
+record = 47
+record_type = "text"
+field = "text"
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext\\Pwith multiple lines in it"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[exception]]
+fixture = "acadsharp-ac1015"
+record = 48
+record_type = "text"
+field = "text"
+a = "this is a Mtext\nwith multiple lines in it"
+b = "this is a Mtext\\Pwith multiple lines in it"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[exception]]
+fixture = "acadsharp-ac1015"
+record = 99
+record_type = "text"
+field = "text"
+a = "∅45,6"
+b = "\\U+220545,6"
+reason = "Saves before 2007 keep text in the code page's MIF form, and the character the code page cannot hold stays an escape (\\U+2205). AutoCAD's own DXF of this save holds the same escape, so it is in the file, and AutoCAD resolved it only when it converted to R2007 and later."
+issue = "libviprs/libviprs-dep#111"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[exception]]
+fixture = "acadsharp-ac1015"
+record = 122
+record_type = "text"
+field = "text"
+a = "4'-0{\\H1x;\\S1#4;}\""
+b = "4'-0\\S1/4;\""
+reason = "The R2000 save stores the stacked fraction as \\S1/4; where the later saves keep the formatted run. AutoCAD's own DXF of this save holds \\S1/4; too."
+issue = "libviprs/acadsharp-rs-tests#24"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[exception]]
+fixture = "acadsharp-ac1015"
+record = 177
+record_type = "text"
+field = "text"
+a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext\\Pbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "Saves before 2007 store the paragraph break of an MTEXT as the escape \\P and later saves store a line feed. The schema carries what the drawing stores, and AutoCAD's own DXF of this save holds the escape."
+issue = "libviprs/acadsharp-rs-tests#24"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[exception]]
+fixture = "acadsharp-ac1018"
+record = 99
+record_type = "text"
+field = "text"
+a = "∅45,6"
+b = "\\U+220545,6"
+reason = "Saves before 2007 keep text in the code page's MIF form, and the character the code page cannot hold stays an escape (\\U+2205). AutoCAD's own DXF of this save holds the same escape, so it is in the file, and AutoCAD resolved it only when it converted to R2007 and later."
+issue = "libviprs/libviprs-dep#111"
+ground_truth = "dxf-sample-ac1018-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1014"
+record = 52
+record_type = "spline"
+field = "control_points.len"
+a = 0
+b = 4
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1014"
+record = 52
+record_type = "spline"
+field = "knots.len"
+a = 0
+b = 8
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1014"
+record = 52
+record_type = "spline"
+field = "fit_points.len"
+a = 2
+b = 0
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1014"
+record = 180
+record_type = "text"
+field = "x"
+a = 977.2814835151885
+b = 977.1230330707217
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1014"
+record = 180
+record_type = "text"
+field = "y"
+a = 28.750814223482195
+b = 27.000817092371317
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1014"
+record = 180
+record_type = "text"
+field = "valign"
+a = "top"
+b = "baseline"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1014"
+record = 180
+record_type = "text"
+field = "text"
+a = ""
+b = "my multi line text for the attrrib"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1015"
+record = 52
+record_type = "spline"
+field = "control_points.len"
+a = 0
+b = 4
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1015"
+record = 52
+record_type = "spline"
+field = "knots.len"
+a = 0
+b = 8
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1015"
+record = 52
+record_type = "spline"
+field = "fit_points.len"
+a = 2
+b = 0
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1015-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1015"
+record = 180
+record_type = "text"
+field = "x"
+a = 977.2814835151885
+b = 977.1230330707217
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1015"
+record = 180
+record_type = "text"
+field = "y"
+a = 28.750814223482195
+b = 27.000817092371317
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1015"
+record = 180
+record_type = "text"
+field = "valign"
+a = "top"
+b = "baseline"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1015"
+record = 180
+record_type = "text"
+field = "text"
+a = ""
+b = "my multi line text for the attrrib"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1018"
+record = 52
+record_type = "spline"
+field = "control_points.len"
+a = 0
+b = 4
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1018-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1018"
+record = 52
+record_type = "spline"
+field = "knots.len"
+a = 0
+b = 8
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1018-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1018"
+record = 52
+record_type = "spline"
+field = "fit_points.len"
+a = 2
+b = 0
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1018-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1018"
+record = 180
+record_type = "text"
+field = "x"
+a = 977.2814835151885
+b = 977.1230330707217
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1018"
+record = 180
+record_type = "text"
+field = "y"
+a = 28.750814223482195
+b = 27.000817092371317
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1018"
+record = 180
+record_type = "text"
+field = "valign"
+a = "top"
+b = "baseline"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1018"
+record = 180
+record_type = "text"
+field = "text"
+a = ""
+b = "my multi line text for the attrrib"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1021"
+record = 52
+record_type = "spline"
+field = "control_points.len"
+a = 0
+b = 4
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1021-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1021"
+record = 52
+record_type = "spline"
+field = "knots.len"
+a = 0
+b = 8
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1021-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1021"
+record = 52
+record_type = "spline"
+field = "fit_points.len"
+a = 2
+b = 0
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1021-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1021"
+record = 180
+record_type = "text"
+field = "x"
+a = 977.2814835151885
+b = 977.1230330707217
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1021"
+record = 180
+record_type = "text"
+field = "y"
+a = 28.750814223482195
+b = 27.000817092371317
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1021"
+record = 180
+record_type = "text"
+field = "valign"
+a = "top"
+b = "baseline"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1021"
+record = 180
+record_type = "text"
+field = "text"
+a = ""
+b = "my multi line text for the attrrib"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1024"
+record = 52
+record_type = "spline"
+field = "control_points.len"
+a = 0
+b = 4
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1024-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1024"
+record = 52
+record_type = "spline"
+field = "knots.len"
+a = 0
+b = 8
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1024-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1024"
+record = 52
+record_type = "spline"
+field = "fit_points.len"
+a = 2
+b = 0
+reason = "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong."
+issue = "libviprs/libviprs-dep#150"
+ground_truth = "dxf-sample-ac1024-ascii"
+
+[[failure]]
+fixture = "acadsharp-ac1024"
+record = 180
+record_type = "text"
+field = "x"
+a = 977.2814835151885
+b = 977.1230330707217
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1024"
+record = 180
+record_type = "text"
+field = "y"
+a = 28.750814223482195
+b = 27.000817092371317
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1024"
+record = 180
+record_type = "text"
+field = "valign"
+a = "top"
+b = "baseline"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1024"
+record = 180
+record_type = "text"
+field = "text"
+a = ""
+b = "my multi line text for the attrrib"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1027"
+record = 180
+record_type = "text"
+field = "x"
+a = 977.2814835151885
+b = 977.1230330707217
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1027"
+record = 180
+record_type = "text"
+field = "y"
+a = 28.750814223482195
+b = 27.000817092371317
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1027"
+record = 180
+record_type = "text"
+field = "valign"
+a = "top"
+b = "baseline"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+
+[[failure]]
+fixture = "acadsharp-ac1027"
+record = 180
+record_type = "text"
+field = "text"
+a = ""
+b = "my multi line text for the attrrib"
+reason = "A reader bug: the multiline block attribute (handle 79D) is dropped by the oracle at AC1032, the only save that stores its text in an embedded MTEXT it does not read. The position and the vertical alignment follow from the same record. AutoCAD's own DXF of the AC1032 save holds the text."
+issue = "libviprs/libviprs-dep#112"
+

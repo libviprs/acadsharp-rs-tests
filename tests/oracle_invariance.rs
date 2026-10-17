@@ -262,7 +262,7 @@ fn classify(save: &str, f: &Finding) -> (Kind, String, String, Option<String>) {
         ("spline", _) => (
             Kind::Failure,
             "A reader bug: the oracle reads this spline as two fit points and no control points in the AC1027 and AC1032 saves, and as four control points and eight knots in the older ones. AutoCAD's own DXF of every one of the six saves with a twin holds four control points, eight knots and no fit points, so the older reading is the right one and the AC1032 baseline is wrong.".into(),
-            "SPLINE_ISSUE".into(),
+            "libviprs/libviprs-dep#150".into(),
             twin(if ver == "1014" { "1015" } else { ver }),
         ),
         _ => (
