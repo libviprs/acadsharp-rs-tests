@@ -58,6 +58,7 @@ fn readings(input: &str) -> BTreeMap<&'static str, BTreeMap<String, String>> {
 
 #[test]
 fn print_the_r12_strings() {
+    let _ = RECORD;
     if std::env::var("R12_PRINT").as_deref() != Ok("1") {
         return;
     }
