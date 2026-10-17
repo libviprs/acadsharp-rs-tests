@@ -1073,7 +1073,7 @@ fn the_standard_style_carries_its_acad_xdata_in_every_reading() {
         let found = records.iter().find_map(|r| match r {
             Record::Entry(e)
                 if e.kind == "xdata"
-                    && e.name.to_ascii_lowercase() == "table/textstyle/standard|acad" =>
+                    && e.name.eq_ignore_ascii_case("table/textstyle/standard|acad") =>
             {
                 Some(e.name.clone())
             }

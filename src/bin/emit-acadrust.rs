@@ -117,8 +117,8 @@ fn main() -> ExitCode {
     let model1_path = acadsharp_rs_tests::model1::output_path(&args.out, &id, "acadrust");
     match acadsharp_rs_tests::acadrust_model1::render(&bytes, is_dxf) {
         Ok(text) => {
-            if let Err(e) = std::fs::create_dir_all(&args.out)
-                .and_then(|()| std::fs::write(&model1_path, text))
+            if let Err(e) =
+                std::fs::create_dir_all(&args.out).and_then(|()| std::fs::write(&model1_path, text))
             {
                 eprintln!("emit-acadrust: {id}: {}: {e}", model1_path.display());
                 return ExitCode::from(1);
