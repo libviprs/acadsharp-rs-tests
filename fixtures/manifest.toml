@@ -2595,6 +2595,12 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 596016
 sha256 = "d0039feca2eda1ead9a7135854c62e0818d0ae0af842a44e1645cf8c8523fd75"
+reference_jsonl = "expected/dxf-sample-ac1009-ascii.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "64a82a0450dcda80dca9b688e5e564e7c751250cd5ccebd8478136564ccc0ce9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
 
 [[oracle_input]]
 id = "dxf-sample-ac1009-binary"
@@ -2609,6 +2615,12 @@ license = "MIT"
 license_evidence = "https://raw.githubusercontent.com/DomCR/ACadSharp/d7dc111023477d8a9fffc2153139459c95b4f345/LICENSE"
 bytes = 321864
 sha256 = "dc8612a2670d8bbb0697d6a4e51b197b6bf2055c08c95b8c646515bb63ca947f"
+reference_jsonl = "expected/dxf-sample-ac1009-binary.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "bfa2a4d56069772bc0f9fa8ab074b2fc016920871917a51b0c51f8090f890d37"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
 
 [[oracle_input]]
 id = "dxf-sample-ac1015-ascii"
