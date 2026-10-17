@@ -1,6 +1,7 @@
 using ACadSharp.Entities;
 using ACadSharp.Generator.Drawings;
 using CSMath;
+using ACadSharp.Generator.Parity;
 
 namespace ACadSharp.Generator;
 
@@ -27,5 +28,15 @@ public static class Catalog
         HatchLoops.Drawing,
         UnsupportedEntity.Drawing,
         LargeEntityCount.Drawing,
+        ArcFixture.Drawing,
+        CircleFixture.Drawing,
+        EllipseFixture.Drawing,
+        SplineFixture.Drawing,
+        LineFixture.Drawing,
+        PolylineFixture.Drawing,
+        TextFixture.Drawing,
+        InsertFixture.Drawing,
+        HatchFixture.Drawing,
+        ViewportFixture.Drawing,
     ];
 }

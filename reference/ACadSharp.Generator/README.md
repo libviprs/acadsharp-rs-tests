@@ -86,3 +86,15 @@ in the drawing's own file with a comment, not worked around quietly:
   authored into the block here.
 - `UpdateBlock` formats an ordinate dimension's measurement of 120 as `35°`, so
   that dimension's text is written out.
+
+## The parity families
+
+`Parity/` holds ten more, for the upstream-parity tests (#10): `parity_arc`,
+`parity_circle`, `parity_ellipse`, `parity_spline`, `parity_line`,
+`parity_polyline`, `parity_text`, `parity_insert`, `parity_hatch` and
+`parity_viewport`. They live apart from the seven regression drawings because they
+answer a different question (what values did the generator write, so what must the
+decoder give back), and their classes are called `*Fixture` so that `ArcFixture`
+cannot shadow `ACadSharp.Entities.Arc` inside its own file. The dimension family
+reuses `regression_dimension_fields`, which already has one of each kind.
+`tests/generator_pin.rs` holds both directories to the same rules.

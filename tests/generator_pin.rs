@@ -142,28 +142,33 @@ fn walk(dir: &std::path::Path) -> Vec<PathBuf> {
 fn every_drawing_file_is_in_the_catalog_and_every_catalog_source_exists() {
     // A drawing nobody listed is never written, and a catalog entry whose
     // `Source` names a file that is not there gives a manifest row a
-    // provenance field that points at nothing.
+    // provenance field that points at nothing. Two directories: `Drawings/` holds
+    // the H4.4 regression classes (names `regression_*`), `Parity/` the H4.2
+    // families (names `parity_*`, classes `*Fixture` so they cannot shadow the
+    // ACadSharp entity of the same name).
     let catalog = read("reference/ACadSharp.Generator/Catalog.cs");
-    let dir = root().join("reference/ACadSharp.Generator/Drawings");
-    let mut seen = 0;
-    for entry in std::fs::read_dir(&dir).unwrap() {
-        let p = entry.unwrap().path();
-        let stem = p.file_stem().unwrap().to_string_lossy().to_string();
-        assert!(
-            catalog.contains(&format!("{stem}.Drawing")),
-            "Drawings/{stem}.cs is not listed in Catalog.All"
-        );
-        let text = std::fs::read_to_string(&p).unwrap();
-        let source = format!("reference/ACadSharp.Generator/Drawings/{stem}.cs");
-        assert!(
-            text.contains(&format!("\"{source}\"")),
-            "{stem}.cs names a different Source than its own path"
-        );
-        assert!(
-            text.contains("public const string Name = \"regression_"),
-            "{stem}.cs: a drawing's name is `regression_<class>`"
-        );
-        seen += 1;
+    for (sub, prefix, want) in [("Drawings", "regression_", 7), ("Parity", "parity_", 10)] {
+        let dir = root().join("reference/ACadSharp.Generator").join(sub);
+        let mut seen = 0;
+        for entry in std::fs::read_dir(&dir).unwrap() {
+            let p = entry.unwrap().path();
+            let stem = p.file_stem().unwrap().to_string_lossy().to_string();
+            assert!(
+                catalog.contains(&format!("{stem}.Drawing")),
+                "{sub}/{stem}.cs is not listed in Catalog.All"
+            );
+            let text = std::fs::read_to_string(&p).unwrap();
+            let source = format!("reference/ACadSharp.Generator/{sub}/{stem}.cs");
+            assert!(
+                text.contains(&format!("\"{source}\"")),
+                "{stem}.cs names a different Source than its own path"
+            );
+            assert!(
+                text.contains(&format!("public const string Name = \"{prefix}")),
+                "{stem}.cs: a drawing in {sub}/ is named `{prefix}<class>`"
+            );
+            seen += 1;
+        }
+        assert_eq!(seen, want, "the drawings in {sub}/");
     }
-    assert_eq!(seen, 7, "the seven classes of H4.4");
 }
