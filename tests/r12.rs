@@ -147,7 +147,7 @@ fn run_emitter(bin: &str, name: &str, bytes: &[u8]) -> (bool, String) {
 
 /// What each engine must say about the six-byte `AC1009` stub, written out. The
 /// oracle's is the manifest's own (`oracle_exit`, frozen by `regenerate_reference.py`).
-const REFUSALS: [(&str, &str); 2] = [("acadrust", "AC1009"), ("acadsharp", "AC1009")];
+const REFUSALS: [(&str, &str); 2] = [("acadrust", "AC1009"), ("acadsharp", "does not read that drawing format")];
 
 #[test]
 fn the_ac1009_dwg_stub_is_refused_by_every_engine_that_is_asked() {
