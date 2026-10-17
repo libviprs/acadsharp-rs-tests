@@ -318,3 +318,10 @@ that is not a block reference or a dimension. An entity the drawing marks invisi
 may be absent, because the schema skips it by design. For acadrust to pass, its
 sidecar names the entity on a warning as well, so an unsupported entity (a viewport,
 a multileader) still counts.
+
+acadsharp-rs runs through the weak check over the real archive, on native x64, on all
+seven saves, and what it misses or adds is `parity/census_exceptions.toml`: the
+unsupported kinds (the oracle warns about them too, and wire 2's warning has no
+entity handle), the POINTs (libviprs-dep#83), the kinds the published viprs.1
+archive does not lower, and the four attribute handles. A finding with no row is
+red, and so is a row with no finding.
