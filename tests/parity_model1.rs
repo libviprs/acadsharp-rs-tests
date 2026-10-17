@@ -928,8 +928,8 @@ fn the_application_xdata_upstream_asserts_on_is_in_every_twin_reading() {
             let reals = coded_values(&records, "xdata", "entity/915|3REAL_APP")
                 .unwrap_or_else(|| panic!("{engine} {twin}: no 3REAL_APP on entity 915"));
             assert!(
-                reals.iter().any(|(c, _)| *c == 1040),
-                "{engine} {twin}: 3REAL_APP holds no real: {reals:?}"
+                reals.iter().any(|(c, _)| *c == 1010),
+                "{engine} {twin}: 3REAL_APP holds no point: {reals:?}"
             );
             let dir = coded_values(&records, "xdata", "entity/916|DIR_APP")
                 .unwrap_or_else(|| panic!("{engine} {twin}: no DIR_APP on entity 916"));
@@ -968,7 +968,7 @@ fn one_changed_real_in_xdata_is_red_and_names_the_owner_and_the_application() {
     for r in &mut oracle {
         if let Record::Entry(e) = r
             && e.kind == "xdata"
-            && e.name == "entity/915|3REAL_APP"
+            && e.name == "entity/91E|REAL_APP"
             && let Some(Value::List(items)) = e.get("values").cloned()
         {
             let mut items = items;
@@ -984,7 +984,7 @@ fn one_changed_real_in_xdata_is_red_and_names_the_owner_and_the_application() {
             e.set("values", Value::List(items));
         }
     }
-    assert_eq!(touched, 1, "the twin has a 1040 real on 3REAL_APP");
+    assert_eq!(touched, 1, "the twin has a 1040 real on REAL_APP");
     let after = compare(
         "ezdxf/oracle",
         &side("ezdxf", twin, &ez),
@@ -996,7 +996,7 @@ fn one_changed_real_in_xdata_is_red_and_names_the_owner_and_the_application() {
         after
             .red()
             .iter()
-            .any(|f| f.key.starts_with("xdata/entity/915|3REAL_APP.values[")),
+            .any(|f| f.key.starts_with("xdata/entity/91E|REAL_APP.values[")),
         "{:?}",
         after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
     );
@@ -1054,4 +1054,27 @@ fn one_removed_xrecord_entry_is_red_and_names_the_path() {
         "{:?}",
         after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
     );
+}
+
+/// The TrueType family name and flags R5.5.2 sends here: the `ACAD` xdata of the
+/// style `Standard` carries a 1000 (the name) and a 1071 (the flags) in every
+/// reading. The AC1014 save writes the name in upper case.
+#[test]
+fn the_standard_style_carries_its_acad_xdata_in_every_reading() {
+    for (engine, id) in every_frozen_reading() {
+        let records = model1::load_frozen(engine, id).unwrap();
+        let found = records.iter().find_map(|r| match r {
+            Record::Entry(e)
+                if e.kind == "xdata"
+                    && e.name.to_ascii_lowercase() == "table/textstyle/standard|acad" =>
+            {
+                Some(e.name.clone())
+            }
+            _ => None,
+        });
+        let key = found.unwrap_or_else(|| panic!("{engine} {id}: no ACAD xdata on the style Standard"));
+        let values = coded_values(&records, "xdata", &key).unwrap();
+        assert!(values.iter().any(|(c, _)| *c == 1000), "{engine} {id}: {values:?}");
+        assert!(values.iter().any(|(c, _)| *c == 1071), "{engine} {id}: {values:?}");
+    }
 }

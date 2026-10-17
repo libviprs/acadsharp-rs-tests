@@ -7,13 +7,14 @@
 //! the DXF writer would apply on the way out, because a record says what the
 //! reader found and not what a writer would make of it.
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use acadrust::document::{
     CadDocument, SemanticNodeV1, SemanticPartV1, SemanticReferenceV1, SemanticRelationshipKindV1,
 };
-use acadrust::objects::ObjectType;
+use acadrust::objects::{ObjectType, XRecordValue};
 use acadrust::types::{Color, Handle};
+use acadrust::xdata::XDataValue;
 
 use crate::model1::{Entry, Header, Record, Value};
 
@@ -428,12 +429,56 @@ pub fn object_class(object: &ObjectType) -> String {
     }
 }
 
+/// What the walk over the dictionaries finds: the `dictionary` and `xrecord`
+/// records, and the xdata owner (`dictionary/<path>`, `xrecord/<path>`) of every
+/// object it reached.
+#[derive(Default)]
+pub struct DictionaryTree {
+    pub dictionaries: Vec<Record>,
+    pub xrecords: Vec<Record>,
+    pub owners: HashMap<Handle, String>,
+}
+
+/// The entries of an XRECORD with the handle-valued ones last, each group in
+/// stored order. ACadSharp lists them last, and a DWG keeps them in a stream of
+/// their own, so their place among the others is not compared (docs/MODEL_1.md).
+pub fn handles_last(entries: Vec<Vec<Value>>) -> Vec<Vec<Value>> {
+    let is_handle = |e: &Vec<Value>| {
+        matches!(
+            e.first(),
+            Some(Value::Int(c)) if matches!(
+                crate::model1::value_form(*c as i32),
+                Ok(crate::model1::Form::Handle)
+            )
+        )
+    };
+    let (handles, rest): (Vec<_>, Vec<_>) = entries.into_iter().partition(is_handle);
+    rest.into_iter().chain(handles).collect()
+}
+
+/// An XRECORD value in the one written form of its group code.
+fn xrecord_value(v: &XRecordValue) -> Value {
+    let hex = |bytes: &[u8]| bytes.iter().map(|b| format!("{b:02X}")).collect::<String>();
+    match v {
+        XRecordValue::String(s) => Value::Str(s.replace("\r\n", "\n").replace('\r', "\n")),
+        XRecordValue::Double(d) => Value::Double(*d),
+        XRecordValue::Int16(i) => Value::Int(i64::from(*i)),
+        XRecordValue::Int32(i) => Value::Int(i64::from(*i)),
+        XRecordValue::Int64(i) => Value::Int(*i),
+        XRecordValue::Byte(b) => Value::Int(i64::from(*b)),
+        XRecordValue::Bool(b) => Value::Int(i64::from(*b)),
+        XRecordValue::Handle(h) => Value::Str(format!("{:X}", h.value())),
+        XRecordValue::Point3D(x, y, z) => Value::Point3([*x, *y, *z]),
+        XRecordValue::Chunk(bytes) => Value::Str(hex(bytes)),
+    }
+}
+
 /// Where one dictionary starts, and the path it is keyed under.
 fn walk_dictionary(
     doc: &CadDocument,
     handle: Handle,
     path: &str,
-    out: &mut Vec<Record>,
+    tree: &mut DictionaryTree,
     seen: &mut HashSet<Handle>,
 ) {
     let (entries, hard_owner, cloning) = match doc.objects.get(&handle) {
@@ -457,7 +502,8 @@ fn walk_dictionary(
         })
         .collect();
     listed.sort_by(|a, b| a.0.as_bytes().cmp(b.0.as_bytes()));
-    out.push(Record::Entry(Entry::new(
+    tree.owners.insert(handle, format!("dictionary/{path}"));
+    tree.dictionaries.push(Record::Entry(Entry::new(
         "dictionary",
         path,
         vec![
@@ -478,7 +524,23 @@ fn walk_dictionary(
         } else {
             format!("{path}/{key}")
         };
-        walk_dictionary(doc, *h, &child, out, seen);
+        if let Some(ObjectType::XRecord(x)) = doc.objects.get(h) {
+            tree.owners.insert(*h, format!("xrecord/{child}"));
+            tree.xrecords.push(Record::Entry(Entry::new(
+                "xrecord",
+                child.clone(),
+                vec![
+                    Value::Int(i64::from(x.cloning_flags.to_value())),
+                    Value::List(handles_last(
+                        x.entries
+                            .iter()
+                            .map(|e| vec![Value::Int(i64::from(e.code)), xrecord_value(&e.value)])
+                            .collect(),
+                    )),
+                ],
+            )));
+        }
+        walk_dictionary(doc, *h, &child, tree, seen);
     }
 }
 
@@ -512,8 +574,8 @@ fn owner_path(node: &SemanticNodeV1<'_>) -> Option<String> {
 /// the root, keyed by the path of entry keys (docs/MODEL_1.md), and per
 /// extension dictionary of a table entry or a layout. Those of entities are
 /// keyed by handle only and are not written.
-pub fn dictionary_records(doc: &CadDocument) -> Vec<Record> {
-    let mut out = Vec::new();
+pub fn dictionary_tree(doc: &CadDocument) -> DictionaryTree {
+    let mut out = DictionaryTree::default();
     let mut seen = HashSet::new();
     walk_dictionary(
         doc,
@@ -545,13 +607,101 @@ pub fn dictionary_records(doc: &CadDocument) -> Vec<Record> {
     out
 }
 
+/// The `dictionary` records alone.
+pub fn dictionary_records(doc: &CadDocument) -> Vec<Record> {
+    dictionary_tree(doc).dictionaries
+}
+
+/// One xdata value as its group code and its written form.
+fn xdata_value(v: &XDataValue) -> (i64, Value) {
+    let hex = |bytes: &[u8]| bytes.iter().map(|b| format!("{b:02X}")).collect::<String>();
+    let p = |v: &acadrust::types::Vector3| Value::Point3([v.x, v.y, v.z]);
+    let s = |v: &str| Value::Str(v.replace("\r\n", "\n").replace('\r', "\n"));
+    match v {
+        XDataValue::String(x) => (1000, s(x)),
+        XDataValue::ControlString(x) => (1002, s(x)),
+        XDataValue::LayerName(x) => (1003, s(x)),
+        XDataValue::BinaryData(b) => (1004, Value::Str(hex(b))),
+        XDataValue::Handle(h) => (1005, Value::Str(format!("{:X}", h.value()))),
+        XDataValue::Point3D(x) => (1010, p(x)),
+        XDataValue::Position3D(x) => (1011, p(x)),
+        XDataValue::Displacement3D(x) => (1012, p(x)),
+        XDataValue::Direction3D(x) => (1013, p(x)),
+        XDataValue::Real(x) => (1040, Value::Double(*x)),
+        XDataValue::Distance(x) => (1041, Value::Double(*x)),
+        XDataValue::ScaleFactor(x) => (1042, Value::Double(*x)),
+        XDataValue::Integer16(x) => (1070, Value::Int(i64::from(*x))),
+        XDataValue::Integer32(x) => (1071, Value::Int(i64::from(*x))),
+    }
+}
+
+fn xdata_record(owner: &str, appid: &str, values: &[XDataValue]) -> Record {
+    Record::Entry(Entry::new(
+        "xdata",
+        format!("{owner}|{appid}"),
+        vec![
+            Value::Str(owner.to_string()),
+            Value::Str(appid.to_string()),
+            Value::List(
+                values
+                    .iter()
+                    .map(|v| {
+                        let (code, value) = xdata_value(v);
+                        vec![Value::Int(code), value]
+                    })
+                    .collect(),
+            ),
+        ],
+    ))
+}
+
+/// One `xdata` record per (owner, application): the entities' decoded extended
+/// data, and what the inventory visits as `NonEntityExtendedData`. A payload the
+/// inventory could not decode is not written, and the `excluded` rows of
+/// `parity/MODEL1.toml` name it.
+pub fn xdata_records(doc: &CadDocument, tree: &DictionaryTree) -> Vec<Record> {
+    let mut out: Vec<Record> = Vec::new();
+    for e in doc.entities() {
+        let common = e.common();
+        let owner = format!("entity/{:X}", common.handle.value());
+        for rec in common.extended_data.records() {
+            out.push(xdata_record(&owner, &rec.application_name, &rec.values));
+        }
+    }
+    doc.semantic_inventory_v1().visit(|part| {
+        let SemanticPartV1::NonEntityExtendedData {
+            owner: SemanticReferenceV1::Resolved(node),
+            application: Some(app),
+            values: Some(values),
+        } = part
+        else {
+            return;
+        };
+        let owner = match &node {
+            SemanticNodeV1::Object(ObjectType::Dictionary(d)) => tree.owners.get(&d.handle).cloned(),
+            SemanticNodeV1::Object(ObjectType::DictionaryWithDefault(d)) => {
+                tree.owners.get(&d.handle).cloned()
+            }
+            SemanticNodeV1::Object(ObjectType::XRecord(x)) => tree.owners.get(&x.handle).cloned(),
+            other => owner_path(other),
+        };
+        if let Some(owner) = owner {
+            out.push(xdata_record(&owner, &app.name, &values));
+        }
+    });
+    out
+}
+
 /// What `emit-acadrust` writes beside the schema 1 stream.
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     let mut all = header_records(doc);
     all.extend(layer_records(doc));
     all.extend(linetype_records(doc));
     all.extend(textstyle_records(doc));
-    all.extend(dictionary_records(doc));
+    let tree = dictionary_tree(doc);
+    all.extend(xdata_records(doc, &tree));
+    all.extend(tree.dictionaries);
+    all.extend(tree.xrecords);
     all
 }
 

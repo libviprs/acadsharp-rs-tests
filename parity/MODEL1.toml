@@ -437,3 +437,138 @@ fixtures = [
 ]
 reason = "on the AC1014 to AC1021 saves the oracle lists the extension dictionary of the dynamic block's record (the DXF twins have none, so the DWG is the only place to ask) and acadrust lists none; the saves from AC1024 on agree"
 issue = "libviprs/acadsharp-rs-tests#129"
+
+# ---- excluded: acadrust's DXF reader keeps the xdata of an entity and of nothing else
+[[excluded]]
+engine = "acadrust"
+names = [
+  "xdata/table/*", "xdata/layout/*", "xdata/dictionary/*"
+]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii",
+  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "acadrust's DXF reader keeps the extended data of an entity, and of a STYLE or DIMSTYLE entry only the AcadAnnotative flag as a bool, so the xdata of the table entries, layouts, dictionaries and XRECORDs of a DXF is not there"
+issue = "libviprs/acadsharp-rs-tests#134"
+
+# ---- excluded: the same gap for the XRECORDs inside the extension dictionaries
+[[excluded]]
+engine = "acadrust"
+names = [
+  "xrecord/table/*", "xrecord/layout/*"
+]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii",
+  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "acadrust's DXF reader keeps no extension dictionary of a table entry or a layout, so the XRECORDs in them are not there either"
+issue = "libviprs/acadsharp-rs-tests#127"
+
+# ---- excluded: the anonymous blocks are named differently by the readers
+[[excluded]]
+engine = "oracle"
+pairs = ["oracle/acadrust"]
+names = [
+  "xdata/table/block_record/*U|*", "xdata/table/block_record/*U0|*", "xdata/table/block_record/*U1|*",
+  "xrecord/table/block_record/*U/*", "xrecord/table/block_record/*U0/*", "xrecord/table/block_record/*U1/*"
+]
+reason = "acadrust names the anonymous blocks of the DWG saves *U, *U0 and *U1 where the oracle (and the DXF twins, per ezdxf) name them *U17 to *U19; the block_record kind is where that is settled, and the extended data and XRECORDs only follow the name"
+issue = "libviprs/acadsharp-rs-tests#37"
+
+[[excluded]]
+engine = "acadrust"
+pairs = ["oracle/acadrust"]
+names = [
+  "xdata/table/block_record/*U18|*", "xdata/table/block_record/*U19|*",
+  "xrecord/table/block_record/*U18/*", "xrecord/table/block_record/*U19/*"
+]
+reason = "acadrust names the anonymous blocks of the DWG saves *U, *U0 and *U1 where the oracle (and the DXF twins, per ezdxf) name them *U17 to *U19; the block_record kind is where that is settled, and the extended data and XRECORDs only follow the name"
+issue = "libviprs/acadsharp-rs-tests#37"
+
+# ---- excluded: neither ACadSharp nor acadrust lists the AcDbAttr xdata of an attribute
+[[excluded]]
+engine = "oracle"
+pairs = ["ezdxf/oracle"]
+names = ["xdata/entity/*|AcDbAttr"]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii",
+  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "ezdxf keeps the AcDbAttr extended data of an attribute (two 1070 values) and ACadSharp does not list it, in the DXF twins; acadrust agrees with ACadSharp on the DWG saves, where neither lists it either"
+issue = "libviprs/acadsharp-rs-tests#40"
+
+[[excluded]]
+engine = "acadrust"
+pairs = ["ezdxf/acadrust"]
+names = ["xdata/entity/*|AcDbAttr"]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii",
+  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "ezdxf keeps the AcDbAttr extended data of an attribute (two 1070 values) and acadrust does not list it, in the DXF twins; ACadSharp agrees with acadrust on the DWG saves, where neither lists it either"
+issue = "libviprs/acadsharp-rs-tests#40"
+
+# ---- excluded: acadrust's DWG reader and the dynamic block's extension dictionary
+[[excluded]]
+engine = "acadrust"
+pairs = ["oracle/acadrust"]
+names = [
+  "xdata/table/block_record/my-dynamic-block|*", "xrecord/table/block_record/my-dynamic-block/*"
+]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021"
+]
+reason = "the extended data and XRECORDs of the dynamic block's record on the AC1014 to AC1021 saves: the oracle lists them (with the extension dictionary they hang off) and acadrust does not"
+issue = "libviprs/acadsharp-rs-tests#129"
+
+# ---- known: acadrust and the AcDs schema XRECORDs
+[[known]]
+names = [
+  "xrecord/AcDsDecomposeData/AcDsSchemas/*"
+]
+pairs = ["oracle/acadrust", "ezdxf/acadrust"]
+reason = "acadrust reads each AcDs schema XRECORD with a cloning flag of 0 and 25 entries where ezdxf reads 1 and 31 and the oracle agrees with ezdxf on the DXF; not root-caused in acadrust"
+issue = "libviprs/acadsharp-rs-tests#137"
+
+# ---- known: the AC1014 save
+[[known]]
+names = [
+  "xrecord/ACDBHEADERROUNDTRIPXREC/UCSBASE.entries.len", "xrecord/ACDBHEADERROUNDTRIPXREC/UCSORTHOREF.entries.len",
+  "xrecord/ACDBHEADERROUNDTRIPXREC/PUCSBASE.entries.len", "xrecord/ACDBHEADERROUNDTRIPXREC/PUCSORTHOREF.entries.len"
+]
+pairs = ["oracle/acadrust"]
+fixtures = ["acadsharp-ac1014"]
+reason = "on the AC1014 save ACadSharp lists no entry in four header round trip XRECORDs where acadrust lists one; the save has no DXF twin to say which is right"
+issue = "libviprs/acadsharp-rs-tests#128"
+
+# ---- excluded and known: what two saves of one drawing hold
+[[excluded]]
+engine = "oracle"
+pairs = ["dxf-dwg:oracle"]
+names = [
+  "xdata/table/*", "xdata/layout/*", "xrecord/table/*", "xrecord/layout/*",
+  "xdata/entity/*|ACAD", "xdata/entity/*|ACAD_SPLINE_DATA",
+  "xrecord/AcDsDecomposeData/*"
+]
+reason = "AutoCAD wrote the DWG and its DXF twin at different moments and the two do not hold the same extension dictionaries, the same ACAD extended data on entities, or the same AcDs schema XRECORDs (keyed by a pointer value of the saving process); ezdxf agrees with the oracle on the DXF and acadrust with the oracle on the DWG"
+issue = "libviprs/acadsharp-rs-tests#31"
+
+[[excluded]]
+engine = "acadrust"
+pairs = ["dxf-dwg:acadrust"]
+names = [
+  "xdata/table/*", "xdata/layout/*", "xrecord/table/*", "xrecord/layout/*",
+  "xdata/entity/*|ACAD", "xdata/entity/*|ACAD_SPLINE_DATA",
+  "xrecord/AcDsDecomposeData/*"
+]
+reason = "AutoCAD wrote the DWG and its DXF twin at different moments and the two do not hold the same ACAD extended data on entities or the same AcDs schema XRECORDs (keyed by a pointer value of the saving process)"
+issue = "libviprs/acadsharp-rs-tests#31"
+
+[[known]]
+names = [
+  "xdata/entity/*|ACAD.*", "xrecord/ACDB_RECOMPOSE_DATA.*", "xrecord/ACAD_LAST_SAVED_VERSION_INFO.*",
+  "xrecord/DWGPROPS.*"
+]
+pairs = ["dxf-dwg:oracle", "dxf-dwg:acadrust"]
+reason = "AutoCAD wrote the DWG and its DXF twin at different moments: the handles in ACDB_RECOMPOSE_DATA, the save information in ACAD_LAST_SAVED_VERSION_INFO and the ACAD extended data AutoCAD writes on annotation entities are per save; ezdxf agrees with the oracle on the DXF and acadrust with the oracle on the DWG"
+issue = "libviprs/acadsharp-rs-tests#31"
