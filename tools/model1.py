@@ -346,6 +346,121 @@ def textstyle_lines(doc) -> list[tuple[str, str, str]]:
     return out
 
 
+# The `$DIM*` fields of a `dimstyle` record, in the order docs/MODEL_1.md gives
+# them, with the type each is written as.
+DIMENSION_FIELDS = [
+    ("DIMPOST", "s"),
+    ("DIMAPOST", "s"),
+    ("DIMSCALE", "d"),
+    ("DIMASZ", "d"),
+    ("DIMEXO", "d"),
+    ("DIMDLI", "d"),
+    ("DIMEXE", "d"),
+    ("DIMRND", "d"),
+    ("DIMDLE", "d"),
+    ("DIMTP", "d"),
+    ("DIMTM", "d"),
+    ("DIMFXL", "d"),
+    ("DIMJOGANG", "d"),
+    ("DIMTFILL", "i"),
+    ("DIMTOL", "i"),
+    ("DIMLIM", "i"),
+    ("DIMTIH", "i"),
+    ("DIMTOH", "i"),
+    ("DIMSE1", "i"),
+    ("DIMSE2", "i"),
+    ("DIMTAD", "i"),
+    ("DIMZIN", "i"),
+    ("DIMAZIN", "i"),
+    ("DIMARCSYM", "i"),
+    ("DIMTXT", "d"),
+    ("DIMCEN", "d"),
+    ("DIMTSZ", "d"),
+    ("DIMALTF", "d"),
+    ("DIMLFAC", "d"),
+    ("DIMTVP", "d"),
+    ("DIMTFAC", "d"),
+    ("DIMGAP", "d"),
+    ("DIMALTRND", "d"),
+    ("DIMALT", "i"),
+    ("DIMALTD", "i"),
+    ("DIMTOFL", "i"),
+    ("DIMSAH", "i"),
+    ("DIMTIX", "i"),
+    ("DIMSOXD", "i"),
+    ("DIMCLRD", "i"),
+    ("DIMCLRE", "i"),
+    ("DIMCLRT", "i"),
+    ("DIMADEC", "i"),
+    ("DIMUNIT", "i"),
+    ("DIMDEC", "i"),
+    ("DIMTDEC", "i"),
+    ("DIMALTU", "i"),
+    ("DIMALTTD", "i"),
+    ("DIMAUNIT", "i"),
+    ("DIMFRAC", "i"),
+    ("DIMLUNIT", "i"),
+    ("DIMDSEP", "i"),
+    ("DIMTMOVE", "i"),
+    ("DIMJUST", "i"),
+    ("DIMSD1", "i"),
+    ("DIMSD2", "i"),
+    ("DIMTOLJ", "i"),
+    ("DIMTZIN", "i"),
+    ("DIMALTZ", "i"),
+    ("DIMALTTZ", "i"),
+    ("DIMFIT", "i"),
+    ("DIMUPT", "i"),
+    ("DIMATFIT", "i"),
+    ("DIMFXLON", "i"),
+    ("DIMTXTDIRECTION", "i"),
+    ("DIMTXSTY", "s"),
+    ("DIMLDRBLK", "s"),
+    ("DIMBLK", "s"),
+    ("DIMBLK1", "s"),
+    ("DIMBLK2", "s"),
+    ("DIMLTYPE", "s"),
+    ("DIMLTEX1", "s"),
+    ("DIMLTEX2", "s"),
+    ("DIMLWD", "i"),
+    ("DIMLWE", "i"),
+]
+
+
+def dimstyle_lines(doc) -> list[tuple[str, str, str]]:
+    """One `dimstyle` record per DIMSTYLE entry, keyed by name (docs/MODEL_1.md).
+
+    A DXF leaves a code out when it holds the default, and the default is not a
+    value the file gave, so a field the entry does not write is `null`. ezdxf
+    already resolves a handle-valued field (text style, arrow blocks, linetypes)
+    to its name, and the angle is converted from the DXF's degrees to radians.
+    """
+    out = []
+    for ds in doc.dimstyles:
+        d = ds.dxf
+        name = d.name
+        if not name:
+            continue
+        fields = [("name", quote(name))]
+        for field, kind in DIMENSION_FIELDS:
+            attr = field[1:].lower() if field.startswith("$") else field.lower()
+            if not d.hasattr(attr):
+                text = "null"
+            else:
+                v = d.get(attr)
+                if kind == "s":
+                    text = quote(normalize_newlines(str(v)))
+                elif kind == "i":
+                    text = str(int(v))
+                else:
+                    f = float(v)
+                    text = real(math.radians(f) if attr == "dimjogang" else f)
+            fields.append((field, text))
+        fields.append(("annotative", "true" if annotative(ds) else "false"))
+        out.append(line("dimstyle", name, fields))
+    return out
+
+
 def command_extract_ezdxf(args) -> int:
     import ezdxf  # only here: `freeze` and `verify` must run without it
 
@@ -361,7 +476,7 @@ def command_extract_ezdxf(args) -> int:
             return 1
         doc = ezdxf.readfile(str(path))
         records, skipped = header_lines(doc)
-        text = encode(records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc))
+        text = encode(records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc) + dimstyle_lines(doc))
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
         print(f"{rid}: {len(text.splitlines())} records")

@@ -29,6 +29,10 @@ pub enum Value {
     Point3([f64; 3]),
     /// A list of records, each one a value per field of the element schema.
     List(Vec<Vec<Value>>),
+    /// The file does not store this field, written `null`. Only a reader of a
+    /// DXF can say so: AutoCAD leaves a code out when it holds the default, and
+    /// the default is not a value the file gave. Never in a header record.
+    Absent,
 }
 
 impl Value {
@@ -42,6 +46,7 @@ impl Value {
             Self::Point2(_) => "point2",
             Self::Point3(_) => "point3",
             Self::List(_) => "list",
+            Self::Absent => "null",
         }
     }
 
@@ -55,6 +60,7 @@ impl Value {
             Self::Point2([x, y]) => format!("[{},{}]", r(*x)?, r(*y)?),
             Self::Point3([x, y, z]) => format!("[{},{},{}]", r(*x)?, r(*y)?, r(*z)?),
             Self::List(_) => return Err("a list is written through its schema".into()),
+            Self::Absent => "null".to_string(),
         })
     }
 
@@ -128,9 +134,91 @@ const TEXTSTYLE: Schema = Schema {
     ],
 };
 
+const DIMSTYLE: Schema = Schema {
+    kind: "dimstyle",
+    fields: &[
+        ("$DIMPOST", Ty::Str),
+        ("$DIMAPOST", Ty::Str),
+        ("$DIMSCALE", Ty::Double),
+        ("$DIMASZ", Ty::Double),
+        ("$DIMEXO", Ty::Double),
+        ("$DIMDLI", Ty::Double),
+        ("$DIMEXE", Ty::Double),
+        ("$DIMRND", Ty::Double),
+        ("$DIMDLE", Ty::Double),
+        ("$DIMTP", Ty::Double),
+        ("$DIMTM", Ty::Double),
+        ("$DIMFXL", Ty::Double),
+        ("$DIMJOGANG", Ty::Double),
+        ("$DIMTFILL", Ty::Int),
+        ("$DIMTOL", Ty::Int),
+        ("$DIMLIM", Ty::Int),
+        ("$DIMTIH", Ty::Int),
+        ("$DIMTOH", Ty::Int),
+        ("$DIMSE1", Ty::Int),
+        ("$DIMSE2", Ty::Int),
+        ("$DIMTAD", Ty::Int),
+        ("$DIMZIN", Ty::Int),
+        ("$DIMAZIN", Ty::Int),
+        ("$DIMARCSYM", Ty::Int),
+        ("$DIMTXT", Ty::Double),
+        ("$DIMCEN", Ty::Double),
+        ("$DIMTSZ", Ty::Double),
+        ("$DIMALTF", Ty::Double),
+        ("$DIMLFAC", Ty::Double),
+        ("$DIMTVP", Ty::Double),
+        ("$DIMTFAC", Ty::Double),
+        ("$DIMGAP", Ty::Double),
+        ("$DIMALTRND", Ty::Double),
+        ("$DIMALT", Ty::Int),
+        ("$DIMALTD", Ty::Int),
+        ("$DIMTOFL", Ty::Int),
+        ("$DIMSAH", Ty::Int),
+        ("$DIMTIX", Ty::Int),
+        ("$DIMSOXD", Ty::Int),
+        ("$DIMCLRD", Ty::Int),
+        ("$DIMCLRE", Ty::Int),
+        ("$DIMCLRT", Ty::Int),
+        ("$DIMADEC", Ty::Int),
+        ("$DIMUNIT", Ty::Int),
+        ("$DIMDEC", Ty::Int),
+        ("$DIMTDEC", Ty::Int),
+        ("$DIMALTU", Ty::Int),
+        ("$DIMALTTD", Ty::Int),
+        ("$DIMAUNIT", Ty::Int),
+        ("$DIMFRAC", Ty::Int),
+        ("$DIMLUNIT", Ty::Int),
+        ("$DIMDSEP", Ty::Int),
+        ("$DIMTMOVE", Ty::Int),
+        ("$DIMJUST", Ty::Int),
+        ("$DIMSD1", Ty::Int),
+        ("$DIMSD2", Ty::Int),
+        ("$DIMTOLJ", Ty::Int),
+        ("$DIMTZIN", Ty::Int),
+        ("$DIMALTZ", Ty::Int),
+        ("$DIMALTTZ", Ty::Int),
+        ("$DIMFIT", Ty::Int),
+        ("$DIMUPT", Ty::Int),
+        ("$DIMATFIT", Ty::Int),
+        ("$DIMFXLON", Ty::Int),
+        ("$DIMTXTDIRECTION", Ty::Int),
+        ("$DIMTXSTY", Ty::Str),
+        ("$DIMLDRBLK", Ty::Str),
+        ("$DIMBLK", Ty::Str),
+        ("$DIMBLK1", Ty::Str),
+        ("$DIMBLK2", Ty::Str),
+        ("$DIMLTYPE", Ty::Str),
+        ("$DIMLTEX1", Ty::Str),
+        ("$DIMLTEX2", Ty::Str),
+        ("$DIMLWD", Ty::Int),
+        ("$DIMLWE", Ty::Int),
+        ("annotative", Ty::Bool),
+    ],
+};
+
 /// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
 /// and one name here, so a new kind never touches the others.
-pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE];
+pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE, DIMSTYLE];
 
 /// One segment of a linetype's pattern, in file order.
 const SEGMENT: &[(&str, Ty)] = &[
@@ -278,6 +366,8 @@ fn kind_index(kind: &str) -> Option<usize> {
 
 fn render_typed(v: &Value, ty: &Ty) -> Result<String, String> {
     match (ty, v) {
+        (Ty::List(_), Value::Absent) => Err("a list is always stored".into()),
+        (_, Value::Absent) => Ok("null".to_string()),
         (Ty::Str, Value::Str(_))
         | (Ty::Int, Value::Int(_))
         | (Ty::Double, Value::Double(_))
@@ -355,6 +445,9 @@ pub fn render_stream(records: &[Record]) -> Result<String, String> {
 
 fn parse_typed(j: &Json, ty: &Ty, what: &str) -> Result<Value, String> {
     let num = |j: &Json| j.as_f64().ok_or(format!("{what}: not a number"));
+    if j.is_null() && !matches!(ty, Ty::List(_)) {
+        return Ok(Value::Absent);
+    }
     Ok(match ty {
         Ty::Str => Value::Str(j.as_str().ok_or(format!("{what}: not a string"))?.into()),
         Ty::Int => Value::Int(j.as_i64().ok_or(format!("{what}: not an integer"))?),
@@ -898,6 +991,23 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                     let Some(vy) = theirs.get(field.as_str()) else {
                         continue;
                     };
+                    // A field the file does not store is not a value to compare.
+                    if matches!(vx, Value::Absent) || matches!(vy, Value::Absent) {
+                        let engine = if matches!(vx, Value::Absent) {
+                            a.engine
+                        } else {
+                            b.engine
+                        };
+                        report.findings.push(Finding {
+                            kind: FindingKind::Value,
+                            key: format!("{name}.{field}"),
+                            detail: format!("left out: the file {engine} read does not store it"),
+                            disposition: Disposition::Excluded,
+                            issue: String::new(),
+                            excluded: Some(engine.to_string()),
+                        });
+                        continue;
+                    }
                     // A field an engine cannot produce is written as its zero
                     // value there and left out of the comparison, and the
                     // report counts it.

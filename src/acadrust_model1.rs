@@ -379,12 +379,119 @@ pub fn textstyle_records(doc: &CadDocument) -> Vec<Record> {
         .collect()
 }
 
+/// One `dimstyle` record per DIMSTYLE entry (docs/MODEL_1.md): the `$DIM*`
+/// fields, in the order the document gives them. The handle-valued ones are
+/// resolved to names through the block record and linetype tables, and a colour
+/// is its index, or -1 when acadrust holds a true colour beside it.
+pub fn dimstyle_records(doc: &CadDocument) -> Vec<Record> {
+    let block_name = |h: acadrust::types::Handle| {
+        doc.block_records
+            .iter()
+            .find(|b| b.handle == h)
+            .map(|b| b.name.clone())
+            .unwrap_or_default()
+    };
+    let linetype_name = |h: acadrust::types::Handle| {
+        doc.line_types
+            .iter()
+            .find(|l| l.handle == h)
+            .map(|l| l.name.clone())
+            .unwrap_or_default()
+    };
+    doc.dim_styles
+        .iter()
+        .filter(|t| !t.name.is_empty())
+        .map(|t| {
+            let mut values = vec![
+        Value::Str(t.dimpost.clone()),
+        Value::Str(t.dimapost.clone()),
+        Value::Double(t.dimscale),
+        Value::Double(t.dimasz),
+        Value::Double(t.dimexo),
+        Value::Double(t.dimdli),
+        Value::Double(t.dimexe),
+        Value::Double(t.dimrnd),
+        Value::Double(t.dimdle),
+        Value::Double(t.dimtp),
+        Value::Double(t.dimtm),
+        Value::Double(t.dimfxl),
+        Value::Double(t.dimjogang),
+        Value::Int(i64::from(t.dimtfill)),
+        Value::Int(i64::from(t.dimtol)),
+        Value::Int(i64::from(t.dimlim)),
+        Value::Int(i64::from(t.dimtih)),
+        Value::Int(i64::from(t.dimtoh)),
+        Value::Int(i64::from(t.dimse1)),
+        Value::Int(i64::from(t.dimse2)),
+        Value::Int(i64::from(t.dimtad)),
+        Value::Int(i64::from(t.dimzin)),
+        Value::Int(i64::from(t.dimazin)),
+        Value::Int(i64::from(t.dimarcsym)),
+        Value::Double(t.dimtxt),
+        Value::Double(t.dimcen),
+        Value::Double(t.dimtsz),
+        Value::Double(t.dimaltf),
+        Value::Double(t.dimlfac),
+        Value::Double(t.dimtvp),
+        Value::Double(t.dimtfac),
+        Value::Double(t.dimgap),
+        Value::Double(t.dimaltrnd),
+        Value::Int(i64::from(t.dimalt)),
+        Value::Int(i64::from(t.dimaltd)),
+        Value::Int(i64::from(t.dimtofl)),
+        Value::Int(i64::from(t.dimsah)),
+        Value::Int(i64::from(t.dimtix)),
+        Value::Int(i64::from(t.dimsoxd)),
+        Value::Int(if t.dimclrd_true_color.is_some() { -1 } else { i64::from(t.dimclrd) }),
+        Value::Int(if t.dimclre_true_color.is_some() { -1 } else { i64::from(t.dimclre) }),
+        Value::Int(if t.dimclrt_true_color.is_some() { -1 } else { i64::from(t.dimclrt) }),
+        Value::Int(i64::from(t.dimadec)),
+        Value::Int(i64::from(t.dimunit)),
+        Value::Int(i64::from(t.dimdec)),
+        Value::Int(i64::from(t.dimtdec)),
+        Value::Int(i64::from(t.dimaltu)),
+        Value::Int(i64::from(t.dimalttd)),
+        Value::Int(i64::from(t.dimaunit)),
+        Value::Int(i64::from(t.dimfrac)),
+        Value::Int(i64::from(t.dimlunit)),
+        Value::Int(i64::from(t.dimdsep)),
+        Value::Int(i64::from(t.dimtmove)),
+        Value::Int(i64::from(t.dimjust)),
+        Value::Int(i64::from(t.dimsd1)),
+        Value::Int(i64::from(t.dimsd2)),
+        Value::Int(i64::from(t.dimtolj)),
+        Value::Int(i64::from(t.dimtzin)),
+        Value::Int(i64::from(t.dimaltz)),
+        Value::Int(i64::from(t.dimalttz)),
+        Value::Int(i64::from(t.dimfit)),
+        Value::Int(i64::from(t.dimupt)),
+        Value::Int(i64::from(t.dimatfit)),
+        Value::Int(i64::from(t.dimfxlon)),
+        Value::Int(i64::from(t.dimtxtdirection)),
+        Value::Str(t.dimtxsty.clone()),
+        Value::Str(block_name(t.dimldrblk)),
+        Value::Str(t.dimblk_name.clone()),
+        Value::Str(t.dimblk1_name.clone()),
+        Value::Str(t.dimblk2_name.clone()),
+        Value::Str(linetype_name(t.dimltex_handle)),
+        Value::Str(linetype_name(t.dimltex1_handle)),
+        Value::Str(linetype_name(t.dimltex2_handle)),
+        Value::Int(i64::from(t.dimlwd)),
+        Value::Int(i64::from(t.dimlwe)),
+            ];
+            values.push(Value::Bool(t.annotative));
+            Record::Entry(Entry::new("dimstyle", t.name.clone(), values))
+        })
+        .collect()
+}
+
 /// What `emit-acadrust` writes beside the schema 1 stream.
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     let mut all = header_records(doc);
     all.extend(layer_records(doc));
     all.extend(linetype_records(doc));
     all.extend(textstyle_records(doc));
+    all.extend(dimstyle_records(doc));
     all
 }
 
