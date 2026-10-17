@@ -368,6 +368,7 @@ fn one_changed_header_value_is_one_diff_and_names_the_variable() {
     let Some(mine) = gate(acadrust(id, &out_dir())) else {
         return;
     };
+    let mine = mine.expect("acadrust reads this save");
     let mut oracle = model1::load_frozen("oracle", id).unwrap();
     let untouched = compare(
         "oracle/acadrust",
