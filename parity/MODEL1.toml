@@ -37,23 +37,73 @@ pairs = ["ezdxf/oracle", "oracle/acadrust"]
 reason = "ACadSharp's DXF reader reports a handle seed 4 above the one the DXF holds, which ezdxf and acadrust report as written"
 issue = "libviprs/acadsharp-rs-tests#99"
 
-# ---- known: ACadSharp's DWG reader
+# ---- known: ACadSharp's DWG reader (upstream, v3.7.1)
+# The rule for these: the oracle says what ACadSharp reads, so an upstream defect is
+# listed and never normalised away, and the authority for what the file holds is the
+# AutoCAD DXF twin of the drawing plus the other independent DWG reader (acadrust).
+# Where both agree against ACadSharp's DWG reader, the defect is ACadSharp's, and the
+# line numbers are those of DwgHeaderReader.cs at v3.7.1.
 [[known]]
 names = [
-  "$DIMALTMZF", "$DIMLTEX1", "$DIMLTEX2", "$DIMLTYPE", "$DIMMZF", "$INTERFERECOLOR"
-]
-pairs = ["dxf-dwg:oracle"]
-reason = "ACadSharp's DWG reader gives a different value from its own DXF reader for the same drawing (the raw lineweight index 29 for $CELWEIGHT, the code page in lower case, defaults for the extended names, measurement and xedit flags and for the dimension linetypes), and acadrust agrees with the DXF"
-issue = "libviprs/acadsharp-rs-tests#99"
-
-# ---- known: ACadSharp's DWG reader
-[[known]]
-names = [
-  "$CELWEIGHT", "$DWGCODEPAGE", "$EXTNAMES", "$MEASUREMENT", "$XEDIT"
+  "$CELWEIGHT"
 ]
 pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
-reason = "ACadSharp's DWG reader gives a different value from its own DXF reader for the same drawing (the raw lineweight index 29 for $CELWEIGHT, the code page in lower case, defaults for the extended names, measurement and xedit flags and for the dimension linetypes), and acadrust agrees with the DXF"
+reason = "DwgHeaderReader.cs:906 casts the lineweight index of the flags word (flags & 0x1F) straight to its LineWeightType, so ByLayer (index 29) is reported as 29 where the DXF twin, ezdxf and acadrust say -1; the DWG stores an index and ACadSharp never maps it to hundredths of a millimetre"
 issue = "libviprs/acadsharp-rs-tests#99"
+
+# ---- known: ACadSharp's DWG reader (upstream, v3.7.1)
+[[known]]
+names = [
+  "$EXTNAMES", "$XEDIT"
+]
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "DwgHeaderReader.cs:914-916 tests a masked flag against 1 (flags & 0x400 == 1, flags & 0x800 == 1), which is never true for a mask that is not bit 0, so both read as false whatever the file holds; the DXF twin, ezdxf and acadrust all say true"
+issue = "libviprs/acadsharp-rs-tests#99"
+
+# ---- known: ACadSharp's DWG reader (upstream, v3.7.1)
+[[known]]
+names = [
+  "$MEASUREMENT"
+]
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "DwgHeaderReader.cs at v3.7.1 never reads the measurement flag, so ACadSharp reports its own default (1, metric) where the DXF twin, ezdxf and acadrust say 0"
+issue = "libviprs/acadsharp-rs-tests#99"
+
+# ---- known: ACadSharp's DWG reader (upstream, v3.7.1)
+[[known]]
+names = [
+  "$DWGCODEPAGE"
+]
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "the same code page, spelled ansi_1252 by ACadSharp's DWG reader (its own code page table) and ANSI_1252 by the DXF, ezdxf and acadrust; a difference of spelling and not of value, listed rather than folded so the oracle stays what ACadSharp says"
+issue = "libviprs/acadsharp-rs-tests#99"
+
+# ---- known: ACadSharp's DWG reader (upstream, v3.7.1)
+[[known]]
+names = [
+  "$DIMLTEX1", "$DIMLTEX2", "$DIMLTYPE"
+]
+pairs = ["dxf-dwg:oracle"]
+reason = "DwgHeaderReader.cs:806-811 reads the three dimension linetype handles into DwgHeaderHandlesCollection and nothing resolves them into the header, so ACadSharp reports the default ByBlock where the DXF twin holds BATTING, TRACKS and ZIGZAG"
+issue = "libviprs/acadsharp-rs-tests#99"
+
+# ---- known: ACadSharp's DWG reader (upstream, v3.7.1)
+[[known]]
+names = [
+  "$INTERFERECOLOR"
+]
+pairs = ["dxf-dwg:oracle"]
+reason = "for R2004 DwgHeaderReader.cs:957 assigns the value read for INTERSECTIONCOLOR to InterfereColor (257, by layer), where the DXF holds 1; the R2007 branch (line 1047) reads the colour properly"
+issue = "libviprs/acadsharp-rs-tests#99"
+
+# ---- known: not stored by the DXF twin
+[[known]]
+names = [
+  "$DIMALTMZF", "$DIMMZF"
+]
+pairs = ["dxf-dwg:oracle"]
+reason = "the AutoCAD DXF of R2010 and later does not write them (ezdxf's skipped list), so ACadSharp's DXF reader reports its default 0.0 where its DWG reader reports the 100.0 the DWG stores; the DWG is the authority, and neither reader is wrong"
+issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: not in the DWG header
 [[known]]
@@ -61,25 +111,25 @@ names = [
   "$LASTSAVEDBY"
 ]
 pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle", "oracle/acadrust"]
-reason = "the DXF holds the user who saved it and neither DWG reader gets it from the DWG header (ACadSharp reports its own default, acadrust the empty string)"
+reason = "the DXF holds the user who saved it, but the DWG header has no slot for $LASTSAVEDBY (the name lives in the summary information section), so neither DWG header reader can read it and ACadSharp reports its own default (ACadSharp) where acadrust reports the empty string; the DXF twin is the only file that stores it in the header"
 issue = "libviprs/acadsharp-rs-tests#101"
 
-# ---- known: undecided
+# ---- known: a DWG colour the DXF cannot hold
 [[known]]
 names = [
   "$CECOLOR"
 ]
 pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle"]
-reason = "the readers disagree and the data does not say which is right: the DXF holds colour index 193 for $CECOLOR where both DWG readers of AC1018 and later give a true colour, and $XCLIPFRAME is written under group code 290 in the DXF and 280 by ACadSharp"
+reason = "decided, neither reader is wrong. The CMC in the DWG header of AC1018 and later is index 0 with the colour word 0xC29B42EC, method byte 0xC2 (true colour) and RGB 155,66,236, read the same way by ACadSharp and acadrust. The DXF header can only say group code 62, an index, and AutoCAD wrote 193 (palette entry 124,82,165), which is not the nearest index to that RGB (181), so it cannot be derived from the DWG bytes. The DWG is the authority for a header colour (it is the richer file), and a dxf-dwg pair of $CECOLOR is listed, never excused by rounding; AC1015 stores a plain index and agrees"
 issue = "libviprs/acadsharp-rs-tests#100"
 
-# ---- known: undecided
+# ---- known: $XCLIPFRAME is a byte in the DWG and a bool in the DXF
 [[known]]
 names = [
   "$XCLIPFRAME"
 ]
-pairs = ["dxf-dwg:oracle", "ezdxf/acadrust", "ezdxf/oracle", "oracle/acadrust"]
-reason = "the readers disagree and the data does not say which is right: the DXF holds colour index 193 for $CECOLOR where both DWG readers of AC1018 and later give a true colour, and $XCLIPFRAME is written under group code 290 in the DXF and 280 by ACadSharp"
+pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle", "ezdxf/acadrust", "ezdxf/oracle"]
+reason = "decided. AutoCAD writes it under group code 290 in all six DXF twins (a bool, which is what ezdxf types it as), ACadSharp's attribute says 280 (an int), so the group-code rule gives bool from ezdxf and int from the others; and the DWG stores a byte (DwgHeaderReader.cs:949, 0 to 2 from R2010) that both DWG readers read as 2 where the DXF holds 0. A bool cannot carry 2, so the DWG is the authority for the value, and the type difference is ACadSharp's attribute against AutoCAD's file. acadrust's DXF reader used to ignore the bool and keep its default (fixed in libviprs/acadrust#31)"
 issue = "libviprs/acadsharp-rs-tests#100"
 
 # ---- known: $DIMBLK
@@ -87,18 +137,9 @@ issue = "libviprs/acadsharp-rs-tests#100"
 names = [
   "$DIMBLK"
 ]
-pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle", "oracle/acadrust"]
-reason = "the DXF holds the arrowhead name BoxBlank, ACadSharp's DWG reader resolves the handle to the block's own name _BoxBlank and acadrust's gives the empty string"
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "decided. The DWG holds a handle to the arrowhead's block, whose name is _BoxBlank, and the DXF holds the arrowhead name BoxBlank (a standard arrowhead's block carries an underscore the variable does not). acadrust resolves the handle and drops the underscore, as the DXF has it (libviprs/acadrust#31); ACadSharp's DWG reader keeps the block's own name, so it differs from the DXF and from acadrust"
 issue = "libviprs/acadsharp-rs-tests#100"
-
-# ---- known: acadrust's DWG reader
-[[known]]
-names = [
-  "$DIMSTYLE"
-]
-pairs = ["dxf-dwg:acadrust", "oracle/acadrust"]
-reason = "acadrust's DWG reader gives the current dimension style as Standard where the DXF and ACadSharp say custom_style_ltypes"
-issue = "libviprs/acadsharp-rs-tests#98"
 
 # ---- known: version default
 [[known]]
@@ -109,7 +150,7 @@ pairs = ["oracle/acadrust"]
 fixtures = [
   "acadsharp-ac1014"
 ]
-reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
+reason = "the DWG header stores the plot style mode in the flags word of R2000 and later; AC1014 has no such word, so ACadSharp (false) and acadrust (true) report their own defaults. The rule for every version default below: neither reader is wrong and neither is the authority, the file does not say, so the variable is compared only where the file stores it, and the first version that does is named in each row"
 issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: version default
@@ -122,7 +163,7 @@ pairs = ["oracle/acadrust"]
 fixtures = [
   "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "dxf-sample-ac1015-ascii"
 ]
-reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
+reason = "both DWG header readers read these only in the R2007 block, and the AutoCAD DXF of AC1015 and AC1018 does not write them, so for AC1014 to AC1018 the file does not store them and ACadSharp (0, 0.0) and acadrust (50.0, pi/2, 1, 7, -8000) each report their own defaults; compared only from AC1021"
 issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: version default
@@ -134,7 +175,7 @@ pairs = ["oracle/acadrust"]
 fixtures = [
   "acadsharp-ac1014", "acadsharp-ac1015", "dxf-sample-ac1015-ascii"
 ]
-reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
+reason = "both DWG header readers read these only in the R2004 block, and the AutoCAD DXF of AC1015 does not write them, so for AC1014 and AC1015 the file does not store them and ACadSharp (0) and acadrust (1, 127) each report their own defaults; compared only from AC1018"
 issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: version default
@@ -148,7 +189,7 @@ fixtures = [
   "acadsharp-ac1027", "acadsharp-ac1032", "dxf-sample-ac1015-ascii", "dxf-sample-ac1021-ascii",
   "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
 ]
-reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
+reason = "both DWG header readers read the object snap mode only for R13 and R14, and none of the AutoCAD DXF twins writes it, so no file of AC1015 or later stores it and ACadSharp (4133) and acadrust (0) each report their own default; AC1014 stores it and agrees"
 issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: version default
@@ -265,18 +306,6 @@ names = [
 pairs = ["ezdxf/acadrust", "ezdxf/oracle"]
 reason = "acadrust gives the empty string for the arrow block $DIMBLK of a style whose DXF holds a block handle, where ezdxf and ACadSharp give the block's name"
 issue = "libviprs/acadsharp-rs-tests#122"
-
-# ---- known: AC1014 upper case
-[[known]]
-names = [
-  "$CELTYPE", "$TEXTSTYLE"
-]
-pairs = ["oracle/acadrust"]
-fixtures = [
-  "acadsharp-ac1014"
-]
-reason = "AC1014 stores table names upper-cased and acadrust reports the table's own spelling"
-issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- excluded: acadrust, none
 [[excluded]]

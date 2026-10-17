@@ -150,6 +150,18 @@ reports its own default, and the two defaults can differ. Those are listed per
 fixture, with the DXF twin of that version as the evidence that the variable is
 not stored.
 
+The rule for them, decided in libviprs/acadsharp-rs-tests#101: no reader is
+authoritative for a variable the file does not hold. Both defaults are libraries'
+choices, so the variable is compared only where the file stores it, the first
+version that does is named in the row that lists it, and the oracle is not
+changed to write an absent record (it says what ACadSharp reads). Where the
+file does hold a value and one reader gets it wrong, the other reader and the
+AutoCAD DXF twin are the authority, and the row says which reader is at fault
+(libviprs/acadsharp-rs-tests#99 for ACadSharp's DWG reader, with the line in
+`DwgHeaderReader.cs` at v3.7.1). A colour in a header variable is read from the DWG,
+which is the richer file: the DXF header can only hold the index
+(libviprs/acadsharp-rs-tests#100).
+
 ### Values that cannot be frozen
 
 A frozen file has to be the same bytes on every freeze, so three kinds of value

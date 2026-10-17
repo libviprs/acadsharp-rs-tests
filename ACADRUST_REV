@@ -23,7 +23,8 @@
 # To bump it: put a libviprs/acadrust `main` commit here, run the suite with the
 # `acadrust` feature against a sibling checkout at that commit, and say below
 # what moved.
-39a11909acf56747f22c7309a0681bef8e6b61b8
-# libviprs/acadrust main @ 2026-10-16, after the hygiene work (committed lock,
-# private-file tests ignored with their reason) merged. Nothing in this suite
-# consumes the fork's API yet; the emitter that does is R3.2.
+f2abfc9ee1527205b641c6d292fe107d5e7aac1c
+# libviprs/acadrust main @ 2026-10-17, after the DWG header started resolving the
+# current text style, linetype, dimension style and the dimension arrow blocks to
+# names, and the DXF reader took the bool $XCLIPFRAME (libviprs/acadrust#31). The
+# header rows of parity/MODEL1.toml that fix removed went with this bump.
