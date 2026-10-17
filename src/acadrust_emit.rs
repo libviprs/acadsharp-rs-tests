@@ -58,8 +58,22 @@ pub fn extract_bytes(bytes: &[u8]) -> Result<Emission, String> {
     Ok(extract(&doc))
 }
 
+/// Read a DXF, ASCII or binary, with acadrust and emit it. acadrust tells the
+/// two encodings (and the pre-AC1012 single-byte group codes) apart on its own.
+pub fn extract_dxf_bytes(bytes: &[u8]) -> Result<Emission, String> {
+    let doc = acadrust::io::dxf::DxfReader::from_reader(Cursor::new(bytes.to_vec()))
+        .and_then(|r| r.read())
+        .map_err(|e| format!("acadrust could not read this DXF: {e}"))?;
+    Ok(extract_as(&doc, "dxf"))
+}
+
 /// Emit an already-read document.
 pub fn extract(doc: &CadDocument) -> Emission {
+    extract_as(doc, "dwg")
+}
+
+/// [`extract`] for a document that came out of `format` (`dwg` or `dxf`).
+pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
     let mut x = Extractor {
         doc,
         warnings: Vec::new(),
@@ -82,7 +96,7 @@ pub fn extract(doc: &CadDocument) -> Emission {
     });
 
     let mut head: Vec<Item> = vec![Item::framing(Record::Document(Document {
-        format: "dwg".to_string(),
+        format: format.to_string(),
         acad_version: doc.version.to_string(),
         maintenance_version: u64::from(doc.maintenance_version),
     }))];

@@ -543,8 +543,72 @@ pub struct OracleInput {
     pub license_evidence: String,
     pub bytes: u64,
     pub sha256: String,
+
+    /// The oracle's frozen reading of this DXF, relative to `fixtures/`, and the
+    /// sha256 of its uncompressed bytes. Written by
+    /// `tools/regenerate_reference.py regenerate --accept` (R5.1), never by hand.
+    #[serde(default)]
+    pub reference_jsonl: Option<String>,
+    #[serde(default)]
+    pub reference_jsonl_uncompressed_sha256: Option<String>,
+    /// Set, with a reason, on a DXF the oracle cannot read into schema 1 yet.
+    #[serde(default)]
+    pub no_reference: Option<String>,
+    /// As on a `[[fixture]]`: a drawing meant to hold no geometry says so.
+    #[serde(default)]
+    pub no_primitives: Option<String>,
+    #[serde(default)]
+    pub acadsharp_reference_version: Option<String>,
+    #[serde(default)]
+    pub acadsharp_reference_commit: Option<String>,
+    #[serde(default)]
+    pub dotnet_sdk: Option<String>,
+    #[serde(default)]
+    pub reference_schema: Option<u64>,
 }
 manifest_file!(OracleInput);
+
+impl OracleInput {
+    /// The oracle's reading of this DXF, decompressed and checked against the
+    /// manifest's hash before a byte is returned.
+    pub fn load_reference_jsonl(&self) -> Result<Vec<u8>, FixtureError> {
+        let (Some(relative), Some(want)) = (
+            &self.reference_jsonl,
+            &self.reference_jsonl_uncompressed_sha256,
+        ) else {
+            return Err(FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "reference_jsonl".to_string(),
+            });
+        };
+        let path = fixture_root().join(relative);
+        let compressed = std::fs::read(&path).map_err(|source| FixtureError::Unreadable {
+            id: self.id.clone(),
+            path: path.clone(),
+            source,
+        })?;
+        let mut decoder =
+            ruzstd::decoding::StreamingDecoder::new(compressed.as_slice()).map_err(|e| {
+                FixtureError::Corrupt {
+                    id: self.id.clone(),
+                    detail: format!("{} is not a zstd frame: {e}", path.display()),
+                }
+            })?;
+        let mut data = Vec::new();
+        std::io::Read::read_to_end(&mut decoder, &mut data).map_err(|e| FixtureError::Corrupt {
+            id: self.id.clone(),
+            detail: format!("{} did not decompress: {e}", path.display()),
+        })?;
+        let got = format!("{:x}", Sha256::digest(&data));
+        if &got != want {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!("uncompressed reference sha256 is {got}, manifest froze {want}"),
+            });
+        }
+        Ok(data)
+    }
+}
 
 /// AutoCAD's own object census, recorded by upstream.
 ///

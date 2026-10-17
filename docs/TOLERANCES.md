@@ -91,6 +91,19 @@ run are below, and `tests/tables_doc.rs` holds this section to the file.
 | `oracle/acadrust` | `text.text` of `acadsharp-ac1032`, `acadsharp-sample-base` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
 | `oracle/acadrust` | `spline.weights.len` of `g13_hatch` | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#67 |
 
+The DXF lane (R5.1) keys its tables `dxf:a/b` (reader against reader on a DXF, the class the same pair has on the DWG), `dxf-dwg:e` (a reader's DXF against its own DWG reading of the same drawing, `BOUNDED` whichever reader it is) and `dxf-ascii-binary:e` (a reader's ASCII against its binary reading, `BOUNDED_TIGHT`: sixteen digits against the raw doubles). acadsharp-rs has no key: its C ABI opens DWG only, so its cells are `EXCLUDED` in the verdict file.
+
+| pair | row | class | issue |
+|---|---|---|---|
+| `dxf:oracle/acadrust`, `dxf:ezdxf/oracle`, `dxf:ezdxf/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#27 |
+| `dxf-dwg:oracle`, `dxf-dwg:acadrust` | warnings, `document.format`, `document.maintenance_version` | `EXCLUDED` | libviprs/acadsharp-rs-tests#27 |
+| `dxf-ascii-binary:oracle`, `dxf-ascii-binary:acadrust`, `dxf-ascii-binary:ezdxf` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#27 |
+| `dxf:oracle/acadrust`, `dxf:ezdxf/acadrust` | `document.maintenance_version` | `EXCLUDED` | libviprs/acadsharp-rs-tests#96 |
+| `dxf-ascii-binary:ezdxf`, `dxf:ezdxf/oracle`, `dxf:ezdxf/acadrust` | `text.text` of the four MTEXTs whose paragraph break is `\P` in AutoCAD's binary DXF | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#24 |
+| `dxf-dwg:acadrust` | `text.text` of `dxf-sample-ac1015-ascii`, `-binary` (the MIF escape) | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#111 |
+| `dxf:oracle/acadrust`, `dxf:ezdxf/oracle` | `text.text` of the embedded-MTEXT attribute in `dxf-sample-ac1032-*` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
+| `dxf-dwg:oracle`, `dxf-dwg:acadrust` | the spline's `control_points.len`, `knots.len`, `fit_points.len` from AC1027 | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#150 |
+
 Everything else the run finds that no row lists is a `DIFF` or a `COUNT` in
 `parity/VERDICTS.toml`, with an issue, and is debt rather than an exception.
 
