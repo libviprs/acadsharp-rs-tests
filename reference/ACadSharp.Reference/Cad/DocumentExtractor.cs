@@ -150,6 +150,36 @@ public static class DocumentExtractor
                 entityRecords);
         }
 
+        if (layouts.Count == 0)
+        {
+            // R12 has no LAYOUT objects: model space and paper space are two blocks and
+            // nothing else. ezdxf reads them as views "Model" and "Layout1", and so does
+            // this, so the three readers agree on what a view is for a drawing that has
+            // none to name (R5.2, acadsharp-rs-tests#28).
+            (string Name, ViewKind Kind, BlockRecord? Block)[] spaces =
+            [
+                ("Model", ViewKind.Model, document.ModelSpace),
+                ("Layout1", ViewKind.Layout, document.PaperSpace),
+            ];
+            for (int index = 0; index < spaces.Length; index++)
+            {
+                (string name, ViewKind kind, BlockRecord? block) = spaces[index];
+                records.Add(new ViewRecord(index, name, kind));
+                if (block is null)
+                {
+                    continue;
+                }
+
+                extractor.ExtractAll(
+                    block.Entities,
+                    index,
+                    CadTransform.Identity,
+                    depth: 0,
+                    insideBlock: false,
+                    entityRecords);
+            }
+        }
+
         records.AddRange(entityRecords);
         records.AddRange(CanonicalWriter.SortWarnings(warnings.Records));
 
