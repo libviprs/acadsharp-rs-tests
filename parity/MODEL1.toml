@@ -15,7 +15,7 @@
 names = [
   "$HANDSEED", "$TDINDWG", "$TDUSRTIMER", "$VERSIONGUID"
 ]
-pairs = ["ezdxf/acadrust", "ezdxf/oracle"]
+pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle"]
 reason = "the DWG and its AutoCAD DXF twin were written by save_samples.lsp at different moments, so the handle seed, the editing timers, the version GUID and the maintenance release differ by construction"
 issue = "libviprs/acadsharp-rs-tests#31"
 
@@ -24,71 +24,80 @@ issue = "libviprs/acadsharp-rs-tests#31"
 names = [
   "$ACADMAINTVER"
 ]
-pairs = ["ezdxf/oracle"]
+pairs = ["dxf-dwg:oracle"]
 reason = "the DWG and its AutoCAD DXF twin were written by save_samples.lsp at different moments, so the handle seed, the editing timers, the version GUID and the maintenance release differ by construction"
 issue = "libviprs/acadsharp-rs-tests#31"
 
-# ---- known: ACadSharp against AutoCAD's DXF
+# ---- known: ACadSharp's DXF reader
 [[known]]
 names = [
-  "$DIMLTEX1", "$DIMLTEX2", "$DIMLTYPE"
+  "$HANDSEED"
 ]
-pairs = ["ezdxf/oracle"]
-reason = "ACadSharp reads a different value from the DWG than AutoCAD's DXF twin holds (the raw lineweight index, the code page in lower case, defaults for the extended names, measurement and xedit flags and for the dimension linetypes), and acadrust agrees with the DXF"
+pairs = ["ezdxf/oracle", "oracle/acadrust"]
+reason = "ACadSharp's DXF reader reports a handle seed 4 above the one the DXF holds, which ezdxf and acadrust report as written"
 issue = "libviprs/acadsharp-rs-tests#99"
 
-# ---- known: ACadSharp against AutoCAD's DXF
+# ---- known: ACadSharp's DWG reader
+[[known]]
+names = [
+  "$DIMALTMZF", "$DIMLTEX1", "$DIMLTEX2", "$DIMLTYPE", "$DIMMZF", "$INTERFERECOLOR"
+]
+pairs = ["dxf-dwg:oracle"]
+reason = "ACadSharp's DWG reader gives a different value from its own DXF reader for the same drawing (the raw lineweight index 29 for $CELWEIGHT, the code page in lower case, defaults for the extended names, measurement and xedit flags and for the dimension linetypes), and acadrust agrees with the DXF"
+issue = "libviprs/acadsharp-rs-tests#99"
+
+# ---- known: ACadSharp's DWG reader
 [[known]]
 names = [
   "$CELWEIGHT", "$DWGCODEPAGE", "$EXTNAMES", "$MEASUREMENT", "$XEDIT"
 ]
-pairs = ["ezdxf/oracle", "oracle/acadrust"]
-reason = "ACadSharp reads a different value from the DWG than AutoCAD's DXF twin holds (the raw lineweight index, the code page in lower case, defaults for the extended names, measurement and xedit flags and for the dimension linetypes), and acadrust agrees with the DXF"
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "ACadSharp's DWG reader gives a different value from its own DXF reader for the same drawing (the raw lineweight index 29 for $CELWEIGHT, the code page in lower case, defaults for the extended names, measurement and xedit flags and for the dimension linetypes), and acadrust agrees with the DXF"
 issue = "libviprs/acadsharp-rs-tests#99"
 
-# ---- known: no reader gets it from the DWG
+# ---- known: not in the DWG header
 [[known]]
 names = [
   "$LASTSAVEDBY"
 ]
-pairs = ["ezdxf/acadrust", "ezdxf/oracle", "oracle/acadrust"]
-reason = "neither DWG reader gets the saving user from the header (ACadSharp reports its own default, acadrust the empty string) and the DXF twin holds the user who saved it"
+pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle", "oracle/acadrust"]
+reason = "the DXF holds the user who saved it and neither DWG reader gets it from the DWG header (ACadSharp reports its own default, acadrust the empty string)"
 issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: undecided
 [[known]]
 names = [
-  "$CECOLOR", "$XCLIPFRAME"
+  "$CECOLOR"
 ]
-pairs = ["ezdxf/acadrust", "ezdxf/oracle"]
-reason = "the readers disagree and the data does not say which is right: both DWG readers give a true colour for $CECOLOR where the DXF holds index 193, three different $DIMBLK, and $XCLIPFRAME is written under group code 290 in the DXF and 280 by ACadSharp"
+pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle"]
+reason = "the readers disagree and the data does not say which is right: the DXF holds colour index 193 for $CECOLOR where both DWG readers of AC1018 and later give a true colour, and $XCLIPFRAME is written under group code 290 in the DXF and 280 by ACadSharp"
 issue = "libviprs/acadsharp-rs-tests#100"
 
 # ---- known: undecided
 [[known]]
 names = [
-  "$DIMBLK"
+  "$XCLIPFRAME"
 ]
-pairs = ["ezdxf/acadrust", "ezdxf/oracle", "oracle/acadrust"]
-reason = "the readers disagree and the data does not say which is right: both DWG readers give a true colour for $CECOLOR where the DXF holds index 193, three different $DIMBLK, and $XCLIPFRAME is written under group code 290 in the DXF and 280 by ACadSharp"
+pairs = ["dxf-dwg:oracle", "ezdxf/acadrust", "ezdxf/oracle", "oracle/acadrust"]
+reason = "the readers disagree and the data does not say which is right: the DXF holds colour index 193 for $CECOLOR where both DWG readers of AC1018 and later give a true colour, and $XCLIPFRAME is written under group code 290 in the DXF and 280 by ACadSharp"
 issue = "libviprs/acadsharp-rs-tests#100"
 
-# ---- known: acadrust
+# ---- known: $DIMBLK
+[[known]]
+names = [
+  "$DIMBLK"
+]
+pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle", "oracle/acadrust"]
+reason = "the DXF holds the arrowhead name BoxBlank, ACadSharp's DWG reader resolves the handle to the block's own name _BoxBlank and acadrust's gives the empty string"
+issue = "libviprs/acadsharp-rs-tests#100"
+
+# ---- known: acadrust's DWG reader
 [[known]]
 names = [
   "$DIMSTYLE"
 ]
-pairs = ["ezdxf/acadrust", "oracle/acadrust"]
-reason = "acadrust reads the current dimension style as Standard where the DXF and ACadSharp say custom_style_ltypes, and $OSMODE as 0 where ACadSharp reads 4133 (the DXF twin does not write $OSMODE)"
-issue = "libviprs/acadsharp-rs-tests#98"
-
-# ---- known: acadrust
-[[known]]
-names = [
-  "$OSMODE"
-]
-pairs = ["oracle/acadrust"]
-reason = "acadrust reads the current dimension style as Standard where the DXF and ACadSharp say custom_style_ltypes, and $OSMODE as 0 where ACadSharp reads 4133 (the DXF twin does not write $OSMODE)"
+pairs = ["dxf-dwg:acadrust", "oracle/acadrust"]
+reason = "acadrust's DWG reader gives the current dimension style as Standard where the DXF and ACadSharp say custom_style_ltypes"
 issue = "libviprs/acadsharp-rs-tests#98"
 
 # ---- known: version default
@@ -100,19 +109,7 @@ pairs = ["oracle/acadrust"]
 fixtures = [
   "acadsharp-ac1014"
 ]
-reason = "the DWG of this version does not store the variable, so ACadSharp and acadrust each report their own default (the DXF twin of the same version, where there is one, does not write it either)"
-issue = "libviprs/acadsharp-rs-tests#101"
-
-# ---- known: version default
-[[known]]
-names = [
-  "$HIDETEXT", "$SORTENTS"
-]
-pairs = ["oracle/acadrust"]
-fixtures = [
-  "acadsharp-ac1014", "acadsharp-ac1015"
-]
-reason = "the DWG of this version does not store the variable, so ACadSharp and acadrust each report their own default (the DXF twin of the same version, where there is one, does not write it either)"
+reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
 issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: version default
@@ -123,9 +120,35 @@ names = [
 ]
 pairs = ["oracle/acadrust"]
 fixtures = [
-  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018"
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "dxf-sample-ac1015-ascii"
 ]
-reason = "the DWG of this version does not store the variable, so ACadSharp and acadrust each report their own default (the DXF twin of the same version, where there is one, does not write it either)"
+reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
+issue = "libviprs/acadsharp-rs-tests#101"
+
+# ---- known: version default
+[[known]]
+names = [
+  "$HIDETEXT", "$SORTENTS"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "dxf-sample-ac1015-ascii"
+]
+reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
+issue = "libviprs/acadsharp-rs-tests#101"
+
+# ---- known: version default
+[[known]]
+names = [
+  "$OSMODE"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021", "acadsharp-ac1024",
+  "acadsharp-ac1027", "acadsharp-ac1032", "dxf-sample-ac1015-ascii", "dxf-sample-ac1021-ascii",
+  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
 issue = "libviprs/acadsharp-rs-tests#101"
 
 # ---- known: AC1014 upper case
@@ -191,7 +214,7 @@ engine = "oracle"
 names = [
   "$TDUCREATE", "$TDUUPDATE"
 ]
-reason = "ACadSharp sets it to the time of the read and its DWG reader never overwrites it, so the oracle does not write it (docs/MODEL_1.md, values that cannot be frozen)"
+reason = "ACadSharp sets it to the time of the read and neither of its readers overwrites it, so the oracle does not write it (docs/MODEL_1.md, values that cannot be frozen)"
 issue = "libviprs/acadsharp-rs-tests#31"
 
 # ---- excluded: ezdxf, not written by the DXF of these versions
@@ -212,7 +235,7 @@ names = [
 fixtures = [
   "dxf-sample-ac1015-ascii"
 ]
-reason = "the AutoCAD DXF twin of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
+reason = "the AutoCAD DXF of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
 issue = "libviprs/acadsharp-rs-tests#31"
 
 # ---- excluded: ezdxf, not written by the DXF of these versions
@@ -231,7 +254,7 @@ names = [
 fixtures = [
   "dxf-sample-ac1018-ascii"
 ]
-reason = "the AutoCAD DXF twin of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
+reason = "the AutoCAD DXF of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
 issue = "libviprs/acadsharp-rs-tests#31"
 
 # ---- excluded: ezdxf, not written by the DXF of these versions
@@ -244,7 +267,7 @@ names = [
 fixtures = [
   "dxf-sample-ac1021-ascii"
 ]
-reason = "the AutoCAD DXF twin of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
+reason = "the AutoCAD DXF of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
 issue = "libviprs/acadsharp-rs-tests#31"
 
 # ---- excluded: ezdxf, not written by the DXF of these versions
@@ -257,7 +280,7 @@ names = [
 fixtures = [
   "dxf-sample-ac1024-ascii"
 ]
-reason = "the AutoCAD DXF twin of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
+reason = "the AutoCAD DXF of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
 issue = "libviprs/acadsharp-rs-tests#31"
 
 # ---- excluded: ezdxf, not written by the DXF of these versions
@@ -270,5 +293,5 @@ names = [
 fixtures = [
   "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
 ]
-reason = "the AutoCAD DXF twin of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
+reason = "the AutoCAD DXF of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
 issue = "libviprs/acadsharp-rs-tests#31"
