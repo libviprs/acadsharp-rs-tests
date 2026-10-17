@@ -50,9 +50,11 @@ fn require() -> bool {
 fn out_dir() -> PathBuf {
     match std::env::var("MODEL1_OUT") {
         Ok(p) if !p.is_empty() => PathBuf::from(p),
+        // One directory per process: a second `cargo test` on the same target
+        // directory (another job, another checkout) must not write into the
+        // files this one is about to read.
         _ => Path::new(env!("CARGO_TARGET_TMPDIR"))
-            .join("..")
-            .join("model1"),
+            .join(format!("model1-{}", std::process::id())),
     }
 }
 
