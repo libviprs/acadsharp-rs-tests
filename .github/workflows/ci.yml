@@ -124,7 +124,7 @@ jobs:
       # step in an existing job rather than a job of its own on purpose: a new
       # job is a new context name, and a context name that is not required is a
       # check nobody has to pass. `shellcheck` ships on the runner image.
-      - run: shellcheck tools/counterpart.sh tools/no_dotnet_proof.sh
+      - run: shellcheck tools/counterpart.sh tools/no_dotnet_proof.sh tools/lsan_cell.sh
       # This crate has no features yet. When it grows one, add a clippy cell for
       # it here rather than assuming the default pass covers it: feature-gated
       # code is invisible to the default cell, and in the core repo that hole
@@ -362,3 +362,35 @@ jobs:
       # runs the smoke with a PATH that cannot find one.
       - name: Smoke with a PATH that cannot find dotnet
         run: tools/no_dotnet_proof.sh scrubbed "$ACADSHARP_NATIVE_DIR"
+
+  # The leak cell (H4.3). The same resource loops as the linux-x64 job runs, under
+  # LeakSanitizer, against the shared library. Nightly, because `-Zsanitizer` is.
+  # `tools/lsan_cell.sh` says what LSan can and cannot see: Rust allocations and
+  # the library's `malloc`, and not .NET's GC heap. It compares two loop lengths
+  # instead of expecting a clean report, because the NativeAOT runtime keeps a
+  # constant handful of startup allocations until exit.
+  native-linux-x64-lsan:
+    name: Native (linux-x64, lsan)
+    runs-on: ubuntu-latest
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
+      VIPRS_REQUIRE_NATIVE: 1
+      ACADSHARP_REQUIRE_NATIVE: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/clone-counterpart
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - name: Fetch the archive by hash
+        id: native
+        uses: ./.github/actions/fetch-native-artifact
+        with:
+          target: linux-x64
+      - name: Export ACADSHARP_NATIVE_DIR
+        run: echo "ACADSHARP_NATIVE_DIR=${{ steps.native.outputs.dir }}" >> "$GITHUB_ENV"
+      - name: Resource loops under LeakSanitizer
+        run: tools/lsan_cell.sh x86_64-unknown-linux-gnu

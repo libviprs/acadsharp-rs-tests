@@ -267,3 +267,37 @@ fn the_readme_documents_the_variable_the_cache_and_the_local_run() {
         assert!(readme.contains(needle), "README.md never mentions {needle}");
     }
 }
+
+#[test]
+fn the_leak_cell_exists_runs_on_nightly_and_compares_two_loop_lengths() {
+    let ci = yaml(".github/workflows/ci.yml");
+    let job = &ci["jobs"]["native-linux-x64-lsan"];
+    assert_eq!(job["name"].as_str(), Some("Native (linux-x64, lsan)"));
+    let steps = job["steps"].as_vec().expect("steps");
+    assert!(
+        steps
+            .iter()
+            .any(|s| s["uses"].as_str() == Some("dtolnay/rust-toolchain@nightly")),
+        "-Zsanitizer needs nightly"
+    );
+    assert!(
+        steps.iter().any(|s| s["run"]
+            .as_str()
+            .is_some_and(|r| r.contains("tools/lsan_cell.sh"))),
+        "the cell never runs the script"
+    );
+    let script = read("tools/lsan_cell.sh");
+    // A clean report is not the pass condition (the runtime keeps a constant
+    // startup baseline); growth with the loop length is the failure.
+    assert!(script.contains("-Zsanitizer=leak"));
+    assert!(script.contains("GREW with the loop length"));
+    assert!(
+        script.contains("LSAN_LONG_ITERATIONS") && script.contains("LSAN_SHORT_ITERATIONS"),
+        "two loop lengths"
+    );
+    // And it says what LSan cannot see, so nobody reads a green cell as more.
+    assert!(
+        script.contains("GC heap"),
+        "the script must say what LSan does not see"
+    );
+}

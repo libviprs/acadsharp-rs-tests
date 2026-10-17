@@ -108,6 +108,17 @@ container with nothing installed, beside a control that a framework-dependent
 ran. On macOS there is no container, so the proof is weaker: the smoke runs with
 a `PATH` that cannot find `dotnet`.
 
+### Resources, cancellation and threads
+
+Three more native files hold the crate's claims about what it frees, when it stops
+and which threads may touch what: `tests/resource_semantics.rs` (a thousand open,
+decode and drop loops with an RSS margin), `tests/cancellation.rs` (a cancel is
+observed at the next batch boundary, counted in batches and not in time) and
+`tests/threading.rs` (two decoders on two threads against the single threaded
+output). `tools/lsan_cell.sh` runs the resource loops under LeakSanitizer, in the
+`Native (linux-x64, lsan)` job. The crate's `docs/THREADING.md` says what each of
+them does and does not establish.
+
 ## How `acadsharp-rs` gets beside this one
 
 `Cargo.toml` depends on the crate as `{ path = "../acadsharp-rs" }`, so a
