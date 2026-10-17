@@ -121,6 +121,13 @@ jobs:
           dotnet restore reference/ACadSharp.Generator --locked-mode
           dotnet run --project reference/ACadSharp.Generator -c Release --no-restore -- selftest
 
+      # And the committed generated drawings are what the generator writes
+      # today: a changed drawing definition, or an ACadSharp bump that changes
+      # what DwgWriter emits, fails here instead of leaving a manifest hash that
+      # nothing can reproduce.
+      - name: The committed generated drawings are reproducible
+        run: dotnet run --project reference/ACadSharp.Generator -c Release --no-restore -- check fixtures/generated/dwg
+
   reference-outputs:
     name: Reference outputs
     runs-on: ubuntu-latest
