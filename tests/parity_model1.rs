@@ -316,7 +316,7 @@ fn the_run_agrees_with_the_committed_verdicts() {
         std::fs::write(verdicts_path(), &rendered).unwrap();
         // The run may be in a container whose tree is thrown away, so the table
         // is printed too, between two markers.
-        println!("\n==MODEL1_VERDICTS==\n{rendered}\n==END==");
+        println!("\n==MODEL1_VERDICTS==\n{rendered}==END==");
         eprintln!("rewrote {}", verdicts_path().display());
         return;
     }
@@ -676,6 +676,186 @@ fn every_file_has_a_style_called_standard() {
     }
 }
 
+// ---- the dictionary tree (R5.5.6, docs/MODEL_1.md) -------------------------------------
+
+/// The `dictionary` record at `path` (`""` is the root), with its entries as
+/// (key, class) pairs.
+fn dictionary_at(records: &[Record], path: &str) -> Option<(Vec<(String, String)>, i64)> {
+    records.iter().find_map(|r| match r {
+        Record::Entry(e) if e.kind == "dictionary" && e.name == path => {
+            let Some(Value::List(items)) = e.get("entries") else {
+                return None;
+            };
+            let Some(Value::Int(count)) = e.get("entry_count") else {
+                return None;
+            };
+            let pairs = items
+                .iter()
+                .map(|item| match item.as_slice() {
+                    [Value::Str(k), Value::Str(c)] => (k.clone(), c.clone()),
+                    other => panic!("an entry that is not (key, class): {other:?}"),
+                })
+                .collect();
+            Some((pairs, *count))
+        }
+        _ => None,
+    })
+}
+
+/// Every frozen reading of every input: the oracle over the thirteen files and
+/// ezdxf over the six twins.
+fn every_frozen_reading() -> Vec<(&'static str, &'static str)> {
+    let mut all: Vec<(&str, &str)> = SAVES.iter().map(|s| ("oracle", *s)).collect();
+    for (twin, _) in TWINS {
+        all.push(("oracle", twin));
+        all.push(("ezdxf", twin));
+    }
+    all
+}
+
+#[test]
+fn every_reading_has_a_root_dictionary_with_the_standard_entries() {
+    for (engine, id) in every_frozen_reading() {
+        let records = model1::load_frozen(engine, id).unwrap();
+        let (entries, count) = dictionary_at(&records, "")
+            .unwrap_or_else(|| panic!("{engine} {id}: no dictionary record for the root"));
+        assert_eq!(count as usize, entries.len(), "{engine} {id}: entry_count");
+        for key in ["ACAD_GROUP", "ACAD_MLINESTYLE"] {
+            assert!(
+                entries.iter().any(|(k, c)| k == key && c == "DICTIONARY"),
+                "{engine} {id}: the root has no dictionary entry {key}: {entries:?}"
+            );
+        }
+        let keys: Vec<&String> = entries.iter().map(|e| &e.0).collect();
+        let mut sorted = keys.clone();
+        sorted.sort_by(|a, b| a.as_bytes().cmp(b.as_bytes()));
+        assert_eq!(keys, sorted, "{engine} {id}: entries are sorted by key");
+    }
+}
+
+/// A nested dictionary is a `DICTIONARY` entry of its parent and has its own
+/// record under the longer path, so no dictionary is only a name in a list.
+#[test]
+fn every_nested_dictionary_has_its_own_record_under_the_longer_path() {
+    for (engine, id) in every_frozen_reading() {
+        let records = model1::load_frozen(engine, id).unwrap();
+        let mut paths: Vec<String> = vec![String::new()];
+        let mut visited = 0;
+        while let Some(path) = paths.pop() {
+            let (entries, _) = dictionary_at(&records, &path)
+                .unwrap_or_else(|| panic!("{engine} {id}: no record for the dictionary {path:?}"));
+            visited += 1;
+            for (key, class) in entries {
+                if class == "DICTIONARY" || class == "ACDBDICTIONARYWDFLT" {
+                    paths.push(if path.is_empty() {
+                        key
+                    } else {
+                        format!("{path}/{key}")
+                    });
+                }
+            }
+        }
+        let recorded = records
+            .iter()
+            .filter(|r| r.kind() == "dictionary")
+            .filter(|r| !r.key().starts_with("table/") && !r.key().starts_with("layout/"))
+            .count();
+        assert_eq!(
+            visited, recorded,
+            "{engine} {id}: a dictionary record that no entry leads to"
+        );
+    }
+}
+
+/// ACadSharp drops an object whose class it does not know unless the reader is
+/// told to keep it, so without the switch the entry would be missing from the
+/// oracle's list. ACAD_ASSOCPERSSUBENTMANAGER is such an object (ACadSharp has no
+/// class for ACDBASSOCPERSSUBENTMANAGER), and the oracle names it in the DWG and
+/// in the DXF twin alike. The DXF reader keeps it only when a second switch is on
+/// as well (docs/MODEL_1.md), which is what this holds the oracle to.
+#[test]
+fn the_oracle_keeps_the_entries_acadsharp_has_no_class_for() {
+    for id in ["acadsharp-ac1032", "dxf-sample-ac1032-ascii"] {
+        let records = model1::load_frozen("oracle", id).unwrap();
+        let (entries, _) = dictionary_at(&records, "").unwrap();
+        assert!(
+            entries
+                .iter()
+                .any(|(k, c)| k == "ACAD_ASSOCPERSSUBENTMANAGER" && c == "ACDBASSOCPERSSUBENTMANAGER"),
+            "{id}: the oracle lost the root entry ACAD_ASSOCPERSSUBENTMANAGER: {entries:?}"
+        );
+    }
+    // The twin and the DWG are one drawing: every key ezdxf lists under the root
+    // of the twin is a key the oracle lists under the root of its DXF.
+    let ez = model1::load_frozen("ezdxf", "dxf-sample-ac1032-ascii").unwrap();
+    let dxf = model1::load_frozen("oracle", "dxf-sample-ac1032-ascii").unwrap();
+    let (theirs, _) = dictionary_at(&ez, "").unwrap();
+    let (ours, _) = dictionary_at(&dxf, "").unwrap();
+    for (key, _) in &theirs {
+        assert!(
+            ours.iter().any(|(k, _)| k == key),
+            "the oracle lost the root entry {key}"
+        );
+    }
+}
+
+/// The dictionary control, on a DXF twin: one entry renamed in a scratch copy of
+/// the oracle's reading turns that twin's row red, and the finding names the
+/// path of the dictionary.
+#[test]
+fn one_renamed_dictionary_entry_is_red_and_names_the_path() {
+    let rules = model1::committed_rules().unwrap();
+    let twin = "dxf-sample-ac1032-ascii";
+    let ez = model1::load_frozen("ezdxf", twin).unwrap();
+    let mut oracle = model1::load_frozen("oracle", twin).unwrap();
+    fn side<'a>(engine: &'a str, id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: id,
+            records,
+        }
+    }
+    let before = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    )
+    .red()
+    .len();
+    let mut touched = 0;
+    for r in &mut oracle {
+        if let Record::Entry(e) = r
+            && e.kind == "dictionary"
+            && e.name == "ACAD_TABLESTYLE"
+            && let Some(Value::List(items)) = e.get("entries").cloned()
+        {
+            let mut items = items;
+            if let Some(Value::Str(k)) = items.get_mut(0).and_then(|i| i.get_mut(0)) {
+                k.push_str("_RENAMED");
+                touched += 1;
+            }
+            e.set("entries", Value::List(items));
+        }
+    }
+    assert_eq!(touched, 1, "the twin has an ACAD_TABLESTYLE with an entry");
+    let after = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    );
+    assert_eq!(after.red().len(), before + 1, "{}", after.first());
+    assert!(
+        after
+            .red()
+            .iter()
+            .any(|f| f.key == "dictionary/ACAD_TABLESTYLE.entries[0].key"),
+        "{:?}",
+        after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
+    );
+}
+
 /// The dimstyle control, on a DXF twin: `$DIMASZ` of `ISO-25` changed in a
 /// scratch copy of the oracle's reading of the AC1032 twin turns that twin's
 /// ezdxf row one finding worse, naming the style and the field.
@@ -914,10 +1094,4 @@ fn the_handle_valued_dimstyle_fields_of_standard_are_names_the_tables_carry() {
             );
         }
     }
-}
-
-            .any(|f| f.key == "dictionary/ACAD_TABLESTYLE.entries[0].key"),
-        "{:?}",
-        after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
-    );
 }
