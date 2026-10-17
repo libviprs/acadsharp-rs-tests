@@ -63,6 +63,7 @@ fn the_oracle_writes_cadheaders_variables_less_the_two_it_cannot_freeze_on_every
         let names: BTreeSet<String> = model1::load_frozen("oracle", s)
             .unwrap()
             .iter()
+            .filter(|r| r.kind() == "header")
             .map(|r| r.key().to_string())
             .collect();
         // CadHeader.GetHeaderMap() has 249; $TDUCREATE and $TDUUPDATE are the time
@@ -101,7 +102,10 @@ fn a_value_agrees_with_the_type_its_group_code_gives() {
     ];
     let r = model1::load_frozen("oracle", "acadsharp-ac1032").unwrap();
     for (name, ty) in want {
-        let Record::Header(h) = r.iter().find(|r| r.key() == name).unwrap();
+        let Some(Record::Header(h)) = r.iter().find(|r| r.kind() == "header" && r.key() == name)
+        else {
+            panic!("{name} is not a header record")
+        };
         assert_eq!(h.value.type_name(), ty, "{name}");
     }
     assert_eq!(header_type("$ORTHOMODE", &[70]).unwrap(), "int");
@@ -132,7 +136,7 @@ fn the_ezdxf_streams_hold_no_handle_valued_variable() {
 fn the_text_of_a_string_variable_has_its_line_endings_normalised() {
     for s in SAVES {
         for r in model1::load_frozen("oracle", s).unwrap() {
-            let Record::Header(h) = r;
+            let Record::Header(h) = r else { continue };
             if let Value::Str(v) = h.value {
                 assert!(!v.contains('\r'), "{s} {}", h.name);
             }

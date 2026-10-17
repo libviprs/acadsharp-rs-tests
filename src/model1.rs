@@ -68,17 +68,40 @@ pub struct Header {
     pub value: Value,
 }
 
-/// A model-1 record. Only `header` so far; every further kind is one more
-/// variant and one more section of docs/MODEL_1.md.
+/// One `layer` record: a LAYER table entry, by name.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Layer {
+    pub name: String,
+    /// DXF 70, only the bits a layer owns: frozen 1, frozen in new viewports 2,
+    /// locked 4.
+    pub flags: i64,
+    /// The colour index (62), or -1 for a true colour.
+    pub color: i64,
+    /// The packed 0xRRGGBB (420), or -1.
+    pub true_color: i64,
+    /// False when the stored colour is negative: the layer is off.
+    pub on: bool,
+    /// The linetype's name (6).
+    pub linetype: String,
+    /// The lineweight (370), in hundredths of a millimetre or -1, -2, -3.
+    pub lineweight: i64,
+    /// The plot flag (290).
+    pub plot: bool,
+}
+
+/// A model-1 record. Every further kind is one more variant and one more
+/// section of docs/MODEL_1.md.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Record {
     Header(Header),
+    Layer(Layer),
 }
 
 impl Record {
     pub fn kind(&self) -> &'static str {
         match self {
             Self::Header(_) => "header",
+            Self::Layer(_) => "layer",
         }
     }
 
@@ -86,6 +109,7 @@ impl Record {
     pub fn key(&self) -> &str {
         match self {
             Self::Header(h) => &h.name,
+            Self::Layer(l) => &l.name,
         }
     }
 }
@@ -127,7 +151,7 @@ pub fn output_path(out: &std::path::Path, fixture: &str, engine: &str) -> std::p
 
 // ---- writing ------------------------------------------------------------------------
 
-const KIND_ORDER: [&str; 1] = ["header"];
+const KIND_ORDER: [&str; 2] = ["header", "layer"];
 
 /// The exact text of a `.model1.jsonl`: sorted by (kind order, key), LF, a final
 /// newline. Two records with one key are refused.
@@ -155,6 +179,19 @@ pub fn render_stream(records: &[Record]) -> Result<String, String> {
                     h.value.render()?
                 ));
             }
+            Record::Layer(l) => {
+                out.push_str(&format!(
+                    "{{\"model\":1,\"record\":\"layer\",\"name\":{},\"flags\":{},\"color\":{},\"true_color\":{},\"on\":{},\"linetype\":{},\"lineweight\":{},\"plot\":{}}}\n",
+                    quote(&l.name),
+                    l.flags,
+                    l.color,
+                    l.true_color,
+                    l.on,
+                    quote(&l.linetype),
+                    l.lineweight,
+                    l.plot
+                ));
+            }
         }
     }
     Ok(out)
@@ -177,12 +214,24 @@ pub fn parse_stream(text: &str) -> Result<Vec<Record>, String> {
         let n = i + 1;
         let v: Json = serde_json::from_str(l).map_err(|e| format!("line {n}: {e}"))?;
         let obj = v.as_object().ok_or(format!("line {n}: not an object"))?;
+        // serde_json without preserve_order sorts the keys, so this checks the
+        // field set; the order is checked by writing the record back below.
         let keys: Vec<&str> = obj.keys().map(String::as_str).collect();
-        // serde_json without preserve_order sorts keys; check the field set, and
-        // the order against the raw text.
         let rec = obj.get("record").and_then(Json::as_str).unwrap_or("");
         let want: &[&str] = match rec {
             "header" => &["model", "name", "record", "type", "value"],
+            "layer" => &[
+                "color",
+                "flags",
+                "linetype",
+                "lineweight",
+                "model",
+                "name",
+                "on",
+                "plot",
+                "record",
+                "true_color",
+            ],
             other => return Err(format!("line {n}: {other:?} is not a model-1 record")),
         };
         if keys != want {
@@ -191,46 +240,70 @@ pub fn parse_stream(text: &str) -> Result<Vec<Record>, String> {
         if obj["model"].as_i64() != Some(1) {
             return Err(format!("line {n}: model is not 1"));
         }
-        let order = "{\"model\":1,\"record\":\"header\",\"name\":";
-        if !l.starts_with(order) || !l.contains(",\"type\":\"") || !l.contains(",\"value\":") {
-            return Err(format!(
-                "line {n}: fields are not in the order the document gives"
-            ));
-        }
         let name = obj["name"]
             .as_str()
             .ok_or(format!("line {n}: name"))?
             .to_string();
-        let ty = obj["type"].as_str().ok_or(format!("line {n}: type"))?;
-        let val = &obj["value"];
-        let f = |j: &Json| j.as_f64().ok_or(format!("line {n}: not a number"));
-        let value = match ty {
-            "string" => Value::Str(
-                val.as_str()
-                    .ok_or(format!("line {n}: not a string"))?
-                    .into(),
-            ),
-            "int" => Value::Int(val.as_i64().ok_or(format!("line {n}: not an integer"))?),
-            "double" => Value::Double(f(val)?),
-            "bool" => Value::Bool(val.as_bool().ok_or(format!("line {n}: not a bool"))?),
-            "point2" | "point3" => {
-                let a = val.as_array().ok_or(format!("line {n}: not an array"))?;
-                match (ty, a.len()) {
-                    ("point2", 2) => Value::Point2([f(&a[0])?, f(&a[1])?]),
-                    ("point3", 3) => Value::Point3([f(&a[0])?, f(&a[1])?, f(&a[2])?]),
-                    _ => return Err(format!("line {n}: {ty} with {} components", a.len())),
-                }
-            }
-            other => return Err(format!("line {n}: type {other:?}")),
+        let int = |k: &str| {
+            obj[k]
+                .as_i64()
+                .ok_or(format!("line {n}: {k} is not an integer"))
         };
-        let r = Record::Header(Header { name, value });
+        let boolean = |k: &str| {
+            obj[k]
+                .as_bool()
+                .ok_or(format!("line {n}: {k} is not a bool"))
+        };
+        let r = if rec == "layer" {
+            Record::Layer(Layer {
+                name,
+                flags: int("flags")?,
+                color: int("color")?,
+                true_color: int("true_color")?,
+                on: boolean("on")?,
+                linetype: obj["linetype"]
+                    .as_str()
+                    .ok_or(format!("line {n}: linetype"))?
+                    .to_string(),
+                lineweight: int("lineweight")?,
+                plot: boolean("plot")?,
+            })
+        } else {
+            let ty = obj["type"].as_str().ok_or(format!("line {n}: type"))?;
+            let val = &obj["value"];
+            let f = |j: &Json| j.as_f64().ok_or(format!("line {n}: not a number"));
+            let value = match ty {
+                "string" => Value::Str(
+                    val.as_str()
+                        .ok_or(format!("line {n}: not a string"))?
+                        .into(),
+                ),
+                "int" => Value::Int(val.as_i64().ok_or(format!("line {n}: not an integer"))?),
+                "double" => Value::Double(f(val)?),
+                "bool" => Value::Bool(val.as_bool().ok_or(format!("line {n}: not a bool"))?),
+                "point2" | "point3" => {
+                    let a = val.as_array().ok_or(format!("line {n}: not an array"))?;
+                    match (ty, a.len()) {
+                        ("point2", 2) => Value::Point2([f(&a[0])?, f(&a[1])?]),
+                        ("point3", 3) => Value::Point3([f(&a[0])?, f(&a[1])?, f(&a[2])?]),
+                        _ => return Err(format!("line {n}: {ty} with {} components", a.len())),
+                    }
+                }
+                other => return Err(format!("line {n}: type {other:?}")),
+            };
+            Record::Header(Header { name, value })
+        };
         if let Some(prev) = out.last() {
-            let ord = prev.key().as_bytes().cmp(r.key().as_bytes());
-            if ord != std::cmp::Ordering::Less {
+            let order = |r: &Record| KIND_ORDER.iter().position(|k| *k == r.kind());
+            let after = order(&r)
+                .cmp(&order(prev))
+                .then_with(|| r.key().as_bytes().cmp(prev.key().as_bytes()));
+            if after != std::cmp::Ordering::Greater {
                 return Err(format!("line {n}: {} is not after {}", r.key(), prev.key()));
             }
         }
-        // Round trip: the line must be the one the writer would write.
+        // Round trip: the line must be the one the writer would write, which
+        // checks the order of the fields and the spelling of every number.
         let again = render_stream(std::slice::from_ref(&r))?;
         if again.trim_end() != l {
             return Err(format!(
@@ -310,7 +383,7 @@ impl Rules {
     fn excluded_for(&self, engine: &str, fixture: &str, name: &str) -> Option<&Excluded> {
         self.excluded.iter().find(|e| {
             e.engine == engine
-                && e.names.iter().any(|n| n == name)
+                && e.names.iter().any(|n| glob(n, name))
                 && (e.fixtures.is_empty() || e.fixtures.iter().any(|f| f == fixture))
         })
     }
@@ -318,7 +391,7 @@ impl Rules {
     /// The row that lists a difference of `name` for this pair and fixture.
     pub fn known_for(&self, pair: &str, fixture: &str, name: &str) -> Option<&Known> {
         self.known.iter().find(|k| {
-            k.names.iter().any(|n| n == name)
+            k.names.iter().any(|n| glob(n, name))
                 && (k.pairs.is_empty() || k.pairs.iter().any(|p| p == pair))
                 && (k.fixtures.is_empty() || k.fixtures.iter().any(|f| f == fixture))
         })
@@ -515,86 +588,160 @@ pub struct Side<'a> {
     pub records: &'a [Record],
 }
 
+/// A record as the comparator sees it: one value (a header variable) or a list
+/// of named fields (a table entry).
+enum Item {
+    Scalar(Value),
+    Fields(Vec<(&'static str, Value)>),
+}
+
+impl Item {
+    fn show(&self) -> String {
+        match self {
+            Self::Scalar(v) => v.show(),
+            Self::Fields(f) => f
+                .iter()
+                .map(|(n, v)| format!("{n}={}", v.show()))
+                .collect::<Vec<_>>()
+                .join(" "),
+        }
+    }
+}
+
+/// The key a record is compared and listed under: the DXF name for a header
+/// variable, `<kind>/<name>` for anything else.
+fn item_key(r: &Record) -> String {
+    match r {
+        Record::Header(h) => h.name.clone(),
+        Record::Layer(l) => format!("layer/{}", l.name),
+    }
+}
+
+fn item_of(r: &Record) -> Item {
+    match r {
+        Record::Header(h) => Item::Scalar(h.value.clone()),
+        Record::Layer(l) => Item::Fields(vec![
+            ("flags", Value::Int(l.flags)),
+            ("color", Value::Int(l.color)),
+            ("true_color", Value::Int(l.true_color)),
+            ("on", Value::Bool(l.on)),
+            ("linetype", Value::Str(l.linetype.clone())),
+            ("lineweight", Value::Int(l.lineweight)),
+            ("plot", Value::Bool(l.plot)),
+        ]),
+    }
+}
+
+/// Does `pattern` (which may hold `*`, standing for any run of characters) match
+/// `text`? A layer name is data, so a rule about every layer's colour is
+/// `layer/*.color`.
+pub fn glob(pattern: &str, text: &str) -> bool {
+    let parts: Vec<&str> = pattern.split('*').collect();
+    if parts.len() == 1 {
+        return pattern == text;
+    }
+    let mut rest = text;
+    for (i, part) in parts.iter().enumerate() {
+        if i == 0 {
+            match rest.strip_prefix(part) {
+                Some(r) => rest = r,
+                None => return false,
+            }
+        } else if i == parts.len() - 1 {
+            return rest.ends_with(part);
+        } else {
+            match rest.find(part) {
+                Some(at) => rest = &rest[at + part.len()..],
+                None => return false,
+            }
+        }
+    }
+    true
+}
+
 /// Compare two streams by key. `pair` is `oracle/acadrust` and so on, the name
 /// `parity/MODEL1.toml` rows use.
 pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
-    let index = |s: &Side| -> BTreeMap<String, Value> {
+    let index = |s: &Side| -> BTreeMap<String, Item> {
         s.records
             .iter()
-            .map(|Record::Header(h)| (h.name.clone(), h.value.clone()))
+            .map(|r| (item_key(r), item_of(r)))
             .collect()
     };
     let (ia, ib) = (index(a), index(b));
     let names: BTreeSet<&String> = ia.keys().chain(ib.keys()).collect();
     let mut report = Report::default();
+    let push = |report: &mut Report, kind: FindingKind, key: String, detail: String| {
+        let known = rules.known_for(pair, a.fixture, &key);
+        report.findings.push(Finding {
+            kind,
+            key,
+            detail,
+            disposition: if known.is_some() {
+                Disposition::Known
+            } else {
+                Disposition::Red
+            },
+            issue: known.map(|k| k.issue.clone()).unwrap_or_default(),
+        });
+    };
+    let compare_values = |x: &Value, y: &Value| -> Option<(FindingKind, String)> {
+        if x.type_name() != y.type_name() {
+            Some((
+                FindingKind::Type,
+                format!("type {} vs {}", x.type_name(), y.type_name()),
+            ))
+        } else if !same(x, y) {
+            Some((FindingKind::Value, format!("{} vs {}", x.show(), y.show())))
+        } else {
+            None
+        }
+    };
     for name in names {
         match (ia.get(name), ib.get(name)) {
-            (Some(x), Some(y)) => {
+            (Some(Item::Scalar(x)), Some(Item::Scalar(y))) => {
                 report.compared += 1;
-                let known = rules.known_for(pair, a.fixture, name);
-                let (kind, detail) = if x.type_name() != y.type_name() {
-                    (
-                        FindingKind::Type,
-                        format!("type {} vs {}", x.type_name(), y.type_name()),
-                    )
-                } else if !same(x, y) {
-                    (FindingKind::Value, format!("{} vs {}", x.show(), y.show()))
-                } else {
-                    continue;
-                };
+                if let Some((kind, detail)) = compare_values(x, y) {
+                    push(&mut report, kind, name.clone(), detail);
+                }
+            }
+            (Some(Item::Fields(x)), Some(Item::Fields(y))) => {
+                report.compared += 1;
+                for ((field, vx), (_, vy)) in x.iter().zip(y) {
+                    if let Some((kind, detail)) = compare_values(vx, vy) {
+                        push(&mut report, kind, format!("{name}.{field}"), detail);
+                    }
+                }
+            }
+            (Some(x), None) => {
+                let excluded = rules.excluded_for(b.engine, b.fixture, name);
                 report.findings.push(Finding {
-                    kind,
+                    kind: FindingKind::OnlyInA,
                     key: name.clone(),
-                    detail,
-                    disposition: if known.is_some() {
-                        Disposition::Known
+                    detail: format!("{name} = {} on {}, not on {}", x.show(), a.engine, b.engine),
+                    disposition: if excluded.is_some() {
+                        Disposition::Excluded
                     } else {
                         Disposition::Red
                     },
-                    issue: known.map(|k| k.issue.clone()).unwrap_or_default(),
+                    issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
                 });
             }
-            (Some(x), None) => report.findings.push(Finding {
-                kind: FindingKind::OnlyInA,
-                key: name.clone(),
-                detail: format!(
-                    "{} = {} on {}, not on {}",
-                    name,
-                    x.show(),
-                    a.engine,
-                    b.engine
-                ),
-                disposition: if rules.excluded_for(b.engine, b.fixture, name).is_some() {
-                    Disposition::Excluded
-                } else {
-                    Disposition::Red
-                },
-                issue: rules
-                    .excluded_for(b.engine, b.fixture, name)
-                    .map(|e| e.issue.clone())
-                    .unwrap_or_default(),
-            }),
-            (None, Some(y)) => report.findings.push(Finding {
-                kind: FindingKind::OnlyInB,
-                key: name.clone(),
-                detail: format!(
-                    "{} = {} on {}, not on {}",
-                    name,
-                    y.show(),
-                    b.engine,
-                    a.engine
-                ),
-                disposition: if rules.excluded_for(a.engine, a.fixture, name).is_some() {
-                    Disposition::Excluded
-                } else {
-                    Disposition::Red
-                },
-                issue: rules
-                    .excluded_for(a.engine, a.fixture, name)
-                    .map(|e| e.issue.clone())
-                    .unwrap_or_default(),
-            }),
-            (None, None) => unreachable!("a name comes from one of the two"),
+            (None, Some(y)) => {
+                let excluded = rules.excluded_for(a.engine, a.fixture, name);
+                report.findings.push(Finding {
+                    kind: FindingKind::OnlyInB,
+                    key: name.clone(),
+                    detail: format!("{name} = {} on {}, not on {}", y.show(), b.engine, a.engine),
+                    disposition: if excluded.is_some() {
+                        Disposition::Excluded
+                    } else {
+                        Disposition::Red
+                    },
+                    issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
+                });
+            }
+            _ => unreachable!("one key is one kind of record"),
         }
     }
     report
@@ -784,5 +931,103 @@ mod tests {
         );
         assert!(Rules::parse("[[excluded]]\nengine = \"oracle\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"\"\n").is_err());
         assert!(Rules::parse("[[excluded]]\nengine = \"nobody\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"i\"\n").is_err());
+    }
+
+    fn layer(name: &str, color: i64) -> Record {
+        Record::Layer(Layer {
+            name: name.into(),
+            flags: 0,
+            color,
+            true_color: -1,
+            on: true,
+            linetype: "Continuous".into(),
+            lineweight: -3,
+            plot: true,
+        })
+    }
+
+    #[test]
+    fn a_layer_round_trips_and_sorts_after_the_header() {
+        let recs = vec![
+            layer("Walls", 1),
+            h("$LTSCALE", Value::Double(1.0)),
+            layer("0", 7),
+        ];
+        let text = render_stream(&recs).unwrap();
+        let back = parse_stream(&text).unwrap();
+        let keys: Vec<(&str, &str)> = back.iter().map(|r| (r.kind(), r.key())).collect();
+        assert_eq!(
+            keys,
+            [("header", "$LTSCALE"), ("layer", "0"), ("layer", "Walls")]
+        );
+        assert_eq!(render_stream(&back).unwrap(), text);
+        assert!(text.contains(
+            "{\"model\":1,\"record\":\"layer\",\"name\":\"0\",\"flags\":0,\"color\":7,\"true_color\":-1,\"on\":true,\"linetype\":\"Continuous\",\"lineweight\":-3,\"plot\":true}"
+        ));
+    }
+
+    #[test]
+    fn a_layer_line_with_a_field_missing_or_out_of_order_is_refused() {
+        let ok = render_stream(&[layer("0", 7)]).unwrap();
+        assert!(parse_stream(&ok).is_ok());
+        assert!(parse_stream(&ok.replace("\"plot\":true", "\"plot\":1")).is_err());
+        assert!(parse_stream(&ok.replace(",\"plot\":true", "")).is_err());
+        let swapped = ok.replace("\"flags\":0,\"color\":7", "\"color\":7,\"flags\":0");
+        assert!(parse_stream(&swapped).is_err());
+        // a layer sorted before a header
+        let two = format!("{ok}{}", render_stream(&[h("$A", Value::Int(1))]).unwrap());
+        assert!(parse_stream(&two).is_err());
+    }
+
+    #[test]
+    fn a_changed_layer_colour_is_one_finding_naming_the_layer_and_the_field() {
+        let a = vec![layer("0", 7), layer("Walls", 1)];
+        let b = vec![layer("0", 7), layer("Walls", 2)];
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
+        assert_eq!(r.verdict(), Verdict::Diff(1));
+        assert_eq!(r.red()[0].key, "layer/Walls.color");
+        assert_eq!(r.compared, 2);
+    }
+
+    #[test]
+    fn a_layer_on_one_side_is_red_and_a_rule_can_name_layers_with_a_star() {
+        let a = vec![layer("0", 7), layer("Walls", 1)];
+        let b = vec![layer("0", 7)];
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
+        assert_eq!(r.verdict(), Verdict::Diff(1));
+        assert_eq!(r.red()[0].key, "layer/Walls");
+        let rules = Rules::parse(
+            "[[excluded]]\nengine = \"acadrust\"\nnames = [\"layer/W*\"]\nreason = \"r\"\nissue = \"i\"\n",
+        )
+        .unwrap();
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &rules,
+        );
+        assert_eq!(r.verdict(), Verdict::Match);
+    }
+
+    #[test]
+    fn a_star_matches_any_run_and_nothing_else() {
+        assert!(glob("layer/*.color", "layer/Walls.color"));
+        assert!(glob("layer/*.color", "layer/.color"));
+        assert!(!glob("layer/*.color", "layer/Walls.flags"));
+        assert!(glob("$A", "$A"));
+        assert!(!glob("$A", "$AB"));
+        assert!(glob("*", "anything"));
+        assert!(glob("a*b*c", "aXbYc"));
+        assert!(!glob("a*b*c", "aXcYb"));
     }
 }

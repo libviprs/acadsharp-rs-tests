@@ -11,7 +11,7 @@
 [[row]]
 fixture = "acadsharp-ac1014"
 pair = "oracle/acadrust"
-verdict = "KNOWN:17"
+verdict = "KNOWN:58"
 reason = "listed in parity/MODEL1.toml"
 issue = "libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#98, libviprs/acadsharp-rs-tests#99"
 first = 'header $CELTYPE "BYLAYER" vs "ByLayer" [Known]'

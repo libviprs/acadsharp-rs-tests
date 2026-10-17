@@ -211,6 +211,36 @@ def header_lines(doc) -> tuple[list[tuple[str, str, str]], list[str]]:
     return out, sorted(skipped)
 
 
+def layer_lines(doc) -> list[tuple[str, str, str]]:
+    """One `layer` record per LAYER entry, keyed by name (docs/MODEL_1.md).
+
+    Fields by DXF code. A colour is the colour index (62, its sign is `on`), or
+    -1 when the layer holds a true colour (420), which has no index. Optional
+    codes a DXF of an older version does not write read as the default the
+    document gives.
+    """
+    out = []
+    for layer in doc.layers:
+        d = layer.dxf
+        name = d.name
+        has_true = d.hasattr("true_color")
+        raw_color = int(d.get("color", 7))
+        color = -1 if has_true else abs(raw_color)
+        true_color = int(d.true_color) & 0xFFFFFF if has_true else -1
+        fields = [
+            ("name", quote(name)),
+            ("flags", str(int(d.get("flags", 0)) & 7)),
+            ("color", str(color)),
+            ("true_color", str(true_color)),
+            ("on", "true" if raw_color >= 0 else "false"),
+            ("linetype", quote(str(d.get("linetype", "Continuous")))),
+            ("lineweight", str(int(d.get("lineweight", -3)))),
+            ("plot", "true" if int(d.get("plot", 1)) != 0 else "false"),
+        ]
+        out.append(line("layer", name, fields))
+    return out
+
+
 def command_extract_ezdxf(args) -> int:
     import ezdxf  # only here: `freeze` and `verify` must run without it
 
@@ -226,7 +256,7 @@ def command_extract_ezdxf(args) -> int:
             return 1
         doc = ezdxf.readfile(str(path))
         records, skipped = header_lines(doc)
-        text = encode(records)
+        text = encode(records + layer_lines(doc))
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
         print(f"{rid}: {len(text.splitlines())} records")
@@ -454,9 +484,9 @@ def command_verify(_args) -> int:
             if not text.endswith("\n") or "\r" in text:
                 problems.append(f"{r['path']}: not LF-terminated")
             parsed = [json.loads(x) for x in text.splitlines()]
-            keys = [(KINDS.index(p["record"]), p["name"].encode("utf-8")) for p in parsed if p["record"] == "header"]
+            keys = [(KINDS.index(p["record"]), p["name"].encode("utf-8")) for p in parsed]
             if keys != sorted(keys) or len(set(keys)) != len(keys):
-                problems.append(f"{r['path']}: header records are not sorted and unique")
+                problems.append(f"{r['path']}: records are not sorted and unique")
             if any(p.get("model") != 1 for p in parsed):
                 problems.append(f"{r['path']}: a record without model 1")
         except (ValueError, KeyError) as e:

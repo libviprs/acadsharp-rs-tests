@@ -22,7 +22,7 @@ side is `tools/model1.py`.
 | kind | status | key |
 |---|---|---|
 | `header` | this document | the DXF `$NAME` |
-| `layer` | follows in its own change | the entry name |
+| `layer` | this document | the entry name |
 
 The rest of the table kinds (`linetype`, `textstyle`, `dimstyle`,
 `block_record`, `layout`), `dictionary`, and `xdata` with `xrecord` are each
@@ -172,6 +172,34 @@ one it did.
 acadsharp-rs is excluded from the whole stream: the C ABI exposes flattened
 primitives only, and growing it is libviprs-dep's call (wire 3,
 libviprs-dep#83).
+
+## `layer`
+
+```json
+{"model":1,"record":"layer","name":"Walls","flags":0,"color":1,"true_color":-1,"on":true,"linetype":"Continuous","lineweight":-3,"plot":true}
+```
+
+One record per LAYER table entry, keyed by the entry name, compared exactly with
+its case. Every drawing has a layer `0`, so the set is never empty. The fields
+are by the DXF code they come from, in this order, all always present:
+
+| field | type | code | meaning |
+|---|---|---|---|
+| `name` | string | 2 | the key |
+| `flags` | int | 70 | only the bits a layer owns: frozen 1, frozen in new viewports 2, locked 4. The xref bits describe the reference and not the layer |
+| `color` | int | 62 | the AutoCAD colour index (its sign is `on`), or -1 when the layer holds a true colour |
+| `true_color` | int | 420 | packed `0xRRGGBB`, or -1 when there is none |
+| `on` | bool | 62 | false when the stored colour is negative |
+| `linetype` | string | 6 | the linetype's name, never its handle |
+| `lineweight` | int | 370 | hundredths of a millimetre, or -1 by layer, -2 by block, -3 default |
+| `plot` | bool | 290 | the plot flag |
+
+The comparator reports one finding per differing field, named
+`layer/<name>.<field>`, and a layer on one side only as `layer/<name>`. A rule
+can name every layer's field with a star, `layer/*.lineweight`. A layer's colour
+is packed from its red, green and blue components in all three producers: the
+packed value ACadSharp exposes is blue first, which is a library convention and
+not a property of the layer.
 
 ## Comparing
 
