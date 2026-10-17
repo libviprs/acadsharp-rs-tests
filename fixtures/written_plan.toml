@@ -11,8 +11,71 @@
 # a version is listed under `refuses` with the library's own reason, so the
 # absence of an output is a recorded fact and not a hole.
 
+# Stage one is on the PR gate: its outputs are rows of fixtures/manifest.toml
+# (`committed = true`). Stage two is the nightly (libviprs/acadsharp-rs-tests#41):
+# the six other saves, sample_base.dwg (the Tier A row that is the AC1012 DXF
+# cells' source) and the 41 Tier B synthetics from libviprs-dep, and nothing of it
+# is stored in the repository: tools/stage_two.py makes the outputs and every
+# frozen reading in a scratch directory on the docker host, and the ignored test
+# in tests/parity.rs reads that directory. The Tier C fixtures are R4.2's, and the
+# two refusal fixtures (g13_ac1009, g13_nan_bulge) have no cells, so the test names
+# them and does not count zero.
 [stage.one]
+committed = true
 sources = ["acadsharp-ac1032"]
+
+[stage.two]
+committed = false
+sources = [
+  "acadsharp-ac1014",
+  "acadsharp-ac1015",
+  "acadsharp-ac1018",
+  "acadsharp-ac1021",
+  "acadsharp-ac1024",
+  "acadsharp-ac1027",
+  "acadsharp-sample-base",
+  "g11_codepage",
+  "g11_shapes",
+  "g13_arc",
+  "g13_bad_extents",
+  "g13_circle",
+  "g13_deep_blocks",
+  "g13_dimension",
+  "g13_dimension_shallow",
+  "g13_ellipse",
+  "g13_empty_view",
+  "g13_face3d",
+  "g13_hatch",
+  "g13_insert",
+  "g13_leader",
+  "g13_line",
+  "g13_long_text",
+  "g13_mesh",
+  "g13_mesh_bad_faces",
+  "g13_mirrored_bulge",
+  "g13_mline",
+  "g13_nonuniform",
+  "g13_ocs_mirror",
+  "g13_ocs_plane",
+  "g13_ocs_rotated",
+  "g13_ocs_skew",
+  "g13_point",
+  "g13_polyface_mesh",
+  "g13_polygon_mesh",
+  "g13_polyline",
+  "g13_ray_xline",
+  "g13_scale_1x",
+  "g13_slot",
+  "g13_slot_block",
+  "g13_solid",
+  "g13_spline",
+  "g13_text",
+  "g13_tolerance",
+  "g13_two_entities",
+  "g13_unsupported",
+  "g13_wipeout",
+  "g13_xref",
+]
 
 # ACadSharp 3.7.1, through the oracle's --rewrite-to (reference/ACadSharp.Reference).
 [writer.acadsharp]
