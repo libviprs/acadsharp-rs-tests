@@ -281,19 +281,10 @@ impl Xf {
 
     /// The object coordinate system a DXF normal implies, as a map from OCS
     /// into world space. DXF's arbitrary axis algorithm: the 1/64 test is from
-    /// the specification and is not a tolerance to tune.
+    /// the specification and is not a tolerance to tune. The rule itself is
+    /// `ocs::axes`, which `emit-acadsharp` projects through as well.
     fn arbitrary_axis(normal: V3) -> Xf {
-        let mut n = normalize(normal);
-        if n == [0.0; 3] {
-            n = [0.0, 0.0, 1.0];
-        }
-        let pick = if n[0].abs() < 1.0 / 64.0 && n[1].abs() < 1.0 / 64.0 {
-            [0.0, 1.0, 0.0]
-        } else {
-            [0.0, 0.0, 1.0]
-        };
-        let ax = normalize(cross(pick, n));
-        let ay = normalize(cross(n, ax));
+        let (ax, ay, n) = crate::ocs::axes(normal);
         Xf {
             m: [
                 [ax[0], ay[0], n[0]],
@@ -477,27 +468,7 @@ fn map_curve(center: V3, u: V3, v: V3, to_world: &Xf) -> Mapped {
     }
 }
 
-/// An angle reduced into `[0, 2*pi)`. One already in range comes back
-/// bit-identical, which keeps an untransformed arc carrying the digits the file
-/// stores.
-fn normalize_angle(angle: f64) -> f64 {
-    if (0.0..TAU).contains(&angle) {
-        return angle;
-    }
-    let reduced = angle - TAU * (angle / TAU).floor();
-    if reduced >= TAU { 0.0 } else { reduced }
-}
-
-/// A start and end into the canonical "sweeps counter-clockwise" form: a start
-/// in `[0, 2*pi)` and an end strictly greater than it.
-fn sweep(start: f64, end: f64, offset: f64) -> (f64, f64) {
-    let s = normalize_angle(start + offset);
-    let mut e = normalize_angle(end + offset);
-    if e <= s {
-        e += TAU;
-    }
-    (s, e)
-}
+use crate::ocs::{normalize_angle, sweep};
 
 // ---- the extractor ------------------------------------------------------------------
 
