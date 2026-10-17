@@ -82,6 +82,11 @@ run are below, and `tests/tables_doc.rs` holds this section to the file.
 | `oracle/acadsharp` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#22 |
 | `oracle/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#23 |
 | `acadsharp/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#25 |
+| `ezdxf/oracle`, `ezdxf/acadsharp`, `ezdxf/acadrust` | `document.format`, `document.maintenance_version`, warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#24 |
+| `ezdxf/acadsharp` | the wire 2 gaps above (`point`, `polygon`, `spline.fit_points`, the four `text` fields) | `EXCLUDED` | as above |
+| `self/oracle`, `self/acadsharp`, `self/acadrust` | `document.acad_version`, `document.maintenance_version` (a save's version is what makes it a different save) | `EXCLUDED` | libviprs/acadsharp-rs-tests#24 |
+| `self/oracle`, `self/acadsharp`, `self/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#25 |
+| `self/oracle` | the differences `parity/oracle_invariance.toml` lists as exceptions | `KNOWN` (the verdict) | per row, in that file |
 | `oracle/acadrust` | `text.text` of `acadsharp-ac1014`, `ac1015`, `ac1018` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#111 |
 | `oracle/acadrust` | `text.text` of `acadsharp-ac1032`, `acadsharp-sample-base` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
 | `oracle/acadrust` | `spline.weights.len` of `g13_hatch` | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#67 |

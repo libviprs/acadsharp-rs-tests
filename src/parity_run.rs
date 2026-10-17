@@ -94,14 +94,22 @@ pub fn judge_self(
         return Ok(plain);
     }
     let (known, open): (Vec<&Finding>, Vec<&Finding>) = red.into_iter().partition(|f| explained(f));
-    let first = open.first().or(known.first()).map(|f| f.render()).unwrap_or_default();
+    let first = open
+        .first()
+        .or(known.first())
+        .map(|f| f.render())
+        .unwrap_or_default();
     let red_text: Vec<String> = open.iter().map(|f| f.render()).collect();
     let verdict = if !open.is_empty() {
         Verdict::Diff(records_of(open.into_iter()))
     } else {
         Verdict::Known(records_of(known.into_iter()))
     };
-    Ok(Judged { verdict, first, red: red_text })
+    Ok(Judged {
+        verdict,
+        first,
+        red: red_text,
+    })
 }
 
 /// `OPEN_FAILED`'s reason: the exit code and the first line of stderr.

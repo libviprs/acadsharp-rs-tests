@@ -186,11 +186,19 @@ fn as_ref(e: &Emitted) -> Result<&Side, &String> {
 
 /// ezdxf's frozen reading of one DXF, with its sidecar.
 fn ezdxf_side(gt: &fixtures::GroundTruth) -> Result<Side, String> {
-    let text = String::from_utf8(gt.load_jsonl().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+    let text = String::from_utf8(gt.load_jsonl().map_err(|e| e.to_string())?)
+        .map_err(|e| e.to_string())?;
     let records = parse_stream(&text).map_err(|e| format!("{}: {e}", gt.id))?;
-    let side = String::from_utf8(gt.load_sidecar().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+    let side = String::from_utf8(gt.load_sidecar().map_err(|e| e.to_string())?)
+        .map_err(|e| e.to_string())?;
     let sidecar = Sidecar::parse(&side, &records).map_err(|e| format!("{}: {e}", gt.id))?;
-    Ok(Side { label: format!("ezdxf:{}", gt.id), stream: Stream { records, sidecar: Some(sidecar) } })
+    Ok(Side {
+        label: format!("ezdxf:{}", gt.id),
+        stream: Stream {
+            records,
+            sidecar: Some(sidecar),
+        },
+    })
 }
 
 /// One row of the run: judge the pair, or `OPEN_FAILED` when a side did not open.
@@ -207,7 +215,9 @@ fn put(
     match (a, b) {
         (Ok(a), Ok(b)) => {
             let j = match explained {
-                Some(e) => acadsharp_rs_tests::parity_run::judge_self(fixture, pair, a, b, tables, e)?,
+                Some(e) => {
+                    acadsharp_rs_tests::parity_run::judge_self(fixture, pair, a, b, tables, e)?
+                }
                 None => judge_pair(fixture, pair, a, b, tables)?,
             };
             if std::env::var("PARITY_EXPLAIN").as_deref() == Ok("1") {
@@ -218,7 +228,12 @@ fn put(
             computed.insert(key, (j.verdict.to_string(), j.first, String::new()));
         }
         (a, b) => {
-            let why = [a.err(), b.err()].into_iter().flatten().cloned().collect::<Vec<_>>().join("; ");
+            let why = [a.err(), b.err()]
+                .into_iter()
+                .flatten()
+                .cloned()
+                .collect::<Vec<_>>()
+                .join("; ");
             computed.insert(key, (Verdict::OpenFailed.to_string(), String::new(), why));
         }
     }
@@ -267,9 +282,33 @@ fn compute() -> Result<(Computed, Option<Digests>), String> {
         let sharp_run = sharp_run?;
         let rust_run = rust_run?;
         let oracle = frozen(f)?;
-        put(&mut computed, &tables, &f.id, "oracle/acadsharp", Ok(&oracle), as_ref(&sharp_run), None)?;
-        put(&mut computed, &tables, &f.id, "oracle/acadrust", Ok(&oracle), as_ref(&rust_run), None)?;
-        put(&mut computed, &tables, &f.id, "acadsharp/acadrust", as_ref(&sharp_run), as_ref(&rust_run), None)?;
+        put(
+            &mut computed,
+            &tables,
+            &f.id,
+            "oracle/acadsharp",
+            Ok(&oracle),
+            as_ref(&sharp_run),
+            None,
+        )?;
+        put(
+            &mut computed,
+            &tables,
+            &f.id,
+            "oracle/acadrust",
+            Ok(&oracle),
+            as_ref(&rust_run),
+            None,
+        )?;
+        put(
+            &mut computed,
+            &tables,
+            &f.id,
+            "acadsharp/acadrust",
+            as_ref(&sharp_run),
+            as_ref(&rust_run),
+            None,
+        )?;
         held.insert(("acadsharp", f.id.clone()), sharp_run);
         held.insert(("acadrust", f.id.clone()), rust_run);
         oracles.insert(f.id.clone(), oracle);
@@ -286,30 +325,75 @@ fn compute() -> Result<(Computed, Option<Digests>), String> {
             continue;
         };
         let ez = ezdxf_side(gt)?;
-        let oracle = oracles.get(&twin_of).ok_or_else(|| format!("{}: its DWG twin {twin_of} is not a fixture", gt.input))?;
-        put(&mut computed, &tables, &gt.input, "ezdxf/oracle", Ok(&ez), Ok(oracle), None)?;
-        for (engine, pair) in [("acadsharp", "ezdxf/acadsharp"), ("acadrust", "ezdxf/acadrust")] {
-            let theirs = held.get(&(engine, twin_of.clone())).ok_or_else(|| format!("{twin_of}: no {engine} run"))?;
-            put(&mut computed, &tables, &gt.input, pair, Ok(&ez), as_ref(theirs), None)?;
+        let oracle = oracles
+            .get(&twin_of)
+            .ok_or_else(|| format!("{}: its DWG twin {twin_of} is not a fixture", gt.input))?;
+        put(
+            &mut computed,
+            &tables,
+            &gt.input,
+            "ezdxf/oracle",
+            Ok(&ez),
+            Ok(oracle),
+            None,
+        )?;
+        for (engine, pair) in [
+            ("acadsharp", "ezdxf/acadsharp"),
+            ("acadrust", "ezdxf/acadrust"),
+        ] {
+            let theirs = held
+                .get(&(engine, twin_of.clone()))
+                .ok_or_else(|| format!("{twin_of}: no {engine} run"))?;
+            put(
+                &mut computed,
+                &tables,
+                &gt.input,
+                pair,
+                Ok(&ez),
+                as_ref(theirs),
+                None,
+            )?;
         }
     }
 
     // Each engine against itself across the seven saves, baseline AC1032. The
     // oracle's differences are the exception list R3.4 committed; the other two
     // engines have none, so theirs are findings.
-    let list = acadsharp_rs_tests::invariance::ExceptionList::oracle().map_err(|e| e.to_string())?;
+    let list =
+        acadsharp_rs_tests::invariance::ExceptionList::oracle().map_err(|e| e.to_string())?;
     let baseline = list.baseline.clone();
     for save in SAVES {
         let o_base = oracles.get(&baseline).expect("the baseline is a fixture");
         let o_save = oracles.get(save).expect("a save is a fixture");
         let explained = |f: &acadsharp_rs_tests::compare::Finding| {
-            list.row_for(save, f).is_some_and(|r| r.kind == acadsharp_rs_tests::invariance::Kind::Exception)
+            list.row_for(save, f)
+                .is_some_and(|r| r.kind == acadsharp_rs_tests::invariance::Kind::Exception)
         };
-        put(&mut computed, &tables, save, "self/oracle", Ok(o_base), Ok(o_save), Some(&explained))?;
+        put(
+            &mut computed,
+            &tables,
+            save,
+            "self/oracle",
+            Ok(o_base),
+            Ok(o_save),
+            Some(&explained),
+        )?;
         for engine in ["acadsharp", "acadrust"] {
-            let base = held.get(&(engine, baseline.clone())).ok_or("no baseline run")?;
-            let this = held.get(&(engine, save.to_string())).ok_or("no run of a save")?;
-            put(&mut computed, &tables, save, &format!("self/{engine}"), as_ref(base), as_ref(this), None)?;
+            let base = held
+                .get(&(engine, baseline.clone()))
+                .ok_or("no baseline run")?;
+            let this = held
+                .get(&(engine, save.to_string()))
+                .ok_or("no run of a save")?;
+            put(
+                &mut computed,
+                &tables,
+                save,
+                &format!("self/{engine}"),
+                as_ref(base),
+                as_ref(this),
+                None,
+            )?;
         }
     }
     let digests = digests(&out)?;
