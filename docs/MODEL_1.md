@@ -132,16 +132,16 @@ producer coerces to that.
 ### Known from the start
 
 Some variables differ between a DWG and its AutoCAD DXF twin by construction,
-because the two files were written at different moments: `$TDCREATE`,
-`$TDUPDATE`, `$TDUCREATE`, `$TDUUPDATE`, `$TDINDWG`, `$TDUSRTIMER`,
-`$VERSIONGUID`, `$FINGERPRINTGUID`, `$HANDSEED`, and `$ACADMAINTVER`, which is the
-maintenance release of whichever AutoCAD wrote the file. They are listed in
-`parity/MODEL1.toml` as `known` for the pairs that have an ezdxf side. Between two
-readers of one DWG they are not excused: both read the same bytes.
+because the two files were written at different moments: `$HANDSEED`, `$TDINDWG`,
+`$TDUSRTIMER`, `$VERSIONGUID`, `$ACADMAINTVER` (the maintenance release of whichever
+AutoCAD wrote the file) and, on the engines that read them, the timestamps. They
+are `known` in `parity/MODEL1.toml` for the `dxf-dwg:` pairs, which hold a
+reader's DXF against its own DWG of the same drawing. Between two readers of one
+file they are not excused: both read the same bytes.
 
-A variable a DWG of an old version does not store is a second class: each reader
+A variable a file of an old version does not store is a second class: each reader
 reports its own default, and the two defaults can differ. Those are listed per
-version, with the DXF twin of that version as the evidence that the variable is
+fixture, with the DXF twin of that version as the evidence that the variable is
 not stored.
 
 ### Values that cannot be frozen
@@ -180,10 +180,19 @@ when it is inside the `BOUNDED` class of `docs/TOLERANCES.md` (every pair here h
 an unrelated reader in it), everything else must be equal, and a difference of
 `type` is its own finding. The verdict is the schema 1 vocabulary
 (`src/verdict.rs`): `MATCH`, `KNOWN:n` when every difference is a listed row,
-`DIFF:n` for the unlisted ones. The rows are in `parity/MODEL1_VERDICTS.toml`.
+`DIFF:n` for the unlisted ones, and `OPEN_FAILED` when a reader refuses the file.
+
+The rows are in `parity/MODEL1_VERDICTS.toml`, one per (fixture, pair):
+
+| pair | fixture | reads |
+|---|---|---|
+| `oracle/acadrust` | each of the seven saves | both DWG readers |
+| `ezdxf/oracle`, `ezdxf/acadrust`, `oracle/acadrust` | each of the six ASCII twins | all three, the DXF |
+| `dxf-dwg:oracle`, `dxf-dwg:acadrust` | each of the six twins | a reader's DXF against its own DWG of that drawing |
+
 They are a sibling of `parity/VERDICTS.toml` and not rows in it: this stream has
 no native lane to wait for, and a second file cannot conflict with the schema 1
-run's.
+run's. The ezdxf side is the DXF only, since ezdxf never opens a DWG.
 
 The control is the same shape as schema 1's: one `$LTSCALE` times 1.001 in a
 scratch copy of the oracle's stream is one more `DIFF` and names the variable
@@ -192,8 +201,8 @@ scratch copy of the oracle's stream is one more `DIFF` and names the variable
 ## Freezing the ground truths
 
 `tools/model1.py freeze` runs the oracle (`ACadSharp.Reference --model1`) in the
-pinned .NET image over the seven AutoCAD saves, and ezdxf in the pinned Python
-image over the six ASCII DXF twins. It writes nothing without `--accept`, for the
+pinned .NET image over the seven AutoCAD saves and the six ASCII DXF twins, and
+ezdxf in the pinned Python image over the twins. It writes nothing without `--accept`, for the
 reason `tools/regenerate_reference.py` gives: a moved ground truth arrives as a
 reviewed diff. `tools/model1.py verify` checks the committed files offline.
 
