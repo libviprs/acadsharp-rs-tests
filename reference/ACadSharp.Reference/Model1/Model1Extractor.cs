@@ -28,9 +28,14 @@ public static class Model1Extractor
         try
         {
             // The container is chosen by extension, as the schema 1 extraction does.
+            // An object whose class ACadSharp does not know is dropped unless
+            // KeepUnknownNonGraphicalObjects is on, and a dictionary entry that is
+            // dropped has no class name to compare. The switch keeps the object
+            // after the reader's notification has fired, and schema 1 emits no
+            // object, so nothing else moves because of it.
             document = string.Equals(Path.GetExtension(path), ".dxf", StringComparison.OrdinalIgnoreCase)
-                ? DxfReader.Read(path)
-                : DwgReader.Read(path);
+                ? DxfReader.Read(path, new DxfReaderConfiguration { KeepUnknownNonGraphicalObjects = true })
+                : DwgReader.Read(path, new DwgReaderConfiguration { KeepUnknownNonGraphicalObjects = true });
         }
         catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
         {
@@ -61,6 +66,7 @@ public static class Model1Extractor
         ExtractLayers(document, records);
         ExtractLinetypes(document, records);
         ExtractTextStyles(document, records);
+        ExtractDictionaries(document, records);
         return records;
     }
 
@@ -184,6 +190,91 @@ public static class Model1Extractor
                 // field is written as false and left out of the comparison
                 // (excluded for the oracle in parity/MODEL1.toml).
                 ("annotative", "false")));
+        }
+    }
+
+    /// <summary>
+    /// One <c>dictionary</c> record per DICTIONARY (and DICTIONARYWDFLT) reachable
+    /// from the root, keyed by the path of entry keys; plus the extension
+    /// dictionaries of table entries (<c>table/&lt;kind&gt;/&lt;name&gt;</c>) and of
+    /// layouts (<c>layout/&lt;name&gt;</c>). Extension dictionaries of entities are
+    /// keyed by handle only and are left out (docs/MODEL_1.md).
+    /// </summary>
+    private static void ExtractDictionaries(CadDocument document, List<Model1Record> records)
+    {
+        var seen = new HashSet<object>(ReferenceEqualityComparer.Instance);
+        if (document.RootDictionary is { } root)
+        {
+            WalkDictionary(root, string.Empty, records, seen);
+        }
+
+        foreach ((string kind, IEnumerable<TableEntry> entries) in TableEntries(document))
+        {
+            foreach (TableEntry entry in entries)
+            {
+                if (entry.XDictionary is { } xdic)
+                {
+                    WalkDictionary(xdic, $"table/{kind}/{entry.Name}", records, seen);
+                }
+            }
+        }
+
+        foreach (Objects.Layout layout in document.Layouts)
+        {
+            if (layout.XDictionary is { } xdic)
+            {
+                WalkDictionary(xdic, $"layout/{layout.Name}", records, seen);
+            }
+        }
+    }
+
+    /// <summary>The table entries by the kind the owner paths of docs/MODEL_1.md use.</summary>
+    internal static IEnumerable<(string Kind, IEnumerable<TableEntry> Entries)> TableEntries(CadDocument document)
+    {
+        yield return ("layer", document.Layers);
+        yield return ("linetype", document.LineTypes);
+        yield return ("textstyle", document.TextStyles);
+        yield return ("dimstyle", document.DimensionStyles);
+        yield return ("block_record", document.BlockRecords);
+        yield return ("appid", document.AppIds);
+        yield return ("view", document.Views);
+        yield return ("vport", document.VPorts);
+        yield return ("ucs", document.UCSs);
+    }
+
+    private static void WalkDictionary(
+        Objects.CadDictionary dictionary, string path, List<Model1Record> records, HashSet<object> seen)
+    {
+        if (!seen.Add(dictionary))
+        {
+            return;
+        }
+
+        string[] keys = [.. dictionary.EntryNames.OrderBy(k => k, StringComparer.Ordinal)];
+        var entries = new List<string>();
+        foreach (string key in keys)
+        {
+            Objects.NonGraphicalObject entry = dictionary[key] as Objects.NonGraphicalObject
+                ?? throw new InvalidOperationException($"{path}/{key}: a dictionary entry that is not an object");
+            entries.Add("{\"key\":" + NumericFormatting.Quoted(key)
+                + ",\"class\":" + NumericFormatting.Quoted(entry.ObjectName) + "}");
+        }
+
+        records.Add(Model1Record.Of(
+            "dictionary",
+            path,
+            ("name", NumericFormatting.Quoted(path)),
+            ("hard_owner", dictionary.HardOwnerFlag ? "true" : "false"),
+            ("cloning", NumericFormatting.Whole((long)dictionary.ClonningFlags)),
+            ("entries", "[" + string.Join(',', entries) + "]"),
+            ("entry_count", NumericFormatting.Whole(keys.Length))));
+
+        foreach (string key in keys)
+        {
+            if (dictionary[key] is Objects.CadDictionary child)
+            {
+                WalkDictionary(child, path.Length == 0 ? key : path + "/" + key, records, seen);
+            }
         }
     }
 

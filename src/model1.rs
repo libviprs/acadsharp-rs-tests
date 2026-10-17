@@ -128,9 +128,24 @@ const TEXTSTYLE: Schema = Schema {
     ],
 };
 
+/// One entry of a dictionary: its key and the DXF object name of what it holds.
+const DICTIONARY_ENTRY: &[(&str, Ty)] = &[("key", Ty::Str), ("class", Ty::Str)];
+
+/// A dictionary, keyed by the path of entry keys from the root (`""` for the
+/// root itself). The entries are sorted by key.
+const DICTIONARY: Schema = Schema {
+    kind: "dictionary",
+    fields: &[
+        ("hard_owner", Ty::Bool),
+        ("cloning", Ty::Int),
+        ("entries", Ty::List(DICTIONARY_ENTRY)),
+        ("entry_count", Ty::Int),
+    ],
+};
+
 /// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
 /// and one name here, so a new kind never touches the others.
-pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE];
+pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE, TEXTSTYLE, DICTIONARY];
 
 /// One segment of a linetype's pattern, in file order.
 const SEGMENT: &[(&str, Ty)] = &[
