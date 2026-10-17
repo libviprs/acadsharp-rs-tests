@@ -53,8 +53,7 @@ fn out_dir() -> PathBuf {
         // One directory per process: a second `cargo test` on the same target
         // directory (another job, another checkout) must not write into the
         // files this one is about to read.
-        _ => Path::new(env!("CARGO_TARGET_TMPDIR"))
-            .join(format!("model1-{}", std::process::id())),
+        _ => Path::new(env!("CARGO_TARGET_TMPDIR")).join(format!("model1-{}", std::process::id())),
     }
 }
 

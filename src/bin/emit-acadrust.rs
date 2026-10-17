@@ -42,7 +42,9 @@ fn main() -> ExitCode {
         .join("acadrust");
     // A `[[fixture]]` is a DWG; an `[[oracle_input]]` is one of AutoCAD's DXF
     // twins. The id says which, and the manifest is the only list of either.
-    let (id, sha256, bytes, is_dxf, extracted) = if let Some(fixture) = fixtures::by_id(&args.fixture) {
+    let (id, sha256, bytes, is_dxf, extracted) = if let Some(fixture) =
+        fixtures::by_id(&args.fixture)
+    {
         let bytes = match fixture.load() {
             Ok(b) => b,
             Err(e) => {
