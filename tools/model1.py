@@ -76,7 +76,7 @@ EZDXF_INPUTS = [
 ]
 
 ORACLE_INPUTS = ORACLE_FIXTURES + EZDXF_INPUTS
-KINDS = ["header", "layer"]
+KINDS = ["header", "layer", "linetype", "textstyle", "dimstyle", "block_record", "layout", "dictionary", "xdata", "xrecord"]
 NL = b"\n"
 
 
@@ -241,6 +241,66 @@ def layer_lines(doc) -> list[tuple[str, str, str]]:
     return out
 
 
+def linetype_lines(doc) -> list[tuple[str, str, str]]:
+    """One `linetype` record per LTYPE entry, keyed by name (docs/MODEL_1.md).
+
+    The pattern is ezdxf's tag list (72, 73, 40 and then, per segment, 49 with
+    the tags that follow it), read the way the DXF group codes say: a code a
+    segment does not write is the default the document gives. The style is the
+    text style's name, resolved from the handle in 340.
+    """
+    out = []
+    for lt in doc.linetypes:
+        name = lt.dxf.name
+        alignment, length, segs, cur = 65, 0.0, [], None
+        for t in lt.pattern_tags.tags:
+            c, v = t.code, t.value
+            if c == 72:
+                alignment = int(v)
+            elif c == 40:
+                length = float(v)
+            elif c == 49:
+                cur = {"length": float(v), "flags": 0, "shape": 0, "scale": 1.0, "rot": 0.0,
+                       "ox": 0.0, "oy": 0.0, "text": "", "style": ""}
+                segs.append(cur)
+            elif cur is not None:
+                if c == 74:
+                    cur["flags"] = int(v)
+                elif c == 75:
+                    cur["shape"] = int(v)
+                elif c == 340:
+                    target = doc.entitydb.get(v)
+                    cur["style"] = target.dxf.name if target is not None and target.dxf.hasattr("name") else ""
+                elif c == 46:
+                    cur["scale"] = float(v)
+                elif c == 50:
+                    cur["rot"] = math.radians(float(v))
+                elif c == 44:
+                    cur["ox"] = float(v)
+                elif c == 45:
+                    cur["oy"] = float(v)
+                elif c == 9:
+                    cur["text"] = normalize_newlines(str(v))
+        items = ",".join(
+            "{" + ",".join([
+                f'"length":{real(g["length"])}', f'"flags":{g["flags"]}', f'"shape_number":{g["shape"]}',
+                f'"scale":{real(g["scale"])}', f'"rotation":{real(g["rot"])}',
+                f'"offset":[{real(g["ox"])},{real(g["oy"])}]', f'"text":{quote(g["text"])}',
+                f'"style":{quote(g["style"])}',
+            ]) + "}"
+            for g in segs
+        )
+        fields = [
+            ("name", quote(name)),
+            ("description", quote(normalize_newlines(str(lt.dxf.get("description", ""))))),
+            ("alignment", str(alignment)),
+            ("pattern_length", real(length)),
+            ("segments", "[" + items + "]"),
+        ]
+        out.append(line("linetype", name, fields))
+    return out
+
+
 def command_extract_ezdxf(args) -> int:
     import ezdxf  # only here: `freeze` and `verify` must run without it
 
@@ -256,7 +316,7 @@ def command_extract_ezdxf(args) -> int:
             return 1
         doc = ezdxf.readfile(str(path))
         records, skipped = header_lines(doc)
-        text = encode(records + layer_lines(doc))
+        text = encode(records + layer_lines(doc) + linetype_lines(doc))
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
         print(f"{rid}: {len(text.splitlines())} records")

@@ -10,7 +10,7 @@
 use acadrust::document::CadDocument;
 use acadrust::types::Color;
 
-use crate::model1::{Header, Layer, Record, Value};
+use crate::model1::{Entry, Header, Record, Value};
 
 fn color(c: &Color) -> i64 {
     // The schema's rule for a colour held in an int variable: the AutoCAD colour
@@ -269,16 +269,82 @@ pub fn layer_records(doc: &CadDocument) -> Vec<Record> {
             let flags = i64::from(l.flags.frozen)
                 | (i64::from(l.flags.frozen_in_new_viewport) << 1)
                 | (i64::from(l.flags.locked) << 2);
-            Record::Layer(Layer {
-                name: l.name.clone(),
-                flags,
-                color,
-                true_color,
-                on: !l.flags.off,
-                linetype: l.line_type.clone(),
-                lineweight: i64::from(l.line_weight.value()),
-                plot: l.is_plottable,
-            })
+            Record::Entry(Entry::new(
+                "layer",
+                l.name.clone(),
+                vec![
+                    Value::Int(flags),
+                    Value::Int(color),
+                    Value::Int(true_color),
+                    Value::Bool(!l.flags.off),
+                    Value::Str(l.line_type.clone()),
+                    Value::Int(i64::from(l.line_weight.value())),
+                    Value::Bool(l.is_plottable),
+                ],
+            ))
+        })
+        .collect()
+}
+
+/// One `linetype` record per LTYPE entry (docs/MODEL_1.md). The flags of a
+/// segment are rebuilt from what acadrust holds as typed data: 1 for an absolute
+/// rotation, 2 for embedded text, 4 for an embedded shape. The style is resolved
+/// from its handle through the text style table.
+pub fn linetype_records(doc: &CadDocument) -> Vec<Record> {
+    use acadrust::tables::LineTypeComplexContent;
+    doc.line_types
+        .iter()
+        .map(|lt| {
+            let segments = lt
+                .elements
+                .iter()
+                .map(|e| match &e.complex {
+                    None => vec![
+                        Value::Double(e.length),
+                        Value::Int(0),
+                        Value::Int(0),
+                        Value::Double(1.0),
+                        Value::Double(0.0),
+                        Value::Point2([0.0, 0.0]),
+                        Value::Str(String::new()),
+                        Value::Str(String::new()),
+                    ],
+                    Some(c) => {
+                        let (kind, shape, text) = match &c.content {
+                            LineTypeComplexContent::Shape { shape_number } => {
+                                (4, i64::from(*shape_number), String::new())
+                            }
+                            LineTypeComplexContent::Text { text } => (2, 0, text.clone()),
+                        };
+                        let style = doc
+                            .text_styles
+                            .iter()
+                            .find(|t| t.handle == c.style_handle)
+                            .map(|t| t.name.clone())
+                            .unwrap_or_default();
+                        vec![
+                            Value::Double(e.length),
+                            Value::Int(kind | i64::from(c.absolute_rotation)),
+                            Value::Int(shape),
+                            Value::Double(c.scale),
+                            Value::Double(c.rotation),
+                            Value::Point2(c.offset),
+                            Value::Str(text),
+                            Value::Str(style),
+                        ]
+                    }
+                })
+                .collect();
+            Record::Entry(Entry::new(
+                "linetype",
+                lt.name.clone(),
+                vec![
+                    Value::Str(lt.description.clone()),
+                    Value::Int(i64::from(u32::from(lt.alignment))),
+                    Value::Double(lt.pattern_length),
+                    Value::List(segments),
+                ],
+            ))
         })
         .collect()
 }
@@ -287,6 +353,7 @@ pub fn layer_records(doc: &CadDocument) -> Vec<Record> {
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     let mut all = header_records(doc);
     all.extend(layer_records(doc));
+    all.extend(linetype_records(doc));
     all
 }
 

@@ -20,7 +20,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use acadsharp_rs_tests::model1::{
-    self, Disposition, FindingKind, Record, Report, Rules, Side, compare,
+    self, Disposition, FindingKind, Record, Report, Rules, Side, Value, compare,
 };
 use acadsharp_rs_tests::verdict::{Row, Table};
 
@@ -510,8 +510,9 @@ fn one_changed_layer_colour_is_red_and_names_the_layer() {
     let name = oracle
         .iter()
         .find_map(|r| match r {
-            Record::Layer(l)
-                if l.color > 0
+            Record::Entry(l)
+                if l.kind == "layer"
+                    && matches!(l.get("color"), Some(Value::Int(c)) if *c > 0)
                     && before
                         .findings
                         .iter()
@@ -523,10 +524,15 @@ fn one_changed_layer_colour_is_red_and_names_the_layer() {
         })
         .expect("the save has a layer with an index colour that matches");
     for r in &mut oracle {
-        if let Record::Layer(l) = r
+        if let Record::Entry(l) = r
+            && l.kind == "layer"
             && l.name == name
         {
-            l.color = if l.color == 1 { 2 } else { 1 };
+            let was = l.get("color").cloned();
+            l.set(
+                "color",
+                Value::Int(if was == Some(Value::Int(1)) { 2 } else { 1 }),
+            );
         }
     }
     let after = compare(
@@ -550,5 +556,59 @@ fn one_changed_layer_colour_is_red_and_names_the_layer() {
         "{}",
         after.first()
     );
+    assert!(after.red().iter().any(|f| f.key == key), "{key}");
+}
+
+/// The linetype control: one segment's length changed in a scratch copy of the
+/// oracle's stream turns that save's row red, and the finding names the entry
+/// and the segment index.
+#[test]
+fn one_changed_segment_length_is_red_and_names_the_entry_and_the_index() {
+    let rules = model1::committed_rules().unwrap();
+    let id = "acadsharp-ac1032";
+    let Some(run) = gate(the_run().as_ref().map_err(String::clone)) else {
+        return;
+    };
+    let mine = run.rust[id].as_ref().expect("acadrust reads this save");
+    let mut oracle = model1::load_frozen("oracle", id).unwrap();
+    fn side<'a>(id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine: "oracle",
+            fixture: id,
+            records,
+        }
+    }
+    let theirs = Side {
+        engine: "acadrust",
+        fixture: id,
+        records: mine,
+    };
+    let before_red = compare("oracle/acadrust", &side(id, &oracle), &theirs, &rules)
+        .red()
+        .len();
+    let mut changed = None;
+    for r in &mut oracle {
+        let Record::Entry(e) = r else { continue };
+        if e.kind != "linetype" || changed.is_some() {
+            continue;
+        }
+        let Some(Value::List(segments)) = e.get("segments").cloned() else {
+            continue;
+        };
+        if segments.len() < 2 {
+            continue;
+        }
+        let mut segments = segments;
+        let Value::Double(len) = segments[1][0] else {
+            continue;
+        };
+        segments[1][0] = Value::Double(len * 1.5 + 1.0);
+        e.set("segments", Value::List(segments));
+        changed = Some(e.name.clone());
+    }
+    let name = changed.expect("a linetype with at least two segments");
+    let after = compare("oracle/acadrust", &side(id, &oracle), &theirs, &rules);
+    let key = format!("linetype/{name}.segments[1].length");
+    assert_eq!(after.red().len(), before_red + 1, "{}", after.first());
     assert!(after.red().iter().any(|f| f.key == key), "{key}");
 }

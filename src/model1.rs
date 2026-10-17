@@ -18,7 +18,7 @@ use crate::canonical::{format_real, quote};
 use crate::compare::BOUNDED;
 use crate::verdict::Verdict;
 
-/// A header variable's value, in the one written form per type.
+/// A value in the one written form per type.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Value {
     Str(String),
@@ -27,6 +27,8 @@ pub enum Value {
     Bool(bool),
     Point2([f64; 2]),
     Point3([f64; 3]),
+    /// A list of records, each one a value per field of the element schema.
+    List(Vec<Vec<Value>>),
 }
 
 impl Value {
@@ -39,6 +41,7 @@ impl Value {
             Self::Bool(_) => "bool",
             Self::Point2(_) => "point2",
             Self::Point3(_) => "point3",
+            Self::List(_) => "list",
         }
     }
 
@@ -51,16 +54,83 @@ impl Value {
             Self::Bool(b) => b.to_string(),
             Self::Point2([x, y]) => format!("[{},{}]", r(*x)?, r(*y)?),
             Self::Point3([x, y, z]) => format!("[{},{},{}]", r(*x)?, r(*y)?, r(*z)?),
+            Self::List(_) => return Err("a list is written through its schema".into()),
         })
     }
 
     /// The value as it is shown in a finding.
     pub fn show(&self) -> String {
-        self.render().unwrap_or_else(|e| format!("<{e}>"))
+        match self {
+            Self::List(l) => format!("[{} elements]", l.len()),
+            other => other.render().unwrap_or_else(|e| format!("<{e}>")),
+        }
     }
 }
 
-/// One `header` record.
+/// The type of one field of a table kind.
+#[derive(Debug, Clone, Copy)]
+pub enum Ty {
+    Str,
+    Int,
+    Double,
+    Bool,
+    Point2,
+    Point3,
+    /// A list whose elements are records of these fields.
+    List(&'static [(&'static str, Ty)]),
+}
+
+/// The fields of one kind of table entry, after its `name`. The order is the
+/// order of the written line.
+pub struct Schema {
+    pub kind: &'static str,
+    pub fields: &'static [(&'static str, Ty)],
+}
+
+const LAYER: Schema = Schema {
+    kind: "layer",
+    fields: &[
+        ("flags", Ty::Int),
+        ("color", Ty::Int),
+        ("true_color", Ty::Int),
+        ("on", Ty::Bool),
+        ("linetype", Ty::Str),
+        ("lineweight", Ty::Int),
+        ("plot", Ty::Bool),
+    ],
+};
+
+const LINETYPE: Schema = Schema {
+    kind: "linetype",
+    fields: &[
+        ("description", Ty::Str),
+        ("alignment", Ty::Int),
+        ("pattern_length", Ty::Double),
+        ("segments", Ty::List(SEGMENT)),
+    ],
+};
+
+/// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
+/// and one name here, so a new kind never touches the others.
+pub const SCHEMAS: &[Schema] = &[LAYER, LINETYPE];
+
+/// One segment of a linetype's pattern, in file order.
+const SEGMENT: &[(&str, Ty)] = &[
+    ("length", Ty::Double),
+    ("flags", Ty::Int),
+    ("shape_number", Ty::Int),
+    ("scale", Ty::Double),
+    ("rotation", Ty::Double),
+    ("offset", Ty::Point2),
+    ("text", Ty::Str),
+    ("style", Ty::Str),
+];
+
+pub fn schema(kind: &str) -> Option<&'static Schema> {
+    SCHEMAS.iter().find(|s| s.kind == kind)
+}
+
+/// One header variable.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Header {
     /// The DXF name, `$LTSCALE`.
@@ -68,40 +138,58 @@ pub struct Header {
     pub value: Value,
 }
 
-/// One `layer` record: a LAYER table entry, by name.
+/// One table entry of any kind that has a [`Schema`]: its kind, its key, and a
+/// value per field in the schema's order.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Layer {
+pub struct Entry {
+    pub kind: &'static str,
     pub name: String,
-    /// DXF 70, only the bits a layer owns: frozen 1, frozen in new viewports 2,
-    /// locked 4.
-    pub flags: i64,
-    /// The colour index (62), or -1 for a true colour.
-    pub color: i64,
-    /// The packed 0xRRGGBB (420), or -1.
-    pub true_color: i64,
-    /// False when the stored colour is negative: the layer is off.
-    pub on: bool,
-    /// The linetype's name (6).
-    pub linetype: String,
-    /// The lineweight (370), in hundredths of a millimetre or -1, -2, -3.
-    pub lineweight: i64,
-    /// The plot flag (290).
-    pub plot: bool,
+    pub values: Vec<Value>,
 }
 
-/// A model-1 record. Every further kind is one more variant and one more
+impl Entry {
+    pub fn new(kind: &'static str, name: impl Into<String>, values: Vec<Value>) -> Self {
+        Self {
+            kind,
+            name: name.into(),
+            values,
+        }
+    }
+
+    /// The value of a field by name.
+    pub fn get(&self, field: &str) -> Option<&Value> {
+        let s = schema(self.kind)?;
+        let i = s.fields.iter().position(|(n, _)| *n == field)?;
+        self.values.get(i)
+    }
+
+    /// The value of a field by name, replaced. For controls that change one
+    /// value in a scratch copy.
+    pub fn set(&mut self, field: &str, value: Value) -> bool {
+        let Some(s) = schema(self.kind) else {
+            return false;
+        };
+        let Some(i) = s.fields.iter().position(|(n, _)| *n == field) else {
+            return false;
+        };
+        self.values[i] = value;
+        true
+    }
+}
+
+/// A model-1 record. Every further kind is one more [`Schema`] and one more
 /// section of docs/MODEL_1.md.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Record {
     Header(Header),
-    Layer(Layer),
+    Entry(Entry),
 }
 
 impl Record {
     pub fn kind(&self) -> &'static str {
         match self {
             Self::Header(_) => "header",
-            Self::Layer(_) => "layer",
+            Self::Entry(e) => e.kind,
         }
     }
 
@@ -109,7 +197,7 @@ impl Record {
     pub fn key(&self) -> &str {
         match self {
             Self::Header(h) => &h.name,
-            Self::Layer(l) => &l.name,
+            Self::Entry(e) => &e.name,
         }
     }
 }
@@ -151,16 +239,66 @@ pub fn output_path(out: &std::path::Path, fixture: &str, engine: &str) -> std::p
 
 // ---- writing ------------------------------------------------------------------------
 
-const KIND_ORDER: [&str; 2] = ["header", "layer"];
+/// The kinds in stream order, every one `docs/MODEL_1.md` plans. A kind with no
+/// [`Schema`] yet is refused by the parser and the writer.
+pub const KIND_ORDER: [&str; 10] = [
+    "header",
+    "layer",
+    "linetype",
+    "textstyle",
+    "dimstyle",
+    "block_record",
+    "layout",
+    "dictionary",
+    "xdata",
+    "xrecord",
+];
+
+fn kind_index(kind: &str) -> Option<usize> {
+    KIND_ORDER.iter().position(|k| *k == kind)
+}
+
+fn render_typed(v: &Value, ty: &Ty) -> Result<String, String> {
+    match (ty, v) {
+        (Ty::Str, Value::Str(_))
+        | (Ty::Int, Value::Int(_))
+        | (Ty::Double, Value::Double(_))
+        | (Ty::Bool, Value::Bool(_))
+        | (Ty::Point2, Value::Point2(_))
+        | (Ty::Point3, Value::Point3(_)) => v.render(),
+        (Ty::List(fields), Value::List(items)) => {
+            let mut parts = Vec::new();
+            for item in items {
+                parts.push(render_fields(fields, item)?);
+            }
+            Ok(format!("[{}]", parts.join(",")))
+        }
+        _ => Err(format!("a {} where the schema says {ty:?}", v.type_name())),
+    }
+}
+
+fn render_fields(fields: &[(&'static str, Ty)], values: &[Value]) -> Result<String, String> {
+    if fields.len() != values.len() {
+        return Err(format!(
+            "{} values for {} fields",
+            values.len(),
+            fields.len()
+        ));
+    }
+    let mut parts = Vec::new();
+    for ((name, ty), v) in fields.iter().zip(values) {
+        parts.push(format!("\"{name}\":{}", render_typed(v, ty)?));
+    }
+    Ok(format!("{{{}}}", parts.join(",")))
+}
 
 /// The exact text of a `.model1.jsonl`: sorted by (kind order, key), LF, a final
 /// newline. Two records with one key are refused.
 pub fn render_stream(records: &[Record]) -> Result<String, String> {
     let mut sorted: Vec<&Record> = records.iter().collect();
     sorted.sort_by(|a, b| {
-        let ka = KIND_ORDER.iter().position(|k| *k == a.kind());
-        let kb = KIND_ORDER.iter().position(|k| *k == b.kind());
-        ka.cmp(&kb)
+        kind_index(a.kind())
+            .cmp(&kind_index(b.kind()))
             .then_with(|| a.key().as_bytes().cmp(b.key().as_bytes()))
     });
     let mut out = String::new();
@@ -179,17 +317,15 @@ pub fn render_stream(records: &[Record]) -> Result<String, String> {
                     h.value.render()?
                 ));
             }
-            Record::Layer(l) => {
+            Record::Entry(e) => {
+                let s = schema(e.kind).ok_or(format!("{} has no schema", e.kind))?;
+                let body = render_fields(s.fields, &e.values)?;
+                // `{"a":1}` becomes `,"a":1}` so the fields follow the name.
                 out.push_str(&format!(
-                    "{{\"model\":1,\"record\":\"layer\",\"name\":{},\"flags\":{},\"color\":{},\"true_color\":{},\"on\":{},\"linetype\":{},\"lineweight\":{},\"plot\":{}}}\n",
-                    quote(&l.name),
-                    l.flags,
-                    l.color,
-                    l.true_color,
-                    l.on,
-                    quote(&l.linetype),
-                    l.lineweight,
-                    l.plot
+                    "{{\"model\":1,\"record\":\"{}\",\"name\":{},{}\n",
+                    e.kind,
+                    quote(&e.name),
+                    &body[1..]
                 ));
             }
         }
@@ -198,6 +334,47 @@ pub fn render_stream(records: &[Record]) -> Result<String, String> {
 }
 
 // ---- reading ------------------------------------------------------------------------
+
+fn parse_typed(j: &Json, ty: &Ty, what: &str) -> Result<Value, String> {
+    let num = |j: &Json| j.as_f64().ok_or(format!("{what}: not a number"));
+    Ok(match ty {
+        Ty::Str => Value::Str(j.as_str().ok_or(format!("{what}: not a string"))?.into()),
+        Ty::Int => Value::Int(j.as_i64().ok_or(format!("{what}: not an integer"))?),
+        Ty::Double => Value::Double(num(j)?),
+        Ty::Bool => Value::Bool(j.as_bool().ok_or(format!("{what}: not a bool"))?),
+        Ty::Point2 | Ty::Point3 => {
+            let a = j.as_array().ok_or(format!("{what}: not an array"))?;
+            match (ty, a.len()) {
+                (Ty::Point2, 2) => Value::Point2([num(&a[0])?, num(&a[1])?]),
+                (Ty::Point3, 3) => Value::Point3([num(&a[0])?, num(&a[1])?, num(&a[2])?]),
+                _ => return Err(format!("{what}: {} components", a.len())),
+            }
+        }
+        Ty::List(fields) => {
+            let a = j.as_array().ok_or(format!("{what}: not an array"))?;
+            let mut items = Vec::new();
+            for (i, item) in a.iter().enumerate() {
+                items.push(parse_fields(item, fields, &format!("{what}[{i}]"))?);
+            }
+            Value::List(items)
+        }
+    })
+}
+
+fn parse_fields(j: &Json, fields: &[(&'static str, Ty)], what: &str) -> Result<Vec<Value>, String> {
+    let obj = j.as_object().ok_or(format!("{what}: not an object"))?;
+    let mut have: Vec<&str> = obj.keys().map(String::as_str).collect();
+    let mut want: Vec<&str> = fields.iter().map(|(n, _)| *n).collect();
+    have.sort_unstable();
+    want.sort_unstable();
+    if have != want {
+        return Err(format!("{what}: fields {have:?}, want {want:?}"));
+    }
+    fields
+        .iter()
+        .map(|(n, ty)| parse_typed(&obj[*n], ty, &format!("{what}.{n}")))
+        .collect()
+}
 
 /// Parse a stream strictly: every line is `{"model":1,"record":..}` with the
 /// fields the document gives, in that order, a `type` that agrees with the shape
@@ -214,89 +391,58 @@ pub fn parse_stream(text: &str) -> Result<Vec<Record>, String> {
         let n = i + 1;
         let v: Json = serde_json::from_str(l).map_err(|e| format!("line {n}: {e}"))?;
         let obj = v.as_object().ok_or(format!("line {n}: not an object"))?;
-        // serde_json without preserve_order sorts the keys, so this checks the
-        // field set; the order is checked by writing the record back below.
-        let keys: Vec<&str> = obj.keys().map(String::as_str).collect();
-        let rec = obj.get("record").and_then(Json::as_str).unwrap_or("");
-        let want: &[&str] = match rec {
-            "header" => &["model", "name", "record", "type", "value"],
-            "layer" => &[
-                "color",
-                "flags",
-                "linetype",
-                "lineweight",
-                "model",
-                "name",
-                "on",
-                "plot",
-                "record",
-                "true_color",
-            ],
-            other => return Err(format!("line {n}: {other:?} is not a model-1 record")),
-        };
-        if keys != want {
-            return Err(format!("line {n}: fields {keys:?}, want {want:?}"));
-        }
-        if obj["model"].as_i64() != Some(1) {
+        if obj.get("model").and_then(Json::as_i64) != Some(1) {
             return Err(format!("line {n}: model is not 1"));
         }
-        let name = obj["name"]
-            .as_str()
+        let rec = obj.get("record").and_then(Json::as_str).unwrap_or("");
+        let name = obj
+            .get("name")
+            .and_then(Json::as_str)
             .ok_or(format!("line {n}: name"))?
             .to_string();
-        let int = |k: &str| {
-            obj[k]
-                .as_i64()
-                .ok_or(format!("line {n}: {k} is not an integer"))
-        };
-        let boolean = |k: &str| {
-            obj[k]
-                .as_bool()
-                .ok_or(format!("line {n}: {k} is not a bool"))
-        };
-        let r = if rec == "layer" {
-            Record::Layer(Layer {
-                name,
-                flags: int("flags")?,
-                color: int("color")?,
-                true_color: int("true_color")?,
-                on: boolean("on")?,
-                linetype: obj["linetype"]
-                    .as_str()
-                    .ok_or(format!("line {n}: linetype"))?
-                    .to_string(),
-                lineweight: int("lineweight")?,
-                plot: boolean("plot")?,
-            })
-        } else {
-            let ty = obj["type"].as_str().ok_or(format!("line {n}: type"))?;
-            let val = &obj["value"];
-            let f = |j: &Json| j.as_f64().ok_or(format!("line {n}: not a number"));
-            let value = match ty {
-                "string" => Value::Str(
-                    val.as_str()
-                        .ok_or(format!("line {n}: not a string"))?
-                        .into(),
-                ),
-                "int" => Value::Int(val.as_i64().ok_or(format!("line {n}: not an integer"))?),
-                "double" => Value::Double(f(val)?),
-                "bool" => Value::Bool(val.as_bool().ok_or(format!("line {n}: not a bool"))?),
-                "point2" | "point3" => {
-                    let a = val.as_array().ok_or(format!("line {n}: not an array"))?;
-                    match (ty, a.len()) {
-                        ("point2", 2) => Value::Point2([f(&a[0])?, f(&a[1])?]),
-                        ("point3", 3) => Value::Point3([f(&a[0])?, f(&a[1])?, f(&a[2])?]),
-                        _ => return Err(format!("line {n}: {ty} with {} components", a.len())),
-                    }
-                }
+        let r = if rec == "header" {
+            let mut have: Vec<&str> = obj.keys().map(String::as_str).collect();
+            have.sort_unstable();
+            if have != ["model", "name", "record", "type", "value"] {
+                return Err(format!("line {n}: fields {have:?}"));
+            }
+            let ty = match obj["type"].as_str().ok_or(format!("line {n}: type"))? {
+                "string" => Ty::Str,
+                "int" => Ty::Int,
+                "double" => Ty::Double,
+                "bool" => Ty::Bool,
+                "point2" => Ty::Point2,
+                "point3" => Ty::Point3,
                 other => return Err(format!("line {n}: type {other:?}")),
             };
-            Record::Header(Header { name, value })
+            Record::Header(Header {
+                name,
+                value: parse_typed(&obj["value"], &ty, &format!("line {n}"))?,
+            })
+        } else {
+            let s = schema(rec).ok_or(format!("line {n}: {rec:?} is not a model-1 record"))?;
+            let mut have: Vec<&str> = obj.keys().map(String::as_str).collect();
+            let mut want: Vec<&str> = s.fields.iter().map(|(n, _)| *n).collect();
+            want.extend(["model", "name", "record"]);
+            have.sort_unstable();
+            want.sort_unstable();
+            if have != want {
+                return Err(format!("line {n}: fields {have:?}, want {want:?}"));
+            }
+            let values = s
+                .fields
+                .iter()
+                .map(|(f, ty)| parse_typed(&obj[*f], ty, &format!("line {n}.{f}")))
+                .collect::<Result<Vec<_>, _>>()?;
+            Record::Entry(Entry {
+                kind: s.kind,
+                name,
+                values,
+            })
         };
         if let Some(prev) = out.last() {
-            let order = |r: &Record| KIND_ORDER.iter().position(|k| *k == r.kind());
-            let after = order(&r)
-                .cmp(&order(prev))
+            let after = kind_index(r.kind())
+                .cmp(&kind_index(prev.kind()))
                 .then_with(|| r.key().as_bytes().cmp(prev.key().as_bytes()));
             if after != std::cmp::Ordering::Greater {
                 return Err(format!("line {n}: {} is not after {}", r.key(), prev.key()));
@@ -589,10 +735,10 @@ pub struct Side<'a> {
 }
 
 /// A record as the comparator sees it: one value (a header variable) or a list
-/// of named fields (a table entry).
+/// of named scalar leaves (a table entry, with its lists unrolled).
 enum Item {
     Scalar(Value),
-    Fields(Vec<(&'static str, Value)>),
+    Fields(Vec<(String, Value)>),
 }
 
 impl Item {
@@ -613,22 +759,38 @@ impl Item {
 fn item_key(r: &Record) -> String {
     match r {
         Record::Header(h) => h.name.clone(),
-        Record::Layer(l) => format!("layer/{}", l.name),
+        Record::Entry(e) => format!("{}/{}", e.kind, e.name),
+    }
+}
+
+/// Unroll a value into scalar leaves: a list is its length, `name.len`, and then
+/// `name[i].field` for each element.
+fn leaves(prefix: &str, ty: &Ty, v: &Value, out: &mut Vec<(String, Value)>) {
+    match (ty, v) {
+        (Ty::List(fields), Value::List(items)) => {
+            out.push((format!("{prefix}.len"), Value::Int(items.len() as i64)));
+            for (i, item) in items.iter().enumerate() {
+                for ((name, fty), fv) in fields.iter().zip(item) {
+                    leaves(&format!("{prefix}[{i}].{name}"), fty, fv, out);
+                }
+            }
+        }
+        _ => out.push((prefix.to_string(), v.clone())),
     }
 }
 
 fn item_of(r: &Record) -> Item {
     match r {
         Record::Header(h) => Item::Scalar(h.value.clone()),
-        Record::Layer(l) => Item::Fields(vec![
-            ("flags", Value::Int(l.flags)),
-            ("color", Value::Int(l.color)),
-            ("true_color", Value::Int(l.true_color)),
-            ("on", Value::Bool(l.on)),
-            ("linetype", Value::Str(l.linetype.clone())),
-            ("lineweight", Value::Int(l.lineweight)),
-            ("plot", Value::Bool(l.plot)),
-        ]),
+        Record::Entry(e) => {
+            let mut out = Vec::new();
+            if let Some(s) = schema(e.kind) {
+                for ((name, ty), v) in s.fields.iter().zip(&e.values) {
+                    leaves(name, ty, v, &mut out);
+                }
+            }
+            Item::Fields(out)
+        }
     }
 }
 
@@ -707,7 +869,14 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
             }
             (Some(Item::Fields(x)), Some(Item::Fields(y))) => {
                 report.compared += 1;
-                for ((field, vx), (_, vy)) in x.iter().zip(y) {
+                let theirs: BTreeMap<&str, &Value> =
+                    y.iter().map(|(k, v)| (k.as_str(), v)).collect();
+                for (field, vx) in x {
+                    // A leaf the other side does not have is an element of a
+                    // longer list, which its `.len` finding already says.
+                    let Some(vy) = theirs.get(field.as_str()) else {
+                        continue;
+                    };
                     if let Some((kind, detail)) = compare_values(vx, vy) {
                         push(&mut report, kind, format!("{name}.{field}"), detail);
                     }
@@ -934,16 +1103,19 @@ mod tests {
     }
 
     fn layer(name: &str, color: i64) -> Record {
-        Record::Layer(Layer {
-            name: name.into(),
-            flags: 0,
-            color,
-            true_color: -1,
-            on: true,
-            linetype: "Continuous".into(),
-            lineweight: -3,
-            plot: true,
-        })
+        Record::Entry(Entry::new(
+            "layer",
+            name,
+            vec![
+                Value::Int(0),
+                Value::Int(color),
+                Value::Int(-1),
+                Value::Bool(true),
+                Value::Str("Continuous".into()),
+                Value::Int(-3),
+                Value::Bool(true),
+            ],
+        ))
     }
 
     #[test]

@@ -163,6 +163,24 @@ fixtures = [
 reason = "AC1014 stores neither a lineweight nor a plot flag per layer, so ACadSharp reports its defaults (-3, plotted) and acadrust its own (0, not plotted)"
 issue = "libviprs/acadsharp-rs-tests#101"
 
+# ---- known: linetype segment styles
+[[known]]
+names = [
+  "linetype/*.segments[*].style"
+]
+pairs = ["dxf-dwg:oracle", "ezdxf/oracle", "oracle/acadrust"]
+reason = "the text style of a shape or text segment: ACadSharp's DWG reader names an unnamed style unnamed0 where the DXF and acadrust leave it empty, and its DXF reader leaves the style empty where the DXF holds Standard"
+issue = "libviprs/acadsharp-rs-tests#116"
+
+# ---- known: linetype segment flags
+[[known]]
+names = [
+  "linetype/*.segments[*].flags"
+]
+pairs = ["dxf-dwg:oracle", "ezdxf/acadrust", "oracle/acadrust"]
+reason = "DXF 74 of an embedded text segment: ACadSharp's DWG reader gives 10 where the DXF holds 2 (to AC1024) or 10 (from AC1027), and acadrust rebuilds 2 from typed data and drops the bit 8"
+issue = "libviprs/acadsharp-rs-tests#116"
+
 # ---- known: AC1014 upper case
 [[known]]
 names = [
