@@ -30,7 +30,9 @@ fn acadsharp_version(csproj: &str) -> String {
 }
 
 fn locked_version(lock: &str) -> String {
-    let at = lock.find("\"ACadSharp\"").expect("ACadSharp in the lock file");
+    let at = lock
+        .find("\"ACadSharp\"")
+        .expect("ACadSharp in the lock file");
     let rest = &lock[at..];
     let r = rest.find("\"resolved\": \"").expect("a resolved version") + "\"resolved\": \"".len();
     rest[r..].split('"').next().unwrap().to_string()
@@ -46,7 +48,10 @@ fn the_generator_and_the_oracle_use_one_acadsharp_version() {
 
     let oracle_lock = read("reference/ACadSharp.Reference/packages.lock.json");
     let generator_lock = read("reference/ACadSharp.Generator/packages.lock.json");
-    assert_eq!(locked_version(&generator_lock), locked_version(&oracle_lock));
+    assert_eq!(
+        locked_version(&generator_lock),
+        locked_version(&oracle_lock)
+    );
     assert_eq!(
         locked_version(&generator_lock),
         acadsharp_version(&generator),
@@ -97,7 +102,12 @@ fn the_generator_never_uses_the_clock_or_randomness() {
     let mut checked = 0;
     for entry in walk(&dir) {
         let text = std::fs::read_to_string(&entry).unwrap();
-        for banned in ["DateTime.Now", "DateTime.UtcNow", "Guid.NewGuid", "new Random()"] {
+        for banned in [
+            "DateTime.Now",
+            "DateTime.UtcNow",
+            "Guid.NewGuid",
+            "new Random()",
+        ] {
             assert!(
                 !text.contains(banned),
                 "{} uses {banned}, which makes the bytes depend on the run",
@@ -106,7 +116,10 @@ fn the_generator_never_uses_the_clock_or_randomness() {
         }
         checked += 1;
     }
-    assert!(checked >= 3, "found only {checked} generator sources; is the path right?");
+    assert!(
+        checked >= 3,
+        "found only {checked} generator sources; is the path right?"
+    );
 }
 
 fn walk(dir: &std::path::Path) -> Vec<PathBuf> {
