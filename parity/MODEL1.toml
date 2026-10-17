@@ -257,6 +257,15 @@ pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
 reason = "AutoCAD writes only the codes that differ from a default, and ACadSharp's and acadrust's DXF readers substitute their own (the ISO set) where the DWG of the same drawing holds AutoCAD's"
 issue = "libviprs/acadsharp-rs-tests#122"
 
+# ---- known: dimstyle $DIMBLK
+[[known]]
+names = [
+  "dimstyle/*.$DIMBLK"
+]
+pairs = ["ezdxf/acadrust", "ezdxf/oracle"]
+reason = "acadrust gives the empty string for the arrow block $DIMBLK of a style whose DXF holds a block handle, where ezdxf and ACadSharp give the block's name"
+issue = "libviprs/acadsharp-rs-tests#122"
+
 # ---- known: AC1014 upper case
 [[known]]
 names = [
