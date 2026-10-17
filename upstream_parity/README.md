@@ -56,6 +56,35 @@ So the denominator is **applicable**, meaning total minus `not_applicable`, and
 
 At `d7dc111`: 112 files, 29 `not_applicable`, so 83 applicable.
 
+## One manifest, two engines
+
+A row may carry `acadrust = { status = "...", reason = "..." }`. A row without
+one means acadrust shares the row's status and reason. Sixteen rows carry it:
+the nine DXF suites and seven writer suites that said "the crate opens only DWG"
+or "exposes no writer", which is true of acadsharp-rs and false of acadrust,
+which reads DXF and writes both formats. Seven of them become `differential`
+for acadrust (the DXF reader suite, the two DXF writer suites, the two DWG
+writer suites, `RewriteSamplesTests` and `WriterSingleObjectTests`). The other
+nine test ACadSharp's own internals and stay `not_applicable` for both, with a
+reason that says so for acadrust.
+
+An override that restates its row, or has no reason, is refused by `validate`.
+
+A row can also name what covers it in `evidence`: `fixture:<id>` (a row of
+`fixtures/manifest.toml`) or `path:<relative path>` (a file here). `validate`
+refuses either when it resolves to nothing, and refuses any other kind until
+the thing it would resolve against exists (R4.1's verdicts, R5.5's model kinds).
+`parity_inventory.py --require-evidence` fails on an applicable row with no
+evidence; the committed run does not pass it yet because mapping the rows onto
+the corpus waits on R4.1 (libviprs/acadsharp-rs-tests#32).
+
+Burn-down at `d7dc111`, as `tools/parity_inventory.py` prints it:
+
+| provider  | total | not_applicable | applicable | evidenced | unevidenced |
+| --------- | ----- | -------------- | ---------- | --------- | ----------- |
+| acadsharp | 112   | 29             | 83         | 0         | 83          |
+| acadrust  | 112   | 22             | 90         | 0         | 90          |
+
 ## `planned_rust`, and why it is not `rust`
 
 A row that will become `mirrored` carries `planned_rust` pointing at where the

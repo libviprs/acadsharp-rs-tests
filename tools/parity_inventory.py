@@ -108,30 +108,55 @@ def compare(upstream: list[str], rows: list[dict]) -> tuple[list[str], list[str]
     return sorted(up - classified), sorted(classified - up)
 
 
-def report_coverage(rows: list[dict]) -> None:
-    counts = {s: 0 for s in STATUSES}
-    unknown = []
-    for r in rows:
-        if r["status"] in counts:
-            counts[r["status"]] += 1
-        else:
-            unknown.append(f"{r['path']}: {r['status']}")
-    if unknown:
-        raise SystemExit("error: rows with a status that is not one of the four: " + ", ".join(unknown))
+def status_for(row: dict, provider: str) -> str:
+    """A row's status as `provider` sees it: acadrust's override if the row has one."""
+    if provider == "acadrust" and "acadrust" in row:
+        return row["acadrust"]["status"]
+    return row["status"]
 
+
+def provider_counts(rows: list[dict], provider: str) -> dict:
+    counts = {s: 0 for s in STATUSES}
+    evidenced = 0
+    unevidenced = []
+    for r in rows:
+        st = status_for(r, provider)
+        if st not in counts:
+            raise SystemExit(f"error: {r['path']}: status {st!r} is not one of the four")
+        counts[st] += 1
+        if st != "not_applicable":
+            if r.get("evidence"):
+                evidenced += 1
+            else:
+                unevidenced.append(r["path"])
     total = sum(counts.values())
-    applicable = total - counts["not_applicable"]
-    print()
-    for s in STATUSES:
-        print(f"  {s:<20} {counts[s]:>4}")
-    print(f"  {'-' * 20} {'-' * 4}")
-    print(f"  {'total':<20} {total:>4}")
-    print(f"  {'applicable':<20} {applicable:>4}   (total minus not_applicable)")
-    if applicable:
-        pct = 100.0 * counts["mirrored"] / applicable
-        print(f"\n  mirrored in Rust: {counts['mirrored']}/{applicable} ({pct:.1f}% of applicable)")
-        print("  The rest is real coverage through the oracle comparison, not a gap;")
-        print("  H4.2 promotes differential rows to mirrored as it writes them.")
+    return {
+        "counts": counts,
+        "total": total,
+        "applicable": total - counts["not_applicable"],
+        "evidenced": evidenced,
+        "unevidenced": unevidenced,
+    }
+
+
+def report_coverage(rows: list[dict]) -> list[str]:
+    """Print the burn-down per provider; return the applicable rows with no evidence."""
+    missing: list[str] = []
+    for provider in ("acadsharp", "acadrust"):
+        c = provider_counts(rows, provider)
+        print(f"\n  {provider}")
+        for st in STATUSES:
+            print(f"    {st:<20} {c['counts'][st]:>4}")
+        print(f"    {'-' * 20} {'-' * 4}")
+        print(f"    {'total':<20} {c['total']:>4}")
+        print(f"    {'applicable':<20} {c['applicable']:>4}   (total minus not_applicable)")
+        print(f"    {'evidenced':<20} {c['evidenced']:>4}   (applicable rows with an `evidence` entry)")
+        print(f"    {'unevidenced':<20} {len(c['unevidenced']):>4}")
+        if c["applicable"]:
+            pct = 100.0 * c["counts"]["mirrored"] / c["applicable"]
+            print(f"    mirrored in Rust: {c['counts']['mirrored']}/{c['applicable']} ({pct:.1f}% of applicable)")
+        missing += [f"{provider}: {p}" for p in c["unevidenced"]]
+    return missing
 
 
 def main() -> int:
@@ -144,6 +169,8 @@ def main() -> int:
                     help="inventory this commit over the API instead of the manifest's pinned one")
     ap.add_argument("--write-snapshot", action="store_true",
                     help="write the inventory to upstream_parity/inventory.<sha>.txt")
+    ap.add_argument("--require-evidence", action="store_true",
+                    help="fail on any applicable row with no `evidence` entry, per provider")
     args = ap.parse_args()
 
     manifest = load_manifest()
@@ -202,7 +229,12 @@ def main() -> int:
 
     if rc == 0:
         print("\nin sync: every upstream test file has a row, every row has a file")
-        report_coverage(rows)
+        missing = report_coverage(rows)
+        if args.require_evidence and missing:
+            print(f"\nerror: {len(missing)} applicable row(s) name no evidence:", file=sys.stderr)
+            for m in missing:
+                print(f"  ? {m}", file=sys.stderr)
+            rc = 1
     return rc
 
 
