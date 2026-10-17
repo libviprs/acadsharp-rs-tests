@@ -64,3 +64,25 @@ A generated drawing is a `[[fixture]]` row like any other, with
 `source = "generated"`, tier B, and three extra fields: `generated_by` (the
 generator project), `generator_source` (the file that defines the drawing) and
 `generator_source_sha256` (that file's hash), next to `acadsharp_generator_version`.
+
+## The catalog
+
+Seven drawings, one per class of ACadSharp bug the suite wants a fixture for
+(`fixtures/README.md` lists them with what each is meant to prove):
+`regression_bulge`, `regression_insert_transform`, `regression_text_zero_height`,
+`regression_dimension_fields`, `regression_hatch_loops`,
+`regression_unsupported_entity` and `regression_large_entity_count`. Each lives
+in its own file under `Drawings/`, and `tests/generator_pin.rs` fails if a file is
+not in `Catalog.All` or names a different source path than its own.
+
+Three things writing them turned up, all measured against 3.7.1 and all handled
+in the drawing's own file with a comment, not worked around quietly:
+
+- The public height setters on `TextEntity` and `MText` refuse 0, so a zero height
+  goes in through the backing field. `DwgWriter` writes it; `DwgReader` then throws
+  on reading it back (its own setter), so neither entity survives a round trip.
+- `Dimension.UpdateBlock` draws nothing for the two angular kinds (no block at all
+  for the two-line form, an empty one for the three-point form), so their text is
+  authored into the block here.
+- `UpdateBlock` formats an ordinate dimension's measurement of 120 as `35°`, so
+  that dimension's text is written out.
