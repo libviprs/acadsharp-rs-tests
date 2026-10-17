@@ -143,3 +143,37 @@ fn the_text_of_a_string_variable_has_its_line_endings_normalised() {
         }
     }
 }
+
+#[test]
+fn every_file_has_the_three_fixed_linetypes_and_one_complex_one_is_compared() {
+    // ACadSharp and acadrust fix the three names, so a stream without one has
+    // lost a record; a missing one is a finding, not a smaller set.
+    let streams: Vec<(String, Vec<Record>)> = SAVES
+        .iter()
+        .map(|s| ("oracle", *s))
+        .chain(TWINS.iter().map(|t| ("oracle", t.0)))
+        .chain(TWINS.iter().map(|t| ("ezdxf", t.0)))
+        .map(|(e, id)| (format!("{e} {id}"), model1::load_frozen(e, id).unwrap()))
+        .collect();
+    for (label, records) in &streams {
+        for name in ["ByBlock", "ByLayer", "Continuous"] {
+            // AC1014 spells table names in upper case.
+            assert!(
+                records.iter().any(|r| r.kind() == "linetype"
+                    && r.key().eq_ignore_ascii_case(name)),
+                "{label}: no linetype {name}"
+            );
+        }
+    }
+    // A shape or text segment (flags other than 0) is in at least one file.
+    let complex = streams.iter().any(|(_, records)| {
+        records.iter().any(|r| match r {
+            Record::Entry(e) if e.kind == "linetype" => matches!(
+                e.get("segments"),
+                Some(Value::List(s)) if s.iter().any(|g| g[1] != Value::Int(0))
+            ),
+            _ => false,
+        })
+    });
+    assert!(complex, "no compared file holds a complex linetype");
+}
