@@ -151,6 +151,18 @@ fixtures = [
 reason = "the file of this version does not store the variable, so ACadSharp and acadrust each report their own default (ACadSharp 4133 and acadrust 0 for $OSMODE, which no DWG reader reads either)"
 issue = "libviprs/acadsharp-rs-tests#101"
 
+# ---- known: version default
+[[known]]
+names = [
+  "layer/*.lineweight", "layer/*.plot"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014"
+]
+reason = "AC1014 stores neither a lineweight nor a plot flag per layer, so ACadSharp reports its defaults (-3, plotted) and acadrust its own (0, not plotted)"
+issue = "libviprs/acadsharp-rs-tests#101"
+
 # ---- known: AC1014 upper case
 [[known]]
 names = [
