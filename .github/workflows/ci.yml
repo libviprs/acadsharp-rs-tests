@@ -258,7 +258,7 @@ jobs:
       # `../acadrust` (laid down above) and builds it. Deterministic output, one
       # thread against the default, the per-row mapping tests, and the comparison
       # with the oracle.
-      - run: cargo test --locked --features acadrust --test emit_acadrust --test canonical_writer
+      - run: cargo test --locked --features acadrust --test emit_acadrust --test canonical_writer --test census_real
       # The same properties from the other side, and the one that catches a
       # manifest whose pin has stopped being a pin. Offline by construction.
       - name: Fixture corpus matches the manifest
