@@ -27,6 +27,7 @@ use acadsharp_rs_tests::emit::{
     EmitArgs, RunInfo, checkout_head, native_provenance, write_emission,
 };
 use acadsharp_rs_tests::fixtures;
+use sha2::{Digest, Sha256};
 
 /// The sha `COUNTERPART_REV` pins: the first line that is neither blank nor a
 /// comment, the way `tools/counterpart.sh` reads it.
@@ -47,18 +48,35 @@ fn main() -> ExitCode {
             return ExitCode::from(2);
         }
     };
-    let Some(fixture) = fixtures::by_id(&args.fixture) else {
-        eprintln!(
-            "emit-acadsharp: no fixture {:?} in fixtures/manifest.toml; the manifest is the only list",
-            args.fixture
-        );
-        return ExitCode::from(2);
-    };
-    let bytes = match fixture.load() {
-        Ok(b) => b,
-        Err(e) => {
-            eprintln!("emit-acadsharp: {e}");
+    // A round-trip output arrives on stdin (R5.3), a fixture is loaded by id.
+    let (id, sha256, bytes) = if let Some(kind) = &args.stdin_as {
+        if kind != "dwg" {
+            eprintln!(
+                "emit-acadsharp: acadsharp-rs opens DWG only, so --stdin-as {kind} has no reader here"
+            );
+            return ExitCode::from(2);
+        }
+        let mut bytes = Vec::new();
+        if let Err(e) = std::io::Read::read_to_end(&mut std::io::stdin(), &mut bytes) {
+            eprintln!("emit-acadsharp: stdin: {e}");
             return ExitCode::from(1);
+        }
+        let sha = format!("{:x}", Sha256::digest(&bytes));
+        (args.fixture.clone(), sha, bytes)
+    } else {
+        let Some(fixture) = fixtures::by_id(&args.fixture) else {
+            eprintln!(
+                "emit-acadsharp: no fixture {:?} in fixtures/manifest.toml; the manifest is the only list",
+                args.fixture
+            );
+            return ExitCode::from(2);
+        };
+        match fixture.load() {
+            Ok(b) => (fixture.id.clone(), fixture.sha256.clone(), b),
+            Err(e) => {
+                eprintln!("emit-acadsharp: {e}");
+                return ExitCode::from(1);
+            }
         }
     };
     let emission = match extract_bytes(&bytes) {
@@ -66,14 +84,20 @@ fn main() -> ExitCode {
         // `Error::Unlinked` is a failure with its message, never an empty
         // success. The two arms read the same on purpose.
         Err(e) => {
-            eprintln!("emit-acadsharp: {}: {e}", fixture.id);
+            eprintln!("emit-acadsharp: {id}: {e}");
             return ExitCode::from(1);
         }
     };
     let sibling = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("..")
         .join("acadsharp-rs");
-    let mut run = RunInfo::for_run("acadsharp", &pinned(), checkout_head(&sibling), fixture);
+    let mut run = RunInfo::for_input(
+        "acadsharp",
+        &pinned(),
+        checkout_head(&sibling),
+        &id,
+        &sha256,
+    );
     run.extra = native_provenance(option_env!("ACADSHARP_LINKED_NATIVE_DIR"));
     match write_emission(&args.out, &run, &emission) {
         Ok(paths) => {
@@ -83,7 +107,7 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         Err(e) => {
-            eprintln!("emit-acadsharp: {}: {e}", fixture.id);
+            eprintln!("emit-acadsharp: {id}: {e}");
             ExitCode::from(1)
         }
     }

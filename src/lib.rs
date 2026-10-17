@@ -26,6 +26,7 @@ pub mod parity;
 pub mod parity_run;
 pub mod tables;
 pub mod verdict;
+pub mod written;
 
 #[cfg(test)]
 mod tests {

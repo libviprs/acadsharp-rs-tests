@@ -359,3 +359,35 @@ none), so it has no cell.
 The positive control is R3.4's: `a_moved_coordinate_in_a_scratch_copy_of_a_twin_...`
 in `tests/parity.rs` moves one LINE's group 10 in a scratch copy of the AC1015
 twin and requires the `dxf-dwg:acadrust` verdict to leave the committed one.
+
+## The round-trip lane (R5.3)
+
+What each library writes, read back by the readers that are not it. The matrix
+is `fixtures/written_plan.toml` (stage one: `sample_AC1032.dwg` through ACadSharp
+and acadrust, every version each claims, in DWG and in ASCII and binary DXF);
+each output is a `[[written]]` row of `fixtures/manifest.toml`, made by
+`tools/regenerate_written.py` and `src/bin/rewrite-acadrust.rs`.
+
+- ACadSharp's outputs are made by the oracle's `--rewrite-to` and **stored**
+  (compressed, hashed uncompressed) under `fixtures/written/`, because nothing
+  offline can make them again. ACadSharp stamps a fresh GUID pair and the clock
+  into the header of everything it writes, so the rewrite pins them, and the tool
+  writes every output twice and refuses a pair that differs.
+- acadrust's outputs are **not stored**: its writer is deterministic, the test
+  runs it and holds the result to the row's sha256, so the frozen readings of
+  the oracle and ezdxf (made from those bytes) are readings of the same file.
+  `rewrite-acadrust` is its own control (it writes twice and compares).
+- The oracle's reading of each output is frozen on the row (`reference_jsonl`),
+  and ezdxf's on a `[[ground_truth]]` row whose `input` is the output's id.
+  A file a reader refuses is a row saying so (`no_reference`, `failed`,
+  `write_failed`), never a hole.
+- The readers are the oracle, acadrust and acadsharp-rs for a DWG (acadsharp-rs
+  reads AC1014 to AC1032) and the oracle, acadrust and ezdxf for a DXF. acadrust
+  and acadsharp-rs run in processes of their own, fed the bytes on standard input
+  (`--stdin-as`), so a reader that aborts on a writer's malformed file takes one
+  cell down.
+
+Each output has a cell per reader and one `w-<writer>:version` row, which is
+where a writer that writes the wrong version is caught (every cell excludes
+`document.acad_version`). Stage two (libviprs/acadsharp-rs-tests#41) runs the
+rest of the sources through the same plan in the nightly.

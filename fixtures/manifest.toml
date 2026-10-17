@@ -3514,7 +3514,490 @@ requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8b
 image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
 records = 337
 schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1009"
+input = "w-acadrust-ac1032-dxf-ascii-ac1009"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1009.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "a645239a64828a2b23d4b61ff383261330f23ff97822775896b530f8f59253e3"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1009.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1009.ezdxf.run.json"
+run_sha256 = "366c4d0f895a279e9b02687ae7a344a5f5573a9e1a31a22607f91d0834f9ce0d"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1012"
+input = "w-acadrust-ac1032-dxf-ascii-ac1012"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1012.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "a645239a64828a2b23d4b61ff383261330f23ff97822775896b530f8f59253e3"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1012.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1012.ezdxf.run.json"
+run_sha256 = "113db13da926243e1f8b230f02740f45d2d044979454c3051e28429ee2d5c5ce"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1014"
+input = "w-acadrust-ac1032-dxf-ascii-ac1014"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1014.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "a645239a64828a2b23d4b61ff383261330f23ff97822775896b530f8f59253e3"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1014.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1014.ezdxf.run.json"
+run_sha256 = "482a3ba23179a8263cc56f495058906d96de8b88e35e949dff7689ba2b9654e6"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1015"
+input = "w-acadrust-ac1032-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "a645239a64828a2b23d4b61ff383261330f23ff97822775896b530f8f59253e3"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "97aeb2352abed41db0bb550de3f1d13aa596308a742beb27e8ea6de67804ed73"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1018"
+input = "w-acadrust-ac1032-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8a4311804b08c8eb74e249bdccd276c5255d26e0e1db2e1205d89230b5cdf54b"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "e6ee21744883ef0c030bf3fa8fe646721a17d80b0ddbb759951b5c72685d381b"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1021"
+input = "w-acadrust-ac1032-dxf-ascii-ac1021"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1021.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "72342abfab2c5d60ab08839c5d863610d158f5c8d3b037784ef0e793b642e0cd"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1021.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1021.ezdxf.run.json"
+run_sha256 = "1154a057df516230613be59ca51d63ba09a3b3bb93c614277f1abfc17c803cfe"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1024"
+input = "w-acadrust-ac1032-dxf-ascii-ac1024"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1024.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "17abfa716511cd43fbd906a5c3b849ff17e132ed0fd4faf4db03e72228a5384a"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1024.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1024.ezdxf.run.json"
+run_sha256 = "8eafe29be26d78f31b87695d580a87d35ca211875500b4915976e982bdd90510"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1027"
+input = "w-acadrust-ac1032-dxf-ascii-ac1027"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1027.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "a179697f1be14b9367f53c90e0754b436de4173b9431ccc168522a3308dfc255"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1027.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1027.ezdxf.run.json"
+run_sha256 = "a59236ab3dc070a16386685e2ceb8da903ce8ac74f6e0cfed801956cdbeaa79a"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1032"
+input = "w-acadrust-ac1032-dxf-ascii-ac1032"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1032.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "9a54b14ba20be857688224bbcfa83ffca2decbe22d2c3b5d41a02b405d9c79da"
+sidecar = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1032.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "cf3f8966f787abdeb5fbb4680aeddf53cd9df13ffeefec80e9b4d018d746f14c"
+run = "ground_truth/ezdxf/w-acadrust-ac1032-dxf-ascii-ac1032.ezdxf.run.json"
+run_sha256 = "c8bbec1eb8cf27c52a55a6d2904d65fed1407679264e99b95355c9943aae1716"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 337
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1009"
+input = "w-acadrust-ac1032-dxf-binary-ac1009"
+engine = "ezdxf"
+failed = "DXFValueError: 291"
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1012"
+input = "w-acadrust-ac1032-dxf-binary-ac1012"
+engine = "ezdxf"
+failed = "DXFValueError: 291"
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1014"
+input = "w-acadrust-ac1032-dxf-binary-ac1014"
+engine = "ezdxf"
+failed = "DXFValueError: 291"
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1015"
+input = "w-acadrust-ac1032-dxf-binary-ac1015"
+engine = "ezdxf"
+failed = "DXFValueError: 291"
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1018"
+input = "w-acadrust-ac1032-dxf-binary-ac1018"
+engine = "ezdxf"
+failed = "DXFValueError: 291"
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1021"
+input = "w-acadrust-ac1032-dxf-binary-ac1021"
+engine = "ezdxf"
+failed = "DXFValueError: 291"
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1024"
+input = "w-acadrust-ac1032-dxf-binary-ac1024"
+engine = "ezdxf"
+failed = "ValueError: Invalid handle ."
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1027"
+input = "w-acadrust-ac1032-dxf-binary-ac1027"
+engine = "ezdxf"
+failed = "ValueError: Invalid handle ."
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadrust-ac1032-dxf-binary-ac1032"
+input = "w-acadrust-ac1032-dxf-binary-ac1032"
+engine = "ezdxf"
+failed = "ValueError: Invalid handle ."
+ezdxf_version = "1.4.4"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1012"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1012"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1012.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "bfc3b037671e8f38b386a1cf3f8619e30aa058bbf74565066dc23a272e61e971"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1012.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1012.ezdxf.run.json"
+run_sha256 = "9a20ba3ed2098410431b395c694cc6dcf730a7074d4cc157629e595251806d6c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1014"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1014"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1014.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "bfc3b037671e8f38b386a1cf3f8619e30aa058bbf74565066dc23a272e61e971"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1014.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1014.ezdxf.run.json"
+run_sha256 = "b172100e0ffed6bf325f3f235ed597b4964285f63e99813a0b03b2e9e40862b0"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1015"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "bfc3b037671e8f38b386a1cf3f8619e30aa058bbf74565066dc23a272e61e971"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "87c8e99a031516e6686aca4d8b1c89766bc9b6eec965a09b8edc3d0241857e11"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1018"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "acd73b50d91d030e0db45c49b193b5f62dc6c91b3a3e3104d6798c05907e8094"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "98f37e3ad4da23eb192411c5b7c93efa1fd247fbd53d02b4af3ca24937987b1c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1021"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1021"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1021.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "9b31d55d63d6e0e6200251cf3aaaa212ed5cca17fe31dc0e13e359d69614ce1c"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1021.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1021.ezdxf.run.json"
+run_sha256 = "52a3d727629b9bf425b9e4b8a806a7cc209067a0e0978ea5746a1a2590522b0f"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1024"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1024"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1024.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "4646e864d3eef152f02deb4e58ecc1e58b1c1ad4e19c9eec4880ec705e68af70"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1024.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1024.ezdxf.run.json"
+run_sha256 = "c1cf075b7c5e4846d6abe12f4e8feca3f03ed29b6a8914312f5edaa7114467e0"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1027"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1027"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1027.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "26255e78a07b5bc11574b289bd9e5528b3a74b25d6acd79948bd55441ba01840"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1027.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1027.ezdxf.run.json"
+run_sha256 = "ac37d617f1688f70860b514eb7d952dc2d8eff965c371c366ec86b38f9553bdd"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1032"
+input = "w-acadsharp-ac1032-dxf-ascii-ac1032"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1032.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f4b1449e80f903bc087ae2fd72e017fab2c64d91f5a5bfdbb15b1751783e42e3"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1032.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-ascii-ac1032.ezdxf.run.json"
+run_sha256 = "b00ec7351ed85180aeb12a7809f2d43155297cb0fc07396ad4dd1a81a46f69a6"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1012"
+input = "w-acadsharp-ac1032-dxf-binary-ac1012"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1012.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "bfc3b037671e8f38b386a1cf3f8619e30aa058bbf74565066dc23a272e61e971"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1012.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1012.ezdxf.run.json"
+run_sha256 = "01dabe356565ce46b2a60f501e0f3b57825d81cce4c14c6b6a3d7ccdfffbd42c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1014"
+input = "w-acadsharp-ac1032-dxf-binary-ac1014"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1014.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "bfc3b037671e8f38b386a1cf3f8619e30aa058bbf74565066dc23a272e61e971"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1014.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1014.ezdxf.run.json"
+run_sha256 = "bd8fb9db03d4adb56f2eda76d5fcf862128fe73ba6f6a294f3674f47573eb447"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1015"
+input = "w-acadsharp-ac1032-dxf-binary-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "bfc3b037671e8f38b386a1cf3f8619e30aa058bbf74565066dc23a272e61e971"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1015.ezdxf.run.json"
+run_sha256 = "39ca8f1117d49b34082498cec72a983629ecec507bae2b582c9ed4f25ae1c86e"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1018"
+input = "w-acadsharp-ac1032-dxf-binary-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "acd73b50d91d030e0db45c49b193b5f62dc6c91b3a3e3104d6798c05907e8094"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1018.ezdxf.run.json"
+run_sha256 = "ec397c07942d15f77e6a39a9fc5c4467c3cf95764f5166da111954a19725a036"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1021"
+input = "w-acadsharp-ac1032-dxf-binary-ac1021"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1021.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "9b31d55d63d6e0e6200251cf3aaaa212ed5cca17fe31dc0e13e359d69614ce1c"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1021.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1021.ezdxf.run.json"
+run_sha256 = "1840551518c4380ecbe4aac07b3f584e8359c2dc279faccd9aa5c1228825376d"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1024"
+input = "w-acadsharp-ac1032-dxf-binary-ac1024"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1024.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "4646e864d3eef152f02deb4e58ecc1e58b1c1ad4e19c9eec4880ec705e68af70"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1024.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1024.ezdxf.run.json"
+run_sha256 = "8e8376033299655e98b3d4eba37b8087caa02d046ed221918d776504998d442c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1027"
+input = "w-acadsharp-ac1032-dxf-binary-ac1027"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1027.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "26255e78a07b5bc11574b289bd9e5528b3a74b25d6acd79948bd55441ba01840"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1027.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1027.ezdxf.run.json"
+run_sha256 = "fc02ca3d3c346f6d851e48ddf25247c3a443982cfc48615ed91eced154a0bd60"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
+[[ground_truth]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1032"
+input = "w-acadsharp-ac1032-dxf-binary-ac1032"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1032.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f4b1449e80f903bc087ae2fd72e017fab2c64d91f5a5bfdbb15b1751783e42e3"
+sidecar = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1032.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "ccfadfa1744a7db4224e1096073726ab46c3830df3386331a9f33aca3c397e4f"
+run = "ground_truth/ezdxf/w-acadsharp-ac1032-dxf-binary-ac1032.ezdxf.run.json"
+run_sha256 = "ca172db1094e8f69f9d801beabea081c8e26d070045e677ce35068e69ce8a141"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 279
+schema = 1
+
 # ---- end of the generated ground truths ----
+
 
 [[fixture]]
 id = "parity_arc"
@@ -3796,3 +4279,794 @@ generator_source = "reference/ACadSharp.Generator/Parity/ViewportFixture.cs"
 generator_source_sha256 = "1e1ea1d1ef536bb7f913d30b58729bf4517d3e3cceff36d55b48d02e83f07bcf"
 acadsharp_generator_version = "3.7.1"
 
+# ---- written outputs: generated by tools/regenerate_written.py, do not edit ----
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1012"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1012"
+bytes = 1171203
+sha256 = "8a2b05354982ab896876d39772830b456e983ca11071dbb114cb85d4a0b129f3"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1012.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d9f923348fe40b2b2027c210ccd4c40db4eecbc0a9145bf286e1ddea9da6a2fb"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1014"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1014"
+bytes = 1171292
+sha256 = "bda276b7960a351dca5a351ddf9544709253a5f342d7a6223b391bb9d59968fb"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1014.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b44a2161681a67b0b3b2e6907a61930c3b500aaccc9e168e5586eb350e36d8fb"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1015"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1015"
+bytes = 1178766
+sha256 = "4a9f080ebc86e95f2852167bc901f1a86b669e37a462a72acd3e91a3e759d058"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "cabb3eb6fa13d774f9ac371e4fdb5b817e44074f196587a7f2eed20e104f05f9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1018"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1018"
+bytes = 1000064
+sha256 = "1fcfabc0905103caacabc6d913fd6075f5d7ba309e411ae2386e8b28c2a93482"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "4759d0bb518dc27f6dff94d5056187617fb2ec04fbdb14627b63ef05b7a19144"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1021"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1021"
+bytes = 1015936
+sha256 = "f6cb33387923584cb54d0c58eab97ec59b588ee612e9f2df612c56e76afdeef0"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1021.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0452c520c25f0be88e884639d0f384df6a0bf24d115de8cb41825df0c688c987"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1024"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1024"
+bytes = 1013736
+sha256 = "a1d34c6489fc46e8f4b0a9518e60cd1e0d27e2ac7fbbd8144600f9dbe5638e17"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1024.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3b72a6bf2d6bb38e71ced7092441fccf6ad2e6d8b077827b9db069925e79033f"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1027"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1027"
+bytes = 1014613
+sha256 = "832b946672ac657678e538f305fd75fa153e2f0876364b8cb836400839a9effb"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1027.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "254d904274cf7e45649d6006807a72d0e436859e9a2dc38c5a45860bc19f3654"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dwg-ac1032"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1032"
+bytes = 1023158
+sha256 = "6d046feba9d7520833d30fe2b13c9ef64be92a76ddbc4e19d85c3c4a511948f4"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dwg-ac1032.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "afa4af4e2b1b76f1dfd5f946eda49296dcde8d9c6ffc5140864a7ddfbaeabce3"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1009"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1009"
+bytes = 2564206
+sha256 = "2e34f55d80eda6a3e8e0817c0423016d172f575dca66f6b2151e8e3c8da1eae0"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1009.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f1e45d57354edb009540f4267d4c205a5289cdd3973262ae08793644658128f1"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1012"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1012"
+bytes = 2564206
+sha256 = "2e34f55d80eda6a3e8e0817c0423016d172f575dca66f6b2151e8e3c8da1eae0"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1012.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f1e45d57354edb009540f4267d4c205a5289cdd3973262ae08793644658128f1"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1014"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1014"
+bytes = 2564206
+sha256 = "26f95cbba50f2e11b78f6aeac7d475ecc71ae0c7dc055e19ebf71c929ef17c08"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1014.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "fb31233c2888e4e0fead92407a88e370d3dbb87a84faec7dbe49e0f07274ece5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1015"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1015"
+bytes = 2564772
+sha256 = "e227901ebba5a4d114e23aa6d651a5bfe137128d7768e05ea188268832ae570f"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "def1e9502e995a9cfb6bcad3085578abbdaf8f2d2d729dda62fcb21697c2d055"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1018"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1018"
+bytes = 2568074
+sha256 = "74e45215114ee7b679b0952f5611db3e107f83ffb4731958117aefcaf953819b"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0e76dacf76f7c07b9a4062eb253b8e3868987d5eecb18e93da3f5bb5df0d489c"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1021"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1021"
+bytes = 2573816
+sha256 = "9769ea1878ee9aa3c59393420f52e51c90fc9b6c3fcd5b13792cc75c3fe7f3e1"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1021.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "aa74b05c8fd049afa58ee4b76bf2053ed9b09c7b601c1f71f82b57fe840e8229"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1024"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1024"
+bytes = 2583636
+sha256 = "76ac261cdd7c2daeab521f5030251f25e73ea0ed124e3636a38e3a8840ad5cb5"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1024.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "56a16e6af616eef92e61576cf5418eaa5cab7ac558aa9ba742bb8bfb5b40dd64"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1027"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1027"
+bytes = 2624275
+sha256 = "9b8e0dc315449e2b67637ee1418878c9a3fe38f983c1d73683fc060ee0df40d1"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1027.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "a5ce8d440aea4eaf5b6a3a177c64ff07f8345422095b3367afa9c32f4a410c3a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-ascii-ac1032"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1032"
+bytes = 2624391
+sha256 = "01615b2799a37969c79837cccc00643f3ffd6a390353491df6ccb0a86ec5943e"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+reference_jsonl = "written/w-acadrust-ac1032-dxf-ascii-ac1032.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f7d2b038f3e1cb4b138a8ea3f24c265cf280607cd7d4419241776ef2ba211bd7"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1009"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1009"
+bytes = 1324374
+sha256 = "87a2123b293eb23b185cd4ef2ec5c3cf1b31ac00118fa50490660381f7430781"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1009.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 223308."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1012"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1012"
+bytes = 1324374
+sha256 = "87a2123b293eb23b185cd4ef2ec5c3cf1b31ac00118fa50490660381f7430781"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1012.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 223308."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1014"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1014"
+bytes = 1324374
+sha256 = "fc0e8093258c41c70b4dd738e3b824e2f8d58758dbbff224ea119c1bec058c1d"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1014.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 223308."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1015"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1015"
+bytes = 1324730
+sha256 = "4af4f49df090a676394c8b9e5791cc8a96df9865b7c78deeee27cd173c419a2e"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1015.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 223664."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1018"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1018"
+bytes = 1326124
+sha256 = "e0d7bd1f34b81550f08480d82d1cf552bbcbc46a18b2c008170515d4ce6d097a"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1018.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 225058."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1021"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1021"
+bytes = 1329073
+sha256 = "cb2f68c9a88a23b4e8602d91aaa8646eccc4568da4e68420eb9a3e809060452b"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1021.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 227249."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1024"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1024"
+bytes = 1331984
+sha256 = "c7aa4dfd27fd2f5a717bc9b09e25271a208657f544a8c007a1d1b7ad08cdde3c"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1024.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 301849."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1027"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1027"
+bytes = 1342536
+sha256 = "a83b5409fde72b7b29d3006ded29f06efdf2f6090c1b68d2b712e654b11d94f3"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1027.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 292620."
+
+[[written]]
+id = "w-acadrust-ac1032-dxf-binary-ac1032"
+writer = "acadrust"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1032"
+bytes = 1342610
+sha256 = "d6be1a8fe9159e7603ca9221f2b1f2e83296cdf41a91a4d989d8ffd271c0857d"
+generated_by = "src/bin/rewrite-acadrust.rs (tools/regenerate_written.py)"
+writer_version = "acadrust@39a11909acf56747f22c7309a0681bef8e6b61b8"
+no_reference = "/staging/files/w-acadrust-ac1032-dxf-binary-ac1032.dxf: ACadSharp could not read this file: DxfException: Invalid dxf code with value 0, at line 292694."
+
+[[written]]
+id = "w-acadsharp-ac1032-dwg-ac1014"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1014"
+file = "written/w-acadsharp-ac1032-dwg-ac1014.dwg.zst"
+bytes = 1091145
+sha256 = "e92972f638cabbad7ac85ccdc2490e94a33e6c4b4a8ad941d5bba11bf92e0e47"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+no_reference = "/staging/files/w-acadsharp-ac1032-dwg-ac1014.dwg: ACadSharp could not read this file: InvalidCastException: Unable to cast object of type 'ACadSharp.IO.Templates.CadBlockRecordTemplate' to type 'ACadSharp.IO.Templates.CadEntityTemplate'."
+
+[[written]]
+id = "w-acadsharp-ac1032-dwg-ac1015"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1015"
+file = "written/w-acadsharp-ac1032-dwg-ac1015.dwg.zst"
+bytes = 1091007
+sha256 = "6bb6d2a3549ec7c2c8e1afe89efb6584a696d009324172082cfc2b724f7d7ae2"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6f0fd991a89dd08e8bd73d68530c5fcb6f5be21bd54113c75e40348d0a2601a8"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dwg-ac1018"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1018"
+file = "written/w-acadsharp-ac1032-dwg-ac1018.dwg.zst"
+bytes = 975309
+sha256 = "53e2798a90f9a8581b5a21ea107f5803a7baf2b7ff0d3012ae492ec1c7cdaeba"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "1f3fb62c8f8f577d5cbb312a77b30caec1322457e8c9bdb9834a189010cb3061"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dwg-ac1024"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1024"
+file = "written/w-acadsharp-ac1032-dwg-ac1024.dwg.zst"
+bytes = 985780
+sha256 = "255c37d6fab71fa515d29ae052697f1917dce4f7e270b15f52af3fcdffaf3aa1"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dwg-ac1024.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "193f54c8baae44d2293a1ad759599ac74fe0a138e6f9a93df7e21fd08af00a73"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dwg-ac1027"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1027"
+file = "written/w-acadsharp-ac1032-dwg-ac1027.dwg.zst"
+bytes = 986045
+sha256 = "30de3b37a00ef9d70c5e6680ec3bfe0e9690253e3fad582b0629246776775233"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dwg-ac1027.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "403615be05d445bb88a195bead9327e89c57d7791d40f02febda29cb22bfb13a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dwg-ac1032"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dwg"
+version = "AC1032"
+file = "written/w-acadsharp-ac1032-dwg-ac1032.dwg.zst"
+bytes = 986737
+sha256 = "d6b079fbc04502f2c17d71c6e653ec871deff334026723a04c87d68d5a8055b6"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dwg-ac1032.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "42fe175a6675356a4ac5154764dbbf2007b2bcbed42fbd546d16d6836e9a8069"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1012"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1012"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1012.dxf.zst"
+bytes = 263407
+sha256 = "77b28cd1fa27abca690f7e7ebc5dd17e1c1c23a8db3000f91a332a54c6928d69"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1012.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f7185fa7959d11bd152ef964ec7c15a4ef5a4cada5e679a0fb933ace67713b26"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1014"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1014"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1014.dxf.zst"
+bytes = 263407
+sha256 = "d43114d8e0880977226220ebdedb37f4e709687bafa87c5256c1e71a81912acf"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1014.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "7704ad89af9e3269da2b5e81baa93eb6ac0ec8bbecdd559283bfa1f8b58cad5e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1015"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1015"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1015.dxf.zst"
+bytes = 263407
+sha256 = "5349f41749ddee3835c61a80e5409668daf35986b18d895ecb2ecbf54ca69078"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f3e7eedf6b465627cc9381b7ee3350bc465bd65c034e55ec30ba8ee466d6338a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1018"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1018"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1018.dxf.zst"
+bytes = 263760
+sha256 = "caccc0daf2d73c37bd9b3bec69de9db4377d562ec29124fab9e082d16c35f4d3"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "617ff1719c3c5fd0d2b89f074211ad20749ef5668d33bbc379a473b844826a41"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1021"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1021"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1021.dxf.zst"
+bytes = 263978
+sha256 = "37378159adec1256f9256b054b5d7aaff0d8f316cb3f02bb84475d116dd21360"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1021.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6ccb937f2094c2f9969dade38436ab2b70877373828b4200702afaffde0391e0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1024"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1024"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1024.dxf.zst"
+bytes = 263978
+sha256 = "84c53d248852dd304e546faf24c519d59a12463a31293a432e6a121edbc8344a"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1024.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2e477a6947dbf7b1c3262c5255cf86ffe6fe46219d253d7e707d5c0d516c5612"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1027"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1027"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1027.dxf.zst"
+bytes = 263978
+sha256 = "fd980449069d55eaacafd6ada4128d96f94b7962d98597342599d4d41f3914d6"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1027.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "95fcaac34c72efe3f344df9e0a864fdbd0f01e5c016d791be069371683694bc9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-ascii-ac1032"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-ascii"
+version = "AC1032"
+file = "written/w-acadsharp-ac1032-dxf-ascii-ac1032.dxf.zst"
+bytes = 265422
+sha256 = "dad2864a48609e7ca3c42c6ee01fbf1b5a4161a1ca2036978eaa69d79ae158b8"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-ascii-ac1032.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "4cbe9d484d5c16b7ed9fcc8c6afa8b51ca23b98f26ed90826982e48906d2e833"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1012"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1012"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1012.dxf.zst"
+bytes = 197703
+sha256 = "f121f1835b086080f75b3d3bc9e52dcec60b9574f9cdc90cb9f4bf5572a53d58"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1012.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f7185fa7959d11bd152ef964ec7c15a4ef5a4cada5e679a0fb933ace67713b26"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1014"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1014"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1014.dxf.zst"
+bytes = 197703
+sha256 = "6f9613482f882ab2e58e0a2cef4771bca806f66debe9d9ac0eda9bda683f708f"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1014.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "7704ad89af9e3269da2b5e81baa93eb6ac0ec8bbecdd559283bfa1f8b58cad5e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1015"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1015"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1015.dxf.zst"
+bytes = 197703
+sha256 = "56861419db255e045aa0a1f988b7c962f0363b314089526556b7de774c590291"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f3e7eedf6b465627cc9381b7ee3350bc465bd65c034e55ec30ba8ee466d6338a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1018"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1018"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1018.dxf.zst"
+bytes = 198051
+sha256 = "e3d64eac492708f6955e31f21cd547b4bc1de769759f5ebe38e1ca3fc5e90a69"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "617ff1719c3c5fd0d2b89f074211ad20749ef5668d33bbc379a473b844826a41"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1021"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1021"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1021.dxf.zst"
+bytes = 198413
+sha256 = "566f8833e7c1eadf7af01de817bc270d88741476fd1ced1c8f52730a58db3638"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1021.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6ccb937f2094c2f9969dade38436ab2b70877373828b4200702afaffde0391e0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1024"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1024"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1024.dxf.zst"
+bytes = 198413
+sha256 = "7c1cfd9b88eb238fe703cdd1d8c6bf110965c09b25829729dd9654da90b9be8c"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1024.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2e477a6947dbf7b1c3262c5255cf86ffe6fe46219d253d7e707d5c0d516c5612"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1027"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1027"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1027.dxf.zst"
+bytes = 198413
+sha256 = "502b8893e275593edcda4b8efb91d88c3f7d6eb1dc3594ff6f57ea3e4e572fd0"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1027.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "95fcaac34c72efe3f344df9e0a864fdbd0f01e5c016d791be069371683694bc9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[written]]
+id = "w-acadsharp-ac1032-dxf-binary-ac1032"
+writer = "acadsharp"
+source = "acadsharp-ac1032"
+container = "dxf-binary"
+version = "AC1032"
+file = "written/w-acadsharp-ac1032-dxf-binary-ac1032.dxf.zst"
+bytes = 199543
+sha256 = "3345b95aeac3a3652e3b81c97014c6a40868e2a3bbfe67a1b9a59dd38f782d31"
+generated_by = "reference/ACadSharp.Reference --rewrite-to (tools/regenerate_written.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "written/w-acadsharp-ac1032-dxf-binary-ac1032.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "4cbe9d484d5c16b7ed9fcc8c6afa8b51ca23b98f26ed90826982e48906d2e833"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+# ---- end of the written outputs ----

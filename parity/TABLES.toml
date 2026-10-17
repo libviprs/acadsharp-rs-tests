@@ -28,54 +28,54 @@ issue = "libviprs/acadsharp-rs-tests#25"
 # ---- oracle / acadsharp: what wire 2 cannot carry -------------------------------------------
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "point"
 reason = "wire 2 has no point record; a POINT arrives as warning 100."
 issue = "libviprs/libviprs-dep#104"
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "polygon"
 reason = "the wire carries no entity type, so a hatch loop and a SOLID are both a Polygon, and a hatch loop is one record per loop with bulges where schema 1 sends one analytic record per edge."
 issue = "libviprs/acadsharp-rs-tests#59"
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "document"
 field = "maintenance_version"
 reason = "wire 2's DocumentBegin carries view_count and drawing_version only."
 issue = "libviprs/acadsharp-rs-tests#61"
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "spline"
 field = "fit_points"
 reason = "fit points are not on wire 2."
 issue = "libviprs/acadsharp-rs-tests#58"
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "text"
 field = "width_factor"
 reason = "wire 2 text carries position, height, rotation and the string only."
 issue = "libviprs/acadsharp-rs-tests#66"
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "text"
 field = "halign"
 reason = "wire 2 text carries position, height, rotation and the string only."
 issue = "libviprs/acadsharp-rs-tests#66"
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "text"
 field = "valign"
 reason = "wire 2 text carries position, height, rotation and the string only."
 issue = "libviprs/acadsharp-rs-tests#66"
 
 [[exclude]]
-pairs = ["oracle/acadsharp", "acadsharp/acadrust"]
+pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "text"
 field = "style"
 reason = "wire 2 text carries position, height, rotation and the string only."
@@ -1314,3 +1314,79 @@ a = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bl
 b = "this is a really long Mtext\\Pbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
 reason = "From the R2004 save on, AutoCAD's ASCII DXF writes the paragraph break of four MTEXTs as a line feed and its binary DXF as the escape \\P. ezdxf keeps what each file stores (the DWG reads as a line feed), and the schema carries what the file stores. The same four texts R3.4 lists in tests/ground_truth_ezdxf.rs."
 issue = "libviprs/acadsharp-rs-tests#24"
+
+# ---- the round-trip matrix (R5.3, #29) -----------------------------------------------------
+#
+# A reader's reading of what a writer wrote, held against the writer's own reading of
+# the source (the oracle for ACadSharp, acadrust for acadrust). `w-<writer>:<reader>`
+# (src/tables.rs). Every key has an explicit warnings row, and the three document
+# fields a rewrite changes by definition are excluded on all of them.
+
+[[warnings]]
+pair = "w-acadsharp:oracle"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[warnings]]
+pair = "w-acadsharp:acadrust"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[warnings]]
+pair = "w-acadsharp:acadsharp"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[warnings]]
+pair = "w-acadsharp:ezdxf"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[warnings]]
+pair = "w-acadrust:oracle"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[warnings]]
+pair = "w-acadrust:acadrust"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[warnings]]
+pair = "w-acadrust:acadsharp"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[warnings]]
+pair = "w-acadrust:ezdxf"
+compare = false
+reason = "a reader's notifications are about the file it read and the writer changed the file, so they are not held; the geometry is."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[exclude]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:acadsharp", "w-acadsharp:ezdxf", "w-acadrust:oracle", "w-acadrust:acadrust", "w-acadrust:acadsharp", "w-acadrust:ezdxf"]
+record = "document"
+field = "acad_version"
+reason = "the version is what was written: AC1032 in, the plan's version out."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[exclude]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:acadsharp", "w-acadsharp:ezdxf", "w-acadrust:oracle", "w-acadrust:acadrust", "w-acadrust:acadsharp", "w-acadrust:ezdxf"]
+record = "document"
+field = "format"
+reason = "the container is what was written."
+issue = "libviprs/acadsharp-rs-tests#29"
+
+[[exclude]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:acadsharp", "w-acadsharp:ezdxf", "w-acadrust:oracle", "w-acadrust:acadrust", "w-acadrust:acadsharp", "w-acadrust:ezdxf"]
+record = "document"
+field = "maintenance_version"
+reason = "a writer stamps its own maintenance number; it is not the source's."
+issue = "libviprs/acadsharp-rs-tests#29"
