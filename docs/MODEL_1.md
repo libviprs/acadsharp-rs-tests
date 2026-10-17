@@ -284,7 +284,16 @@ and a dictionary inside it, if there were one, as `ACAD_GROUP/<key>`).
   `KeepUnknownNonGraphicalObjects` on, so an entry whose class it has no type for
   stays in the list under the class name the file gives it. The switch keeps an
   object after the reader's notification has fired, and schema 1 emits no
-  object, so no schema 1 output moves because of it.
+  object, so no schema 1 output moves because of it. The DXF reader needs a
+  second switch: it reads the handle of an unknown object only when
+  `KeepUnknownEntities` is on, where the name says it means the other one, so
+  the oracle sets both for a DXF (libviprs/acadsharp-rs-tests#126). The unknown
+  entities that keeps are drawing content, which no model-1 record reads.
+- **The key is the file's.** ACadSharp adds each entry under the object's own
+  name (`CadDictionaryTemplate.build`), so for a dictionary whose keys are not
+  the names (ACAD_SCALELIST, which AutoCAD keys `A0`, `A1`, and so on) the
+  oracle's key is the name. Those are `known` rows for the five dictionaries it
+  touches (libviprs/acadsharp-rs-tests#124).
 - **An entry that names no object** is a dangling reference. A reader that
   resolves the entry has nothing to list, so it is not listed.
 - **Extension dictionaries** hang off an owner and not off the root. Those of

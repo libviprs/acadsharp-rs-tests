@@ -769,16 +769,28 @@ fn every_nested_dictionary_has_its_own_record_under_the_longer_path() {
 
 /// ACadSharp drops an object whose class it does not know unless the reader is
 /// told to keep it, so without the switch the entry would be missing from the
-/// oracle's list. At least one entry of the standard tree is such an object on
-/// the newest save, and the oracle names its class.
+/// oracle's list. ACAD_ASSOCPERSSUBENTMANAGER is such an object (ACadSharp has no
+/// class for ACDBASSOCPERSSUBENTMANAGER), and the oracle names it in the DWG and
+/// in the DXF twin alike. The DXF reader keeps it only when a second switch is on
+/// as well (docs/MODEL_1.md), which is what this holds the oracle to.
 #[test]
 fn the_oracle_keeps_the_entries_acadsharp_has_no_class_for() {
-    let records = model1::load_frozen("oracle", "acadsharp-ac1032").unwrap();
-    let ez = model1::load_frozen("ezdxf", "dxf-sample-ac1032-ascii").unwrap();
-    let (theirs, _) = dictionary_at(&ez, "").unwrap();
-    let (ours, _) = dictionary_at(&records, "").unwrap();
+    for id in ["acadsharp-ac1032", "dxf-sample-ac1032-ascii"] {
+        let records = model1::load_frozen("oracle", id).unwrap();
+        let (entries, _) = dictionary_at(&records, "").unwrap();
+        assert!(
+            entries
+                .iter()
+                .any(|(k, c)| k == "ACAD_ASSOCPERSSUBENTMANAGER" && c == "ACDBASSOCPERSSUBENTMANAGER"),
+            "{id}: the oracle lost the root entry ACAD_ASSOCPERSSUBENTMANAGER: {entries:?}"
+        );
+    }
     // The twin and the DWG are one drawing: every key ezdxf lists under the root
-    // of the twin is a key the oracle lists under the root of the DWG.
+    // of the twin is a key the oracle lists under the root of its DXF.
+    let ez = model1::load_frozen("ezdxf", "dxf-sample-ac1032-ascii").unwrap();
+    let dxf = model1::load_frozen("oracle", "dxf-sample-ac1032-ascii").unwrap();
+    let (theirs, _) = dictionary_at(&ez, "").unwrap();
+    let (ours, _) = dictionary_at(&dxf, "").unwrap();
     for (key, _) in &theirs {
         assert!(
             ours.iter().any(|(k, _)| k == key),
@@ -815,7 +827,7 @@ fn one_renamed_dictionary_entry_is_red_and_names_the_path() {
     for r in &mut oracle {
         if let Record::Entry(e) = r
             && e.kind == "dictionary"
-            && e.name == "ACAD_MLINESTYLE"
+            && e.name == "ACAD_TABLESTYLE"
             && let Some(Value::List(items)) = e.get("entries").cloned()
         {
             let mut items = items;
@@ -826,7 +838,7 @@ fn one_renamed_dictionary_entry_is_red_and_names_the_path() {
             e.set("entries", Value::List(items));
         }
     }
-    assert_eq!(touched, 1, "the twin has an ACAD_MLINESTYLE with an entry");
+    assert_eq!(touched, 1, "the twin has an ACAD_TABLESTYLE with an entry");
     let after = compare(
         "ezdxf/oracle",
         &side("ezdxf", twin, &ez),
@@ -838,7 +850,7 @@ fn one_renamed_dictionary_entry_is_red_and_names_the_path() {
         after
             .red()
             .iter()
-            .any(|f| f.key == "dictionary/ACAD_MLINESTYLE.entries[0].key"),
+            .any(|f| f.key == "dictionary/ACAD_TABLESTYLE.entries[0].key"),
         "{:?}",
         after.red().iter().map(|f| &f.key).collect::<Vec<_>>()
     );

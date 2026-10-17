@@ -527,6 +527,11 @@ pub struct Excluded {
     /// `oracle`, `acadrust` or `ezdxf`.
     pub engine: String,
     pub names: Vec<String>,
+    /// Pairs the row applies to; empty means every pair. A name two saves of one
+    /// drawing do not both hold is not a name a reader cannot produce, so such a
+    /// row is scoped to the `dxf-dwg:` pairs.
+    #[serde(default)]
+    pub pairs: Vec<String>,
     /// Fixture ids the row applies to; empty means every fixture.
     #[serde(default)]
     pub fixtures: Vec<String>,
@@ -559,10 +564,17 @@ impl Rules {
         Ok(r)
     }
 
-    fn excluded_for(&self, engine: &str, fixture: &str, name: &str) -> Option<&Excluded> {
+    fn excluded_for(
+        &self,
+        pair: &str,
+        engine: &str,
+        fixture: &str,
+        name: &str,
+    ) -> Option<&Excluded> {
         self.excluded.iter().find(|e| {
             e.engine == engine
                 && e.names.iter().any(|n| glob(n, name))
+                && (e.pairs.is_empty() || e.pairs.iter().any(|p| p == pair))
                 && (e.fixtures.is_empty() || e.fixtures.iter().any(|f| f == fixture))
         })
     }
@@ -919,7 +931,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                     let leaf = format!("{name}.{field}");
                     let left_out = [a, b].into_iter().find_map(|side| {
                         rules
-                            .excluded_for(side.engine, side.fixture, &leaf)
+                            .excluded_for(pair, side.engine, side.fixture, &leaf)
                             .map(|e| (side.engine, e.issue.clone()))
                     });
                     if let Some((engine, issue)) = left_out {
@@ -939,7 +951,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 }
             }
             (Some(x), None) => {
-                let excluded = rules.excluded_for(b.engine, b.fixture, name);
+                let excluded = rules.excluded_for(pair, b.engine, b.fixture, name);
                 report.findings.push(Finding {
                     kind: FindingKind::OnlyInA,
                     key: name.clone(),
@@ -954,7 +966,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 });
             }
             (None, Some(y)) => {
-                let excluded = rules.excluded_for(a.engine, a.fixture, name);
+                let excluded = rules.excluded_for(pair, a.engine, a.fixture, name);
                 report.findings.push(Finding {
                     kind: FindingKind::OnlyInB,
                     key: name.clone(),

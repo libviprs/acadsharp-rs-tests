@@ -33,8 +33,18 @@ public static class Model1Extractor
             // dropped has no class name to compare. The switch keeps the object
             // after the reader's notification has fired, and schema 1 emits no
             // object, so nothing else moves because of it.
+            //
+            // The DXF reader needs a second switch. DxfObjectsSectionReader reads
+            // the codes of an unknown object (its handle among them) only when
+            // KeepUnknownEntities is on, where the name says it means
+            // KeepUnknownNonGraphicalObjects, so with the right switch alone the
+            // object has no handle, no dictionary resolves it and the entry is
+            // dropped. The unknown entities this keeps are drawing content, which
+            // no model-1 record reads, and the DWG reader is not given it.
             document = string.Equals(Path.GetExtension(path), ".dxf", StringComparison.OrdinalIgnoreCase)
-                ? DxfReader.Read(path, new DxfReaderConfiguration { KeepUnknownNonGraphicalObjects = true })
+                ? DxfReader.Read(
+                    path,
+                    new DxfReaderConfiguration { KeepUnknownNonGraphicalObjects = true, KeepUnknownEntities = true })
                 : DwgReader.Read(path, new DwgReaderConfiguration { KeepUnknownNonGraphicalObjects = true });
         }
         catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
