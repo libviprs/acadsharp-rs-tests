@@ -27,6 +27,8 @@ side is `tools/model1.py`.
 | `textstyle` | this document | the entry name |
 | `dimstyle` | this document | the entry name |
 | `dictionary` | this document | the path of entry keys from the root |
+| `xdata` | this document | the owner, a vertical bar, the application name |
+| `xrecord` | this document | the dictionary path that reaches it |
 
 The rest of the table kinds (`linetype`, `textstyle`, `dimstyle`,
 `block_record`, `layout`), `dictionary`, and `xdata` with `xrecord` are each
@@ -329,6 +331,76 @@ and a dictionary inside it, if there were one, as `ACAD_GROUP/<key>`).
   `xdata` kind (R5.5.7) prove the sidecar rule there.
 - **A class only one side can name** is listed by name in `parity/MODEL1.toml`
   and is the list R5.6's object rows want.
+
+## `xdata` and `xrecord`
+
+```json
+{"model":1,"record":"xdata","name":"entity/91E|REAL_APP","owner":"entity/91E","appid":"REAL_APP","values":[{"code":1002,"value":"{"},{"code":1040,"value":1.5},{"code":1002,"value":"}"}]}
+{"model":1,"record":"xrecord","name":"ACAD_LAST_SAVED_VERSION_INFO","cloning":1,"entries":[{"code":1,"value":"a note"},{"code":40,"value":2.5}]}
+```
+
+Both are lists of `(group code, value)` pairs, and both readers type them with
+one code-to-type map, so the written form of a value is one table, below, and
+the only thing that differs between the two kinds is the key.
+
+### The value table
+
+The code is always written beside the value, and the code decides the written
+form. The same table is in all three producers (`model1::value_form`,
+`Model1Extractor.ValueForm`, `value_form` in `tools/model1.py`):
+
+| group codes | written as |
+|---|---|
+| 0 to 4, 6 to 9, 100 to 102, 300 to 309, 410 to 419, 430 to 439, 470 to 479, 999, 1000, 1002, 1003 | a JSON string. 1002 is the control string, `{` or `}`. 1003 is a layer name, written as the name and never as its handle |
+| 5, 105, 320 to 369, 390 to 399, 480 and 481, 1005 | a JSON string of the handle digits, upper case, no prefix |
+| 310 to 319, 1004 | a JSON string of the bytes in upper case hex |
+| 10 to 37, 1010 to 1013 | `[x,y,z]` (the 20 and 30 partners are folded in; a 2D point has z 0.0) |
+| 38 to 59, 110 to 149, 210 to 239, 460 to 469, 1040 to 1042 | a schema 1 real |
+| 60 to 99, 150 to 179, 270 to 299, 370 to 389, 400 to 409, 420 to 429, 440 to 459, 1070, 1071 | a JSON integer. A byte, a short, an int and a long are all integers, and a bool (290 to 299) is 0 or 1 |
+
+A code outside the table is a hole in it and a producer refuses it loudly.
+Writing the code beside the value is what lets ACadSharp, which folds a bool into
+`ExtendedDataInteger16`, and acadrust, which keeps `Bool`, compare the same. It
+also means the four point kinds (1010 to 1013) differ by their code, and the
+readers that fold them into one type lose nothing. The comparator tells the
+shapes apart by the JSON (string, integer, double, `[x,y,z]`), and a value of
+another shape than the other side's is a type finding.
+
+### `xdata`
+
+One record per `(owner, appid)`, the list in stored order, the key
+`<owner>|<appid>` (both halves are fields too). Owners are `table/<kind>/<name>`,
+`layout/<name>`, `dictionary/<path>`, `xrecord/<path>` and `entity/<handle>`,
+the paths being the ones the `dictionary` kind uses.
+
+- **Entity handles** are the upper case digits of the handle. A handle is stable
+  between a DWG and its AutoCAD DXF twin, and not across a writer's rewrite, so
+  the entity form compares where one file is read by every reader (the pairs
+  here) and is left out of any comparison across a rewrite, which is the sidecar
+  rule schema 1 already lives by. The AC1014 save has no twin to align with.
+- **A payload a reader could not decode** is not written. acadrust decodes the
+  extended data of an entity and keeps everything else raw, decoding it when its
+  inventory visits `NonEntityExtendedData`, and a payload it cannot decode is
+  `excluded` for acadrust in `parity/MODEL1.toml`, naming the owner and the
+  application. It is never silently left out.
+- **ACadSharp narrows an int64 to `ExtendedDataInteger32`.** If a file carried a
+  150 to 169 code in xdata the oracle's value would be wrong by construction.
+
+### `xrecord`
+
+One record per XRECORD reachable by a dictionary path, keyed by that path (the
+entry's own key included), with `cloning` (280) and the entries in stored order.
+
+- **Handle-valued entries go last.** ACadSharp lists the entries with a handle
+  value (320 to 369, 390 to 399) after the others, and a DWG keeps them in a
+  stream of their own, so no reader can say where one stood. Every producer
+  writes them last, each group in stored order, and the values and codes of
+  every entry are still compared (libviprs/acadsharp-rs-tests#136).
+- **The cloning flag is 280 and is not an entry.** ACadSharp's DXF reader leaves
+  it in the entry list and reads the flag as 0, so the oracle moves a leading
+  280 back when the document came from a DXF (libviprs/acadsharp-rs-tests#133).
+- **An entry whose code a reader cannot type** is dropped by ACadSharp's XRECORD
+  reader, which notifies, and kept by acadrust as an unknown value.
 
 ## Comparing
 

@@ -478,19 +478,82 @@ def table_entries(doc):
             yield kind, entry.dxf.name, entry
 
 
+def value_form(code: int) -> str:
+    """The written form of a value, decided by its group code: one table for
+    xdata and for XRECORDs, the same as `model1::value_form` and
+    `Model1Extractor.ValueForm`, written a third time on purpose.
+    """
+    if (
+        0 <= code <= 4 or 6 <= code <= 9 or 100 <= code <= 102 or 300 <= code <= 309
+        or 410 <= code <= 419 or 430 <= code <= 439 or 470 <= code <= 479 or code == 999
+        or code in (1000, 1002, 1003)
+    ):
+        return "text"
+    if code in (5, 105, 1005) or 320 <= code <= 369 or 390 <= code <= 399 or 480 <= code <= 481:
+        return "handle"
+    if 310 <= code <= 319 or code == 1004:
+        return "binary"
+    if 10 <= code <= 37 or 1010 <= code <= 1013:
+        return "point"
+    if 38 <= code <= 59 or 110 <= code <= 149 or 210 <= code <= 239 or 460 <= code <= 469 or 1040 <= code <= 1042:
+        return "real"
+    if (
+        60 <= code <= 99 or 150 <= code <= 179 or 270 <= code <= 299 or 370 <= code <= 389
+        or 400 <= code <= 409 or 420 <= code <= 429 or 440 <= code <= 459 or code in (1070, 1071)
+    ):
+        return "whole"
+    raise ValueError(f"no written form is defined for group code {code}")
+
+
+def coded_value(code: int, raw) -> str:
+    """One `{"code":..,"value":..}` pair."""
+    form = value_form(code)
+    if form == "text":
+        value = quote(normalize_newlines(str(raw)))
+    elif form == "handle":
+        value = quote(format(int(str(raw), 16), "X"))
+    elif form == "binary":
+        data = raw if isinstance(raw, (bytes, bytearray)) else bytes.fromhex(str(raw))
+        value = quote(bytes(data).hex().upper())
+    elif form == "point":
+        parts = [float(p) for p in (raw if isinstance(raw, (tuple, list)) else tuple(raw))]
+        parts += [0.0] * (3 - len(parts))
+        value = "[" + ",".join(real(p) for p in parts) + "]"
+    elif form == "real":
+        value = real(float(raw))
+    else:
+        value = str(int(raw))
+    return '{"code":' + str(code) + ',"value":' + value + "}"
+
+
+def dictionary_tree(doc):
+    """The `dictionary` and `xrecord` lines, and the xdata owner of every
+    dictionary and XRECORD reached (`dictionary/<path>`, `xrecord/<path>`), by
+    handle.
+    """
+    lines, owners = _walk_dictionaries(doc)
+    return lines, owners
+
+
 def dictionary_lines(doc) -> list[tuple[str, str, str]]:
+    return dictionary_tree(doc)[0]
+
+
+def _walk_dictionaries(doc):
     """One `dictionary` record per DICTIONARY (and DICTIONARYWDFLT) reachable from
     the root, keyed by the path of entry keys, and per extension dictionary of a
     table entry or a layout (docs/MODEL_1.md). Those of entities are keyed by
     handle only and are not written.
     """
     out = []
+    owners = {}
     seen = set()
 
     def walk(d, path: str) -> None:
         if id(d) in seen:
             return
         seen.add(id(d))
+        owners[d.dxf.handle] = f"dictionary/{path}"
         # An entry whose handle names no object is a dangling reference.
         items = sorted(((k, e) for k, e in d.items() if e is not None), key=lambda kv: kv[0].encode("utf-8"))
         entries = ",".join(
@@ -510,8 +573,30 @@ def dictionary_lines(doc) -> list[tuple[str, str, str]]:
             )
         )
         for k, e in items:
+            child = k if not path else f"{path}/{k}"
             if e.dxftype() in ("DICTIONARY", "ACDBDICTIONARYWDFLT"):
-                walk(e, k if not path else f"{path}/{k}")
+                walk(e, child)
+            elif e.dxftype() == "XRECORD" and e.dxf.handle not in owners:
+                owners[e.dxf.handle] = f"xrecord/{child}"
+                # The handle-valued entries go last, each group in stored order:
+                # ACadSharp lists them last and a DWG keeps them in a stream of
+                # their own, so their place among the others is not compared.
+                tags = list(e.tags)
+                tags = [t for t in tags if value_form(int(t.code)) != "handle"] + [
+                    t for t in tags if value_form(int(t.code)) == "handle"
+                ]
+                values = ",".join(coded_value(int(t.code), t.value) for t in tags)
+                out.append(
+                    line(
+                        "xrecord",
+                        child,
+                        [
+                            ("name", quote(child)),
+                            ("cloning", str(int(e.dxf.get("cloning", 0)))),
+                            ("entries", f"[{values}]"),
+                        ],
+                    )
+                )
 
     walk(doc.rootdict, "")
     for kind, name, entry in table_entries(doc):
@@ -521,6 +606,46 @@ def dictionary_lines(doc) -> list[tuple[str, str, str]]:
         dxf_layout = layout.dxf_layout
         if dxf_layout.has_extension_dict:
             walk(dxf_layout.get_extension_dict().dictionary, f"layout/{layout.name}")
+    return out, owners
+
+
+def xdata_lines(doc, owners) -> list[tuple[str, str, str]]:
+    """One `xdata` record per (owner, application): table entries, layouts,
+    dictionaries and XRECORDs by their path, and entities by handle.
+    """
+    from ezdxf.entities import DXFGraphic
+
+    out = []
+
+    def add(entity, owner: str) -> None:
+        xd = entity.xdata
+        if xd is None:
+            return
+        for appid, tags in xd.data.items():
+            values = ",".join(coded_value(int(t.code), t.value) for t in tags if int(t.code) != 1001)
+            key = f"{owner}|{appid}"
+            out.append(
+                line(
+                    "xdata",
+                    key,
+                    [
+                        ("name", quote(key)),
+                        ("owner", quote(owner)),
+                        ("appid", quote(appid)),
+                        ("values", f"[{values}]"),
+                    ],
+                )
+            )
+
+    for kind, name, entry in table_entries(doc):
+        add(entry, f"table/{kind}/{name}")
+    for layout in doc.layouts:
+        add(layout.dxf_layout, f"layout/{layout.name}")
+    for handle, owner in owners.items():
+        add(doc.entitydb[handle], owner)
+    for entity in doc.entitydb.values():
+        if isinstance(entity, DXFGraphic):
+            add(entity, f"entity/{entity.dxf.handle.upper()}")
     return out
 
 
@@ -539,7 +664,10 @@ def command_extract_ezdxf(args) -> int:
             return 1
         doc = ezdxf.readfile(str(path))
         records, skipped = header_lines(doc)
-        text = encode(records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc) + dimstyle_lines(doc) + dictionary_lines(doc))
+        tree, owners = dictionary_tree(doc)
+        text = encode(
+            records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc) + dimstyle_lines(doc) + tree + xdata_lines(doc, owners)
+        )
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
         print(f"{rid}: {len(text.splitlines())} records")
