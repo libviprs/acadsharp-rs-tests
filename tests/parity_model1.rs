@@ -347,23 +347,10 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
         return;
     };
     let mut used: BTreeSet<(String, String, String)> = BTreeSet::new();
-    for ((fixture, pair), r) in &run.reports {
-        let (a, b) = match pair.split_once('/') {
-            Some(ab) => ab,
-            // `dxf-dwg:oracle`: the same engine on both sides.
-            None => {
-                let e = pair.split_once(':').unwrap().1;
-                (e, e)
-            }
-        };
-        for f in r
-            .findings
-            .iter()
-            .filter(|f| f.disposition == Disposition::Excluded)
-        {
-            // OnlyInA: the name is missing from b; OnlyInB: missing from a.
-            let engine = if f.kind == FindingKind::OnlyInA { b } else { a };
-            used.insert((engine.to_string(), fixture.clone(), f.key.clone()));
+    for ((fixture, _), r) in &run.reports {
+        for f in r.findings.iter().filter(|f| f.disposition == Disposition::Excluded) {
+            let engine = f.excluded.clone().expect("an excluded finding names its engine");
+            used.insert((engine, fixture.clone(), f.key.clone()));
         }
     }
     let mut stale = Vec::new();

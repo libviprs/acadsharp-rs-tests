@@ -372,6 +372,7 @@ pub fn textstyle_records(doc: &CadDocument) -> Vec<Record> {
                     Value::Bool(t.is_shape_file),
                     Value::Bool(t.is_vertical),
                     Value::Bool(t.xref_dependent),
+                    Value::Bool(t.annotative),
                 ],
             ))
         })

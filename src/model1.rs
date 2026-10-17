@@ -124,6 +124,7 @@ const TEXTSTYLE: Schema = Schema {
         ("is_shape", Ty::Bool),
         ("is_vertical", Ty::Bool),
         ("xref_dependent", Ty::Bool),
+        ("annotative", Ty::Bool),
     ],
 };
 
@@ -659,6 +660,8 @@ pub struct Finding {
     pub disposition: Disposition,
     /// The issue of the row that lists it, when one does.
     pub issue: String,
+    /// For an `Excluded` finding, the engine the row excludes.
+    pub excluded: Option<String>,
 }
 
 impl fmt::Display for Finding {
@@ -862,6 +865,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                 Disposition::Red
             },
             issue: known.map(|k| k.issue.clone()).unwrap_or_default(),
+            excluded: None,
         });
     };
     let compare_values = |x: &Value, y: &Value| -> Option<(FindingKind, String)> {
@@ -894,6 +898,26 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                     let Some(vy) = theirs.get(field.as_str()) else {
                         continue;
                     };
+                    // A field an engine cannot produce is written as its zero
+                    // value there and left out of the comparison, and the
+                    // report counts it.
+                    let leaf = format!("{name}.{field}");
+                    let left_out = [a, b].into_iter().find_map(|side| {
+                        rules
+                            .excluded_for(side.engine, side.fixture, &leaf)
+                            .map(|e| (side.engine, e.issue.clone()))
+                    });
+                    if let Some((engine, issue)) = left_out {
+                        report.findings.push(Finding {
+                            kind: FindingKind::Value,
+                            key: leaf,
+                            detail: format!("left out: {engine} cannot produce it"),
+                            disposition: Disposition::Excluded,
+                            issue,
+                            excluded: Some(engine.to_string()),
+                        });
+                        continue;
+                    }
                     if let Some((kind, detail)) = compare_values(vx, vy) {
                         push(&mut report, kind, format!("{name}.{field}"), detail);
                     }
@@ -911,6 +935,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                         Disposition::Red
                     },
                     issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
+                    excluded: excluded.map(|_| b.engine.to_string()),
                 });
             }
             (None, Some(y)) => {
@@ -925,6 +950,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
                         Disposition::Red
                     },
                     issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
+                    excluded: excluded.map(|_| a.engine.to_string()),
                 });
             }
             _ => unreachable!("one key is one kind of record"),

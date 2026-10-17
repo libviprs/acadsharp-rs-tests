@@ -178,7 +178,12 @@ public static class Model1Extractor
                 ("upside_down", (mirror & 4) != 0 ? "true" : "false"),
                 ("is_shape", (flags & 1) != 0 ? "true" : "false"),
                 ("is_vertical", (flags & 4) != 0 ? "true" : "false"),
-                ("xref_dependent", (flags & 16) != 0 ? "true" : "false")));
+                ("xref_dependent", (flags & 16) != 0 ? "true" : "false"),
+
+                // ACadSharp 3.7.1 has no annotative property on TextStyle. The
+                // field is written as false and left out of the comparison
+                // (excluded for the oracle in parity/MODEL1.toml).
+                ("annotative", "false")));
         }
     }
 

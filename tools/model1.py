@@ -301,6 +301,17 @@ def linetype_lines(doc) -> list[tuple[str, str, str]]:
     return out
 
 
+def annotative(entry) -> bool:
+    """Whether the entry carries the AcadAnnotative xdata with its flag set: the
+    first 1070 inside the AnnotativeData group is 1."""
+    if not entry.has_xdata("AcadAnnotative"):
+        return False
+    for code, value in entry.get_xdata("AcadAnnotative"):
+        if code == 1070:
+            return int(value) == 1
+    return False
+
+
 def textstyle_lines(doc) -> list[tuple[str, str, str]]:
     """One `textstyle` record per STYLE entry, keyed by name (docs/MODEL_1.md).
 
@@ -329,6 +340,7 @@ def textstyle_lines(doc) -> list[tuple[str, str, str]]:
             ("is_shape", "true" if flags & 1 else "false"),
             ("is_vertical", "true" if flags & 4 else "false"),
             ("xref_dependent", "true" if flags & 16 else "false"),
+            ("annotative", "true" if annotative(st) else "false"),
         ]
         out.append(line("textstyle", name, fields))
     return out
