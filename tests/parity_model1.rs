@@ -668,8 +668,9 @@ fn every_file_has_a_style_called_standard() {
     ] {
         let records = model1::load_frozen(engine, id).unwrap();
         assert!(
-            records.iter().any(|r| r.kind() == "textstyle"
-                && r.key().eq_ignore_ascii_case("Standard")),
+            records
+                .iter()
+                .any(|r| r.kind() == "textstyle" && r.key().eq_ignore_ascii_case("Standard")),
             "{engine} {id}: no style Standard"
         );
     }
