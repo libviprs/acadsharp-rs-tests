@@ -1,4 +1,5 @@
 using ACadSharp.Entities;
+using ACadSharp.Generator.Drawings;
 using CSMath;
 
 namespace ACadSharp.Generator;
@@ -17,5 +18,14 @@ public static class Catalog
         doc => doc.Entities.Add(new Line(new XYZ(0, 0, 0), new XYZ(1, 1, 0)) { Layer = Writer.Layer(doc) }));
 
     /// <summary>The committed fixtures, in the order they are listed.</summary>
-    public static readonly IReadOnlyList<Drawing> All = [];
+    public static readonly IReadOnlyList<Drawing> All =
+    [
+        Bulge.Drawing,
+        InsertTransform.Drawing,
+        TextZeroHeight.Drawing,
+        DimensionFields.Drawing,
+        HatchLoops.Drawing,
+        UnsupportedEntity.Drawing,
+        LargeEntityCount.Drawing,
+    ];
 }
