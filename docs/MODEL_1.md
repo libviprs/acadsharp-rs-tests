@@ -24,6 +24,7 @@ side is `tools/model1.py`.
 | `header` | this document | the DXF `$NAME` |
 | `layer` | this document | the entry name |
 | `linetype` | this document | the entry name |
+| `textstyle` | this document | the entry name |
 
 The rest of the table kinds (`linetype`, `textstyle`, `dimstyle`,
 `block_record`, `layout`), `dictionary`, and `xdata` with `xrecord` are each
@@ -226,6 +227,32 @@ degrees), `offset` (44, 45), `text` (9) and `style` (340).
 The comparator unrolls the list: `linetype/<name>.segments.len` and then
 `linetype/<name>.segments[i].<field>`. A rule that covers a field of every
 segment of every linetype is `linetype/*.segments[*].style`.
+
+## `textstyle`
+
+```json
+{"model":1,"record":"textstyle","name":"Standard","font_file":"arial.ttf","big_font_file":"","height":0.0,"width_factor":1.0,"last_height":0.5,"oblique_angle":0.0,"backward":false,"upside_down":false,"is_shape":false,"is_vertical":false,"xref_dependent":false,"annotative":false}
+```
+
+One record per STYLE entry, keyed by the name. `Standard` is in every file. The
+fields are by DXF code: `font_file` (3), `big_font_file` (4), `height` (40),
+`width_factor` (41), `last_height` (42, the **stored** value, not what a reader
+would substitute for a zero), `oblique_angle` (50, radians), `backward` and
+`upside_down` (the two bits of 71, 2 and 4), `is_shape`, `is_vertical` and
+`xref_dependent` (bits 1, 4 and 16 of 70), and `annotative`.
+
+- **An entry with no name has no record.** It cannot be keyed. A STYLE entry
+  without a name is a shape file that only a linetype segment points at, and the
+  readers disagree on what to call it (ACadSharp invents `unnamed0`, `unnamed1`).
+  The oracle drops the names it invented. The count of such entries is not
+  compared.
+- **The TrueType family name and its flags** live in the style's `ACAD` xdata (1000
+  and 1071). Neither engine has the name as a field, so the row for it is the
+  `xdata` record on the style, not a field here.
+- **A field an engine cannot produce** is written as its zero value there and is
+  left out of the comparison by an `excluded` row naming it
+  (`textstyle/*.annotative` for the oracle: ACadSharp 3.7.1 has no such property).
+  The report counts what was left out, and a row the run never needed is stale.
 
 ## Comparing
 
