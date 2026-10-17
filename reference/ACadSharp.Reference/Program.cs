@@ -63,6 +63,22 @@ namespace ACadSharp.Reference
                 return (int)ExitCode.Ok;
             }
 
+            if (options.RewriteTo is { } rewriteTo)
+            {
+                ExportError? failure = Rewriter.Rewrite(
+                    options.Input!, rewriteTo, options.RewriteAs!, options.RewriteVersion!);
+                if (failure is not null)
+                {
+                    error.WriteLine(failure.Message);
+                    return (int)failure.Code;
+                }
+
+                output.WriteLine(string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"{rewriteTo}: {options.RewriteAs} {options.RewriteVersion}"));
+                return (int)ExitCode.Ok;
+            }
+
             Result<IReadOnlyList<Job>> jobs = BuildJobs(options);
             if (!jobs.IsOk)
             {
@@ -312,6 +328,9 @@ namespace ACadSharp.Reference
                 The whole corpus:
                   ACadSharp.Reference --manifest <manifest.toml> --all --output <dir>
 
+                Rewrite a drawing at another version (the writer half of the round-trip matrix):
+                  ACadSharp.Reference <input.dwg|input.dxf> --rewrite-to <out> --as <dwg|dxf|dxf-binary> --version <ACxxxx>
+
                 Options:
                   --jsonl <path>      Where to write the canonical JSONL. Required for a single file.
                   --svg <path>        Where to write the visual SVG. Optional for a single file.
@@ -322,6 +341,9 @@ namespace ACadSharp.Reference
                   --output <dir>      Directory for --all output, named <id>.reference.jsonl/.svg.
                   --no-svg            With --all, skip the SVG artefacts.
                   --summary <path>    Write a JSON census of what was produced.
+                  --rewrite-to <path> Read the input and write it again, instead of extracting it.
+                  --as <container>    With --rewrite-to: dwg, dxf (ASCII) or dxf-binary.
+                  --version <ACxxxx>  With --rewrite-to: the version to write.
                   --max-depth <n>     Block nesting limit (default 16).
                   --svg-margin <f>    SVG margin as a fraction of the drawing size (default 0.02).
                   --verbose           Echo the reader's own diagnostics to stderr.
@@ -329,7 +351,7 @@ namespace ACadSharp.Reference
 
                 Exit codes: 0 ok, 2 usage, 3 reader failure, 4 unsupported version,
                 5 invalid output path, 6 canonical serialization failure,
-                7 SVG generation failure, 8 unhandled ACadSharp error.
+                7 SVG generation failure, 8 unhandled ACadSharp error, 9 writer failure.
 
                 This tool never compresses and never writes into a checked-in
                 directory of its own accord. tools/regenerate_reference.py owns
@@ -372,6 +394,15 @@ namespace ACadSharp.Reference
             /// <summary>Whether to echo reader diagnostics.</summary>
             public bool Verbose { get; init; }
 
+            /// <summary>Where <c>--rewrite-to</c> writes, when it is a rewrite.</summary>
+            public string? RewriteTo { get; init; }
+
+            /// <summary>The container <c>--rewrite-to</c> writes.</summary>
+            public string? RewriteAs { get; init; }
+
+            /// <summary>The version <c>--rewrite-to</c> writes.</summary>
+            public string? RewriteVersion { get; init; }
+
             /// <summary>Whether the user just asked for help.</summary>
             public bool ShowHelp { get; init; }
 
@@ -388,6 +419,9 @@ namespace ACadSharp.Reference
                 string? summary = null;
                 string? model1Path = null;
                 bool model1All = false;
+                string? rewriteTo = null;
+                string? rewriteAs = null;
+                string? rewriteVersion = null;
                 bool noSvg = false;
                 bool all = false;
                 bool verbose = false;
@@ -473,6 +507,33 @@ namespace ACadSharp.Reference
 
                             break;
 
+                        case "--rewrite-to":
+                            rewriteTo = Next(arg);
+                            if (rewriteTo is null)
+                            {
+                                return Missing(arg);
+                            }
+
+                            break;
+
+                        case "--as":
+                            rewriteAs = Next(arg);
+                            if (rewriteAs is null)
+                            {
+                                return Missing(arg);
+                            }
+
+                            break;
+
+                        case "--version":
+                            rewriteVersion = Next(arg);
+                            if (rewriteVersion is null)
+                            {
+                                return Missing(arg);
+                            }
+
+                            break;
+
                         case "--all":
                             all = true;
                             break;
@@ -544,6 +605,30 @@ namespace ACadSharp.Reference
                 if (args.Length == 0)
                 {
                     return Result.Ok<Options>(new Options { ShowHelp = true });
+                }
+
+                if (rewriteTo is not null)
+                {
+                    if (input is null || rewriteAs is null || rewriteVersion is null || manifest is not null
+                        || all || jsonl is not null || svg is not null)
+                    {
+                        return Result.Fail<Options>(
+                            ExitCode.Usage,
+                            "--rewrite-to takes one input, --as and --version, and nothing that extracts");
+                    }
+
+                    return Result.Ok<Options>(new Options
+                    {
+                        Input = input,
+                        RewriteTo = rewriteTo,
+                        RewriteAs = rewriteAs,
+                        RewriteVersion = rewriteVersion,
+                    });
+                }
+
+                if (rewriteAs is not null || rewriteVersion is not null)
+                {
+                    return Result.Fail<Options>(ExitCode.Usage, "--as and --version go with --rewrite-to");
                 }
 
                 if (manifest is not null)

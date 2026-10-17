@@ -832,8 +832,28 @@ def sha256(data: bytes) -> str:
 def inputs(manifest: dict) -> list[dict]:
     """Every DXF the manifest lists. All of them: the twins of a DWG, and the
     AC1009 and geoloc_AC1021 files that are inputs for R5 and compared with
-    nothing yet."""
-    return list(manifest.get("oracle_input", []))
+    nothing yet, then the DXF outputs of the round-trip matrix (R5.3). A written
+    output is read from `written/<id>.dxf`, a file that exists only inside the
+    extraction (`written_bytes` decides where its bytes come from); its hash is
+    the row's own, so ezdxf reads the bytes the manifest froze."""
+    rows = list(manifest.get("oracle_input", []))
+    for w in manifest.get("written", []):
+        if w["container"].startswith("dxf") and not w.get("write_failed"):
+            rows.append({"id": w["id"], "file": f"written/{w['id']}.dxf",
+                         "sha256": w["sha256"], "written": w})
+    return rows
+
+
+def written_bytes(row: dict, written_dir: pathlib.Path | None) -> bytes:
+    """The bytes of a written output: from its stored, compressed file when
+    there is one (ACadSharp's), otherwise from the directory `rewrite-acadrust`
+    wrote."""
+    w = row["written"]
+    if w.get("file"):
+        return decompress((FIXTURES / w["file"]).read_bytes())
+    if written_dir is None:
+        sys.exit(f"{w['id']}: not stored, and --written-dir was not given")
+    return (written_dir / f"{w['id']}.dxf").read_bytes()
 
 
 def requirements_sha256() -> str:
@@ -845,6 +865,7 @@ def command_extract(args) -> int:
 
     manifest = load_manifest(pathlib.Path(args.manifest))
     root = pathlib.Path(args.dxf_root)
+    written_root = pathlib.Path(args.written_root) if getattr(args, "written_root", None) else None
     out = pathlib.Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     image = os.environ.get("GT_IMAGE", "")
@@ -854,7 +875,7 @@ def command_extract(args) -> int:
     for row in inputs(manifest):
         if wanted and row["id"] not in wanted:
             continue
-        path = root / row["file"]
+        path = (written_root if row.get("written") and written_root else root) / row["file"]
         data = path.read_bytes()
         if sha256(data) != row["sha256"]:
             print(f"{row['id']}: {path} is not the file the manifest froze", file=sys.stderr)
@@ -862,11 +883,17 @@ def command_extract(args) -> int:
         try:
             doc = ezdxf.readfile(str(path))
             records, sidecar = extract_document(doc, doc.dxfversion)
-        except Exception:  # report every input's failure, then fail the run
+        except Exception as exc:  # report every input's failure, then fail the run
             import traceback
 
             print(f"{row['id']}: FAILED", file=sys.stderr)
             traceback.print_exc()
+            if row.get("written"):
+                # A writer's output that ezdxf will not read is a finding about
+                # the writer, so it is recorded with ezdxf's own message.
+                message = " ".join(f"{type(exc).__name__}: {exc}".split())[:300]
+                (out / f"{row['id']}.{ENGINE}.error.txt").write_text(message + "\n", encoding="utf-8")
+                continue
             failed += 1
             continue
         jsonl, src = emit_texts(records, sidecar)
@@ -926,7 +953,8 @@ def decompress(data: bytes) -> bytes:
     return zstd_module().decompress(data)
 
 
-def run_extract_in_container(image: str, only: list[str] | None) -> dict[str, bytes]:
+def run_extract_in_container(image: str, only: list[str] | None,
+                             written_dir: pathlib.Path | None = None) -> dict[str, bytes]:
     """Run `extract` in the pinned image and return {file name: bytes}.
 
     The inputs go in and the outputs come out as tar streams, so this works
@@ -947,10 +975,16 @@ def run_extract_in_container(image: str, only: list[str] | None) -> dict[str, by
         add(REQUIREMENTS, "w/tools/ground_truth/requirements.txt")
         manifest = load_manifest()
         for row in inputs(manifest):
-            add(FIXTURES / row["file"], f"w/fixtures/{row['file']}")
+            if row.get("written"):
+                data = written_bytes(row, written_dir)
+                info = tarfile.TarInfo(f"w/fixtures/{row['file']}")
+                info.size = len(data)
+                tar.addfile(info, io.BytesIO(data))
+            else:
+                add(FIXTURES / row["file"], f"w/fixtures/{row['file']}")
     only_args = "".join(f" --only {o}" for o in (only or []))
     script = (
-        "set -e; mkdir -p /w && tar -x -C /w && cd /w && "
+        "set -e; tar -x -C / && cd /w && "
         "pip install -q --no-cache-dir --require-hashes -r tools/ground_truth/requirements.txt >&2 && "
         "python tools/ground_truth/extract_ezdxf.py extract --manifest fixtures/manifest.toml "
         f"--dxf-root fixtures --out /out{only_args} >&2 && tar -c -C /out ."
@@ -977,6 +1011,8 @@ MANIFEST_KEYS = (
     "sidecar_uncompressed_sha256", "run", "run_sha256", "ezdxf_version",
     "requirements_sha256", "image", "records", "schema",
 )
+# What a row whose DXF ezdxf would not read carries instead.
+FAILED_KEYS = ("input", "engine", "failed", "ezdxf_version", "image", "schema")
 
 
 def render_rows(rows: list[dict]) -> str:
@@ -984,7 +1020,7 @@ def render_rows(rows: list[dict]) -> str:
     for r in rows:
         out.append("[[ground_truth]]")
         out.append(f'id = "{r["id"]}"')
-        for key in MANIFEST_KEYS:
+        for key in (FAILED_KEYS if "failed" in r else MANIFEST_KEYS):
             if key == "file":
                 continue
             value = r[key]
@@ -1007,6 +1043,11 @@ def stage_rows(files: dict[str, bytes], manifest: dict, image: str) -> tuple[lis
     for row in inputs(manifest):
         rid = row["id"]
         base = f"{rid}.{ENGINE}"
+        if base + ".error.txt" in files:
+            rows.append({"id": rid, "input": rid, "engine": ENGINE,
+                         "failed": files[base + ".error.txt"].decode("utf-8").strip(),
+                         "ezdxf_version": EZDXF_VERSION, "image": image, "schema": SCHEMA})
+            continue
         jsonl, src, run = files[base + ".jsonl"], files[base + ".src.jsonl"], files[base + ".run.json"]
         meta = json.loads(run)
         rows.append({
@@ -1029,15 +1070,21 @@ def stage_rows(files: dict[str, bytes], manifest: dict, image: str) -> tuple[lis
     return rows, store
 
 
-def extract_locally(image: str) -> dict[str, bytes]:
+def extract_locally(image: str, written_dir: pathlib.Path | None = None) -> dict[str, bytes]:
     """The same extraction, in this process (already inside the pinned image)."""
     import tempfile
 
     os.environ["GT_IMAGE"] = image
-    with tempfile.TemporaryDirectory() as tmp:
+    with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as wroot:
+        manifest = load_manifest()
+        for row in inputs(manifest):
+            if row.get("written"):
+                target = pathlib.Path(wroot) / row["file"]
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(written_bytes(row, written_dir))
         ns = argparse.Namespace(
             manifest=str(MANIFEST), dxf_root=str(FIXTURES), out=tmp, only=None,
-            requirements_sha256=None,
+            requirements_sha256=None, written_root=wroot,
         )
         if command_extract(ns) != 0:
             sys.exit("extraction failed")
@@ -1047,9 +1094,11 @@ def extract_locally(image: str) -> dict[str, bytes]:
 def command_freeze(args) -> int:
     manifest = load_manifest()
     if args.runner == "local":
-        files = extract_locally(args.image)
+        files = extract_locally(
+            args.image, pathlib.Path(args.written_dir) if args.written_dir else None)
     else:
-        files = run_extract_in_container(args.image, None)
+        files = run_extract_in_container(
+            args.image, None, pathlib.Path(args.written_dir) if args.written_dir else None)
     rows, store = stage_rows(files, manifest, args.image)
     committed = {r["id"]: r for r in manifest.get("ground_truth", [])}
     moved = []
@@ -1057,6 +1106,9 @@ def command_freeze(args) -> int:
         old = committed.get(r["id"])
         if old is None:
             moved.append(f"{r['id']}: new")
+        elif "failed" in r or "failed" in old:
+            if old.get("failed") != r.get("failed"):
+                moved.append(f"{r['id']}: read or failed differently")
         elif old["jsonl_uncompressed_sha256"] != r["jsonl_uncompressed_sha256"]:
             moved.append(f"{r['id']}: records moved")
         elif old["sidecar_uncompressed_sha256"] != r["sidecar_uncompressed_sha256"]:
@@ -1068,7 +1120,13 @@ def command_freeze(args) -> int:
         return 1 if moved else 0
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for name, data in store.items():
-        (OUT_DIR / name).write_bytes(data)
+        target = OUT_DIR / name
+        # Frames are reproducible for one library version, so an unchanged file
+        # is left alone: a freeze that touches nothing it did not change is a
+        # freeze whose diff is its own change.
+        if target.is_file() and target.read_bytes() == data:
+            continue
+        target.write_bytes(data)
     text = MANIFEST.read_text(encoding="utf-8")
     MANIFEST.write_text(rewrite_manifest(text, rows), encoding="utf-8", newline="\n")
     print(f"wrote {len(store)} files and {len(rows)} manifest rows")
@@ -1087,6 +1145,10 @@ def command_verify(_args) -> int:
         problems.append("duplicate ground truth ids")
     req = requirements_sha256()
     for r in rows:
+        if "failed" in r:
+            if not str(r["failed"]).strip():
+                problems.append(f"{r['id']}: failed with no message")
+            continue
         if r["requirements_sha256"] != req:
             problems.append(f"{r['id']}: made with requirements {r['requirements_sha256']}, tools/ground_truth/requirements.txt is {req}")
         if r["ezdxf_version"] != EZDXF_VERSION:
@@ -1128,6 +1190,8 @@ def main(argv=None) -> int:
     p = sub.add_parser("freeze")
     p.add_argument("--accept", action="store_true")
     p.add_argument("--image", default=IMAGE)
+    p.add_argument("--written-dir", default=None,
+                   help="the directory src/bin/rewrite-acadrust.rs wrote (acadrust's outputs are not stored)")
     p.add_argument(
         "--runner", choices=("docker", "local"), default="docker",
         help="docker: drive the pinned image; local: this process is already inside it",

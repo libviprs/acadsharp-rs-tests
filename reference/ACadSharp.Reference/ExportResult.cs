@@ -34,6 +34,9 @@ public enum ExitCode
 
     /// <summary>ACadSharp threw something the tool does not classify.</summary>
     UnhandledAcadSharpError = 8,
+
+    /// <summary>ACadSharp would not write the drawing at that version or in that container.</summary>
+    WriterFailure = 9,
 }
 
 /// <summary>Why an operation did not produce a value.</summary>

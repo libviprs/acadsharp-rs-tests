@@ -186,7 +186,13 @@ class TestVerify(unittest.TestCase):
     def test_every_input_in_the_manifest_has_a_row(self):
         manifest = tool.load_manifest()
         have = {r["input"] for r in manifest["ground_truth"]}
-        want = {r["id"] for r in manifest["oracle_input"]}
+        # AutoCAD's DXF twins, and every DXF output of the round-trip matrix that
+        # was written (R5.3): ezdxf is asked to read each one, and says so either way.
+        want = {r["id"] for r in manifest["oracle_input"]} | {
+            w["id"]
+            for w in manifest.get("written", [])
+            if w["container"].startswith("dxf") and not w.get("write_failed")
+        }
         self.assertEqual(have, want)
 
 

@@ -219,9 +219,11 @@ def rewrite_manifest(text: str, per_fixture: dict[str, dict[str, object]]) -> st
             index += 1
             continue
 
-        if key_match and key_match.group(1) in REFERENCE_KEYS:
+        if key_match and key_match.group(1) in REFERENCE_KEYS and current_id in per_fixture:
             # Dropped here and re-emitted after sha256, so a row that already
-            # had them does not accumulate a second copy.
+            # had them does not accumulate a second copy. Only for the rows this
+            # tool owns: a `[[written]]` row carries the same key names and
+            # belongs to tools/regenerate_written.py.
             index += 1
             continue
 

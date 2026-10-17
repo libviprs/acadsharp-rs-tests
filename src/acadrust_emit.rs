@@ -67,6 +67,33 @@ pub fn extract_dxf_bytes(bytes: &[u8]) -> Result<Emission, String> {
     Ok(extract_as(&doc, "dxf"))
 }
 
+/// Read a DWG with acadrust and write it again as `container` (`dwg`,
+/// `dxf-ascii` or `dxf-binary`) at `version` (`AC1015` and so on): the acadrust
+/// half of the round-trip matrix (R5.3). acadrust's writers are deterministic, so
+/// the output is a function of the source, the container and the version.
+pub fn rewrite(bytes: &[u8], container: &str, version: &str) -> Result<Vec<u8>, String> {
+    use acadrust::io::dwg::DwgWriter;
+    use acadrust::io::dxf::DxfWriter;
+    use acadrust::types::DxfVersion;
+
+    let target =
+        DxfVersion::parse(version).ok_or_else(|| format!("{version:?} is not a version"))?;
+    let mut doc = DwgReader::from_stream(Cursor::new(bytes.to_vec()))
+        .read()
+        .map_err(|e| format!("acadrust could not read the source: {e}"))?;
+    doc.version = target;
+    match container {
+        "dwg" => DwgWriter::write_to_vec(&doc).map_err(|e| format!("DwgWriter: {e}")),
+        "dxf-ascii" => DxfWriter::new(&doc)
+            .write_to_vec()
+            .map_err(|e| format!("DxfWriter: {e}")),
+        "dxf-binary" => DxfWriter::new_binary(&doc)
+            .write_to_vec()
+            .map_err(|e| format!("DxfWriter (binary): {e}")),
+        other => Err(format!("{other:?} is not a container")),
+    }
+}
+
 /// Emit an already-read document.
 pub fn extract(doc: &CadDocument) -> Emission {
     extract_as(doc, "dwg")

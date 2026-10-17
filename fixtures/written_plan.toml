@@ -1,0 +1,33 @@
+# The writer matrix of the round-trip lane (R5.3, acadsharp-rs-tests#29): which
+# drawing is rewritten by which library, at which version, in which container.
+#
+# Read by tools/regenerate_written.py (which makes the files), by src/written.rs
+# and by tests/written.rs (which count the cells by hand against it). Each output
+# is one `[[written]]` row of fixtures/manifest.toml, written by that tool and
+# never by hand. Stage two (libviprs/acadsharp-rs-tests#41) lists more sources
+# under [stage.two]; it changes nothing else here.
+#
+# A cell is writer x container x version x reader x source. A writer that refuses
+# a version is listed under `refuses` with the library's own reason, so the
+# absence of an output is a recorded fact and not a hole.
+
+[stage.one]
+sources = ["acadsharp-ac1032"]
+
+# ACadSharp 3.7.1, through the oracle's --rewrite-to (reference/ACadSharp.Reference).
+[writer.acadsharp]
+dwg = ["AC1014", "AC1015", "AC1018", "AC1024", "AC1027", "AC1032"]
+dxf = ["AC1012", "AC1014", "AC1015", "AC1018", "AC1021", "AC1024", "AC1027", "AC1032"]
+
+[writer.acadsharp.refuses]
+# src/ACadSharp/IO/DwgWriter.cs:149-150, 158-159: CadNotSupportedException.
+dwg = ["AC1012", "AC1021"]
+
+# acadrust, through src/bin/rewrite-acadrust.rs (its DwgWriter and DxfWriter).
+[writer.acadrust]
+dwg = ["AC1012", "AC1014", "AC1015", "AC1018", "AC1021", "AC1024", "AC1027", "AC1032"]
+dxf = ["AC1009", "AC1012", "AC1014", "AC1015", "AC1018", "AC1021", "AC1024", "AC1027", "AC1032"]
+
+[writer.acadrust.refuses]
+# DwgVersion::from_version_string has no AC1009 arm (src/io/dwg/dwg_version.rs:148-158).
+dwg = ["AC1009"]

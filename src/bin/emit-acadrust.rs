@@ -17,6 +17,7 @@ use std::process::ExitCode;
 use acadsharp_rs_tests::acadrust_emit::{extract_bytes, extract_dxf_bytes};
 use acadsharp_rs_tests::emit::{EmitArgs, RunInfo, checkout_head, write_emission};
 use acadsharp_rs_tests::fixtures;
+use sha2::Digest;
 
 /// The sha `ACADRUST_REV` pins: the first line that is neither blank nor a
 /// comment, the way `tools/counterpart.sh` reads it.
@@ -42,9 +43,22 @@ fn main() -> ExitCode {
         .join("acadrust");
     // A `[[fixture]]` is a DWG; an `[[oracle_input]]` is one of AutoCAD's DXF
     // twins. The id says which, and the manifest is the only list of either.
-    let (id, sha256, bytes, is_dxf, extracted) = if let Some(fixture) =
-        fixtures::by_id(&args.fixture)
-    {
+    let (id, sha256, bytes, is_dxf, extracted) = if let Some(kind) = &args.stdin_as {
+        // A round-trip output (R5.3) arrives on stdin and is only named by --fixture.
+        let mut bytes = Vec::new();
+        if let Err(e) = std::io::Read::read_to_end(&mut std::io::stdin(), &mut bytes) {
+            eprintln!("emit-acadrust: stdin: {e}");
+            return ExitCode::from(1);
+        }
+        let sha = format!("{:x}", sha2::Sha256::digest(&bytes));
+        let is_dxf = kind == "dxf";
+        let read = if is_dxf {
+            extract_dxf_bytes(&bytes)
+        } else {
+            extract_bytes(&bytes)
+        };
+        (args.fixture.clone(), sha, bytes, is_dxf, read)
+    } else if let Some(fixture) = fixtures::by_id(&args.fixture) {
         let bytes = match fixture.load() {
             Ok(b) => b,
             Err(e) => {
