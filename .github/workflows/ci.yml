@@ -124,7 +124,7 @@ jobs:
       # step in an existing job rather than a job of its own on purpose: a new
       # job is a new context name, and a context name that is not required is a
       # check nobody has to pass. `shellcheck` ships on the runner image.
-      - run: shellcheck tools/counterpart.sh
+      - run: shellcheck tools/counterpart.sh tools/no_dotnet_proof.sh
       # This crate has no features yet. When it grows one, add a clippy cell for
       # it here rather than assuming the default pass covers it: feature-gated
       # code is invisible to the default cell, and in the core repo that hole
@@ -281,3 +281,84 @@ jobs:
       # decides what it means, which is the whole point of the manifest.
       - name: Upstream test parity is classified
         run: python3 tools/parity_inventory.py
+
+  # --- The native lane (H3.2) ------------------------------------------------
+  #
+  # Everything above runs against stubs or against no library at all. These two
+  # jobs are where the suite meets the real NativeAOT artifact: they fetch the
+  # archive `NATIVE_ARTIFACT.toml` names by hash (`tools/fetch_native.py` refuses
+  # a wrong hash before it extracts a byte), export `ACADSHARP_NATIVE_DIR`, and
+  # run the suite with `--features native`, which turns on `tests/native_smoke.rs`.
+  #
+  # `VIPRS_REQUIRE_NATIVE=1` and `ACADSHARP_REQUIRE_NATIVE=1` are what make this
+  # a lane and not a hope: the first turns "nothing was linked" in the smoke into
+  # a panic that names `ACADSHARP_NATIVE_DIR`, the second does the same inside
+  # the crate's build script. A job that quietly built without the library would
+  # otherwise go green having proved nothing.
+  #
+  # "Fetch the header" (H2.1) needs no step: the crate vendors the header under
+  # `native/` and its build script checks the archive against it, so a header and
+  # an archive from different commits refuse to build.
+  #
+  # The job names are plain on purpose, with no version in them, for the reason
+  # the MSRV job says. The static-certified cells and the other targets are H4.1's.
+  native-linux-x64:
+    name: Native (linux-x64, shared)
+    runs-on: ubuntu-latest
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
+      VIPRS_REQUIRE_NATIVE: 1
+      ACADSHARP_REQUIRE_NATIVE: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/clone-counterpart
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Fetch the archive by hash
+        id: native
+        uses: ./.github/actions/fetch-native-artifact
+        with:
+          target: linux-x64
+      - name: Export ACADSHARP_NATIVE_DIR
+        run: echo "ACADSHARP_NATIVE_DIR=${{ steps.native.outputs.dir }}" >> "$GITHUB_ENV"
+      - run: cargo test --locked --all-targets --features native
+      # The same smoke binary, in a container that has nothing but libc, and a
+      # control that a framework-dependent .NET app cannot start in that same
+      # container. The runner image ships an SDK, which is why the control
+      # publishes its hello-world here and only ever *runs* it in the clean one.
+      - name: Smoke with no .NET installed, and the control that says the container is clean
+        run: tools/no_dotnet_proof.sh linux "$ACADSHARP_NATIVE_DIR"
+
+  native-mac-arm64:
+    name: Native (mac-arm64, shared)
+    runs-on: macos-15
+    env:
+      VIPRS_REQUIRE_COUNTERPART: 1
+      ACADRUST_REQUIRE: 1
+      VIPRS_REQUIRE_NATIVE: 1
+      ACADSHARP_REQUIRE_NATIVE: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/clone-counterpart
+      - uses: ./.github/actions/clone-counterpart
+        with:
+          pin: ACADRUST_REV
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Fetch the archive by hash
+        id: native
+        uses: ./.github/actions/fetch-native-artifact
+        with:
+          target: mac-arm64
+      - name: Export ACADSHARP_NATIVE_DIR
+        run: echo "ACADSHARP_NATIVE_DIR=${{ steps.native.outputs.dir }}" >> "$GITHUB_ENV"
+      - run: cargo test --locked --all-targets --features native
+      # macOS has no container to put the smoke in, so the proof is weaker and
+      # says so: it records whether the runner image has a dotnet at all, and
+      # runs the smoke with a PATH that cannot find one.
+      - name: Smoke with a PATH that cannot find dotnet
+        run: tools/no_dotnet_proof.sh scrubbed "$ACADSHARP_NATIVE_DIR"

@@ -1,0 +1,39 @@
+name: Fetch a native archive
+description: >
+  Download one libviprs-dep archive named in NATIVE_ARTIFACT.toml, verify its
+  sha256 before extracting anything, and expose the directory to use as
+  ACADSHARP_NATIVE_DIR. A wrapper around tools/fetch_native.py, which is where
+  the rules live (and where tools/tests/test_fetch_native.py drives them), so
+  the workflow and a laptop run the same code. Check this repository out first:
+  the manifest and the tool both come from the checkout.
+
+inputs:
+  target:
+    description: >
+      A `[[target]]` name from NATIVE_ARTIFACT.toml: linux-x64, linux-arm64,
+      musl-x64, musl-arm64 or mac-arm64. Not a release tag and not an asset
+      name: the release is whatever the committed manifest says.
+    required: true
+
+outputs:
+  dir:
+    description: The unpacked archive's top-level directory, for ACADSHARP_NATIVE_DIR.
+    value: ${{ steps.fetch.outputs.dir }}
+
+runs:
+  using: composite
+  steps:
+    - name: Download, verify, extract
+      id: fetch
+      shell: bash
+      env:
+        TARGET: ${{ inputs.target }}
+      # The tool prints exactly one line on stdout, the directory, and a refusal
+      # exits non-zero with nothing on stdout, so `set -e` is the whole error
+      # handling. The input goes through an environment variable and is quoted,
+      # never interpolated into the script text.
+      run: |
+        set -euo pipefail
+        dir="$(python3 tools/fetch_native.py --target "$TARGET")"
+        echo "dir=$dir" >> "$GITHUB_OUTPUT"
+        echo "ACADSHARP_NATIVE_DIR for $TARGET is $dir"

@@ -18,9 +18,17 @@
 //! Static linking needs no rpath and nothing here: build with
 //! `--features acadsharp-rs/link-static` on a target whose `LINKINFO.json` says
 //! `static_certified: true`.
+//!
+//! The same variables are the honest signal for "this build can call the native
+//! library", so they also set `cfg(native_linked)`. The native lane's tests
+//! (`tests/native_smoke.rs` and the files beside it) gate their real bodies on
+//! it, and without it they skip, or under `VIPRS_REQUIRE_NATIVE=1` panic naming
+//! `ACADSHARP_NATIVE_DIR`. The link-arg below applies to test targets as well as
+//! binaries, so one rpath serves both.
 
 fn main() {
     println!("cargo::rerun-if-changed=build.rs");
+    println!("cargo::rustc-check-cfg=cfg(native_linked)");
     for var in [
         "DEP_ACADSHARP_NATIVE_LIB_DIR",
         "DEP_ACADSHARP_NATIVE_NATIVE_DIR",
@@ -30,6 +38,7 @@ fn main() {
     }
     if let Ok(dir) = std::env::var("DEP_ACADSHARP_NATIVE_LIB_DIR") {
         println!("cargo::rustc-link-arg=-Wl,-rpath,{dir}");
+        println!("cargo::rustc-cfg=native_linked");
     }
     // The archive that was linked, for `run.json`: what the binary was built
     // against, which is not necessarily what `ACADSHARP_NATIVE_DIR` says when

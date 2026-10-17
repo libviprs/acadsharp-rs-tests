@@ -1,0 +1,44 @@
+# The libviprs-dep release the native lane (H3.2) links, and the hash of every
+# asset on it.
+#
+# `tools/fetch_native.py` downloads one asset from
+#   https://github.com/libviprs/libviprs-dep/releases/download/<release_tag>/<asset>
+# and checks it against the `sha256` below before it extracts a byte. The values
+# are committed, not looked up: a release asset that changes under a tag is a
+# supply-chain event, and the fetch tool refuses it instead of following it.
+# `tests/native_artifact.rs` checks the shape of this file (64 hex characters,
+# libviprs-dep's `acadsharp-<platform>-<cpu>.tgz` naming rule) with no network.
+#
+# The hashes are the ones GitHub lists for the release's assets, and the fetch
+# tool has been run against every one of them (see the PR that added this file).
+#
+# To bump the release: change `release_tag` and every `sha256` together from
+# `gh release view <tag> -R libviprs/libviprs-dep --json assets`, and expect the
+# crate's `COMPAT.toml` to have an opinion about the new `artifact_version`.
+
+release_tag = "acadsharp-3.7.1-viprs.1"
+
+[[target]]
+name = "linux-x64"
+asset = "acadsharp-linux-x64.tgz"
+sha256 = "4cbdbbdd03c4431780ddca80a1d660e6940ff561734d666e162d6fb50438136e"
+
+[[target]]
+name = "linux-arm64"
+asset = "acadsharp-linux-arm64.tgz"
+sha256 = "dd938ef919d437eedc1c243fd05c405c6b77a9343d3c478d3994e8c57808cf3d"
+
+[[target]]
+name = "musl-x64"
+asset = "acadsharp-musl-x64.tgz"
+sha256 = "049964119a49fa9e71779bd00acf2b81a2be1faf78e5ea356656619346c2f149"
+
+[[target]]
+name = "musl-arm64"
+asset = "acadsharp-musl-arm64.tgz"
+sha256 = "c39302d7de0bb2507130615e068465ab95851b1445b356faffb366c7831e48b3"
+
+[[target]]
+name = "mac-arm64"
+asset = "acadsharp-mac-arm64.tgz"
+sha256 = "b809dc5e8a488f6bb71a065386225be9e706225873a244969165c374b8c59347"
