@@ -221,11 +221,16 @@ fn the_run_agrees_with_the_committed_verdicts() {
     for k in run.failures.keys() {
         actual.insert(k.clone(), ("OPEN_FAILED".to_string(), String::new()));
     }
-    let issues: BTreeMap<(String, String), String> = run
+    let mut issues: BTreeMap<(String, String), String> = run
         .reports
         .iter()
         .map(|(k, r)| (k.clone(), r.issues()))
         .collect();
+    for k in run.failures.keys() {
+        // The refusal is R5.1's finding (acadrust cannot read these DXFs); the
+        // schema 1 table already carries it under this issue.
+        issues.insert(k.clone(), "libviprs/acadsharp-rs-tests#95".to_string());
+    }
 
     if regen {
         let mut table = Table {
@@ -238,10 +243,10 @@ fn the_run_agrees_with_the_committed_verdicts() {
                 fixture: fixture.clone(),
                 pair: pair.clone(),
                 verdict: verdict.clone(),
-                reason: if needs {
-                    "listed in parity/MODEL1.toml".to_string()
-                } else {
-                    String::new()
+                reason: match run.failures.get(&(fixture.clone(), pair.clone())) {
+                    Some(why) => why.clone(),
+                    None if needs => "listed in parity/MODEL1.toml".to_string(),
+                    None => String::new(),
                 },
                 issue: if needs {
                     issues[&(fixture.clone(), pair.clone())].clone()
