@@ -1049,8 +1049,19 @@ fn every_ci_job_lays_the_counterpart_down_before_it_builds() {
     let jobs = doc["jobs"].as_hash().expect("ci.yml declares no jobs");
     assert!(jobs.len() >= 4, "ci.yml should still have its four jobs");
 
+    // Jobs that never run cargo, so have no use for either sibling: the matrix
+    // planner (it prints JSON from NATIVE_ARTIFACT.toml) and the comparison of the
+    // cells' output files (it diffs bytes). The list is explicit rather than
+    // inferred, so a new job is covered the day it is added unless somebody
+    // writes its name here and defends it, and `tests/native_artifact.rs` checks
+    // that neither of these two has grown a cargo step.
+    const NO_CARGO_JOBS: [&str; 2] = ["native-plan", "native-compare"];
+
     for (name, job) in jobs {
         let name = name.as_str().unwrap_or_default();
+        if NO_CARGO_JOBS.contains(&name) {
+            continue;
+        }
         let steps = job["steps"]
             .as_vec()
             .unwrap_or_else(|| panic!("job {name} has no steps"));

@@ -30,6 +30,7 @@ fn main() {
     println!("cargo::rerun-if-changed=build.rs");
     println!("cargo::rustc-check-cfg=cfg(native_linked)");
     for var in [
+        "DEP_ACADSHARP_NATIVE_LINK_KIND",
         "DEP_ACADSHARP_NATIVE_LIB_DIR",
         "DEP_ACADSHARP_NATIVE_NATIVE_DIR",
         "DEP_ACADSHARP_NATIVE_ARTIFACT_VERSION",
@@ -39,6 +40,11 @@ fn main() {
     if let Ok(dir) = std::env::var("DEP_ACADSHARP_NATIVE_LIB_DIR") {
         println!("cargo::rustc-link-arg=-Wl,-rpath,{dir}");
         println!("cargo::rustc-cfg=native_linked");
+        // How it was linked, for the lane test that holds a cell to the mode it
+        // claims. The crate's build script sets `link_kind` to `shared` or
+        // `static` on every resolved archive.
+        let kind = std::env::var("DEP_ACADSHARP_NATIVE_LINK_KIND").unwrap_or_default();
+        println!("cargo::rustc-env=SUITE_NATIVE_LINK_KIND={kind}");
     }
     // The archive that was linked, for `run.json`: what the binary was built
     // against, which is not necessarily what `ACADSHARP_NATIVE_DIR` says when

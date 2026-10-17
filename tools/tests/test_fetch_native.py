@@ -27,12 +27,18 @@ sys.path.insert(0, str(TOOLS))
 import fetch_native as tool  # noqa: E402
 
 
-def make_archive(top: str = "acadsharp-linux-x64", linkinfo: bool = True) -> bytes:
+def make_archive(
+    top: str = "acadsharp-linux-x64", linkinfo: bool = True, certified: bool = False
+) -> bytes:
     buf = io.BytesIO()
     with tarfile.open(fileobj=buf, mode="w:gz") as tar:
         files = {f"{top}/lib/libacadsharp_native.so": b"\x7fELF-not-really"}
         if linkinfo:
-            files[f"{top}/metadata/LINKINFO.json"] = b'{"schema_version": 1}'
+            files[f"{top}/metadata/LINKINFO.json"] = (
+                b'{"schema_version": 1, "static_certified": '
+                + (b"true" if certified else b"false")
+                + b"}"
+            )
         for name, data in files.items():
             info = tarfile.TarInfo(name)
             info.size = len(data)
@@ -53,6 +59,7 @@ GOOD = make_archive()
 BAD_BODY = make_archive() + b"tampered"
 NO_LINKINFO = make_archive(linkinfo=False)
 EVIL = make_evil_archive()
+LYING = make_archive(top="acadsharp-musl-arm64", certified=True)
 
 
 def sha(data: bytes) -> str:
@@ -66,6 +73,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             "/acadsharp-test.1/acadsharp-musl-x64.tgz": BAD_BODY,
             "/acadsharp-test.1/acadsharp-linux-arm64.tgz": NO_LINKINFO,
             "/acadsharp-test.1/acadsharp-mac-arm64.tgz": EVIL,
+            "/acadsharp-test.1/acadsharp-musl-arm64.tgz": LYING,
         }
         self.server.hits.append(self.path)
         body = bodies.get(self.path)
@@ -89,21 +97,36 @@ release_tag = "acadsharp-test.1"
 name = "linux-x64"
 asset = "acadsharp-linux-x64.tgz"
 sha256 = "{sha(GOOD)}"
+static_certified = false
+runner = "ubuntu-latest"
 
 [[target]]
 name = "musl-x64"
 asset = "acadsharp-musl-x64.tgz"
 sha256 = "{musl_hash or sha(make_archive('acadsharp-musl-x64'))}"
+static_certified = false
+runner = "ubuntu-latest"
 
 [[target]]
 name = "linux-arm64"
 asset = "acadsharp-linux-arm64.tgz"
 sha256 = "{sha(NO_LINKINFO)}"
+static_certified = false
+runner = "ubuntu-latest"
 
 [[target]]
 name = "mac-arm64"
 asset = "acadsharp-mac-arm64.tgz"
 sha256 = "{sha(EVIL)}"
+static_certified = false
+runner = "ubuntu-latest"
+
+[[target]]
+name = "musl-arm64"
+asset = "acadsharp-musl-arm64.tgz"
+sha256 = "{sha(LYING)}"
+static_certified = false
+runner = "ubuntu-latest"
 """
 
 
@@ -189,6 +212,15 @@ class FetchNative(unittest.TestCase):
         self.assertFalse((self.tmp / "escaped.txt").exists())
         self.assertFalse((self.cache / "escaped.txt").exists())
 
+    def test_an_archive_that_disagrees_about_static_certification_is_refused(self):
+        # The manifest says false and LINKINFO.json says true. The matrix is
+        # planned from the manifest, so this must not be quietly accepted, and
+        # the extraction must not be left behind looking trustworthy.
+        r = self.run_tool("musl-arm64")
+        self.assertEqual(r.returncode, 1, r.stderr)
+        self.assertIn("static_certified", r.stderr)
+        self.assertFalse(self.extracted_anything())
+
     def test_an_unknown_target_is_refused_before_any_request(self):
         r = self.run_tool("plan9-mips")
         self.assertEqual(r.returncode, 1)
@@ -214,6 +246,13 @@ class Manifest(unittest.TestCase):
                 "release_tag": "acadsharp-x.1",
                 "target": [{"name": "linux-x64", "asset": "acadsharp-linux-x64.tgz", "sha256": "ab" * 31}],
             })
+
+    def test_a_target_without_static_certified_is_refused(self):
+        row = {"name": "linux-x64", "asset": "acadsharp-linux-x64.tgz", "sha256": "a" * 64, "runner": "ubuntu-latest"}
+        with self.assertRaises(tool.Refused):
+            tool.check_manifest({"release_tag": "acadsharp-x.1", "target": [row]})
+        row["static_certified"] = True
+        tool.check_manifest({"release_tag": "acadsharp-x.1", "target": [row]})
 
     def test_an_asset_that_breaks_the_naming_rule_is_refused(self):
         with self.assertRaises(tool.Refused):
