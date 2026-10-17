@@ -30,7 +30,8 @@ const TWINS: [&str; 6] = [
 #[test]
 fn every_frozen_stream_is_the_file_the_manifest_froze_and_parses_strictly() {
     let files = model1::frozen_files().unwrap();
-    assert_eq!(files.len(), SAVES.len() + TWINS.len());
+    // The oracle over the seven saves and the six twins, ezdxf over the six twins.
+    assert_eq!(files.len(), SAVES.len() + 2 * TWINS.len());
     for s in SAVES {
         let r = model1::load_frozen("oracle", s).unwrap();
         let f = files
@@ -40,6 +41,9 @@ fn every_frozen_stream_is_the_file_the_manifest_froze_and_parses_strictly() {
         assert_eq!(r.len(), f.records, "{s}");
     }
     for t in TWINS {
+        let r = model1::load_frozen("oracle", t).unwrap();
+        let f = files.iter().find(|f| f.engine == "oracle" && f.id == t).unwrap();
+        assert_eq!(r.len(), f.records, "{t}");
         let r = model1::load_frozen("ezdxf", t).unwrap();
         let f = files
             .iter()
