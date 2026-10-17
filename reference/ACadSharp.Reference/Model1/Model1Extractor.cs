@@ -13,7 +13,7 @@ namespace ACadSharp.Reference.Model1;
 /// </summary>
 public static class Model1Extractor
 {
-    /// <summary>Reads a DWG and extracts its model-1 records.</summary>
+    /// <summary>Reads a DWG or a DXF (by extension) and extracts its model-1 records.</summary>
     /// <param name="path">Path to the input file.</param>
     /// <returns>The encoded stream, or the reason there is none.</returns>
     public static Result<byte[]> ExtractFile(string path)
@@ -27,7 +27,10 @@ public static class Model1Extractor
         CadDocument document;
         try
         {
-            document = DwgReader.Read(path);
+            // The container is chosen by extension, as the schema 1 extraction does.
+            document = string.Equals(Path.GetExtension(path), ".dxf", StringComparison.OrdinalIgnoreCase)
+                ? DxfReader.Read(path)
+                : DwgReader.Read(path);
         }
         catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
         {

@@ -4,8 +4,8 @@
 Two producers sit behind this file, kept apart on purpose, and neither of them
 runs on the machine that runs this script: both run in pinned containers.
 
-    oracle   ACadSharp (JIT .NET) over the seven AutoCAD saves, through
-             `ACadSharp.Reference --model1`.
+    oracle   ACadSharp (JIT .NET) over the seven AutoCAD saves and over the six
+             DXF twins, through `ACadSharp.Reference --model1`.
     ezdxf    ezdxf over the six ASCII DXF twins AutoCAD wrote beside them.
 
     tools/model1.py verify                 offline, stdlib only: every committed file is
@@ -75,6 +75,7 @@ EZDXF_INPUTS = [
     "dxf-sample-ac1032-ascii",
 ]
 
+ORACLE_INPUTS = ORACLE_FIXTURES + EZDXF_INPUTS
 KINDS = ["header", "layer"]
 NL = b"\n"
 
@@ -283,12 +284,13 @@ def run_oracle(manifest: dict) -> dict[str, bytes]:
         if path.is_file() and not any(p in ("bin", "obj") for p in path.parts):
             files[path.relative_to(ROOT).as_posix()] = path
     rows = {f["id"]: f for f in manifest["fixture"]}
-    for fid in ORACLE_FIXTURES:
+    rows.update({r["id"]: r for r in manifest["oracle_input"]})
+    for fid in ORACLE_INPUTS:
         files[f"fixtures/{rows[fid]['file']}"] = FIXTURES / rows[fid]["file"]
     runs = "".join(
         f"dotnet /tmp/oracle/ACadSharp.Reference.dll fixtures/{rows[fid]['file']} "
         f"--jsonl /tmp/discard.jsonl --model1 /out/{fid}.oracle.model1.jsonl >&2 && "
-        for fid in ORACLE_FIXTURES
+        for fid in ORACLE_INPUTS
     )
     script = (
         "set -e; mkdir -p /w /out && tar -x -C /w && cd /w && "
@@ -361,7 +363,7 @@ def stage(manifest: dict) -> tuple[list[dict], dict[str, bytes]]:
     sdk = sdk_version()
     rows: list[dict] = []
     store: dict[str, bytes] = {}
-    for fid in ORACLE_FIXTURES:
+    for fid in ORACLE_INPUTS:
         name = f"{fid}.oracle.model1.jsonl"
         data = oracle[name]
         rows.append({
@@ -429,7 +431,7 @@ def command_verify(_args) -> int:
     rows = tomllib.loads(OUT_MANIFEST.read_text(encoding="utf-8")).get("file", [])
     problems = []
     listed = {(r["engine"], r["id"]) for r in rows}
-    want = {("oracle", f) for f in ORACLE_FIXTURES} | {("ezdxf", r) for r in EZDXF_INPUTS}
+    want = {("oracle", f) for f in ORACLE_INPUTS} | {("ezdxf", r) for r in EZDXF_INPUTS}
     for missing in sorted(want - listed):
         problems.append(f"{missing}: no row")
     for extra in sorted(listed - want):
