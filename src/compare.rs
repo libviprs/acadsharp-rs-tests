@@ -328,10 +328,7 @@ impl ClassTable {
         }
         for k in &self.known_missing {
             need(
-                &format!(
-                    "KNOWN_MISSING row {} of {}",
-                    k.record_type, k.fixture
-                ),
+                &format!("KNOWN_MISSING row {} of {}", k.record_type, k.fixture),
                 &k.reason,
                 &k.issue,
             )?;
