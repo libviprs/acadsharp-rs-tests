@@ -1,6 +1,6 @@
 //! The parity run for the model-1 stream (R5.5, docs/MODEL_1.md): the oracle and
-//! acadrust over the seven AutoCAD saves, and ezdxf over the six DXF twins
-//! against both.
+//! acadrust over the seven AutoCAD saves, and all three over the six ASCII DXF
+//! twins, each DWG reader's DXF also held against its own DWG.
 //!
 //! The same words and the same table type as `tests/parity.rs` and
 //! `parity/VERDICTS.toml` (src/verdict.rs), in a file of their own,
@@ -98,62 +98,46 @@ struct Run {
 fn compute(rules: &Rules) -> Result<Run, String> {
     let out = out_dir();
     std::fs::create_dir_all(&out).map_err(|e| e.to_string())?;
-    let mut oracle = BTreeMap::new();
-    let mut rust = BTreeMap::new();
-    for s in SAVES {
-        oracle.insert(s, model1::load_frozen("oracle", s)?);
-        rust.insert(s, acadrust(s, &out)?);
+    // acadrust's stream for each of the thirteen inputs, once.
+    let mut rust: BTreeMap<&str, Vec<Record>> = BTreeMap::new();
+    for id in SAVES.iter().copied().chain(TWINS.iter().map(|t| t.0)) {
+        rust.insert(id, acadrust(id, &out)?);
     }
     let mut reports = BTreeMap::new();
-    for s in SAVES {
-        let r = compare(
-            "oracle/acadrust",
-            &Side {
-                engine: "oracle",
-                fixture: s,
-                records: &oracle[s],
-            },
-            &Side {
-                engine: "acadrust",
-                fixture: s,
-                records: &rust[s],
-            },
-            rules,
+    let mut put = |fixture: &str, pair: &str, a: Side, b: Side| {
+        reports.insert(
+            (fixture.to_string(), pair.to_string()),
+            compare(pair, &a, &b, rules),
         );
-        reports.insert((s.to_string(), "oracle/acadrust".to_string()), r);
+    };
+
+    // Both DWG readers over each save.
+    for s in SAVES {
+        let o = model1::load_frozen("oracle", s)?;
+        let r = &rust[s];
+        put(
+            s,
+            "oracle/acadrust",
+            Side { engine: "oracle", fixture: s, records: &o },
+            Side { engine: "acadrust", fixture: s, records: r },
+        );
     }
+
+    // All three over each DXF twin, and each DWG reader's DXF against its own
+    // DWG of the same drawing (where the two files were written at different
+    // moments, so the known list applies).
     for (twin, save) in TWINS {
         let ez = model1::load_frozen("ezdxf", twin)?;
-        let r = compare(
-            "ezdxf/oracle",
-            &Side {
-                engine: "ezdxf",
-                fixture: twin,
-                records: &ez,
-            },
-            &Side {
-                engine: "oracle",
-                fixture: save,
-                records: &oracle[save],
-            },
-            rules,
-        );
-        reports.insert((twin.to_string(), "ezdxf/oracle".to_string()), r);
-        let r = compare(
-            "ezdxf/acadrust",
-            &Side {
-                engine: "ezdxf",
-                fixture: twin,
-                records: &ez,
-            },
-            &Side {
-                engine: "acadrust",
-                fixture: save,
-                records: &rust[save],
-            },
-            rules,
-        );
-        reports.insert((twin.to_string(), "ezdxf/acadrust".to_string()), r);
+        let o = model1::load_frozen("oracle", twin)?;
+        let r = &rust[twin];
+        let o_dwg = model1::load_frozen("oracle", save)?;
+        let r_dwg = &rust[save];
+        let side = |engine: &'static str, records| Side { engine, fixture: twin, records };
+        put(twin, "ezdxf/oracle", side("ezdxf", &ez), side("oracle", &o));
+        put(twin, "ezdxf/acadrust", side("ezdxf", &ez), side("acadrust", r));
+        put(twin, "oracle/acadrust", side("oracle", &o), side("acadrust", r));
+        put(twin, "dxf-dwg:oracle", side("oracle", &o), side("oracle", &o_dwg));
+        put(twin, "dxf-dwg:acadrust", side("acadrust", r), side("acadrust", r_dwg));
     }
     Ok(Run { reports })
 }
@@ -281,7 +265,14 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
     };
     let mut used: BTreeSet<(String, String, String)> = BTreeSet::new();
     for ((fixture, pair), r) in &run.reports {
-        let (a, b) = pair.split_once('/').unwrap();
+        let (a, b) = match pair.split_once('/') {
+            Some(ab) => ab,
+            // `dxf-dwg:oracle`: the same engine on both sides.
+            None => {
+                let e = pair.split_once(':').unwrap().1;
+                (e, e)
+            }
+        };
         for f in r
             .findings
             .iter()

@@ -76,6 +76,66 @@ image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
 
 [[file]]
 id = "dxf-sample-ac1015-ascii"
+engine = "oracle"
+path = "oracle/dxf-sample-ac1015-ascii.oracle.model1.jsonl"
+sha256 = "754eaeb4c14916708e10dd6cd5c0dc44755041867dd1a4f7088a4d954a684e78"
+records = 247
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "dxf-sample-ac1018-ascii"
+engine = "oracle"
+path = "oracle/dxf-sample-ac1018-ascii.oracle.model1.jsonl"
+sha256 = "8e4af396d4706785dc892af1739e0612fd44d084373b32a4dbd586006b3d91af"
+records = 247
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "dxf-sample-ac1021-ascii"
+engine = "oracle"
+path = "oracle/dxf-sample-ac1021-ascii.oracle.model1.jsonl"
+sha256 = "4bdf5849e94080fbacad6c61bfe3217be709f71bc60e8b8f05cd3f19d941e3c9"
+records = 247
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "dxf-sample-ac1024-ascii"
+engine = "oracle"
+path = "oracle/dxf-sample-ac1024-ascii.oracle.model1.jsonl"
+sha256 = "06f4ec791e12c1d8389192561353fdf2418fba864931a70741e341542d9f6d66"
+records = 247
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "dxf-sample-ac1027-ascii"
+engine = "oracle"
+path = "oracle/dxf-sample-ac1027-ascii.oracle.model1.jsonl"
+sha256 = "bc45b0fca35097896f63a218df0b7b6e22d99bed9cdfb086eae7f59078fc488a"
+records = 247
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "dxf-sample-ac1032-ascii"
+engine = "oracle"
+path = "oracle/dxf-sample-ac1032-ascii.oracle.model1.jsonl"
+sha256 = "fe964f99eeada887ac69ffe72436691eb57c7e9cdc3d86dc17b58f41dffda5a6"
+records = 247
+acadsharp_version = "3.7.1"
+dotnet_sdk = "10.0.401"
+image = "mcr.microsoft.com/dotnet/sdk:10.0.401-noble"
+
+[[file]]
+id = "dxf-sample-ac1015-ascii"
 engine = "ezdxf"
 path = "ezdxf/dxf-sample-ac1015-ascii.ezdxf.model1.jsonl"
 sha256 = "1eef22c0e3a227d86846fe2ea6f62713f7faad6ddc2d8314040a43dec5f38d44"
