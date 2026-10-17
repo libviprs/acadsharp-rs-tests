@@ -70,6 +70,44 @@ against the manifest offline.
 - For the reference oracle only: the .NET SDK `reference/global.json` pins, and
   Python 3.14+ for `compression.zstd`. Neither is needed to run the Rust suite.
 
+## The native lane
+
+A default `cargo test` links no native library and needs none. The native lane
+is the part of the suite that does: it links the NativeAOT archive that
+[`libviprs-dep`](https://github.com/libviprs/libviprs-dep) publishes and runs the
+tests behind the `native` feature against it.
+
+`NATIVE_ARTIFACT.toml` names the release and, per target (`linux-x64`,
+`linux-arm64`, `musl-x64`, `musl-arm64`, `mac-arm64`), the asset and its sha256.
+`tools/fetch_native.py` downloads one asset, checks the hash **before** it
+extracts anything, unpacks it into a cache and prints the directory to use:
+
+```bash
+export ACADSHARP_NATIVE_DIR="$(python3 tools/fetch_native.py --target linux-x64)"
+export VIPRS_REQUIRE_NATIVE=1        # a missing archive is a failure, not a skip
+export ACADSHARP_REQUIRE_NATIVE=1    # the same, one layer down in the crate's build script
+cargo test --features native
+```
+
+- `ACADSHARP_NATIVE_DIR` is the unpacked archive's top-level directory (the one
+  with `lib/`, `include/` and `metadata/`). `acadsharp-rs`'s build script reads
+  it and links `lib/`; this suite's `build.rs` adds the rpath for the test
+  binaries, so nothing needs `LD_LIBRARY_PATH`.
+- The cache is `$ACADSHARP_NATIVE_CACHE`, else `$XDG_CACHE_HOME/acadsharp-rs-tests/native`,
+  else `~/.cache/acadsharp-rs-tests/native`. A cached archive is hashed again
+  before it is reused, and a mismatch deletes it.
+- A wrong hash deletes the download, extracts nothing and exits 1.
+- With `VIPRS_REQUIRE_NATIVE` unset and no archive, the native tests print why
+  they skipped. With it set to `1` they panic, naming `ACADSHARP_NATIVE_DIR`.
+  Every native CI job sets it.
+
+The `Native (...)` jobs in `ci.yml` do exactly this, then run
+`tools/no_dotnet_proof.sh`: the same smoke binary in a `debian:bookworm-slim`
+container with nothing installed, beside a control that a framework-dependent
+.NET app cannot start in that container, so "no .NET needed" is something that
+ran. On macOS there is no container, so the proof is weaker: the smoke runs with
+a `PATH` that cannot find `dotnet`.
+
 ## How `acadsharp-rs` gets beside this one
 
 `Cargo.toml` depends on the crate as `{ path = "../acadsharp-rs" }`, so a

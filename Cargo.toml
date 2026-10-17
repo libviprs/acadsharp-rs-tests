@@ -19,6 +19,12 @@ deprecated = "deny"
 incompatible_msrv = "warn"
 
 [features]
+# The native lane (H3.2): tests that call the real NativeAOT library. Off by
+# default, because a plain `cargo test` has no archive to link. The jobs that
+# have one turn it on with `--features native` and set `VIPRS_REQUIRE_NATIVE=1`,
+# which makes a missing archive a failure instead of a printed skip.
+native = []
+
 # Off by default. `emit-acadrust` (R3.2) is the only thing that will use it.
 acadrust = ["dep:acadrust"]
 
