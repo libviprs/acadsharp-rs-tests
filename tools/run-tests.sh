@@ -231,15 +231,20 @@ cargo_lines() {
   fi
   decide_locked
   set -x
-  cargo test "${LOCKED[@]}" --no-fail-fast --all-targets
-  cargo test "${LOCKED[@]}" --no-fail-fast --doc
+  # Every line runs, and the script fails if any did: a red first line must not
+  # hide the parity lane behind it (a push whose only red test is early would
+  # otherwise never show the moved verdict the gate exists to show).
+  local rc=0
+  cargo test "${LOCKED[@]}" --no-fail-fast --all-targets || rc=1
+  cargo test "${LOCKED[@]}" --no-fail-fast --doc || rc=1
   # The parity lane: both emitters, the oracle, ezdxf and the verdict table.
-  cargo test "${LOCKED[@]}" --no-fail-fast --features acadrust --all-targets
+  cargo test "${LOCKED[@]}" --no-fail-fast --features acadrust --all-targets || rc=1
   if [ -n "${PARITY_VERDICTS_BASE:-}" ]; then
     # The same test, a second time, against the base table: this is the pass a
     # moved-and-re-recorded verdict cannot get through.
-    cargo test "${LOCKED[@]}" --features acadrust --test parity -- --exact the_run_agrees_with_the_committed_verdicts
+    cargo test "${LOCKED[@]}" --features acadrust --test parity -- --exact the_run_agrees_with_the_committed_verdicts || rc=1
   fi
+  return "$rc"
 }
 
 export_requires() {
