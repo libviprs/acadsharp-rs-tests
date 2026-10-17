@@ -22,6 +22,12 @@
 # only thing that is not already in the image is the native archive, which is
 # fetched once per sha into a named volume and verified every time.
 #
+# Every extracted file is touched. `git archive` stamps files with the commit's
+# time, and cargo decides a path dependency is fresh by comparing mtimes with the
+# cached build, so a tree whose commit is older than the last build in the volume
+# would be reported fresh and never rebuilt: a gate that tests the previous run's
+# code. The registry stays cached; the three path crates rebuild on every run.
+#
 # Three trees take part, laid out as siblings because the suite depends on both
 # by path (`../acadsharp-rs`, `../acadrust`):
 #
@@ -376,6 +382,6 @@ case "$MODE" in
       -e CARGO_HOME=/cargo-home -e CARGO_TARGET_DIR=/cargo-home/target \
       -e CARGO_TERM_COLOR=never -e RUSTFLAGS=-Dwarnings \
       "${envs[@]}" "$IMAGE" \
-      sh -c 'mkdir -p /work && tar -x -C /work && exec "$@"' sh "${inner[@]}"
+      sh -c 'mkdir -p /work && tar -x -C /work && find /work -type f -exec touch {} + && exec "$@"' sh "${inner[@]}"
     ;;
 esac
