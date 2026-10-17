@@ -163,6 +163,22 @@ class TestRequirements(unittest.TestCase):
         self.assertIn(f"ezdxf=={tool.EZDXF_VERSION}", text)
 
 
+class TestManifestRewrite(unittest.TestCase):
+    ROW = {k: "x" for k in tool.MANIFEST_KEYS}
+    ROW.update(id="r1", records=3, schema=1)
+
+    def test_a_table_after_the_generated_block_survives_a_freeze(self):
+        text = "[[fixture]]\nid = 'a'\n\n" + tool.render_rows([self.ROW]) + "\n[[later]]\nid = 'z'\n"
+        out = tool.rewrite_manifest(text, [dict(self.ROW, id="r2")])
+        self.assertIn("[[later]]", out)
+        self.assertIn('id = "r2"', out)
+        self.assertNotIn('id = "r1"', out)
+
+    def test_a_manifest_with_no_block_gets_one_at_the_end(self):
+        out = tool.rewrite_manifest("[[fixture]]\nid = 'a'\n", [self.ROW])
+        self.assertTrue(out.index("[[fixture]]") < out.index("[[ground_truth]]"))
+
+
 class TestVerify(unittest.TestCase):
     def test_the_committed_ground_truths_are_the_ones_the_manifest_froze(self):
         self.assertEqual(tool.command_verify(None), 0)
