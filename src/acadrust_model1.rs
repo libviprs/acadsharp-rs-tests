@@ -76,7 +76,10 @@ pub fn header_records(doc: &CadDocument) -> Vec<Record> {
     put("$HYPERLINKBASE", s(&h.hyperlink_base));
     put("$INDEXCTL", i(h.index_control.into()));
     put("$INSUNITS", i(h.insertion_units.into()));
-    put("$INTERFERECOLOR", i(h.intersection_color.into()));
+    put("$INTERSECTIONCOLOR", i(h.intersection_color.into()));
+    put("$INTERSECTIONDISPLAY", i(h.intersection_display.into()));
+    put("$OBSCOLOR", i(h.obscured_color.into()));
+    put("$OBSLTYPE", i(h.obscured_linetype.into()));
     put("$JOINSTYLE", i(h.join_style.into()));
     put("$LASTSAVEDBY", s(&h.last_saved_by));
     put("$LATITUDE", d(h.latitude));
