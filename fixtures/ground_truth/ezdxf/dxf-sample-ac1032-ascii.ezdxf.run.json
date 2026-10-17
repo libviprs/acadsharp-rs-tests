@@ -1,0 +1,12 @@
+{
+  "dxf_version": "AC1032",
+  "engine": "ezdxf",
+  "ezdxf_version": "1.4.4",
+  "image": "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170",
+  "input": "dxf-sample-ac1032-ascii",
+  "input_file": "dxf/sample_AC1032_ascii.dxf",
+  "input_sha256": "c2934f616ecd7097e773b85e5d6e0548d21ccc635abcc8e7276f7d4a585a7ae2",
+  "python": "3.14.8",
+  "records": 337,
+  "requirements_sha256": "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+}

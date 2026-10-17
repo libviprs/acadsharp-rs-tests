@@ -1,0 +1,24 @@
+# The ezdxf extractor's whole dependency set, pinned by hash.
+#
+# ezdxf 1.4.4 and what it pulls in on Python 3.14: numpy (with 3.14 wheels),
+# pyparsing, fonttools and typing_extensions. `pip install --require-hashes`
+# refuses anything not listed, so a dependency that moves under a pin is a
+# failure and not a different ground truth. Hashes cover the linux x86_64 and
+# aarch64 wheels the extractor's image can resolve; nothing else is allowed.
+#
+# The sha256 of this file is stamped into every output's run.json
+# (`requirements_sha256`), and `extract_ezdxf.py verify` fails when it moves
+# without the outputs being frozen again.
+ezdxf==1.4.4 \
+    --hash=sha256:666edda631ba717270293b734f5d58dd97a1d1aba4787187f09d0cc584645865
+fonttools==4.67.0 \
+    --hash=sha256:e2b5d511ea012dce7bd6df12b279b7d7a5b01b019865717d03ae679f4b944fa5 \
+    --hash=sha256:916836845e4b1c1447bb61390ffb3cb5f2940fd9f5d6de4685539a81806c7764 \
+    --hash=sha256:4304f03ed7f4ba000a8dcc941ad854bfa52e2f3b6112b8f099b6f431cf98e701
+numpy==2.5.4 \
+    --hash=sha256:4054173604cd8658796053f1f3bc0befb68ec1c0762c57fdad61e199256a8617 \
+    --hash=sha256:d549420b8858885cea8838a727842249218b9c1da24dd517e25c9c7a948310a3
+pyparsing==3.3.3 \
+    --hash=sha256:ece8c00a69cf01b45d0b1dedabb469c90d8caf996d4fda40f147627a122849a4
+typing_extensions==4.16.0 \
+    --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8

@@ -63,6 +63,7 @@ pub fn extract(doc: &CadDocument) -> Emission {
     let mut x = Extractor {
         doc,
         warnings: Vec::new(),
+        at: Vec::new(),
         active: Vec::new(),
         sink: Vec::new(),
     };
@@ -113,15 +114,20 @@ pub fn extract(doc: &CadDocument) -> Emission {
         }
     }
 
-    x.warnings.sort();
+    x.warnings
+        .sort_by(|a, b| (&a.0, &a.1, &a.2).cmp(&(&b.0, &b.1, &b.2)));
     let mut items = head;
     items.append(&mut x.sink);
-    for (category, entity_type, detail) in x.warnings {
-        items.push(Item::framing(Record::Warning(Warning {
-            category,
-            entity_type,
-            detail,
-        })));
+    for (category, entity_type, detail, at) in x.warnings {
+        items.push(Item {
+            record: Record::Warning(Warning {
+                category,
+                entity_type,
+                detail,
+            }),
+            path: at,
+            dxf: None,
+        });
     }
 
     let mut out = Emission::default();
@@ -474,7 +480,11 @@ use crate::ocs::{normalize_angle, sweep};
 
 struct Extractor<'a> {
     doc: &'a CadDocument,
-    warnings: Vec<(String, String, String)>,
+    /// Category, entity type, detail, and the handle path of the entity being
+    /// read when it was raised (empty for a finding about the document).
+    warnings: Vec<(String, String, String, Vec<u64>)>,
+    /// The handle path of the entity `extract` is inside, for `warn`.
+    at: Vec<u64>,
     /// Block names on the path being expanded. Keyed on the block itself and not
     /// on a handle: a document built in memory has not been assigned handles
     /// yet, so every block would answer zero and the first nested block would
@@ -489,6 +499,7 @@ impl Extractor<'_> {
             category.to_string(),
             entity_type.to_string(),
             detail.to_string(),
+            self.at.clone(),
         ));
     }
 
@@ -530,6 +541,25 @@ impl Extractor<'_> {
     }
 
     fn extract(
+        &mut self,
+        entity: &EntityType,
+        view: u64,
+        xf: &Xf,
+        depth: usize,
+        inside_block: bool,
+        path: &mut Vec<u64>,
+    ) {
+        // A warning names the entity it was raised inside, so a diff and the
+        // census check can say which one. Restored on the way out, because the
+        // extraction recurses.
+        let mut here = path.clone();
+        here.push(entity.common().handle.value());
+        let saved = std::mem::replace(&mut self.at, here);
+        self.extract_entity(entity, view, xf, depth, inside_block, path);
+        self.at = saved;
+    }
+
+    fn extract_entity(
         &mut self,
         entity: &EntityType,
         view: u64,

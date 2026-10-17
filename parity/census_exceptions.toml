@@ -1,0 +1,153 @@
+# What the census check lets acadsharp-rs miss or add, and why (R3.4).
+#
+# `check_weak` compares the handles on acadsharp-rs's top-level records (the
+# ones whose `x` flag is clear) with AutoCAD's census of the model space. What
+# is left over is listed here, by class for an entity it never reported and by
+# handle for one it reported that the census does not have. A row with no reason
+# or no `owner/repo#N` issue is refused, a finding with no row is red, and a row
+# for a finding that has gone is red too: tests/census_real.rs holds all three.
+#
+# The three classes of "never reported" are the pair table's EXCLUDED rows seen
+# from the census' side: docs/EMITTERS.md ("Wire 2 onto schema 1") has the
+# per-archive reasons, and the rows move when the rebuilt archive is the one
+# the parity run uses.
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "DBPoint"
+reason = "Wire 2 has no point record: a POINT arrives as warning 100 with no handle."
+issue = "libviprs/libviprs-dep#83"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Face"
+reason = "The published viprs.1 archive refuses 3DFACE, and the warning carries no entity handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Solid"
+reason = "The published acadsharp-3.7.1-viprs.1 archive does not lower this kind (the rebuilt bc351a9 one does), and the warning wire 2 sends carries no entity handle, so no record or warning names it."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Mline"
+reason = "The published acadsharp-3.7.1-viprs.1 archive does not lower this kind (the rebuilt bc351a9 one does), and the warning wire 2 sends carries no entity handle, so no record or warning names it."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Leader"
+reason = "The published acadsharp-3.7.1-viprs.1 archive does not lower this kind (the rebuilt bc351a9 one does), and the warning wire 2 sends carries no entity handle, so no record or warning names it."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Wipeout"
+reason = "The published acadsharp-3.7.1-viprs.1 archive does not lower this kind (the rebuilt bc351a9 one does), and the warning wire 2 sends carries no entity handle, so no record or warning names it."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "SubDMesh"
+reason = "The published acadsharp-3.7.1-viprs.1 archive does not lower this kind (the rebuilt bc351a9 one does), and the warning wire 2 sends carries no entity handle, so no record or warning names it."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "MLeader"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "FeatureControlFrame"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "PdfReference"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "RasterImage"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Shape"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Region"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Solid3d"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Xline"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "missing"
+class = "Ray"
+reason = "AutoCAD has this entity in model space, the oracle warns about it too, and wire 2's warning carries a code and a message and no entity handle, so the sidecar cannot name it. Counted by the warning stream, not by handle."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "unexpected"
+handle = "705"
+reason = "An attribute of a block reference. Wire 2 emits an insert's ATTRIBs before the block body with the expansion flag clear, so the leaf handle looks top level, and AutoCAD's census lists the entities of a block table record and not the attributes of its references."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "unexpected"
+handle = "79D"
+reason = "An attribute of a block reference. Wire 2 emits an insert's ATTRIBs before the block body with the expansion flag clear, so the leaf handle looks top level, and AutoCAD's census lists the entities of a block table record and not the attributes of its references."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "unexpected"
+handle = "79F"
+reason = "An attribute of a block reference. Wire 2 emits an insert's ATTRIBs before the block body with the expansion flag clear, so the leaf handle looks top level, and AutoCAD's census lists the entities of a block table record and not the attributes of its references."
+issue = "libviprs/acadsharp-rs-tests#22"
+
+[[row]]
+reader = "acadsharp"
+kind = "unexpected"
+handle = "7A0"
+reason = "An attribute of a block reference. Wire 2 emits an insert's ATTRIBs before the block body with the expansion flag clear, so the leaf handle looks top level, and AutoCAD's census lists the entities of a block table record and not the attributes of its references."
+issue = "libviprs/acadsharp-rs-tests#22"
