@@ -301,6 +301,51 @@ def linetype_lines(doc) -> list[tuple[str, str, str]]:
     return out
 
 
+def annotative(entry) -> bool:
+    """Whether the entry carries the AcadAnnotative xdata with its flag set: the
+    first 1070 inside the AnnotativeData group is 1."""
+    if not entry.has_xdata("AcadAnnotative"):
+        return False
+    for code, value in entry.get_xdata("AcadAnnotative"):
+        if code == 1070:
+            return int(value) == 1
+    return False
+
+
+def textstyle_lines(doc) -> list[tuple[str, str, str]]:
+    """One `textstyle` record per STYLE entry, keyed by name (docs/MODEL_1.md).
+
+    Fields by DXF code. The stored last height is the field, whatever a reader
+    would substitute for a zero. The oblique angle is converted from the DXF's
+    degrees to radians.
+    """
+    out = []
+    for st in doc.styles:
+        d = st.dxf
+        name = d.name
+        if not name:  # an entry with no name cannot be keyed: it has no record
+            continue
+        flags = int(d.get("flags", 0))
+        gen = int(d.get("generation_flags", 0))
+        fields = [
+            ("name", quote(name)),
+            ("font_file", quote(str(d.get("font", "")))),
+            ("big_font_file", quote(str(d.get("bigfont", "")))),
+            ("height", real(float(d.get("height", 0.0)))),
+            ("width_factor", real(float(d.get("width", 1.0)))),
+            ("last_height", real(float(d.get("last_height", 0.0)))),
+            ("oblique_angle", real(math.radians(float(d.get("oblique", 0.0))))),
+            ("backward", "true" if gen & 2 else "false"),
+            ("upside_down", "true" if gen & 4 else "false"),
+            ("is_shape", "true" if flags & 1 else "false"),
+            ("is_vertical", "true" if flags & 4 else "false"),
+            ("xref_dependent", "true" if flags & 16 else "false"),
+            ("annotative", "true" if annotative(st) else "false"),
+        ]
+        out.append(line("textstyle", name, fields))
+    return out
+
+
 def command_extract_ezdxf(args) -> int:
     import ezdxf  # only here: `freeze` and `verify` must run without it
 
@@ -316,7 +361,7 @@ def command_extract_ezdxf(args) -> int:
             return 1
         doc = ezdxf.readfile(str(path))
         records, skipped = header_lines(doc)
-        text = encode(records + layer_lines(doc) + linetype_lines(doc))
+        text = encode(records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc))
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
         print(f"{rid}: {len(text.splitlines())} records")

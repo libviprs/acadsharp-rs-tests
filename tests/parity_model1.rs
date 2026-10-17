@@ -347,23 +347,17 @@ fn every_exclusion_is_used_and_none_excuses_a_name_the_engine_wrote() {
         return;
     };
     let mut used: BTreeSet<(String, String, String)> = BTreeSet::new();
-    for ((fixture, pair), r) in &run.reports {
-        let (a, b) = match pair.split_once('/') {
-            Some(ab) => ab,
-            // `dxf-dwg:oracle`: the same engine on both sides.
-            None => {
-                let e = pair.split_once(':').unwrap().1;
-                (e, e)
-            }
-        };
+    for ((fixture, _), r) in &run.reports {
         for f in r
             .findings
             .iter()
             .filter(|f| f.disposition == Disposition::Excluded)
         {
-            // OnlyInA: the name is missing from b; OnlyInB: missing from a.
-            let engine = if f.kind == FindingKind::OnlyInA { b } else { a };
-            used.insert((engine.to_string(), fixture.clone(), f.key.clone()));
+            let engine = f
+                .excluded
+                .clone()
+                .expect("an excluded finding names its engine");
+            used.insert((engine, fixture.clone(), f.key.clone()));
         }
     }
     let mut stale = Vec::new();
@@ -611,4 +605,73 @@ fn one_changed_segment_length_is_red_and_names_the_entry_and_the_index() {
     let key = format!("linetype/{name}.segments[1].length");
     assert_eq!(after.red().len(), before_red + 1, "{}", after.first());
     assert!(after.red().iter().any(|f| f.key == key), "{key}");
+}
+
+/// The textstyle control, on a DXF twin: one `width_factor` changed in a scratch
+/// copy of the oracle's reading of the twin turns that twin's ezdxf row red, and
+/// the finding names the entry.
+#[test]
+fn one_changed_width_factor_is_red_and_names_the_style() {
+    let rules = model1::committed_rules().unwrap();
+    let twin = "dxf-sample-ac1032-ascii";
+    let ez = model1::load_frozen("ezdxf", twin).unwrap();
+    let mut oracle = model1::load_frozen("oracle", twin).unwrap();
+    fn side<'a>(engine: &'a str, id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: id,
+            records,
+        }
+    }
+    let before = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    )
+    .red()
+    .len();
+    let mut touched = 0;
+    for r in &mut oracle {
+        if let Record::Entry(e) = r
+            && e.kind == "textstyle"
+            && e.name == "Standard"
+            && let Some(Value::Double(w)) = e.get("width_factor").cloned()
+        {
+            e.set("width_factor", Value::Double(w * 1.5));
+            touched += 1;
+        }
+    }
+    assert_eq!(touched, 1, "the twin has a style Standard");
+    let after = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", twin, &ez),
+        &side("oracle", twin, &oracle),
+        &rules,
+    );
+    assert_eq!(after.red().len(), before + 1, "{}", after.first());
+    assert!(
+        after
+            .red()
+            .iter()
+            .any(|f| f.key == "textstyle/Standard.width_factor")
+    );
+}
+
+#[test]
+fn every_file_has_a_style_called_standard() {
+    use acadsharp_rs_tests::model1;
+    for (engine, id) in [
+        ("oracle", "acadsharp-ac1032"),
+        ("oracle", "acadsharp-ac1014"),
+        ("ezdxf", "dxf-sample-ac1032-ascii"),
+    ] {
+        let records = model1::load_frozen(engine, id).unwrap();
+        assert!(
+            records
+                .iter()
+                .any(|r| r.kind() == "textstyle" && r.key().eq_ignore_ascii_case("Standard")),
+            "{engine} {id}: no style Standard"
+        );
+    }
 }

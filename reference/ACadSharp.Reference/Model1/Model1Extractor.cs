@@ -60,6 +60,7 @@ public static class Model1Extractor
         ExtractHeader(document, records);
         ExtractLayers(document, records);
         ExtractLinetypes(document, records);
+        ExtractTextStyles(document, records);
         return records;
     }
 
@@ -145,6 +146,51 @@ public static class Model1Extractor
                 ("plot", layer.PlotFlag ? "true" : "false")));
         }
     }
+
+    private static void ExtractTextStyles(CadDocument document, List<Model1Record> records)
+    {
+        foreach (TextStyle style in document.TextStyles)
+        {
+            string name = style.Name ?? string.Empty;
+
+            // An entry with no name cannot be keyed, so it has no record. A STYLE
+            // entry without a name is a shape file that only a linetype segment
+            // points at, and ACadSharp invents unnamed0, unnamed1... for them.
+            if (name.Length == 0 || (style.IsShapeFile && IsInventedName(name)))
+            {
+                continue;
+            }
+
+            long mirror = (long)style.MirrorFlag;
+            long flags = (long)(short)style.Flags;
+
+            records.Add(Model1Record.Of(
+                "textstyle",
+                name,
+                ("name", NumericFormatting.Quoted(name)),
+                ("font_file", NumericFormatting.Quoted(style.Filename ?? string.Empty)),
+                ("big_font_file", NumericFormatting.Quoted(style.BigFontFilename ?? string.Empty)),
+                ("height", NumericFormatting.Real(style.Height)),
+                ("width_factor", NumericFormatting.Real(style.Width)),
+                ("last_height", NumericFormatting.Real(style.LastHeight)),
+                ("oblique_angle", NumericFormatting.Real(style.ObliqueAngle)),
+                ("backward", (mirror & 2) != 0 ? "true" : "false"),
+                ("upside_down", (mirror & 4) != 0 ? "true" : "false"),
+                ("is_shape", (flags & 1) != 0 ? "true" : "false"),
+                ("is_vertical", (flags & 4) != 0 ? "true" : "false"),
+                ("xref_dependent", (flags & 16) != 0 ? "true" : "false"),
+
+                // ACadSharp 3.7.1 has no annotative property on TextStyle. The
+                // field is written as false and left out of the comparison
+                // (excluded for the oracle in parity/MODEL1.toml).
+                ("annotative", "false")));
+        }
+    }
+
+    private static bool IsInventedName(string name) =>
+        name.StartsWith("unnamed", StringComparison.Ordinal)
+        && name.Length > "unnamed".Length
+        && name["unnamed".Length..].All(char.IsAsciiDigit);
 
     private static void ExtractLinetypes(CadDocument document, List<Model1Record> records)
     {

@@ -349,11 +349,42 @@ pub fn linetype_records(doc: &CadDocument) -> Vec<Record> {
         .collect()
 }
 
+/// One `textstyle` record per STYLE entry (docs/MODEL_1.md). The stored last
+/// height is the field, not `effective_last_height()`.
+pub fn textstyle_records(doc: &CadDocument) -> Vec<Record> {
+    doc.text_styles
+        .iter()
+        // An entry with no name cannot be keyed: it has no record.
+        .filter(|t| !t.name.is_empty())
+        .map(|t| {
+            Record::Entry(Entry::new(
+                "textstyle",
+                t.name.clone(),
+                vec![
+                    Value::Str(t.font_file.clone()),
+                    Value::Str(t.big_font_file.clone()),
+                    Value::Double(t.height),
+                    Value::Double(t.width_factor),
+                    Value::Double(t.last_height),
+                    Value::Double(t.oblique_angle),
+                    Value::Bool(t.flags.backward),
+                    Value::Bool(t.flags.upside_down),
+                    Value::Bool(t.is_shape_file),
+                    Value::Bool(t.is_vertical),
+                    Value::Bool(t.xref_dependent),
+                    Value::Bool(t.annotative),
+                ],
+            ))
+        })
+        .collect()
+}
+
 /// What `emit-acadrust` writes beside the schema 1 stream.
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     let mut all = header_records(doc);
     all.extend(layer_records(doc));
     all.extend(linetype_records(doc));
+    all.extend(textstyle_records(doc));
     all
 }
 

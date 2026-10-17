@@ -247,6 +247,15 @@ names = [
 reason = "ACadSharp sets it to the time of the read and neither of its readers overwrites it, so the oracle does not write it (docs/MODEL_1.md, values that cannot be frozen)"
 issue = "libviprs/acadsharp-rs-tests#31"
 
+# ---- excluded: oracle, a field it cannot produce
+[[excluded]]
+engine = "oracle"
+names = [
+  "textstyle/*.annotative"
+]
+reason = "ACadSharp 3.7.1 has no annotative property on TextStyle (acadrust reads it from the AcadAnnotative xdata of the style), so the oracle writes false and the field is left out; the xdata itself is compared by the xdata kind (#40)"
+issue = "libviprs/acadsharp-rs-tests#35"
+
 # ---- excluded: ezdxf, not written by the DXF of these versions
 [[excluded]]
 engine = "ezdxf"
