@@ -152,7 +152,7 @@ two pairs that have acadsharp-rs in them (`oracle/acadsharp`, `acadsharp/acadrus
 | `point` | no record; a POINT arrives as warning 100 (`acadsharp-ac1032` has 40) | a `point` record | libviprs-dep#104 (wire 3) |
 | hatch boundaries and `polygon` | one `Polygon` with bulges per loop; no entity type, so a hatch polygon and a SOLID polygon look the same (160 polygons against 15 on `acadsharp-ac1032`) | one analytic record per edge | acadsharp-rs-tests#59, decided: the same boundary in a form a viewer fills, so the kind stays excluded for good (hatch edges are compared between the oracle and acadrust) |
 | `document.maintenance_version` | `DocumentBegin` has `view_count` and `drawing_version` only | the header's maintenance version | acadsharp-rs-tests#61 |
-| `spline.fit_points` | not on the wire | carried | acadsharp-rs-tests#58 |
+| `spline.fit_points` | not on the wire, on purpose: fit points are editing data and the curve a viewer draws is the control points and knots | carried | acadsharp-rs-tests#58, decided |
 | `text.width_factor`, `halign`, `valign`, `style` | position, height, rotation, the string | all four | acadsharp-rs-tests#66 |
 
 What the adapter writes for those is the schema's default (`0`, `[]`, `left`,
