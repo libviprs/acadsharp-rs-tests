@@ -102,9 +102,7 @@ fn a_value_agrees_with_the_type_its_group_code_gives() {
     ];
     let r = model1::load_frozen("oracle", "acadsharp-ac1032").unwrap();
     for (name, ty) in want {
-        let Some(Record::Header(h)) = r
-            .iter()
-            .find(|r| r.kind() == "header" && r.key() == name)
+        let Some(Record::Header(h)) = r.iter().find(|r| r.kind() == "header" && r.key() == name)
         else {
             panic!("{name} is not a header record")
         };
