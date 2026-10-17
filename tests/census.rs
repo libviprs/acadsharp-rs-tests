@@ -73,12 +73,24 @@ fn reader(rows: &[Row]) -> (Vec<Record>, Sidecar) {
 fn framing() -> Vec<Row> {
     [(DOC, "document"), (MODEL, "view"), (LAYOUT, "view")]
         .into_iter()
-        .map(|(r, k)| Row { record: r.into(), handles: r#""0""#.into(), kind: k, dxf: None, from_insert: None })
+        .map(|(r, k)| Row {
+            record: r.into(),
+            handles: r#""0""#.into(),
+            kind: k,
+            dxf: None,
+            from_insert: None,
+        })
         .collect()
 }
 
 fn row(record: String, handles: &str, kind: &'static str, dxf: &'static str) -> Row {
-    Row { record, handles: handles.into(), kind, dxf: Some(dxf), from_insert: None }
+    Row {
+        record,
+        handles: handles.into(),
+        kind,
+        dxf: Some(dxf),
+        from_insert: None,
+    }
 }
 
 // handles: 0x1A = 26, 0x1B = 27, 0x1C = 28
@@ -135,10 +147,17 @@ fn a_reader_one_short_is_red_and_names_the_handle() {
     let findings = check_full(&census3(), &records, &sidecar);
     assert_eq!(
         findings,
-        [Finding::Missing { handle: 28, class: "Line".into() }],
+        [Finding::Missing {
+            handle: 28,
+            class: "Line".into()
+        }],
         "{findings:?}"
     );
-    assert!(findings[0].to_string().contains("1C"), "the message names the handle in hex: {}", findings[0]);
+    assert!(
+        findings[0].to_string().contains("1C"),
+        "the message names the handle in hex: {}",
+        findings[0]
+    );
 }
 
 #[test]
@@ -147,7 +166,11 @@ fn a_reader_with_one_too_many_is_red_and_names_the_handle() {
     rows.push(row(line(0), r#""AA""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
     let findings = check_full(&census3(), &records, &sidecar);
-    assert_eq!(findings, [Finding::Unexpected { handle: 0xAA }], "{findings:?}");
+    assert_eq!(
+        findings,
+        [Finding::Unexpected { handle: 0xAA }],
+        "{findings:?}"
+    );
     assert!(findings[0].to_string().contains("AA"));
 }
 
@@ -171,7 +194,11 @@ fn a_wrong_class_is_red_for_a_top_level_record() {
     let findings = check_full(&census3(), &records, &sidecar);
     assert_eq!(
         findings,
-        [Finding::WrongClass { handle: 27, census: "DBText".into(), reader: "MTEXT".into() }],
+        [Finding::WrongClass {
+            handle: 27,
+            census: "DBText".into(),
+            reader: "MTEXT".into()
+        }],
         "{findings:?}"
     );
 }
@@ -182,20 +209,33 @@ fn an_invisible_entity_may_be_absent_and_a_visible_one_may_not() {
     let mut rows = framing();
     rows.push(row(line(0), r#""1A""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
-    assert_eq!(check_full(&c, &records, &sidecar), [], "the invisible one is allowed to be missing");
+    assert_eq!(
+        check_full(&c, &records, &sidecar),
+        [],
+        "the invisible one is allowed to be missing"
+    );
 
     let c = Census::parse(&census_json(&[("Line", 26, false), ("Line", 27, false)])).unwrap();
     assert_eq!(
         check_full(&c, &records, &sidecar),
-        [Finding::Missing { handle: 27, class: "Line".into() }]
+        [Finding::Missing {
+            handle: 27,
+            class: "Line".into()
+        }]
     );
 }
 
 #[test]
 fn an_empty_model_space_in_the_reader_is_refused_as_vacuous() {
     let (records, sidecar) = reader(&framing());
-    assert_eq!(check_full(&census3(), &records, &sidecar), [Finding::Vacuous]);
-    assert_eq!(check_weak(&census3(), &records, &sidecar), [Finding::Vacuous]);
+    assert_eq!(
+        check_full(&census3(), &records, &sidecar),
+        [Finding::Vacuous]
+    );
+    assert_eq!(
+        check_weak(&census3(), &records, &sidecar),
+        [Finding::Vacuous]
+    );
 }
 
 #[test]
@@ -205,8 +245,9 @@ fn a_class_the_name_map_does_not_know_is_a_finding_not_a_pass() {
     rows.push(row(line(0), r#""1A""#, "line", "LINE"));
     let (records, sidecar) = reader(&rows);
     assert!(
-        check_full(&c, &records, &sidecar)
-            .contains(&Finding::UnmappedClass { class: "SomethingNew".into() })
+        check_full(&c, &records, &sidecar).contains(&Finding::UnmappedClass {
+            class: "SomethingNew".into()
+        })
     );
 }
 
@@ -228,7 +269,12 @@ fn weak_rows(entities: &[(&str, bool)]) -> Vec<Row> {
 #[test]
 fn the_weak_check_passes_when_top_level_handles_are_in_and_cover_the_census() {
     // 1A and 1C top level; 1B is a block reference's expansion leaf (x true)
-    let c = Census::parse(&census_json(&[("Line", 26, false), ("BlockReference", 27, false), ("Line", 28, false)])).unwrap();
+    let c = Census::parse(&census_json(&[
+        ("Line", 26, false),
+        ("BlockReference", 27, false),
+        ("Line", 28, false),
+    ]))
+    .unwrap();
     let rows = weak_rows(&[("1A", false), ("50", true), ("1C", false)]);
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_weak(&c, &records, &sidecar), []);
@@ -239,7 +285,10 @@ fn the_weak_check_is_red_for_a_top_level_handle_the_census_lacks() {
     let c = census3();
     let rows = weak_rows(&[("1A", false), ("1B", false), ("1C", false), ("EE", false)]);
     let (records, sidecar) = reader(&rows);
-    assert_eq!(check_weak(&c, &records, &sidecar), [Finding::Unexpected { handle: 0xEE }]);
+    assert_eq!(
+        check_weak(&c, &records, &sidecar),
+        [Finding::Unexpected { handle: 0xEE }]
+    );
 }
 
 #[test]
@@ -249,13 +298,21 @@ fn the_weak_check_is_red_for_a_census_entity_it_never_saw() {
     let (records, sidecar) = reader(&rows);
     assert_eq!(
         check_weak(&c, &records, &sidecar),
-        [Finding::Missing { handle: 27, class: "DBText".into() }]
+        [Finding::Missing {
+            handle: 27,
+            class: "DBText".into()
+        }]
     );
 }
 
 #[test]
 fn the_weak_check_does_not_ask_for_block_references_or_dimensions() {
-    let c = Census::parse(&census_json(&[("Line", 26, false), ("BlockReference", 27, false), ("RotatedDimension", 28, false)])).unwrap();
+    let c = Census::parse(&census_json(&[
+        ("Line", 26, false),
+        ("BlockReference", 27, false),
+        ("RotatedDimension", 28, false),
+    ]))
+    .unwrap();
     let rows = weak_rows(&[("1A", false)]);
     let (records, sidecar) = reader(&rows);
     assert_eq!(check_weak(&c, &records, &sidecar), []);
@@ -273,6 +330,10 @@ fn the_expansion_leaves_of_an_insert_are_not_unexpected_for_the_weak_check() {
 fn the_name_map_knows_the_common_classes_and_not_a_made_up_one() {
     assert_eq!(dxf_names("DBText"), Some(&["TEXT"][..]));
     assert!(dxf_names("BlockReference").unwrap().contains(&"INSERT"));
-    assert!(dxf_names("Point3AngularDimension").unwrap().contains(&"DIMENSION"));
+    assert!(
+        dxf_names("Point3AngularDimension")
+            .unwrap()
+            .contains(&"DIMENSION")
+    );
     assert!(dxf_names("NotAClass").is_none());
 }

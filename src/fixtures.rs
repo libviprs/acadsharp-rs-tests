@@ -622,7 +622,9 @@ impl GroundTruth {
         if got != want {
             return Err(FixtureError::Corrupt {
                 id: self.id.clone(),
-                detail: format!("{relative} hashes to {got} uncompressed, the manifest froze {want}"),
+                detail: format!(
+                    "{relative} hashes to {got} uncompressed, the manifest froze {want}"
+                ),
             });
         }
         Ok(data)
@@ -650,7 +652,10 @@ impl GroundTruth {
         if got != self.run_sha256 {
             return Err(FixtureError::Corrupt {
                 id: self.id.clone(),
-                detail: format!("run.json hashes to {got}, the manifest froze {}", self.run_sha256),
+                detail: format!(
+                    "run.json hashes to {got}, the manifest froze {}",
+                    self.run_sha256
+                ),
             });
         }
         Ok(data)

@@ -8,7 +8,7 @@
 use std::collections::BTreeSet;
 
 use acadsharp_rs_tests::canonical::{Record, Sidecar, parse_stream};
-use acadsharp_rs_tests::census::{Census, Finding, check_full, check_weak, dxf_names};
+use acadsharp_rs_tests::census::{Census, Finding, check_full, dxf_names};
 use acadsharp_rs_tests::fixtures;
 
 const SAVES: [&str; 7] = [
@@ -27,8 +27,11 @@ const TWINS: [&str; 6] = ["1015", "1018", "1021", "1024", "1027", "1032"];
 fn ezdxf_stream(input: &str) -> (Vec<Record>, Sidecar) {
     let gt = fixtures::ground_truth(input).expect("a ground truth row for every DXF twin");
     let records = parse_stream(&String::from_utf8(gt.load_jsonl().unwrap()).unwrap()).unwrap();
-    let sidecar =
-        Sidecar::parse(&String::from_utf8(gt.load_sidecar().unwrap()).unwrap(), &records).unwrap();
+    let sidecar = Sidecar::parse(
+        &String::from_utf8(gt.load_sidecar().unwrap()).unwrap(),
+        &records,
+    )
+    .unwrap();
     (records, sidecar)
 }
 
@@ -43,7 +46,10 @@ fn the_census_is_163_entities_of_36_classes_and_the_same_in_every_save() {
     let classes: BTreeSet<&str> = first.model_space.iter().map(|e| e.class.as_str()).collect();
     assert_eq!(classes.len(), 36, "{classes:?}");
     let set = |c: &Census| -> BTreeSet<(u64, String)> {
-        c.model_space.iter().map(|e| (e.handle, e.class.clone())).collect()
+        c.model_space
+            .iter()
+            .map(|e| (e.handle, e.class.clone()))
+            .collect()
     };
     for id in SAVES {
         let c = Census::for_fixture(id).unwrap();
@@ -73,7 +79,11 @@ fn ezdxf_reports_exactly_the_census_on_every_save_that_has_a_dxf_twin() {
             let (records, sidecar) = ezdxf_stream(&format!("dxf-sample-ac{v}-{enc}"));
             let census = Census::for_fixture(&format!("acadsharp-ac{v}")).unwrap();
             let findings = check_full(&census, &records, &sidecar);
-            assert!(findings.is_empty(), "ezdxf, AC{v} {enc}:{}", show(&findings));
+            assert!(
+                findings.is_empty(),
+                "ezdxf, AC{v} {enc}:{}",
+                show(&findings)
+            );
         }
     }
 }
@@ -85,7 +95,10 @@ fn without(records: &[Record], sidecar: &Sidecar, handle: u64) -> (Vec<Record>, 
     let keep: Vec<usize> = (0..records.len())
         .filter(|&i| sidecar.entries[i].handles.first().map(String::as_str) != Some(&hex))
         .collect();
-    assert!(keep.len() < records.len(), "{hex} names no record, so nothing was removed");
+    assert!(
+        keep.len() < records.len(),
+        "{hex} names no record, so nothing was removed"
+    );
     let recs: Vec<Record> = keep.iter().map(|&i| records[i].clone()).collect();
     let mut entries = Vec::new();
     for (n, &i) in keep.iter().enumerate() {
@@ -111,11 +124,18 @@ fn a_reader_that_loses_one_entity_is_red_naming_its_handle() {
     let findings = check_full(&census, &records, &sidecar);
     assert_eq!(
         findings,
-        [Finding::Missing { handle: victim.handle, class: "Circle".into() }],
+        [Finding::Missing {
+            handle: victim.handle,
+            class: "Circle".into()
+        }],
         "{}",
         show(&findings)
     );
-    assert!(findings[0].to_string().contains(&format!("{:X}", victim.handle)));
+    assert!(
+        findings[0]
+            .to_string()
+            .contains(&format!("{:X}", victim.handle))
+    );
 }
 
 #[test]
@@ -141,6 +161,7 @@ mod acadrust {
     use super::*;
     use acadsharp_rs_tests::acadrust_emit::extract_bytes;
     use acadsharp_rs_tests::canonical::render_sidecar;
+    use acadsharp_rs_tests::census::check_weak;
     use acadsharp_rs_tests::emit::Emission;
 
     fn emission(fixture: &str) -> (Emission, Sidecar) {

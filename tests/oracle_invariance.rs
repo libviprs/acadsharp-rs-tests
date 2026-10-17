@@ -46,7 +46,10 @@ fn table() -> ClassTable {
     );
     for field in ["acad_version", "maintenance_version"] {
         t.excluded.push(Exclusion {
-            scope: Scope::Field { record: "document".into(), field: field.into() },
+            scope: Scope::Field {
+                record: "document".into(),
+                field: field.into(),
+            },
             reason: by_definition.into(),
             issue: "libviprs/acadsharp-rs-tests#24".into(),
         });
@@ -120,9 +123,17 @@ fn every_difference_is_on_the_list_and_every_row_is_still_a_difference() {
         .rows
         .iter()
         .filter(|r| !hit.contains(&(r.fixture.clone(), r.record, r.field.clone())))
-        .map(|r| format!("{} record {} {}.{}", r.fixture, r.record, r.record_type, r.field))
+        .map(|r| {
+            format!(
+                "{} record {} {}.{}",
+                r.fixture, r.record, r.record_type, r.field
+            )
+        })
         .collect();
-    assert!(stale.is_empty(), "rows for differences that are gone: {stale:?}");
+    assert!(
+        stale.is_empty(),
+        "rows for differences that are gone: {stale:?}"
+    );
 }
 
 #[test]
@@ -142,7 +153,13 @@ issue = "{issue}"
 "#
         )
     };
-    assert!(ExceptionList::parse(&row("R14 upper-cases table names", "libviprs/acadsharp-rs-tests#24")).is_ok());
+    assert!(
+        ExceptionList::parse(&row(
+            "R14 upper-cases table names",
+            "libviprs/acadsharp-rs-tests#24"
+        ))
+        .is_ok()
+    );
     assert!(matches!(
         ExceptionList::parse(&row("", "libviprs/acadsharp-rs-tests#24")),
         Err(ListError::NoReason(_))
@@ -160,7 +177,11 @@ issue = "{issue}"
 #[test]
 fn the_two_reader_bugs_are_pinned_as_failures_and_not_excused() {
     let list = ExceptionList::oracle().unwrap();
-    let failures: Vec<_> = list.rows.iter().filter(|r| r.kind == Kind::Failure).collect();
+    let failures: Vec<_> = list
+        .rows
+        .iter()
+        .filter(|r| r.kind == Kind::Failure)
+        .collect();
     assert!(!failures.is_empty());
     let issues: BTreeSet<&str> = failures.iter().map(|r| r.issue.as_str()).collect();
     // The multiline ATTRIB only AC1032 loses (libviprs-dep#112), and the spline
@@ -188,18 +209,29 @@ fn an_exception_that_names_a_dxf_twin_is_backed_by_what_the_twin_holds() {
     for row in list.rows.iter().filter(|r| r.ground_truth.is_some()) {
         let input = row.ground_truth.as_deref().unwrap();
         let gt = fixtures::ground_truth(input).unwrap_or_else(|| panic!("no ground truth {input}"));
-        let records =
-            parse_stream(&String::from_utf8(gt.load_jsonl().unwrap()).unwrap()).unwrap();
-        let holds = records.iter().any(|r| match (r, row.record_type.as_str(), row.field.as_str(), &row.b) {
-            (Record::Text(t), "text", "text", Val::Str(v)) => &t.text == v,
-            (Record::Text(t), "text", "style", Val::Str(v)) => &t.style == v,
-            (Record::Spline(s), "spline", "control_points.len", Val::Int(n)) => s.control_points.len() as u64 == *n,
-            (Record::Spline(s), "spline", "knots.len", Val::Int(n)) => s.knots.len() as u64 == *n,
-            (Record::Spline(s), "spline", "fit_points.len", Val::Int(n)) => s.fit_points.len() as u64 == *n,
-            (Record::Text(t), "text", "valign", Val::Str(v)) => &t.valign == v,
-            _ => false,
+        let records = parse_stream(&String::from_utf8(gt.load_jsonl().unwrap()).unwrap()).unwrap();
+        let holds = records.iter().any(|r| {
+            match (r, row.record_type.as_str(), row.field.as_str(), &row.b) {
+                (Record::Text(t), "text", "text", Val::Str(v)) => &t.text == v,
+                (Record::Text(t), "text", "style", Val::Str(v)) => &t.style == v,
+                (Record::Spline(s), "spline", "control_points.len", Val::Int(n)) => {
+                    s.control_points.len() as u64 == *n
+                }
+                (Record::Spline(s), "spline", "knots.len", Val::Int(n)) => {
+                    s.knots.len() as u64 == *n
+                }
+                (Record::Spline(s), "spline", "fit_points.len", Val::Int(n)) => {
+                    s.fit_points.len() as u64 == *n
+                }
+                (Record::Text(t), "text", "valign", Val::Str(v)) => &t.valign == v,
+                _ => false,
+            }
         });
-        assert!(holds, "{input} does not hold {:?} for {}.{} ({})", row.b, row.record_type, row.field, row.fixture);
+        assert!(
+            holds,
+            "{input} does not hold {:?} for {}.{} ({})",
+            row.b, row.record_type, row.field, row.fixture
+        );
         checked += 1;
     }
     assert!(checked > 10, "only {checked} rows name a ground truth");
@@ -284,7 +316,11 @@ fn print_the_list() {
             let (kind, reason, issue, truth) = classify(save, f);
             let mut row = format!(
                 "[[{}]]\nfixture = {}\nrecord = {}\nrecord_type = {}\nfield = {}\na = {}\nb = {}\nreason = {}\nissue = {}\n",
-                if kind == Kind::Exception { "exception" } else { "failure" },
+                if kind == Kind::Exception {
+                    "exception"
+                } else {
+                    "failure"
+                },
                 toml_str(save),
                 f.index_a.unwrap(),
                 toml_str(&f.record_type),
@@ -298,7 +334,11 @@ fn print_the_list() {
                 row.push_str(&format!("ground_truth = {}\n", toml_str(&t)));
             }
             row.push('\n');
-            if kind == Kind::Exception { exceptions.push_str(&row) } else { failures.push_str(&row) }
+            if kind == Kind::Exception {
+                exceptions.push_str(&row)
+            } else {
+                failures.push_str(&row)
+            }
         }
     }
     println!("=====BEGIN=====\n{exceptions}{failures}=====END=====");

@@ -90,7 +90,8 @@ fn is_issue(s: &str) -> bool {
     let Some((repo, n)) = s.split_once('#') else {
         return false;
     };
-    repo.split_once('/').is_some_and(|(o, r)| !o.is_empty() && !r.is_empty())
+    repo.split_once('/')
+        .is_some_and(|(o, r)| !o.is_empty() && !r.is_empty())
         && !n.is_empty()
         && n.bytes().all(|b| b.is_ascii_digit())
 }
@@ -101,7 +102,9 @@ fn val(v: &toml::Value, what: &str) -> Result<Val, ListError> {
         toml::Value::Integer(i) if *i >= 0 => Ok(Val::Int(*i as u64)),
         toml::Value::Boolean(b) => Ok(Val::Bool(*b)),
         toml::Value::Float(x) => Ok(Val::Float(*x)),
-        _ => Err(ListError::Missing(format!("{what} is not a string, count, bool or float"))),
+        _ => Err(ListError::Missing(format!(
+            "{what} is not a string, count, bool or float"
+        ))),
     }
 }
 
@@ -112,7 +115,9 @@ impl ExceptionList {
     }
 
     pub fn parse(text: &str) -> Result<Self, ListError> {
-        let root: toml::Table = text.parse().map_err(|e: toml::de::Error| ListError::NotToml(e.to_string()))?;
+        let root: toml::Table = text
+            .parse()
+            .map_err(|e: toml::de::Error| ListError::NotToml(e.to_string()))?;
         let baseline = root
             .get("baseline")
             .and_then(toml::Value::as_str)
@@ -157,11 +162,22 @@ impl ExceptionList {
                         .ok_or_else(|| ListError::Missing(format!("{label} has no `record`")))?,
                     record_type: s("record_type")?,
                     field: s("field")?,
-                    a: val(t.get("a").ok_or_else(|| ListError::Missing(format!("{label} has no `a`")))?, "a")?,
-                    b: val(t.get("b").ok_or_else(|| ListError::Missing(format!("{label} has no `b`")))?, "b")?,
+                    a: val(
+                        t.get("a")
+                            .ok_or_else(|| ListError::Missing(format!("{label} has no `a`")))?,
+                        "a",
+                    )?,
+                    b: val(
+                        t.get("b")
+                            .ok_or_else(|| ListError::Missing(format!("{label} has no `b`")))?,
+                        "b",
+                    )?,
                     reason,
                     issue,
-                    ground_truth: t.get("ground_truth").and_then(toml::Value::as_str).map(str::to_string),
+                    ground_truth: t
+                        .get("ground_truth")
+                        .and_then(toml::Value::as_str)
+                        .map(str::to_string),
                 });
             }
         }

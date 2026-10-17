@@ -78,7 +78,10 @@ impl Census {
                         .and_then(Value::as_str)
                         .ok_or("an entity with no ACadName")?,
                 );
-                let invisible = e.get("IsInvisible").and_then(Value::as_bool).unwrap_or(false);
+                let invisible = e
+                    .get("IsInvisible")
+                    .and_then(Value::as_bool)
+                    .unwrap_or(false);
                 all.insert(handle);
                 rows.push(CensusEntity {
                     handle,
@@ -245,7 +248,10 @@ impl fmt::Display for Finding {
                 f,
                 "the census has a {class} and the class name map does not know it"
             ),
-            Self::Vacuous => write!(f, "the reader wrote no model-space entity, so there is nothing to check"),
+            Self::Vacuous => write!(
+                f,
+                "the reader wrote no model-space entity, so there is nothing to check"
+            ),
         }
     }
 }
