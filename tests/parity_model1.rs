@@ -571,17 +571,21 @@ fn one_changed_segment_length_is_red_and_names_the_entry_and_the_index() {
     };
     let mine = run.rust[id].as_ref().expect("acadrust reads this save");
     let mut oracle = model1::load_frozen("oracle", id).unwrap();
-    let side = |records| Side {
-        engine: "oracle",
-        fixture: id,
-        records,
-    };
+    fn side<'a>(id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine: "oracle",
+            fixture: id,
+            records,
+        }
+    }
     let theirs = Side {
         engine: "acadrust",
         fixture: id,
         records: mine,
     };
-    let before = compare("oracle/acadrust", &side(&oracle), &theirs, &rules);
+    let before_red = compare("oracle/acadrust", &side(id, &oracle), &theirs, &rules)
+        .red()
+        .len();
     let mut changed = None;
     for r in &mut oracle {
         let Record::Entry(e) = r else { continue };
@@ -603,11 +607,11 @@ fn one_changed_segment_length_is_red_and_names_the_entry_and_the_index() {
         changed = Some(e.name.clone());
     }
     let name = changed.expect("a linetype with at least two segments");
-    let after = compare("oracle/acadrust", &side(&oracle), &theirs, &rules);
+    let after = compare("oracle/acadrust", &side(id, &oracle), &theirs, &rules);
     let key = format!("linetype/{name}.segments[1].length");
     assert_eq!(
         after.red().len(),
-        before.red().len() + 1,
+        before_red + 1,
         "{}",
         after.first()
     );

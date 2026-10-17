@@ -151,8 +151,8 @@ fn every_file_has_the_three_fixed_linetypes_and_one_complex_one_is_compared() {
     let streams: Vec<(String, Vec<Record>)> = SAVES
         .iter()
         .map(|s| ("oracle", *s))
-        .chain(TWINS.iter().map(|t| ("oracle", t.0)))
-        .chain(TWINS.iter().map(|t| ("ezdxf", t.0)))
+        .chain(TWINS.iter().map(|t| ("oracle", *t)))
+        .chain(TWINS.iter().map(|t| ("ezdxf", *t)))
         .map(|(e, id)| (format!("{e} {id}"), model1::load_frozen(e, id).unwrap()))
         .collect();
     for (label, records) in &streams {
