@@ -397,3 +397,128 @@ pub fn check_weak(census: &Census, records: &[Record], sidecar: &Sidecar) -> Vec
     }
     findings
 }
+
+// ---- what a reader is allowed to miss ----------------------------------------
+
+/// One reason a reader's census findings are not red: `parity/census_exceptions.toml`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExceptionRow {
+    /// `acadsharp`, the reader the row is about.
+    pub reader: String,
+    /// `missing` or `unexpected`.
+    pub kind: String,
+    /// For `missing`: the AutoCAD class that is allowed to be absent.
+    pub class: Option<String>,
+    /// For `unexpected`: the handle, uppercase hex, that is allowed to be extra.
+    pub handle: Option<u64>,
+    pub reason: String,
+    pub issue: String,
+}
+
+/// What loading the list can refuse.
+#[derive(Debug, Clone, PartialEq)]
+pub enum ExceptionError {
+    NotToml(String),
+    Malformed(String),
+    NoReason(String),
+    NoIssue(String),
+}
+
+impl fmt::Display for ExceptionError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::NotToml(e) => write!(f, "not TOML: {e}"),
+            Self::Malformed(e) => write!(f, "{e}"),
+            Self::NoReason(r) => write!(f, "{r} has no reason"),
+            Self::NoIssue(r) => write!(f, "{r} has no issue (an `owner/repo#N`)"),
+        }
+    }
+}
+
+impl std::error::Error for ExceptionError {}
+
+/// The committed list.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Exceptions {
+    pub rows: Vec<ExceptionRow>,
+}
+
+impl Exceptions {
+    pub fn committed() -> Result<Self, ExceptionError> {
+        Self::parse(include_str!("../parity/census_exceptions.toml"))
+    }
+
+    pub fn parse(text: &str) -> Result<Self, ExceptionError> {
+        let root: toml::Table = text
+            .parse()
+            .map_err(|e: toml::de::Error| ExceptionError::NotToml(e.to_string()))?;
+        let mut rows = Vec::new();
+        for (n, row) in root
+            .get("row")
+            .and_then(toml::Value::as_array)
+            .map(Vec::as_slice)
+            .unwrap_or_default()
+            .iter()
+            .enumerate()
+        {
+            let t = row
+                .as_table()
+                .ok_or_else(|| ExceptionError::Malformed(format!("row #{n} is not a table")))?;
+            let s = |k: &str| t.get(k).and_then(toml::Value::as_str).map(str::to_string);
+            let label = format!(
+                "row #{n} ({} {})",
+                s("kind").unwrap_or_default(),
+                s("class").or_else(|| s("handle")).unwrap_or_default()
+            );
+            let reason = s("reason").unwrap_or_default();
+            if reason.trim().is_empty() {
+                return Err(ExceptionError::NoReason(label));
+            }
+            let issue = s("issue").unwrap_or_default();
+            let ok = issue.split_once('#').is_some_and(|(repo, num)| {
+                repo.contains('/') && !num.is_empty() && num.bytes().all(|b| b.is_ascii_digit())
+            });
+            if !ok {
+                return Err(ExceptionError::NoIssue(label));
+            }
+            let kind = s("kind").ok_or_else(|| ExceptionError::Malformed(format!("{label} has no kind")))?;
+            let handle = match s("handle") {
+                Some(h) => Some(
+                    parse_handle(&h)
+                        .ok_or_else(|| ExceptionError::Malformed(format!("{label}: {h:?} is not hex")))?,
+                ),
+                None => None,
+            };
+            match (kind.as_str(), s("class"), handle) {
+                ("missing", Some(_), None) | ("unexpected", None, Some(_)) => {}
+                _ => {
+                    return Err(ExceptionError::Malformed(format!(
+                        "{label}: `missing` takes a class and `unexpected` takes a handle"
+                    )));
+                }
+            }
+            rows.push(ExceptionRow {
+                reader: s("reader")
+                    .ok_or_else(|| ExceptionError::Malformed(format!("{label} has no reader")))?,
+                kind,
+                class: s("class"),
+                handle,
+                reason,
+                issue,
+            });
+        }
+        Ok(Self { rows })
+    }
+
+    /// The index of the row that explains `f` for this reader, if any.
+    pub fn explains(&self, reader: &str, f: &Finding) -> Option<usize> {
+        self.rows.iter().position(|r| {
+            r.reader == reader
+                && match f {
+                    Finding::Missing { class, .. } => r.kind == "missing" && r.class.as_deref() == Some(class),
+                    Finding::Unexpected { handle } => r.kind == "unexpected" && r.handle == Some(*handle),
+                    _ => false,
+                }
+        })
+    }
+}

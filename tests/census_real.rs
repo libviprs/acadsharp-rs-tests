@@ -218,3 +218,77 @@ mod acadrust {
         assert!(findings.len() < 40, "{}", show(&findings));
     }
 }
+
+/// acadsharp-rs, through the safe API over a real archive. It needs the native
+/// library, so it skips with the reason printed, and `ACADSHARP_REQUIRE_NATIVE=1`
+/// turns the skip into a failure: a lane that skipped is the same colour as one
+/// that passed.
+mod acadsharp {
+    use super::*;
+    use acadsharp_rs::Decoder;
+    use acadsharp_rs_tests::acadsharp_emit::extract_bytes;
+    use acadsharp_rs_tests::canonical::render_sidecar;
+    use acadsharp_rs_tests::census::{Exceptions, check_weak};
+
+    fn linked() -> bool {
+        match Decoder::new() {
+            Ok(_) => true,
+            Err(e) if e.is_unlinked() => {
+                assert!(
+                    std::env::var("ACADSHARP_REQUIRE_NATIVE").as_deref() != Ok("1"),
+                    "ACADSHARP_REQUIRE_NATIVE=1 and nothing is linked"
+                );
+                eprintln!("skipped: no native library is linked (set ACADSHARP_NATIVE_DIR)");
+                false
+            }
+            Err(e) => panic!("the handshake failed: {e}"),
+        }
+    }
+
+    pub fn findings(id: &str) -> Vec<Finding> {
+        let e = extract_bytes(&fixtures::load(id).unwrap()).unwrap();
+        let sidecar = Sidecar::parse(&render_sidecar(&e.sidecar), &e.records).unwrap();
+        check_weak(&Census::for_fixture(id).unwrap(), &e.records, &sidecar)
+    }
+
+    #[test]
+    fn acadsharp_rs_reports_the_census_except_where_the_list_says() {
+        if !linked() {
+            return;
+        }
+        let list = Exceptions::committed().unwrap();
+        let mut used = std::collections::BTreeSet::new();
+        let mut open = Vec::new();
+        for id in SAVES {
+            for f in findings(id) {
+                match list.explains("acadsharp", &f) {
+                    Some(i) => {
+                        used.insert(i);
+                    }
+                    None => open.push(format!("{id}: {f}")),
+                }
+            }
+        }
+        assert!(open.is_empty(), "census findings with no row:\n{}", open.join("\n"));
+        let stale: Vec<_> = (0..list.rows.len())
+            .filter(|i| list.rows[*i].reader == "acadsharp" && !used.contains(i))
+            .map(|i| format!("{} {:?} {:?}", list.rows[i].kind, list.rows[i].class, list.rows[i].handle))
+            .collect();
+        assert!(stale.is_empty(), "rows for findings that are gone: {stale:?}");
+    }
+
+    #[test]
+    fn a_handle_the_census_does_not_have_is_still_red_for_acadsharp_rs() {
+        if !linked() {
+            return;
+        }
+        // Not every extra handle is excused: only the ones on the list.
+        let list = Exceptions::committed().unwrap();
+        assert_eq!(list.explains("acadsharp", &Finding::Unexpected { handle: 0xDEAD }), None);
+        assert_eq!(
+            list.explains("acadsharp", &Finding::Missing { handle: 1, class: "Line".into() }),
+            None,
+            "a missing line is never excused"
+        );
+    }
+}
