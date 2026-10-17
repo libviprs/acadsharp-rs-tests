@@ -19,6 +19,7 @@ use acadsharp_rs as _;
 #[cfg(feature = "acadrust")]
 pub mod acadrust_emit;
 pub mod canonical;
+pub mod census;
 pub mod compare;
 pub mod emit;
 pub mod fixtures;
