@@ -259,7 +259,7 @@ fn the_run_agrees_with_the_committed_verdicts() {
         std::fs::write(verdicts_path(), &rendered).unwrap();
         // The run may be in a container whose tree is thrown away, so the table
         // is printed too, between two markers.
-        println!("==MODEL1_VERDICTS==\n{rendered}==END==");
+        println!("\n==MODEL1_VERDICTS==\n{rendered}==END==");
         eprintln!("rewrote {}", verdicts_path().display());
         return;
     }
