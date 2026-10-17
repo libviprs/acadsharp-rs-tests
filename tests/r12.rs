@@ -25,8 +25,10 @@ fn by_handle(records: &[Record], sidecar: &[SidecarEntry]) -> BTreeMap<String, S
     let mut out = BTreeMap::new();
     for (i, r) in records.iter().enumerate() {
         if let Record::Text(t) = r {
-            if let Some(h) = sidecar.get(i).and_then(|e| e.handles.last()) {
-                if HANDLES.contains(&h.as_str()) {
+            // A dimension's text sits in its block: the handle path is the insert,
+            // the dimension (64B) and the text, so match anywhere along it.
+            if let Some(e) = sidecar.get(i) {
+                if let Some(h) = e.handles.iter().find(|h| HANDLES.contains(&h.as_str())) {
                     out.insert(h.clone(), t.text.clone());
                 }
             }
@@ -71,7 +73,7 @@ fn print_the_r12_strings() {
         let recs = parse_stream(&String::from_utf8(row.load_reference_jsonl().unwrap()).unwrap()).unwrap();
         for r in recs {
             if let Record::Text(t) = r {
-                if t.text.contains("45,6") || t.text.starts_with("94") {
+                if t.text.contains("45") || t.text.starts_with("94") {
                     println!("R12 {input} oracle {:?}", t.text);
                 }
             }
