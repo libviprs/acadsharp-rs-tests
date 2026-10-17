@@ -269,12 +269,24 @@ mod acadsharp {
                 }
             }
         }
-        assert!(open.is_empty(), "census findings with no row:\n{}", open.join("\n"));
+        assert!(
+            open.is_empty(),
+            "census findings with no row:\n{}",
+            open.join("\n")
+        );
         let stale: Vec<_> = (0..list.rows.len())
             .filter(|i| list.rows[*i].reader == "acadsharp" && !used.contains(i))
-            .map(|i| format!("{} {:?} {:?}", list.rows[i].kind, list.rows[i].class, list.rows[i].handle))
+            .map(|i| {
+                format!(
+                    "{} {:?} {:?}",
+                    list.rows[i].kind, list.rows[i].class, list.rows[i].handle
+                )
+            })
             .collect();
-        assert!(stale.is_empty(), "rows for findings that are gone: {stale:?}");
+        assert!(
+            stale.is_empty(),
+            "rows for findings that are gone: {stale:?}"
+        );
     }
 
     #[test]
@@ -284,9 +296,18 @@ mod acadsharp {
         }
         // Not every extra handle is excused: only the ones on the list.
         let list = Exceptions::committed().unwrap();
-        assert_eq!(list.explains("acadsharp", &Finding::Unexpected { handle: 0xDEAD }), None);
         assert_eq!(
-            list.explains("acadsharp", &Finding::Missing { handle: 1, class: "Line".into() }),
+            list.explains("acadsharp", &Finding::Unexpected { handle: 0xDEAD }),
+            None
+        );
+        assert_eq!(
+            list.explains(
+                "acadsharp",
+                &Finding::Missing {
+                    handle: 1,
+                    class: "Line".into()
+                }
+            ),
             None,
             "a missing line is never excused"
         );

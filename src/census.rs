@@ -481,12 +481,12 @@ impl Exceptions {
             if !ok {
                 return Err(ExceptionError::NoIssue(label));
             }
-            let kind = s("kind").ok_or_else(|| ExceptionError::Malformed(format!("{label} has no kind")))?;
+            let kind = s("kind")
+                .ok_or_else(|| ExceptionError::Malformed(format!("{label} has no kind")))?;
             let handle = match s("handle") {
-                Some(h) => Some(
-                    parse_handle(&h)
-                        .ok_or_else(|| ExceptionError::Malformed(format!("{label}: {h:?} is not hex")))?,
-                ),
+                Some(h) => Some(parse_handle(&h).ok_or_else(|| {
+                    ExceptionError::Malformed(format!("{label}: {h:?} is not hex"))
+                })?),
                 None => None,
             };
             match (kind.as_str(), s("class"), handle) {
@@ -515,8 +515,12 @@ impl Exceptions {
         self.rows.iter().position(|r| {
             r.reader == reader
                 && match f {
-                    Finding::Missing { class, .. } => r.kind == "missing" && r.class.as_deref() == Some(class),
-                    Finding::Unexpected { handle } => r.kind == "unexpected" && r.handle == Some(*handle),
+                    Finding::Missing { class, .. } => {
+                        r.kind == "missing" && r.class.as_deref() == Some(class)
+                    }
+                    Finding::Unexpected { handle } => {
+                        r.kind == "unexpected" && r.handle == Some(*handle)
+                    }
                     _ => false,
                 }
         })
