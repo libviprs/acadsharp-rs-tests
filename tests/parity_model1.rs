@@ -73,54 +73,69 @@ fn verdicts_path() -> PathBuf {
 }
 
 /// What acadrust says about a save, by running the emitter as a process.
-fn acadrust(id: &str, out: &Path) -> Result<Vec<Record>, String> {
+///
+/// `Ok(Err(why))` is acadrust refusing the file, which is a row (`OPEN_FAILED`);
+/// `Err` is the emitter not running at all, which is the run's failure.
+fn acadrust(id: &str, out: &Path) -> Result<Result<Vec<Record>, String>, String> {
     let run = Command::new(env!("CARGO_BIN_EXE_emit-acadrust"))
         .args(["--fixture", id, "--out"])
         .arg(out)
         .output()
         .map_err(|e| format!("emit-acadrust could not be started: {e}"))?;
     if !run.status.success() {
-        return Err(format!(
-            "emit-acadrust failed on {id}: {}",
-            String::from_utf8_lossy(&run.stderr)
-        ));
+        let stderr = String::from_utf8_lossy(&run.stderr);
+        if stderr.contains("could not read") {
+            let line = stderr.lines().find(|l| !l.trim().is_empty()).unwrap_or("");
+            return Ok(Err(format!("exit {}: {line}", run.status.code().unwrap_or(-1))));
+        }
+        return Err(format!("emit-acadrust failed on {id}: {stderr}"));
     }
     let path = model1::output_path(out, id, "acadrust");
     let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
-    model1::parse_stream(&text).map_err(|e| format!("{}: {e}", path.display()))
+    model1::parse_stream(&text)
+        .map(Ok)
+        .map_err(|e| format!("{}: {e}", path.display()))
 }
 
 struct Run {
     /// (fixture, pair) -> report.
     reports: BTreeMap<(String, String), Report>,
+    /// (fixture, pair) -> why a side could not be read: `OPEN_FAILED` rows.
+    failures: BTreeMap<(String, String), String>,
 }
 
 fn compute(rules: &Rules) -> Result<Run, String> {
     let out = out_dir();
     std::fs::create_dir_all(&out).map_err(|e| e.to_string())?;
     // acadrust's stream for each of the thirteen inputs, once.
-    let mut rust: BTreeMap<&str, Vec<Record>> = BTreeMap::new();
+    let mut rust: BTreeMap<&str, Result<Vec<Record>, String>> = BTreeMap::new();
     for id in SAVES.iter().copied().chain(TWINS.iter().map(|t| t.0)) {
         rust.insert(id, acadrust(id, &out)?);
     }
     let mut reports = BTreeMap::new();
+    let mut failures = BTreeMap::new();
     let mut put = |fixture: &str, pair: &str, a: Side, b: Side| {
         reports.insert(
             (fixture.to_string(), pair.to_string()),
             compare(pair, &a, &b, rules),
         );
     };
+    let mut fail = |fixture: &str, pair: &str, why: &str| {
+        failures.insert((fixture.to_string(), pair.to_string()), why.to_string());
+    };
 
     // Both DWG readers over each save.
     for s in SAVES {
         let o = model1::load_frozen("oracle", s)?;
-        let r = &rust[s];
-        put(
-            s,
-            "oracle/acadrust",
-            Side { engine: "oracle", fixture: s, records: &o },
-            Side { engine: "acadrust", fixture: s, records: r },
-        );
+        match &rust[s] {
+            Ok(r) => put(
+                s,
+                "oracle/acadrust",
+                Side { engine: "oracle", fixture: s, records: &o },
+                Side { engine: "acadrust", fixture: s, records: r },
+            ),
+            Err(why) => fail(s, "oracle/acadrust", why),
+        }
     }
 
     // All three over each DXF twin, and each DWG reader's DXF against its own
@@ -129,17 +144,25 @@ fn compute(rules: &Rules) -> Result<Run, String> {
     for (twin, save) in TWINS {
         let ez = model1::load_frozen("ezdxf", twin)?;
         let o = model1::load_frozen("oracle", twin)?;
-        let r = &rust[twin];
         let o_dwg = model1::load_frozen("oracle", save)?;
-        let r_dwg = &rust[save];
         let side = |engine: &'static str, records| Side { engine, fixture: twin, records };
         put(twin, "ezdxf/oracle", side("ezdxf", &ez), side("oracle", &o));
-        put(twin, "ezdxf/acadrust", side("ezdxf", &ez), side("acadrust", r));
-        put(twin, "oracle/acadrust", side("oracle", &o), side("acadrust", r));
         put(twin, "dxf-dwg:oracle", side("oracle", &o), side("oracle", &o_dwg));
-        put(twin, "dxf-dwg:acadrust", side("acadrust", r), side("acadrust", r_dwg));
+        match (&rust[twin], &rust[save]) {
+            (Ok(r), Ok(r_dwg)) => {
+                put(twin, "ezdxf/acadrust", side("ezdxf", &ez), side("acadrust", r));
+                put(twin, "oracle/acadrust", side("oracle", &o), side("acadrust", r));
+                put(twin, "dxf-dwg:acadrust", side("acadrust", r), side("acadrust", r_dwg));
+            }
+            (a, b) => {
+                let why = a.as_ref().err().or(b.as_ref().err()).unwrap();
+                for pair in ["ezdxf/acadrust", "oracle/acadrust", "dxf-dwg:acadrust"] {
+                    fail(twin, pair, why);
+                }
+            }
+        }
     }
-    Ok(Run { reports })
+    Ok(Run { reports, failures })
 }
 
 fn gate<T>(r: Result<T, String>) -> Option<T> {
@@ -190,11 +213,14 @@ fn the_run_agrees_with_the_committed_verdicts() {
         Err(_) if regen => Table::default(),
         Err(e) => panic!("{}: {e}", verdicts_path().display()),
     };
-    let actual: BTreeMap<(String, String), (String, String)> = run
+    let mut actual: BTreeMap<(String, String), (String, String)> = run
         .reports
         .iter()
         .map(|(k, r)| (k.clone(), (r.verdict().to_string(), r.first())))
         .collect();
+    for k in run.failures.keys() {
+        actual.insert(k.clone(), ("OPEN_FAILED".to_string(), String::new()));
+    }
     let issues: BTreeMap<(String, String), String> = run
         .reports
         .iter()
