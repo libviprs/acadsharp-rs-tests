@@ -609,11 +609,6 @@ fn one_changed_segment_length_is_red_and_names_the_entry_and_the_index() {
     let name = changed.expect("a linetype with at least two segments");
     let after = compare("oracle/acadrust", &side(id, &oracle), &theirs, &rules);
     let key = format!("linetype/{name}.segments[1].length");
-    assert_eq!(
-        after.red().len(),
-        before_red + 1,
-        "{}",
-        after.first()
-    );
+    assert_eq!(after.red().len(), before_red + 1, "{}", after.first());
     assert!(after.red().iter().any(|f| f.key == key), "{key}");
 }
