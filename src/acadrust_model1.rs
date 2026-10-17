@@ -10,7 +10,7 @@
 use acadrust::document::CadDocument;
 use acadrust::types::Color;
 
-use crate::model1::{Header, Record, Value};
+use crate::model1::{Header, Layer, Record, Value};
 
 fn color(c: &Color) -> i64 {
     // The schema's rule for a colour held in an int variable: the AutoCAD colour
@@ -253,9 +253,41 @@ pub fn header_records(doc: &CadDocument) -> Vec<Record> {
     out
 }
 
+/// One `layer` record per LAYER entry (docs/MODEL_1.md): the fields by the DXF
+/// code they come from, with the colour as an index or -1 for a true colour.
+pub fn layer_records(doc: &CadDocument) -> Vec<Record> {
+    doc.layers
+        .iter()
+        .map(|l| {
+            let (color, true_color) = match l.color {
+                Color::Rgb { r, g, b } => (
+                    -1,
+                    (i64::from(r) << 16) | (i64::from(g) << 8) | i64::from(b),
+                ),
+                other => (other.index().map_or(-1, i64::from), -1),
+            };
+            let flags = i64::from(l.flags.frozen)
+                | (i64::from(l.flags.frozen_in_new_viewport) << 1)
+                | (i64::from(l.flags.locked) << 2);
+            Record::Layer(Layer {
+                name: l.name.clone(),
+                flags,
+                color,
+                true_color,
+                on: !l.flags.off,
+                linetype: l.line_type.clone(),
+                lineweight: i64::from(l.line_weight.value()),
+                plot: l.is_plottable,
+            })
+        })
+        .collect()
+}
+
 /// What `emit-acadrust` writes beside the schema 1 stream.
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
-    header_records(doc)
+    let mut all = header_records(doc);
+    all.extend(layer_records(doc));
+    all
 }
 
 /// Read a DWG or a DXF and render its model-1 stream.
