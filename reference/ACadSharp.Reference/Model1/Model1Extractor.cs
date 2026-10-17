@@ -59,6 +59,7 @@ public static class Model1Extractor
         var records = new List<Model1Record>();
         ExtractHeader(document, records);
         ExtractLayers(document, records);
+        ExtractLinetypes(document, records);
         return records;
     }
 
@@ -142,6 +143,37 @@ public static class Model1Extractor
                 ("linetype", NumericFormatting.Quoted(layer.LineType?.Name ?? string.Empty)),
                 ("lineweight", NumericFormatting.Whole((short)layer.LineWeight)),
                 ("plot", layer.PlotFlag ? "true" : "false")));
+        }
+    }
+
+    private static void ExtractLinetypes(CadDocument document, List<Model1Record> records)
+    {
+        foreach (LineType linetype in document.LineTypes)
+        {
+            string name = linetype.Name ?? string.Empty;
+            var segments = new List<string>();
+            foreach (LineType.Segment segment in linetype.Segments)
+            {
+                segments.Add("{"
+                    + "\"length\":" + NumericFormatting.Real(segment.Length)
+                    + ",\"flags\":" + NumericFormatting.Whole((long)segment.Flags)
+                    + ",\"shape_number\":" + NumericFormatting.Whole(segment.ShapeNumber)
+                    + ",\"scale\":" + NumericFormatting.Real(segment.Scale)
+                    + ",\"rotation\":" + NumericFormatting.Real(segment.Rotation)
+                    + ",\"offset\":[" + NumericFormatting.Real(segment.Offset.X) + "," + NumericFormatting.Real(segment.Offset.Y) + "]"
+                    + ",\"text\":" + NumericFormatting.Quoted(NumericFormatting.NormalizeLineEndings(segment.Text))
+                    + ",\"style\":" + NumericFormatting.Quoted(segment.Style?.Name ?? string.Empty)
+                    + "}");
+            }
+
+            records.Add(Model1Record.Of(
+                "linetype",
+                name,
+                ("name", NumericFormatting.Quoted(name)),
+                ("description", NumericFormatting.Quoted(NumericFormatting.NormalizeLineEndings(linetype.Description))),
+                ("alignment", NumericFormatting.Whole(linetype.Alignment)),
+                ("pattern_length", NumericFormatting.Real(linetype.PatternLength)),
+                ("segments", "[" + string.Join(',', segments) + "]")));
         }
     }
 

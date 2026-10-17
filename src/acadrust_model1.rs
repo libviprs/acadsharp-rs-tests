@@ -286,10 +286,74 @@ pub fn layer_records(doc: &CadDocument) -> Vec<Record> {
         .collect()
 }
 
+/// One `linetype` record per LTYPE entry (docs/MODEL_1.md). The flags of a
+/// segment are rebuilt from what acadrust holds as typed data: 1 for an absolute
+/// rotation, 2 for embedded text, 4 for an embedded shape. The style is resolved
+/// from its handle through the text style table.
+pub fn linetype_records(doc: &CadDocument) -> Vec<Record> {
+    use acadrust::tables::LineTypeComplexContent;
+    doc.line_types
+        .iter()
+        .map(|lt| {
+            let segments = lt
+                .elements
+                .iter()
+                .map(|e| match &e.complex {
+                    None => vec![
+                        Value::Double(e.length),
+                        Value::Int(0),
+                        Value::Int(0),
+                        Value::Double(1.0),
+                        Value::Double(0.0),
+                        Value::Point2([0.0, 0.0]),
+                        Value::Str(String::new()),
+                        Value::Str(String::new()),
+                    ],
+                    Some(c) => {
+                        let (kind, shape, text) = match &c.content {
+                            LineTypeComplexContent::Shape { shape_number } => {
+                                (4, i64::from(*shape_number), String::new())
+                            }
+                            LineTypeComplexContent::Text { text } => (2, 0, text.clone()),
+                        };
+                        let style = doc
+                            .text_styles
+                            .iter()
+                            .find(|t| t.handle == c.style_handle)
+                            .map(|t| t.name.clone())
+                            .unwrap_or_default();
+                        vec![
+                            Value::Double(e.length),
+                            Value::Int(kind | i64::from(c.absolute_rotation)),
+                            Value::Int(shape),
+                            Value::Double(c.scale),
+                            Value::Double(c.rotation),
+                            Value::Point2(c.offset),
+                            Value::Str(text),
+                            Value::Str(style),
+                        ]
+                    }
+                })
+                .collect();
+            Record::Entry(Entry::new(
+                "linetype",
+                lt.name.clone(),
+                vec![
+                    Value::Str(lt.description.clone()),
+                    Value::Int(i64::from(u32::from(lt.alignment))),
+                    Value::Double(lt.pattern_length),
+                    Value::List(segments),
+                ],
+            ))
+        })
+        .collect()
+}
+
 /// What `emit-acadrust` writes beside the schema 1 stream.
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     let mut all = header_records(doc);
     all.extend(layer_records(doc));
+    all.extend(linetype_records(doc));
     all
 }
 

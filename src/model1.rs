@@ -101,6 +101,18 @@ pub const SCHEMAS: &[Schema] = &[Schema {
     ],
 }];
 
+/// One segment of a linetype's pattern, in file order.
+const SEGMENT: &[(&str, Ty)] = &[
+    ("length", Ty::Double),
+    ("flags", Ty::Int),
+    ("shape_number", Ty::Int),
+    ("scale", Ty::Double),
+    ("rotation", Ty::Double),
+    ("offset", Ty::Point2),
+    ("text", Ty::Str),
+    ("style", Ty::Str),
+];
+
 pub fn schema(kind: &str) -> Option<&'static Schema> {
     SCHEMAS.iter().find(|s| s.kind == kind)
 }
