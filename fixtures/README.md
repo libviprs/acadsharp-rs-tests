@@ -292,8 +292,12 @@ Where this differs from the issue text (#12), and why:
   formats an ordinate's 120 as `35°`; the generator authors those three texts
   (see `DimensionFields.cs`). `Measurement` has no setter, so a "measured value"
   is the points that give it.
-- **`large_entity_count`.** The streaming half (peak RSS during a native decode)
-  needs the native lane and is not in the claim test.
+- **`large_entity_count`.** The streaming half (RSS during a native decode) is
+  `tests/native_streaming.rs`, with `native_streaming_control.rs` as its control.
+  It asserts growth *after a warm-up of twelve batches* is under four batches,
+  not growth from the post-open RSS: measured, the first decode ramps about
+  10 MiB over ten batches and is then flat, so a post-open bound would measure
+  the runtime warming up and not the stream.
 
 Nothing here claims the crate fixes an upstream bug. The differential shows that
 Rust matches the pinned reference; an intentional deviation would get its own
