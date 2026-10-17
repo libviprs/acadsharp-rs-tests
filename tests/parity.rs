@@ -265,6 +265,7 @@ fn the_run_agrees_with_the_committed_verdicts() {
 
     // The digest table for this archive on this target: reproduced exactly when
     // there is one, written when asked to, noted when there is not.
+    let mut digest_failure: Option<String> = None;
     if let Some(d) = &digests {
         let committed = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("parity")
@@ -278,12 +279,13 @@ fn the_run_agrees_with_the_committed_verdicts() {
             let want =
                 digest::parse(&text).unwrap_or_else(|e| panic!("{}: {e}", committed.display()));
             let diff = digest::differences(&want, &d.rows);
-            assert!(
-                diff.is_empty(),
-                "emit-acadsharp no longer reproduces {}:\n  {}",
-                committed.display(),
-                diff.join("\n  ")
-            );
+            if !diff.is_empty() {
+                digest_failure = Some(format!(
+                    "emit-acadsharp no longer reproduces {}:\n  {}",
+                    committed.display(),
+                    diff.join("\n  ")
+                ));
+            }
         } else {
             eprintln!(
                 "note: no digest table {} for this archive on this target",
@@ -356,6 +358,10 @@ fn the_run_agrees_with_the_committed_verdicts() {
         "parity/VERDICTS.toml:\n  {}",
         refusals.join("\n  ")
     );
+    // After the verdicts, so a moved row is what the log leads with.
+    if let Some(f) = digest_failure {
+        panic!("{f}");
+    }
 }
 
 // ---- the properties of the test itself ------------------------------------------------
