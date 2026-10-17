@@ -257,3 +257,17 @@ pub fn header_records(doc: &CadDocument) -> Vec<Record> {
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     header_records(doc)
 }
+
+/// Read a DWG or a DXF and render its model-1 stream.
+pub fn render(bytes: &[u8], dxf: bool) -> Result<String, String> {
+    let doc = if dxf {
+        acadrust::io::dxf::DxfReader::from_reader(std::io::Cursor::new(bytes.to_vec()))
+            .and_then(|r| r.read())
+            .map_err(|e| format!("acadrust could not read this DXF: {e}"))?
+    } else {
+        acadrust::io::dwg::DwgReader::from_stream(std::io::Cursor::new(bytes.to_vec()))
+            .read()
+            .map_err(|e| format!("acadrust could not read this file: {e}"))?
+    };
+    crate::model1::render_stream(&model1_records(&doc))
+}

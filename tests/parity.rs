@@ -396,8 +396,190 @@ fn compute() -> Result<(Computed, Option<Digests>), String> {
             )?;
         }
     }
+    // R5.1: AutoCAD's own DXF, read by the oracle, acadrust and ezdxf. The twin of
+    // a DWG keeps its handles, so each reader's DXF reading is held against its
+    // own DWG reading of the same save, ASCII against binary, and reader against
+    // reader. acadsharp-rs is EXCLUDED: its C ABI opens DWG only.
+    dxf_lane(&mut computed, &tables, &out, rust, &oracles, &held)?;
+
     let digests = digests(&out)?;
     Ok((computed, digests))
+}
+
+// ---- the DXF lane (R5.1) --------------------------------------------------------------
+
+/// One DXF input as the three readers that open DXF read it.
+struct DxfReadings {
+    oracle: Side,
+    acadrust: Emitted,
+    ezdxf: Side,
+}
+
+/// The inputs the lane covers: every DXF the oracle reads. The two AC1009 files
+/// are R5.2's (the oracle cannot read R12 into schema 1 yet, which is their
+/// `no_reference` row), so they are not in this lane.
+fn dxf_inputs() -> Vec<&'static fixtures::OracleInput> {
+    fixtures::oracle_inputs()
+        .iter()
+        .filter(|i| i.no_reference.is_none())
+        .collect()
+}
+
+fn oracle_dxf_side(i: &fixtures::OracleInput) -> Result<Side, String> {
+    let bytes = i
+        .load_reference_jsonl()
+        .map_err(|e| format!("{}: the oracle's frozen DXF reading is missing: {e}", i.id))?;
+    let text = String::from_utf8(bytes).map_err(|e| e.to_string())?;
+    let records = parse_stream(&text).map_err(|e| format!("{}: {e}", i.id))?;
+    Ok(Side {
+        label: format!("oracle-dxf:{}", i.id),
+        stream: Stream::new(records),
+    })
+}
+
+fn dxf_lane(
+    computed: &mut Computed,
+    tables: &BTreeMap<String, acadsharp_rs_tests::compare::ClassTable>,
+    out: &Path,
+    rust: &str,
+    oracles: &BTreeMap<String, Side>,
+    held: &BTreeMap<(&'static str, String), Emitted>,
+) -> Result<(), String> {
+    let inputs = dxf_inputs();
+    // acadrust over each DXF, a few at a time; the comparisons stay sequential.
+    let next = std::sync::atomic::AtomicUsize::new(0);
+    let runs: std::sync::Mutex<BTreeMap<usize, Result<Emitted, String>>> =
+        std::sync::Mutex::new(BTreeMap::new());
+    std::thread::scope(|s| {
+        for _ in 0..4 {
+            s.spawn(|| {
+                loop {
+                    let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    let Some(input) = inputs.get(i) else { break };
+                    let r = emit(rust, "acadrust", &input.id, out);
+                    runs.lock().unwrap().insert(i, r);
+                }
+            });
+        }
+    });
+    let mut runs = runs.into_inner().unwrap();
+    let mut read: BTreeMap<String, DxfReadings> = BTreeMap::new();
+    for (i, input) in inputs.iter().enumerate() {
+        let gt = fixtures::ground_truth(&input.id)
+            .ok_or_else(|| format!("{}: no ezdxf ground truth", input.id))?;
+        read.insert(
+            input.id.clone(),
+            DxfReadings {
+                oracle: oracle_dxf_side(input)?,
+                acadrust: runs.remove(&i).expect("every input was run")?,
+                ezdxf: ezdxf_side(gt)?,
+            },
+        );
+    }
+
+    for input in &inputs {
+        let r = &read[&input.id];
+        let id = input.id.as_str();
+        // Reader against reader on the DXF, the pairs the DWG has.
+        put(
+            computed,
+            tables,
+            id,
+            "dxf:oracle/acadrust",
+            Ok(&r.oracle),
+            as_ref(&r.acadrust),
+            None,
+        )?;
+        put(
+            computed,
+            tables,
+            id,
+            "dxf:ezdxf/oracle",
+            Ok(&r.ezdxf),
+            Ok(&r.oracle),
+            None,
+        )?;
+        put(
+            computed,
+            tables,
+            id,
+            "dxf:ezdxf/acadrust",
+            Ok(&r.ezdxf),
+            as_ref(&r.acadrust),
+            None,
+        )?;
+        // Each reader's DXF against its own DWG reading of the same drawing.
+        if let Some(twin) = &input.for_fixture {
+            let o_dwg = oracles
+                .get(twin)
+                .ok_or_else(|| format!("{id}: its DWG twin {twin} is not a fixture"))?;
+            let a_dwg = held
+                .get(&("acadrust", twin.clone()))
+                .ok_or_else(|| format!("{twin}: no acadrust run"))?;
+            put(
+                computed,
+                tables,
+                id,
+                "dxf-dwg:oracle",
+                Ok(&r.oracle),
+                Ok(o_dwg),
+                None,
+            )?;
+            put(
+                computed,
+                tables,
+                id,
+                "dxf-dwg:acadrust",
+                as_ref(&r.acadrust),
+                as_ref(a_dwg),
+                None,
+            )?;
+            computed.insert(
+                (id.to_string(), "dxf-dwg:acadsharp".to_string()),
+                (Verdict::Excluded.to_string(), String::new(), String::new()),
+            );
+        }
+    }
+
+    // ASCII against binary, per reader, one row per save.
+    for ascii in inputs
+        .iter()
+        .filter(|i| i.encoding.as_deref() == Some("ascii"))
+    {
+        let binary_id = ascii.id.replace("-ascii", "-binary");
+        let (Some(a), Some(b)) = (read.get(&ascii.id), read.get(&binary_id)) else {
+            continue;
+        };
+        let save = ascii.id.replace("-ascii", "");
+        put(
+            computed,
+            tables,
+            &save,
+            "dxf-ascii-binary:oracle",
+            Ok(&a.oracle),
+            Ok(&b.oracle),
+            None,
+        )?;
+        put(
+            computed,
+            tables,
+            &save,
+            "dxf-ascii-binary:acadrust",
+            as_ref(&a.acadrust),
+            as_ref(&b.acadrust),
+            None,
+        )?;
+        put(
+            computed,
+            tables,
+            &save,
+            "dxf-ascii-binary:ezdxf",
+            Ok(&a.ezdxf),
+            Ok(&b.ezdxf),
+            None,
+        )?;
+    }
+    Ok(())
 }
 
 #[test]
@@ -666,5 +848,95 @@ fn a_base_with_one_row_moved_is_red_and_names_that_row() {
         plain.status.success(),
         "{}",
         String::from_utf8_lossy(&plain.stderr)
+    );
+}
+
+// ---- the DXF lane's positive control (R5.1) -----------------------------------------------
+
+/// R3.4's control, run through this lane: in a scratch copy of AutoCAD's own
+/// twin, move the first LINE's group 10 by 1.0 (the extractor test in
+/// `tools/ground_truth/tests` does the same to the file ezdxf reads). The lane's
+/// DXF-against-DWG row for that twin must then leave the verdict the file
+/// committed, and name a line. Without it the lane could be comparing a reading
+/// with itself and nobody would know.
+#[test]
+fn a_moved_coordinate_in_a_scratch_copy_of_a_twin_turns_its_dxf_against_dwg_row_red() {
+    use acadsharp_rs_tests::acadrust_emit::{extract_bytes, extract_dxf_bytes};
+    use acadsharp_rs_tests::fixtures::ManifestFile;
+
+    let twin = fixtures::oracle_inputs()
+        .iter()
+        .find(|i| i.id == "dxf-sample-ac1015-ascii")
+        .expect("the AC1015 ASCII twin");
+    let dwg = fixtures::by_id(twin.for_fixture.as_deref().unwrap())
+        .unwrap()
+        .load()
+        .unwrap();
+    let text = String::from_utf8(twin.load().unwrap()).expect("an ASCII DXF is text");
+
+    let mut lines: Vec<String> = text.lines().map(str::to_string).collect();
+    let mut in_line = false;
+    let mut moved = None;
+    for i in (0..lines.len().saturating_sub(1)).step_by(2) {
+        let (code, value) = (lines[i].trim().to_string(), lines[i + 1].trim().to_string());
+        if code == "0" {
+            in_line = value == "LINE";
+        } else if in_line && code == "10" {
+            let x: f64 = value.parse().unwrap();
+            lines[i + 1] = format!("{}", x + 1.0);
+            moved = Some(i);
+            break;
+        }
+    }
+    assert!(moved.is_some(), "no LINE with a group 10 in the twin");
+    let scratch = lines.join("\n") + "\n";
+    assert_ne!(scratch, text, "the mutation has to change the file");
+
+    let side = |label: &str, e: acadsharp_rs_tests::emit::Emission| {
+        let sidecar = Sidecar::parse(
+            &acadsharp_rs_tests::canonical::render_sidecar(&e.sidecar),
+            &e.records,
+        )
+        .unwrap();
+        Side {
+            label: label.into(),
+            stream: Stream {
+                records: e.records,
+                sidecar: Some(sidecar),
+            },
+        }
+    };
+    let tables = tables::load_all().unwrap();
+    let dwg_side = side("acadrust-dwg", extract_bytes(&dwg).unwrap());
+    let judge = |label: &str, bytes: &[u8]| {
+        let dxf = side(label, extract_dxf_bytes(bytes).unwrap());
+        judge_pair(&twin.id, "dxf-dwg:acadrust", &dxf, &dwg_side, &tables).unwrap()
+    };
+    let untouched = judge("acadrust-dxf", text.as_bytes());
+    let mutated = judge("acadrust-dxf-scratch", scratch.as_bytes());
+
+    let committed = Table::parse(&std::fs::read_to_string(verdicts_path()).unwrap()).unwrap();
+    let row = committed.by_key()[&(twin.id.clone(), "dxf-dwg:acadrust".to_string())]
+        .verdict
+        .clone();
+    assert_eq!(
+        untouched.verdict.to_string(),
+        row,
+        "the control starts from the committed row"
+    );
+    assert_ne!(
+        mutated.verdict.to_string(),
+        row,
+        "a moved coordinate must move the verdict"
+    );
+    assert!(
+        matches!(mutated.verdict, Verdict::Diff(n) if n >= 1),
+        "{:?}",
+        mutated.verdict
+    );
+    assert!(
+        mutated.red.iter().any(|f| f.contains("line.")),
+        "the finding names the line: {:?}",
+        mutated.red
     );
 }

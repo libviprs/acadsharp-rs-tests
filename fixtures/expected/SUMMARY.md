@@ -97,3 +97,34 @@ not the entity counts a DWG inspector would show.
 | parity_insert | AC1032 | 10 | 0 | 0 | 1 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 2 | 5 |
 | parity_hatch | AC1032 | 11 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 2 | 5 |
 | parity_viewport | AC1032 | 15 | 0 | 0 | 1 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 4 | 7 |
+
+## DXF inputs
+
+The oracle's reading of AutoCAD's own DXF, one row per `[[oracle_input]]`.
+
+| input | version | records | arc | circle | document | ellipse | line | point | polygon | polyline | spline | text | view | warning |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| dxf-blockalignmentparameter | AC1032 | 36 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 31 |
+| dxf-blockbasepointparameter | AC1032 | 36 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 31 |
+| dxf-blockflipparameter | AC1032 | 39 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 3 | 31 |
+| dxf-blocklinearparameter | AC1032 | 37 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 31 |
+| dxf-blocklookupparameter | AC1032 | 47 | 0 | 0 | 1 | 0 | 8 | 0 | 0 | 4 | 0 | 0 | 3 | 31 |
+| dxf-blockpointparameter | AC1032 | 45 | 0 | 3 | 1 | 0 | 6 | 0 | 0 | 0 | 0 | 0 | 3 | 32 |
+| dxf-blockpolarparameter | AC1032 | 39 | 0 | 2 | 1 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 3 | 31 |
+| dxf-blockrotationparameter | AC1032 | 51 | 0 | 4 | 1 | 0 | 12 | 0 | 0 | 0 | 0 | 0 | 3 | 31 |
+| dxf-blockvisibilityparameter | AC1032 | 47 | 0 | 3 | 1 | 0 | 4 | 0 | 0 | 5 | 0 | 0 | 3 | 31 |
+| dxf-blockxyparameter | AC1032 | 56 | 0 | 21 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 31 |
+| dxf-geoloc | AC1032 | 37 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 33 |
+| dxf-geoloc-ac1021 | AC1021 | 36 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 32 |
+| dxf-sample-ac1015-ascii | AC1015 | 3559 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 3262 |
+| dxf-sample-ac1015-binary | AC1015 | 3559 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 3262 |
+| dxf-sample-ac1018-ascii | AC1018 | 3559 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 3262 |
+| dxf-sample-ac1018-binary | AC1018 | 3559 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 3262 |
+| dxf-sample-ac1021-ascii | AC1021 | 393 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 96 |
+| dxf-sample-ac1021-binary | AC1021 | 393 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 96 |
+| dxf-sample-ac1024-ascii | AC1024 | 397 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 100 |
+| dxf-sample-ac1024-binary | AC1024 | 397 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 100 |
+| dxf-sample-ac1027-ascii | AC1027 | 398 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 101 |
+| dxf-sample-ac1027-binary | AC1027 | 398 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 101 |
+| dxf-sample-ac1032-ascii | AC1032 | 398 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 101 |
+| dxf-sample-ac1032-binary | AC1032 | 398 | 3 | 15 | 1 | 1 | 118 | 40 | 15 | 29 | 2 | 69 | 4 | 101 |

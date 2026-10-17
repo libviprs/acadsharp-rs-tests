@@ -100,6 +100,11 @@ REFERENCE_KEYS = (
 )
 INT_KEYS = frozenset({"reference_schema", "svg_schema"})
 
+# What an `[[oracle_input]]` (a DXF) row carries: the same keys without the SVG.
+# The oracle's DXF readings are frozen beside the DWG ones, but nothing draws
+# them, so there is nothing to hash on the visual side.
+DXF_KEYS = tuple(k for k in REFERENCE_KEYS if not k.startswith(("reference_svg", "svg_")))
+
 # Record names that count as drawable. A reference holding zero of them cannot
 # fail a differential, so it is refused rather than accepted as "the drawing was
 # empty".
@@ -154,9 +159,19 @@ def pinned_sdk_version() -> str | None:
     return json.loads(GLOBAL_JSON.read_text(encoding="utf-8")).get("sdk", {}).get("version")
 
 
+def frozen_inputs(manifest: dict) -> list[dict]:
+    """The `[[oracle_input]]` rows the oracle reads and freezes. A row with
+    `no_reference = "<reason>"` is one it cannot read into schema 1 yet, and says why."""
+    return [r for r in manifest.get("oracle_input", []) if not r.get("no_reference")]
+
+
 def render_reference_block(values: dict[str, object]) -> list[str]:
+    """The keys this tool owns, in its order. A DXF input has no SVG, so a key a
+    row does not carry is not written (a DWG fixture carries all of them)."""
     lines = []
     for key in REFERENCE_KEYS:
+        if key not in values:
+            continue
         value = values[key]
         if key in INT_KEYS:
             lines.append(f"{key} = {int(value)}")
@@ -279,7 +294,7 @@ def run(command: list[str], *, what: str) -> None:
 def verify_inputs(manifest: dict) -> list[str]:
     """Every DWG is the file the manifest froze, before anything is generated."""
     problems = []
-    for fixture in manifest["fixture"]:
+    for fixture in [*manifest["fixture"], *manifest.get("oracle_input", [])]:
         path = FIXTURE_DIR / fixture["file"]
         if not path.is_file():
             problems.append(f"{fixture['id']}: {path} is missing")
@@ -345,7 +360,7 @@ def report_difference(fixture_id: str, old: dict, new: dict, diff_lines: int) ->
             print(line)
 
 
-def write_summary(entries: list[dict]) -> str:
+def write_summary(entries: list[dict], dxf_entries: list[dict] | None = None) -> str:
     """The committed census, so a reviewer sees what moved without decompressing."""
     lines = [
         "# Reference output summary",
@@ -375,6 +390,22 @@ def write_summary(entries: list[dict]) -> str:
         row += [str(counts.get(name, 0)) for name in names]
         lines.append("| " + " | ".join(row) + " |")
     lines.append("")
+    if dxf_entries:
+        lines += [
+            "## DXF inputs",
+            "",
+            "The oracle's reading of AutoCAD's own DXF, one row per `[[oracle_input]]`.",
+            "",
+        ]
+        dxf_names = sorted({name for entry in dxf_entries for name in entry["counts"]})
+        lines.append("| input | version | records | " + " | ".join(dxf_names) + " |")
+        lines.append("|" + "---|" * (3 + len(dxf_names)))
+        for entry in dxf_entries:
+            counts = entry["counts"]
+            row = [entry["id"], entry["acad_version"], str(sum(counts.values()))]
+            row += [str(counts.get(name, 0)) for name in dxf_names]
+            lines.append("| " + " | ".join(row) + " |")
+        lines.append("")
     return "\n".join(lines)
 
 
@@ -437,6 +468,20 @@ def command_regenerate(args: argparse.Namespace) -> int:
                 return 1
             print(f"  {refusal['id']}: refused with {refusal['oracle_exit']} "
                   f"({refusal['oracle_exit_code']}), as the row says")
+
+        # AutoCAD's own DXF, one file at a time in single-file mode: the oracle
+        # picks DwgReader or DxfReader by extension.
+        for source in frozen_inputs(manifest):
+            command = dotnet + ["run", "--no-build", "--no-restore", "-c", "Release",
+                                "--project", "reference/ACadSharp.Reference", "--",
+                                f"fixtures/{source['file']}",
+                                "--jsonl", f"{staging_arg}/{source['id']}{JSONL_SUFFIX}"]
+            print(f"$ {' '.join(command)}")
+            got = subprocess.run(command, cwd=ROOT, check=False).returncode
+            if got != 0:
+                print(f"error: {source['id']}: the oracle exited {got} reading a DXF it is "
+                      "expected to read", file=sys.stderr)
+                return 1
 
         entries = []
         changed = []
@@ -513,7 +558,43 @@ def command_regenerate(args: argparse.Namespace) -> int:
             changed.append(fixture_id)
             report_difference(fixture_id, old, new, args.diff_lines)
 
-        summary = write_summary(entries)
+        dxf_entries = []
+        for source in frozen_inputs(manifest):
+            source_id = source["id"]
+            jsonl_path = staging / (source_id + JSONL_SUFFIX)
+            if not jsonl_path.is_file():
+                print(f"error: {source_id}: the oracle produced no artefact", file=sys.stderr)
+                return 1
+            jsonl = jsonl_path.read_bytes()
+            counts = record_census(jsonl)
+            problems = check_stream(source_id, source, jsonl, container="dxf")
+            if problems:
+                for problem in problems:
+                    print(f"error: {problem}", file=sys.stderr)
+                return 1
+            new = {"jsonl": jsonl, "jsonl_sha": sha256_bytes(jsonl), "counts": counts}
+            dxf_entries.append({
+                "id": source_id,
+                "acad_version": json.loads(jsonl.decode("utf-8").splitlines()[0])["acad_version"],
+                "counts": counts,
+            })
+            per_fixture[source_id] = {
+                "reference_jsonl": f"expected/{source_id}{ZST_SUFFIX}",
+                "reference_jsonl_uncompressed_sha256": new["jsonl_sha"],
+                "acadsharp_reference_version": acadsharp,
+                "acadsharp_reference_commit": manifest["upstream"]["commit"],
+                "dotnet_sdk": sdk,
+                "reference_schema": REFERENCE_SCHEMA,
+            }
+            old = read_committed(source_id)
+            if old.get("jsonl_sha") == new["jsonl_sha"]:
+                print(f"  {source_id}: unchanged ({sum(counts.values())} records)")
+                continue
+            changed.append(source_id)
+            report_difference(source_id, old, {**new, "svg_sha": "<none: a DXF has no SVG>"},
+                              args.diff_lines)
+
+        summary = write_summary(entries, dxf_entries)
         if SUMMARY.is_file() and SUMMARY.read_text(encoding="utf-8") != summary:
             if not changed:
                 changed.append("SUMMARY.md")
@@ -541,13 +622,16 @@ def command_regenerate(args: argparse.Namespace) -> int:
             svg = (staging / (fixture_id + SVG_SUFFIX)).read_bytes()
             (EXPECTED_DIR / (fixture_id + ZST_SUFFIX)).write_bytes(compress(jsonl))
             (EXPECTED_DIR / (fixture_id + SVG_SUFFIX)).write_bytes(svg)
+        for source in frozen_inputs(manifest):
+            jsonl = (staging / (source["id"] + JSONL_SUFFIX)).read_bytes()
+            (EXPECTED_DIR / (source["id"] + ZST_SUFFIX)).write_bytes(compress(jsonl))
         SUMMARY.write_text(summary, encoding="utf-8")
         MANIFEST.write_text(
             rewrite_manifest(MANIFEST.read_text(encoding="utf-8"), per_fixture),
             encoding="utf-8",
         )
         print()
-        print(f"accepted: wrote {len(manifest['fixture'])} reference pairs, SUMMARY.md and the manifest rows")
+        print(f"accepted: wrote {len(manifest['fixture'])} reference pairs, {len(frozen_inputs(manifest))} DXF readings, SUMMARY.md and the manifest rows")
         return 0
 
 
@@ -653,6 +737,47 @@ def command_verify(args: argparse.Namespace) -> int:
         if fixture["svg_schema"] != SVG_SCHEMA:
             problems.append(f"{fixture_id}: svg_schema {fixture['svg_schema']} is not {SVG_SCHEMA}")
 
+    dxf_entries = []
+    for source in manifest.get("oracle_input", []):
+        source_id = source["id"]
+        if source.get("no_reference"):
+            if any(key in source for key in DXF_KEYS):
+                problems.append(f"{source_id}: says it has no reference ({source['no_reference']!r}) "
+                                "and carries reference fields too")
+            continue
+        missing = [key for key in DXF_KEYS if key not in source]
+        if missing:
+            problems.append(f"{source_id}: a DXF input with no frozen oracle reading "
+                            f"(missing {missing})")
+            continue
+        zst = FIXTURE_DIR / source["reference_jsonl"]
+        if not zst.is_file():
+            problems.append(f"{source_id}: {zst} is missing")
+            continue
+        try:
+            jsonl = decompress(zst.read_bytes())
+        except zstd.ZstdError as error:
+            problems.append(f"{source_id}: {zst} does not decompress: {error}")
+            continue
+        got = sha256_bytes(jsonl)
+        if got != source["reference_jsonl_uncompressed_sha256"]:
+            problems.append(f"{source_id}: uncompressed JSONL sha256 is {got}, manifest froze "
+                            f"{source['reference_jsonl_uncompressed_sha256']}")
+        problems.extend(check_stream(source_id, source, jsonl, container="dxf"))
+        if acadsharp and source["acadsharp_reference_version"] != acadsharp:
+            problems.append(f"{source_id}: says ACadSharp {source['acadsharp_reference_version']} "
+                            f"but packages.lock.json locks {acadsharp}")
+        if sdk and source["dotnet_sdk"] != sdk:
+            problems.append(f"{source_id}: says SDK {source['dotnet_sdk']} but global.json pins {sdk}")
+        if source["acadsharp_reference_commit"] != upstream_commit:
+            problems.append(f"{source_id}: acadsharp_reference_commit is not upstream.commit")
+        checked += 1
+        dxf_entries.append({
+            "id": source_id,
+            "acad_version": json.loads(jsonl.decode("utf-8").splitlines()[0])["acad_version"],
+            "counts": record_census(jsonl),
+        })
+
     if checked == 0:
         problems.append(
             "no fixture carried reference fields, so every per-fixture check above ran over "
@@ -660,7 +785,7 @@ def command_verify(args: argparse.Namespace) -> int:
         )
 
     if entries:
-        expected_summary = write_summary(entries)
+        expected_summary = write_summary(entries, dxf_entries)
         if not SUMMARY.is_file():
             problems.append(f"{SUMMARY} is missing")
         elif SUMMARY.read_text(encoding="utf-8") != expected_summary:
@@ -679,7 +804,7 @@ def command_verify(args: argparse.Namespace) -> int:
     return 0
 
 
-def check_stream(fixture_id: str, fixture: dict, jsonl: bytes) -> list[str]:
+def check_stream(fixture_id: str, fixture: dict, jsonl: bytes, container: str = "dwg") -> list[str]:
     """The properties a reference has to have to be worth comparing against."""
     problems = []
     text = jsonl.decode("utf-8")
@@ -704,7 +829,12 @@ def check_stream(fixture_id: str, fixture: dict, jsonl: bytes) -> list[str]:
     first = records[0]
     if first.get("record") != "document":
         problems.append(f"{fixture_id}: the first record is {first.get('record')!r}, not 'document'")
-    elif first.get("acad_version") != fixture["acad_version"]:
+    elif first.get("format") != container:
+        problems.append(
+            f"{fixture_id}: the document record says format {first.get('format')!r}, "
+            f"expected {container!r}"
+        )
+    elif fixture.get("acad_version") and first.get("acad_version") != fixture["acad_version"]:
         problems.append(
             f"{fixture_id}: the document record says {first.get('acad_version')!r} but the "
             f"manifest says {fixture['acad_version']!r}"

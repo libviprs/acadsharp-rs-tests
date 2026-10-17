@@ -634,6 +634,13 @@ fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
         referenced.extend(f.reference_jsonl_path());
         referenced.extend(f.reference_svg_path());
     }
+    // The oracle's frozen reading of a DXF is claimed by the `[[oracle_input]]`
+    // row it is a reading of (R5.1).
+    for i in fixtures::oracle_inputs() {
+        if let Some(r) = &i.reference_jsonl {
+            referenced.insert(root.join(r));
+        }
+    }
     // The ezdxf ground truths are claimed by their own rows, which carry the
     // hashes (R3.4).
     for g in fixtures::ground_truths() {

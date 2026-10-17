@@ -219,6 +219,42 @@ class StreamChecks(unittest.TestCase):
         self.assertTrue(any("is not JSON" in p for p in problems), problems)
 
 
+class DxfInputs(unittest.TestCase):
+    """The oracle's reading of AutoCAD's own DXF (R5.1, #27)."""
+
+    DXF = (
+        '{"schema":1,"record":"document","format":"dxf","acad_version":"AC1032"}\n'
+        '{"schema":1,"record":"view","index":0,"name":"Model","kind":"model"}\n'
+        '{"schema":1,"record":"line","view":0,"x1":0.0}\n'
+    )
+
+    def check(self, text: str, container: str = "dxf") -> list[str]:
+        return tool.check_stream("dx", {"acad_version": "AC1032"}, text.encode(), container=container)
+
+    def test_a_dxf_reading_that_says_dxf_is_healthy(self):
+        self.assertEqual(self.check(self.DXF), [])
+
+    def test_a_dxf_reading_that_says_dwg_is_caught(self):
+        problems = self.check(self.DXF.replace('"dxf"', '"dwg"'))
+        self.assertTrue(any("format" in p for p in problems), problems)
+
+    def test_a_dwg_reading_is_still_checked_as_a_dwg(self):
+        self.assertTrue(self.check(self.DXF, container="dwg"))
+
+    def test_a_row_with_no_reference_is_not_frozen_and_the_rest_are(self):
+        manifest = {"oracle_input": [
+            {"id": "a"},
+            {"id": "b", "no_reference": "R12"},
+        ]}
+        self.assertEqual([r["id"] for r in tool.frozen_inputs(manifest)], ["a"])
+
+    def test_a_dxf_row_is_written_without_svg_keys(self):
+        self.assertFalse(any(k.startswith(("reference_svg", "svg_")) for k in tool.DXF_KEYS))
+        values = {k: ("1" if k in tool.INT_KEYS else "x") for k in tool.DXF_KEYS}
+        rendered = tool.render_reference_block(values)
+        self.assertEqual(len(rendered), len(tool.DXF_KEYS))
+
+
 class Reporting(unittest.TestCase):
     def test_the_census_counts_by_record_name(self):
         counts = tool.record_census(StreamChecks.GOOD.encode("utf-8"))
