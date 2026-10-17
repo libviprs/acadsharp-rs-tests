@@ -40,7 +40,8 @@ use std::collections::BTreeMap;
 use serde::Deserialize;
 
 use crate::compare::{
-    ClassTable, Engine, Exclusion, KnownDivergence, Pair, RecordKey, Scope, Val, WarningRow,
+    BOUNDED, BOUNDED_TIGHT, Class, ClassTable, Engine, Exclusion, KnownDivergence, Pair, RecordKey,
+    Scope, Val, WarningRow,
 };
 
 const TABLES: &str = include_str!("../parity/TABLES.toml");
@@ -63,6 +64,41 @@ pub fn parse_pair(s: &str) -> Result<Pair, String> {
         return Ok(Pair::new(e, e));
     }
     Ok(Pair::new(engine(a)?, engine(b)?))
+}
+
+/// A table key: [`parse_pair`]'s spellings, and the three that name the DXF lane
+/// (R5.1), each with the float class it is judged by.
+///
+/// - `dxf:a/b` is reader against reader on AutoCAD's DXF, the class the same
+///   pair has on the DWG.
+/// - `dxf-dwg:e` is one reader's DXF reading against its own DWG reading of the
+///   same save. `BOUNDED` whichever reader it is: a DXF holds sixteen digits, a
+///   DWG the raw double, and the oracle's own `BOUNDED_TIGHT` is a bound for two
+///   flatteners over one reader, not for two containers.
+/// - `dxf-ascii-binary:e` is one reader's ASCII reading against its binary
+///   reading. `BOUNDED_TIGHT`: sixteen digits against the raw doubles.
+pub fn parse_key(s: &str) -> Result<(Pair, Option<Class>), String> {
+    let engine = |e: &str| match e {
+        "oracle" => Ok(Engine::Oracle),
+        "acadrust" => Ok(Engine::Acadrust),
+        "ezdxf" => Ok(Engine::Ezdxf),
+        other => Err(format!("{other:?} is not an engine that reads DXF")),
+    };
+    if let Some(e) = s.strip_prefix("dxf-dwg:") {
+        let e = engine(e)?;
+        return Ok((Pair::new(e, e), Some(Class::Bounded)));
+    }
+    if let Some(e) = s.strip_prefix("dxf-ascii-binary:") {
+        let e = engine(e)?;
+        return Ok((Pair::new(e, e), Some(Class::BoundedTight)));
+    }
+    if let Some(rest) = s.strip_prefix("dxf:") {
+        let (a, b) = rest
+            .split_once('/')
+            .ok_or_else(|| format!("{s:?} is not dxf:a/b"))?;
+        return Ok((Pair::new(engine(a)?, engine(b)?), None));
+    }
+    Ok((parse_pair(s)?, None))
 }
 
 /// The spelling [`parse_pair`] reads.
@@ -146,7 +182,7 @@ pub fn load(text: &str) -> Result<BTreeMap<String, ClassTable>, String> {
     let file: File = toml::from_str(text).map_err(|e| format!("parity/TABLES.toml: {e}"))?;
     let mut tables: BTreeMap<String, ClassTable> = BTreeMap::new();
     for w in &file.warnings {
-        let pair = parse_pair(&w.pair)?;
+        let (pair, class) = parse_key(&w.pair)?;
         let row = if w.compare {
             WarningRow::Compare
         } else {
@@ -155,10 +191,15 @@ pub fn load(text: &str) -> Result<BTreeMap<String, ClassTable>, String> {
                 issue: w.issue.clone(),
             }
         };
-        if tables
-            .insert(w.pair.clone(), ClassTable::for_pair(pair, row))
-            .is_some()
-        {
+        let mut table = ClassTable::for_pair(pair, row);
+        match class {
+            Some(Class::Bounded) => (table.class, table.tolerance) = (Class::Bounded, BOUNDED),
+            Some(Class::BoundedTight) => {
+                (table.class, table.tolerance) = (Class::BoundedTight, BOUNDED_TIGHT)
+            }
+            _ => {}
+        }
+        if tables.insert(w.pair.clone(), table).is_some() {
             return Err(format!("the warnings row for {} appears twice", w.pair));
         }
     }

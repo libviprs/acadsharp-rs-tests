@@ -333,3 +333,29 @@ unsupported kinds (the oracle warns about them too, and wire 2's warning has no
 entity handle), the POINTs (libviprs-dep#83), the kinds the published viprs.1
 archive does not lower, and the four attribute handles. A finding with no row is
 red, and so is a row with no finding.
+
+## The DXF lane (R5.1)
+
+Three readers open a DXF: the oracle (ACadSharp's `DxfReader`, chosen by
+extension in `DocumentExtractor`), acadrust (`emit-acadrust` takes an
+`[[oracle_input]]` id as well as a fixture id, and acadrust tells ASCII, binary and
+the pre-AC1012 group codes apart on its own) and ezdxf (R3.4, unchanged). The
+oracle's reading of each DXF is frozen beside the DWG ones (`reference_jsonl` on
+the `[[oracle_input]]` row, written by `tools/regenerate_reference.py regenerate
+--accept` and checked by `verify`). acadsharp-rs is not a reader here: its C ABI
+opens DWG only, so each of its cells is `EXCLUDED` with that reason.
+
+The lane covers the 24 DXFs the oracle reads. The two AC1009 files are R5.2's: the
+oracle reads R12 into a document with no layouts, so its extractor finds no view,
+and the row says so (`no_reference`). AC1014 has no DXF twin (the save script wrote
+none), so it has no cell.
+
+| pair key | what it holds | float class |
+|---|---|---|
+| `dxf:oracle/acadrust`, `dxf:ezdxf/oracle`, `dxf:ezdxf/acadrust` | reader against reader on one DXF | as for the same pair on the DWG |
+| `dxf-dwg:oracle`, `dxf-dwg:acadrust` | a reader's DXF against its own DWG reading of the same drawing | `BOUNDED` |
+| `dxf-ascii-binary:oracle`, `dxf-ascii-binary:acadrust`, `dxf-ascii-binary:ezdxf` | a reader's ASCII against its binary reading of the same save | `BOUNDED_TIGHT` |
+
+The positive control is R3.4's: `a_moved_coordinate_in_a_scratch_copy_of_a_twin_...`
+in `tests/parity.rs` moves one LINE's group 10 in a scratch copy of the AC1015
+twin and requires the `dxf-dwg:acadrust` verdict to leave the committed one.
