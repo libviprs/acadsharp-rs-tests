@@ -68,6 +68,16 @@ g13_wide_spline	00e9b63335174249a2fe645296ec8467e51aa5ca5d7fa1b82074fe4695723e63
 g13_wipeout	9ee31bba8a8adc0f95b1ee5e1386743d84580400db8db277248137ee7d1038cc	19	document=1,view=2,warning=16
 g13_xref	27707306b4a2c278bce485e74f998d3c60e2e30a26c71976ac11900f4bbc6a53	15	document=1,view=2,warning=12
 g13_xref_long	27707306b4a2c278bce485e74f998d3c60e2e30a26c71976ac11900f4bbc6a53	15	document=1,view=2,warning=12
+parity_arc	906ffb79e722dad3dbfd560a686e2b4e1579e112cc71917596e06eeec04f16ee	15	arc=2,document=1,view=2,warning=10
+parity_circle	e12225cb202487cd27caadeb19a343fbce1f54c3bc2dd8108e258e2520663bc3	15	circle=2,document=1,view=2,warning=10
+parity_ellipse	fc6874fe4f1a4cb457d5057e6d98e360c3c279ed78d2d2f3d7cbea5ec0d39005	15	document=1,ellipse=2,view=2,warning=10
+parity_hatch	a8461415f881221624e4ec70fb8dc3c5c5aa9529a4d1f4d9773ec5eeb31cb93d	16	document=1,polygon=3,view=2,warning=10
+parity_insert	5765cb2cf5f5afcc72d9ca761137542772c0ce25606dc7214fd853620f3c38bf	15	document=1,line=2,view=2,warning=10
+parity_line	aa8f891b57fc9ca7c7949197d5a6eb7c8767b2f34e176c71d0978957b95c9843	15	document=1,line=2,view=2,warning=10
+parity_polyline	a59ccd11f4ba1e2de6bf1a7221007925995063039572a38c57df97d79a983080	17	document=1,polyline=4,view=2,warning=10
+parity_spline	f82e9d33cf1f829781dd86b07bcd269272a4996ddee68bc60ab0fd24e88daed8	15	document=1,spline=2,view=2,warning=10
+parity_text	04c17a0ba1e031e79cfa2d0a253e3f3d0cf406cb9cb6f77b4c7f28609bb8910a	18	document=1,line=1,text=4,view=2,warning=10
+parity_viewport	db21253723a6f8363f8f12eeec484e17ff42373d5f8891da2dcb3866d3397e95	28	document=1,line=3,view=4,warning=20
 regression_bulge	4defea1d206c661267c1c46dd74a84eeffad9a1b68cb103e8a849816c03479bd	14	document=1,polyline=1,view=2,warning=10
 regression_dimension_fields	e9bd580917253f9e0c912463be85a199c043d48515c41285585e25bc4fbef94d	52	document=1,line=16,text=7,view=2,warning=26
 regression_hatch_loops	b2be0017eb2b1060b0a7d0c34094c6b72c132fca0927c49ffdd35762d579f82c	16	document=1,polygon=3,view=2,warning=10
