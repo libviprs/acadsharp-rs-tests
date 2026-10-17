@@ -22,7 +22,7 @@ use std::process::Command;
 use acadsharp_rs_tests::model1::{
     self, Disposition, FindingKind, Record, Report, Rules, Side, compare,
 };
-use acadsharp_rs_tests::verdict::{Row, Table, Verdict};
+use acadsharp_rs_tests::verdict::{Row, Table};
 
 const SAVES: [&str; 7] = [
     "acadsharp-ac1014",
