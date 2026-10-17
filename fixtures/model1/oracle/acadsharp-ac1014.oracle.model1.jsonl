@@ -119,7 +119,7 @@
 {"model":1,"record":"header","name":"$FACETRES","type":"double","value":0.5}
 {"model":1,"record":"header","name":"$FILLETRAD","type":"double","value":0.0}
 {"model":1,"record":"header","name":"$FILLMODE","type":"int","value":1}
-{"model":1,"record":"header","name":"$FINGERPRINTGUID","type":"string","value":"816ea3c3-feba-4b8a-bf43-e23a437a4eb4"}
+{"model":1,"record":"header","name":"$FINGERPRINTGUID","type":"string","value":""}
 {"model":1,"record":"header","name":"$HALOGAP","type":"int","value":0}
 {"model":1,"record":"header","name":"$HANDSEED","type":"string","value":"12C7"}
 {"model":1,"record":"header","name":"$HIDETEXT","type":"int","value":0}
@@ -208,10 +208,8 @@
 {"model":1,"record":"header","name":"$SURFV","type":"int","value":6}
 {"model":1,"record":"header","name":"$TDCREATE","type":"double","value":2459632.9743402777}
 {"model":1,"record":"header","name":"$TDINDWG","type":"double","value":0.40239583333333334}
-{"model":1,"record":"header","name":"$TDUCREATE","type":"double","value":2461331.223733553}
 {"model":1,"record":"header","name":"$TDUPDATE","type":"double","value":2461012.935648148}
 {"model":1,"record":"header","name":"$TDUSRTIMER","type":"double","value":0.40239583333333334}
-{"model":1,"record":"header","name":"$TDUUPDATE","type":"double","value":2461331.223733553}
 {"model":1,"record":"header","name":"$TEXTSIZE","type":"double","value":0.5}
 {"model":1,"record":"header","name":"$TEXTSTYLE","type":"string","value":"STANDARD"}
 {"model":1,"record":"header","name":"$THICKNESS","type":"double","value":0.0}
@@ -242,7 +240,7 @@
 {"model":1,"record":"header","name":"$USERR4","type":"double","value":0.0}
 {"model":1,"record":"header","name":"$USERR5","type":"double","value":0.0}
 {"model":1,"record":"header","name":"$USRTIMER","type":"int","value":1}
-{"model":1,"record":"header","name":"$VERSIONGUID","type":"string","value":"22690fd1-8c25-44af-89d4-7e854a0500b7"}
+{"model":1,"record":"header","name":"$VERSIONGUID","type":"string","value":""}
 {"model":1,"record":"header","name":"$VISRETAIN","type":"int","value":1}
 {"model":1,"record":"header","name":"$WORLDVIEW","type":"int","value":1}
 {"model":1,"record":"header","name":"$XCLIPFRAME","type":"int","value":2}

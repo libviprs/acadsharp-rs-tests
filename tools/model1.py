@@ -170,18 +170,25 @@ def is_handle_code(code: int) -> bool:
     return 320 <= code <= 369 or 390 <= code <= 399 or 480 <= code <= 481
 
 
+# ezdxf stamps these with the time of the read (it keeps its own creation date
+# current), so the value is the moment the extraction ran and a frozen file
+# would move on every freeze. Left out and listed with the others.
+UNSTABLE = {"$TDCREATE"}
+
+
 def header_lines(doc) -> tuple[list[tuple[str, str, str]], list[str]]:
     """The header records, and the names of the variables with no written form.
 
     A variable stored under a handle code (a material, a visual style) is the
     handle of an object, and handles stay out of the compared stream, so it has
-    no record. It is not dropped quietly: the names come back as the second value
+    no record; one ezdxf stamps with the time of the read (UNSTABLE) cannot be
+    frozen. Neither is dropped quietly: the names come back as the second value
     and are committed beside the stream.
     """
     out = []
     skipped = []
     for name, var in doc.header.hdrvars.items():
-        if is_handle_code(int(var.code)):
+        if is_handle_code(int(var.code)) or name in UNSTABLE:
             skipped.append(name)
             continue
         value = var.value

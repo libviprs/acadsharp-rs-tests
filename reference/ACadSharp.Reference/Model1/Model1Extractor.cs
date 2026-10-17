@@ -67,6 +67,15 @@ public static class Model1Extractor
         // header's variables that carries the DXF name and the DXF codes.
         foreach (string name in CadHeader.GetHeaderMap().Keys)
         {
+            // ACadSharp initialises these two to the time of the read and its DWG
+            // reader never sets them, so their value is the moment the oracle ran
+            // and a frozen file would move on every freeze. Not written, and listed
+            // as excluded for the oracle in parity/MODEL1.toml.
+            if (name is "$TDUCREATE" or "$TDUUPDATE")
+            {
+                continue;
+            }
+
             Dictionary<DxfCode, object>? values = header.GetValues(name);
             if (values is null || values.Count == 0)
             {
@@ -81,6 +90,13 @@ public static class Model1Extractor
                 "point3" => Point(values, 3),
                 _ => HeaderValue(name, type, values.Values.First()),
             };
+
+            // A GUID a version does not store is a fresh random one per read, which
+            // cannot be frozen, so it is written empty. R14 files hold neither.
+            if (name is "$VERSIONGUID" or "$FINGERPRINTGUID" && header.Version < ACadVersion.AC1015)
+            {
+                value = NumericFormatting.Quoted(string.Empty);
+            }
 
             records.Add(Model1Record.Of(
                 "header",

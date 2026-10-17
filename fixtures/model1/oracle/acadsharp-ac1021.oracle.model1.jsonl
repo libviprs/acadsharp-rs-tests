@@ -208,10 +208,8 @@
 {"model":1,"record":"header","name":"$SURFV","type":"int","value":6}
 {"model":1,"record":"header","name":"$TDCREATE","type":"double","value":2459632.932673611}
 {"model":1,"record":"header","name":"$TDINDWG","type":"double","value":0.40239583333333334}
-{"model":1,"record":"header","name":"$TDUCREATE","type":"double","value":2461331.2237460185}
 {"model":1,"record":"header","name":"$TDUPDATE","type":"double","value":2461012.8939814814}
 {"model":1,"record":"header","name":"$TDUSRTIMER","type":"double","value":0.40239583333333334}
-{"model":1,"record":"header","name":"$TDUUPDATE","type":"double","value":2461331.2237460185}
 {"model":1,"record":"header","name":"$TEXTSIZE","type":"double","value":0.5}
 {"model":1,"record":"header","name":"$TEXTSTYLE","type":"string","value":"Standard"}
 {"model":1,"record":"header","name":"$THICKNESS","type":"double","value":0.0}
