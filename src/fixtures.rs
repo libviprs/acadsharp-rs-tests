@@ -523,6 +523,163 @@ pub struct Recording {
 }
 manifest_file!(Recording);
 
+/// Decompress `path` (a zstd frame) and check the sha256 of what came out.
+fn read_packed(id: &str, path: &std::path::Path, want: &str) -> Result<Vec<u8>, FixtureError> {
+    let compressed = std::fs::read(path).map_err(|source| FixtureError::Unreadable {
+        id: id.to_string(),
+        path: path.to_path_buf(),
+        source,
+    })?;
+    let mut decoder =
+        ruzstd::decoding::StreamingDecoder::new(compressed.as_slice()).map_err(|e| {
+            FixtureError::Corrupt {
+                id: id.to_string(),
+                detail: format!("{} is not a zstd frame: {e}", path.display()),
+            }
+        })?;
+    let mut data = Vec::new();
+    std::io::Read::read_to_end(&mut decoder, &mut data).map_err(|e| FixtureError::Corrupt {
+        id: id.to_string(),
+        detail: format!("{} did not decompress: {e}", path.display()),
+    })?;
+    let got = format!("{:x}", Sha256::digest(&data));
+    if got != want {
+        return Err(FixtureError::Corrupt {
+            id: id.to_string(),
+            detail: format!(
+                "{} hashes to {got} uncompressed, the manifest froze {want}",
+                path.display()
+            ),
+        });
+    }
+    Ok(data)
+}
+
+/// A drawing one library wrote from another drawing (R5.3): the output of a
+/// round-trip cell. Stored compressed, hashed uncompressed, and read back by the
+/// same loader discipline as everything else in the corpus.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Written {
+    pub id: String,
+    /// `acadsharp` or `acadrust`.
+    pub writer: String,
+    /// The `[[fixture]]` this was rewritten from.
+    pub source: String,
+    /// `dwg`, `dxf-ascii` or `dxf-binary`.
+    pub container: String,
+    /// The version written, for example `AC1015`.
+    pub version: String,
+    /// The compressed output, relative to `fixtures/`. Empty on a row whose
+    /// writer failed.
+    #[serde(default)]
+    pub file: String,
+    /// Size and sha256 of the output as the writer wrote it.
+    #[serde(default)]
+    pub bytes: u64,
+    #[serde(default)]
+    pub sha256: String,
+    /// Set, with the writer's own message, when the library could not write this
+    /// output: the absence of a file is then a recorded fact.
+    #[serde(default)]
+    pub write_failed: Option<String>,
+    /// The committed command that produced it.
+    pub generated_by: String,
+    /// The writer library and the version or commit that wrote it.
+    pub writer_version: String,
+    #[serde(default)]
+    pub reference_jsonl: Option<String>,
+    #[serde(default)]
+    pub reference_jsonl_uncompressed_sha256: Option<String>,
+    /// Set, with a reason, on an output the oracle cannot read.
+    #[serde(default)]
+    pub no_reference: Option<String>,
+    #[serde(default)]
+    pub acadsharp_reference_version: Option<String>,
+    #[serde(default)]
+    pub acadsharp_reference_commit: Option<String>,
+    #[serde(default)]
+    pub dotnet_sdk: Option<String>,
+    #[serde(default)]
+    pub reference_schema: Option<u64>,
+}
+
+impl Written {
+    /// Whether the output is stored under `fixtures/written/`. ACadSharp's are
+    /// (nothing offline can make them again); acadrust's are not, because its
+    /// writer is deterministic and the test runs it, then holds the result to
+    /// [`Self::verify`].
+    pub fn is_stored(&self) -> bool {
+        !self.file.is_empty()
+    }
+
+    /// Check bytes a test made against the row's hash: what makes an output the
+    /// test regenerates the output the frozen readings were taken from.
+    pub fn verify(&self, data: &[u8]) -> Result<(), FixtureError> {
+        let got = format!("{:x}", Sha256::digest(data));
+        if got != self.sha256 || data.len() as u64 != self.bytes {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!(
+                    "{} bytes hashing to {got}; the manifest froze {} bytes hashing to {}",
+                    data.len(),
+                    self.bytes,
+                    self.sha256
+                ),
+            });
+        }
+        Ok(())
+    }
+
+    /// The output as the writer wrote it, verified against the manifest. Only
+    /// for a stored output ([`Self::is_stored`]).
+    pub fn load(&self) -> Result<Vec<u8>, FixtureError> {
+        if !self.is_stored() && self.write_failed.is_none() {
+            return Err(FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "a stored file (this output is made by the test)".to_string(),
+            });
+        }
+        if let Some(why) = &self.write_failed {
+            return Err(FixtureError::NoReference {
+                id: self.id.clone(),
+                what: format!("an output (the writer failed: {why})"),
+            });
+        }
+        let data = read_packed(&self.id, &fixture_root().join(&self.file), &self.sha256)?;
+        if data.len() as u64 != self.bytes {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!("{} bytes, manifest says {}", data.len(), self.bytes),
+            });
+        }
+        Ok(data)
+    }
+
+    /// The oracle's frozen reading of the output.
+    pub fn load_reference_jsonl(&self) -> Result<Vec<u8>, FixtureError> {
+        let (Some(relative), Some(want)) = (
+            &self.reference_jsonl,
+            &self.reference_jsonl_uncompressed_sha256,
+        ) else {
+            return Err(FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "reference_jsonl".to_string(),
+            });
+        };
+        read_packed(&self.id, &fixture_root().join(relative), want)
+    }
+
+    /// Every file this row claims, relative to `fixtures/`.
+    pub fn files(&self) -> Vec<&str> {
+        let mut f = Vec::new();
+        if !self.file.is_empty() {
+            f.push(self.file.as_str());
+        }
+        f.extend(self.reference_jsonl.as_deref());
+        f
+    }
+}
+
 /// A file the oracle's inputs are adjudicated against: AutoCAD's own DXF twins.
 #[derive(Debug, Clone, Deserialize)]
 pub struct OracleInput {
@@ -581,32 +738,7 @@ impl OracleInput {
                 what: "reference_jsonl".to_string(),
             });
         };
-        let path = fixture_root().join(relative);
-        let compressed = std::fs::read(&path).map_err(|source| FixtureError::Unreadable {
-            id: self.id.clone(),
-            path: path.clone(),
-            source,
-        })?;
-        let mut decoder =
-            ruzstd::decoding::StreamingDecoder::new(compressed.as_slice()).map_err(|e| {
-                FixtureError::Corrupt {
-                    id: self.id.clone(),
-                    detail: format!("{} is not a zstd frame: {e}", path.display()),
-                }
-            })?;
-        let mut data = Vec::new();
-        std::io::Read::read_to_end(&mut decoder, &mut data).map_err(|e| FixtureError::Corrupt {
-            id: self.id.clone(),
-            detail: format!("{} did not decompress: {e}", path.display()),
-        })?;
-        let got = format!("{:x}", Sha256::digest(&data));
-        if &got != want {
-            return Err(FixtureError::Corrupt {
-                id: self.id.clone(),
-                detail: format!("uncompressed reference sha256 is {got}, manifest froze {want}"),
-            });
-        }
-        Ok(data)
+        read_packed(&self.id, &fixture_root().join(relative), want)
     }
 }
 
@@ -667,20 +799,33 @@ manifest_file!(Refusal);
 #[derive(Debug, Clone, Deserialize)]
 pub struct GroundTruth {
     pub id: String,
-    /// The `[[oracle_input]]` row this is a reading of.
+    /// The `[[oracle_input]]` row this is a reading of, or the `[[written]]` row
+    /// when it is ezdxf's reading of a round-trip output (R5.3).
     pub input: String,
     pub engine: String,
+    #[serde(default)]
     pub jsonl: String,
+    #[serde(default)]
     pub jsonl_uncompressed_sha256: String,
+    #[serde(default)]
     pub sidecar: String,
+    #[serde(default)]
     pub sidecar_uncompressed_sha256: String,
+    #[serde(default)]
     pub run: String,
+    #[serde(default)]
     pub run_sha256: String,
     pub ezdxf_version: String,
+    #[serde(default)]
     pub requirements_sha256: String,
     pub image: String,
+    #[serde(default)]
     pub records: u64,
     pub schema: u64,
+    /// ezdxf's own message when it would not read the file. The row then has no
+    /// files: a writer's output ezdxf rejects is a finding about the writer.
+    #[serde(default)]
+    pub failed: Option<String>,
 }
 
 impl GroundTruth {
@@ -746,9 +891,19 @@ impl GroundTruth {
         Ok(data)
     }
 
-    /// Every file this row claims, relative to the fixture root.
-    pub fn files(&self) -> [&str; 3] {
-        [&self.jsonl, &self.sidecar, &self.run]
+    /// Every file this row claims, relative to the fixture root. None for a
+    /// reading ezdxf failed.
+    pub fn files(&self) -> Vec<&str> {
+        if self.failed.is_some() {
+            return Vec::new();
+        }
+        vec![&self.jsonl, &self.sidecar, &self.run]
+    }
+
+    /// Whether this is ezdxf's reading of a round-trip output and not of one of
+    /// AutoCAD's own DXF.
+    pub fn is_written(&self) -> bool {
+        self.input.starts_with("w-")
     }
 }
 
@@ -763,6 +918,8 @@ struct Manifest {
     recordings: Vec<Recording>,
     #[serde(default, rename = "oracle_input")]
     oracle_inputs: Vec<OracleInput>,
+    #[serde(default, rename = "written")]
+    written: Vec<Written>,
     #[serde(default, rename = "census")]
     censuses: Vec<Census>,
     #[serde(default, rename = "refusal")]
@@ -806,6 +963,16 @@ pub fn recordings() -> &'static [Recording] {
 /// The DXF twins and other inputs the oracle's output is adjudicated against.
 pub fn oracle_inputs() -> &'static [OracleInput] {
     &manifest().oracle_inputs
+}
+
+/// The round-trip outputs (R5.3), in manifest order.
+pub fn written() -> &'static [Written] {
+    &manifest().written
+}
+
+/// One round-trip output by its row id.
+pub fn written_by_id(id: &str) -> Option<&'static Written> {
+    written().iter().find(|w| w.id == id)
 }
 
 /// AutoCAD's recorded object census files.

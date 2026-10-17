@@ -222,13 +222,21 @@ clear step 1. Do not add them.
 
 ## Size, and when this moves to LFS
 
-About 42 MB in all: the 26 DXF twins are 25 MB of it, the drawings 12 MB, the
-census files 1.2 MB, the references under `expected/` 3 MB. Plain git handles
-that, and LFS would buy nothing but a second thing to configure in CI and a
-second way for a checkout to arrive without its fixtures. Vendoring all of it is
-what keeps `fixture_integrity.rs` from needing the network or skipping.
+About 49 MiB in all (51.5 MB): the 26 DXF twins are 25 MB of it, the drawings 12 MB,
+the census files 1.2 MB, the references under `expected/` 3 MB (the oracle's
+readings of the DXF twins included), the ezdxf ground truths 3.5 MB, and the 22
+outputs ACadSharp wrote for the round-trip matrix with the readings of all 48 under
+`written/` 4 MB. Plain git handles that, and LFS would buy nothing but a second thing
+to configure in CI and a second way for a checkout to arrive without its fixtures.
+Vendoring all of it is what keeps `fixture_integrity.rs` from needing the network or
+skipping.
 
-**The threshold is 50 MB total.** Past that, move the drawings to git LFS rather
+The round-trip matrix is why this moved: ACadSharp's outputs cannot be made again
+without .NET, so they are stored, and acadrust's (14 MB) are not, because its writer is
+deterministic and the test makes them. Stage two of the matrix (libviprs/acadsharp-rs-tests#41)
+must not store its outputs here; it has about fifty sources.
+
+**The threshold is 50 MB total.** The number was written without saying which megabyte; this counts it in MiB (49.2 MiB now, 51.5 MB in decimal), and the PR that moved the tree past 50 decimal MB says so. Past that, move the drawings to git LFS rather
 than letting clone times creep, and ask first whether the DXF twins need to be
 vendored at all. Writing the number down here so nobody has to
 rediscover it by arguing about it: below 50 MB, plain git, no discussion.

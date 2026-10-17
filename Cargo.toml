@@ -98,3 +98,9 @@ yaml-rust2 = "0.10"
 name = "emit-acadrust"
 path = "src/bin/emit-acadrust.rs"
 required-features = ["acadrust"]
+
+# acadrust as a writer, for the round-trip matrix (R5.3).
+[[bin]]
+name = "rewrite-acadrust"
+path = "src/bin/rewrite-acadrust.rs"
+required-features = ["acadrust"]

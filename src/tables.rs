@@ -77,6 +77,8 @@ pub fn parse_pair(s: &str) -> Result<Pair, String> {
 ///   flatteners over one reader, not for two containers.
 /// - `dxf-ascii-binary:e` is one reader's ASCII reading against its binary
 ///   reading. `BOUNDED_TIGHT`: sixteen digits against the raw doubles.
+/// - `w-<writer>:<reader>` is the round-trip lane (R5.3), the class the same
+///   engines have on the DWG.
 pub fn parse_key(s: &str) -> Result<(Pair, Option<Class>), String> {
     let engine = |e: &str| match e {
         "oracle" => Ok(Engine::Oracle),
@@ -84,6 +86,27 @@ pub fn parse_key(s: &str) -> Result<(Pair, Option<Class>), String> {
         "ezdxf" => Ok(Engine::Ezdxf),
         other => Err(format!("{other:?} is not an engine that reads DXF")),
     };
+    // `w-<writer>:<reader>`: a reader's reading of a drawing a writer wrote (R5.3),
+    // held against the writer's own reading of the source. The writer's side is
+    // the oracle for ACadSharp and acadrust for acadrust.
+    if let Some(rest) = s.strip_prefix("w-") {
+        let (w, r) = rest
+            .split_once(':')
+            .ok_or_else(|| format!("{s:?} is not w-<writer>:<reader>"))?;
+        let reference = match w {
+            "acadsharp" => Engine::Oracle,
+            "acadrust" => Engine::Acadrust,
+            other => return Err(format!("{other:?} is not a writer")),
+        };
+        let reader = match r {
+            "oracle" => Engine::Oracle,
+            "acadsharp" => Engine::Acadsharp,
+            "acadrust" => Engine::Acadrust,
+            "ezdxf" => Engine::Ezdxf,
+            other => return Err(format!("{other:?} is not a reader")),
+        };
+        return Ok((Pair::new(reference, reader), None));
+    }
     if let Some(e) = s.strip_prefix("dxf-dwg:") {
         let e = engine(e)?;
         return Ok((Pair::new(e, e), Some(Class::Bounded)));

@@ -30,6 +30,7 @@ fn every_dxf_in_the_manifest_has_exactly_one_ground_truth() {
         .collect();
     let truths: Vec<&str> = fixtures::ground_truths()
         .iter()
+        .filter(|g| !g.is_written())
         .map(|g| g.input.as_str())
         .collect();
     assert_eq!(truths.len(), inputs.len(), "one row per DXF");
@@ -74,7 +75,10 @@ fn the_dxf_twins_of_the_dwgs_and_the_r5_inputs_are_all_extracted() {
 
 #[test]
 fn every_file_is_the_one_the_manifest_froze_and_the_strict_parser_reads_it() {
-    for g in fixtures::ground_truths() {
+    for g in fixtures::ground_truths()
+        .iter()
+        .filter(|g| g.failed.is_none())
+    {
         let jsonl =
             String::from_utf8(g.load_jsonl().unwrap_or_else(|e| panic!("{}: {e}", g.id))).unwrap();
         let records = parse_stream(&jsonl).unwrap_or_else(|e| panic!("{}: {e}", g.id));
@@ -89,7 +93,10 @@ fn every_file_is_the_one_the_manifest_froze_and_the_strict_parser_reads_it() {
 #[test]
 fn run_json_carries_the_version_the_requirements_hash_and_the_image_digest() {
     let want = requirements_sha256();
-    for g in fixtures::ground_truths() {
+    for g in fixtures::ground_truths()
+        .iter()
+        .filter(|g| g.failed.is_none())
+    {
         let run: serde_json::Value = serde_json::from_slice(&g.load_run().unwrap()).unwrap();
         assert_eq!(run["ezdxf_version"], "1.4.4", "{}", g.id);
         assert_eq!(
@@ -105,13 +112,15 @@ fn run_json_carries_the_version_the_requirements_hash_and_the_image_digest() {
             g.id
         );
         assert_eq!(run["input"], g.input.as_str());
-        let input = fixtures::oracle_inputs()
-            .iter()
-            .find(|i| i.id == g.input)
-            .unwrap();
+        let input_sha = match fixtures::oracle_inputs().iter().find(|i| i.id == g.input) {
+            Some(i) => i.sha256.as_str(),
+            None => fixtures::written_by_id(&g.input)
+                .unwrap_or_else(|| panic!("{}: no such DXF", g.input))
+                .sha256
+                .as_str(),
+        };
         assert_eq!(
-            run["input_sha256"],
-            input.sha256.as_str(),
+            run["input_sha256"], input_sha,
             "{}: made from other bytes",
             g.id
         );

@@ -28,6 +28,12 @@ pub struct EmitArgs {
     pub fixture: String,
     /// The directory the three files go in.
     pub out: PathBuf,
+    /// `--stdin-as dwg|dxf`: the bytes come on standard input and are this
+    /// kind, and `fixture` is only the name the output files carry. For a
+    /// round-trip output (R5.3), which the test regenerates or loads and hands
+    /// to the reader in a process of its own, so a reader that aborts on a
+    /// writer's malformed file takes only its own cell down.
+    pub stdin_as: Option<String>,
 }
 
 impl EmitArgs {
@@ -35,11 +41,19 @@ impl EmitArgs {
     pub fn parse<I: IntoIterator<Item = String>>(args: I) -> Result<Self, String> {
         let mut fixture = None;
         let mut out = None;
+        let mut stdin_as = None;
         let mut it = args.into_iter();
         while let Some(arg) = it.next() {
             match arg.as_str() {
                 "--fixture" => {
                     fixture = Some(it.next().ok_or("--fixture needs a fixture id")?);
+                }
+                "--stdin-as" => {
+                    let kind = it.next().ok_or("--stdin-as needs dwg or dxf")?;
+                    if kind != "dwg" && kind != "dxf" {
+                        return Err(format!("--stdin-as wants dwg or dxf, got {kind:?}"));
+                    }
+                    stdin_as = Some(kind);
                 }
                 "--out" => {
                     out = Some(PathBuf::from(it.next().ok_or("--out needs a directory")?));
@@ -50,6 +64,7 @@ impl EmitArgs {
         Ok(Self {
             fixture: fixture.ok_or("--fixture <id> is required")?,
             out: out.ok_or("--out <dir> is required")?,
+            stdin_as,
         })
     }
 }
