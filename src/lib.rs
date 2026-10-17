@@ -22,6 +22,7 @@ pub mod canonical;
 pub mod compare;
 pub mod emit;
 pub mod fixtures;
+pub mod fuzz_harness;
 pub mod parity;
 
 #[cfg(test)]
