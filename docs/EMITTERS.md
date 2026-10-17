@@ -228,7 +228,13 @@ archive 24 rows of the published archive's table move, 12 in each acadsharp pair
   `DIFF:55` in the `acadsharp/acadrust` pair for `acadsharp-ac1014` to `ac1018`),
   two more differing records than the published archive has.
 
-The committed table stays the published archive's. The rebuilt lane is held by its
+Both archives have a digest table on x64 and on arm64, and on every fixture the
+x64 and the arm64 table hold the same sha256 for the same archive: the emitters are
+byte-identical across the two architectures. The rebuilt arm64 archive (library
+`744e0ead...`, tarball `5e0280b0...`) was built from the same commit with the same
+recipe on a native arm64 docker host (`--arch arm64`).
+
+The committed verdict table stays the published archive's. The rebuilt lane is held by its
 digest table, which is what a change to either archive has to move.
 
 ## ezdxf
