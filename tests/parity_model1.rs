@@ -781,7 +781,8 @@ fn the_oracle_keeps_the_entries_acadsharp_has_no_class_for() {
         assert!(
             entries
                 .iter()
-                .any(|(k, c)| k == "ACAD_ASSOCPERSSUBENTMANAGER" && c == "ACDBASSOCPERSSUBENTMANAGER"),
+                .any(|(k, c)| k == "ACAD_ASSOCPERSSUBENTMANAGER"
+                    && c == "ACDBASSOCPERSSUBENTMANAGER"),
             "{id}: the oracle lost the root entry ACAD_ASSOCPERSSUBENTMANAGER: {entries:?}"
         );
     }
@@ -902,15 +903,21 @@ fn every_coded_value_is_written_in_the_form_its_group_code_gives() {
                     (Form::Whole, Value::Int(_)) | (Form::Point, Value::Point3(_)) => true,
                     (Form::Handle, Value::Str(s)) => {
                         !s.is_empty()
-                            && s.chars().all(|c| c.is_ascii_digit() || ('A'..='F').contains(&c))
+                            && s.chars()
+                                .all(|c| c.is_ascii_digit() || ('A'..='F').contains(&c))
                     }
                     (Form::Binary, Value::Str(s)) => {
                         s.len() % 2 == 0
-                            && s.chars().all(|c| c.is_ascii_digit() || ('A'..='F').contains(&c))
+                            && s.chars()
+                                .all(|c| c.is_ascii_digit() || ('A'..='F').contains(&c))
                     }
                     _ => false,
                 };
-                assert!(ok, "{engine} {id} {} code {code}: {form:?} but {value:?}", e.name);
+                assert!(
+                    ok,
+                    "{engine} {id} {} code {code}: {form:?} but {value:?}",
+                    e.name
+                );
             }
         }
     }
@@ -1072,9 +1079,16 @@ fn the_standard_style_carries_its_acad_xdata_in_every_reading() {
             }
             _ => None,
         });
-        let key = found.unwrap_or_else(|| panic!("{engine} {id}: no ACAD xdata on the style Standard"));
+        let key =
+            found.unwrap_or_else(|| panic!("{engine} {id}: no ACAD xdata on the style Standard"));
         let values = coded_values(&records, "xdata", &key).unwrap();
-        assert!(values.iter().any(|(c, _)| *c == 1000), "{engine} {id}: {values:?}");
-        assert!(values.iter().any(|(c, _)| *c == 1071), "{engine} {id}: {values:?}");
+        assert!(
+            values.iter().any(|(c, _)| *c == 1000),
+            "{engine} {id}: {values:?}"
+        );
+        assert!(
+            values.iter().any(|(c, _)| *c == 1071),
+            "{engine} {id}: {values:?}"
+        );
     }
 }

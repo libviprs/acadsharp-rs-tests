@@ -678,7 +678,9 @@ pub fn xdata_records(doc: &CadDocument, tree: &DictionaryTree) -> Vec<Record> {
             return;
         };
         let owner = match &node {
-            SemanticNodeV1::Object(ObjectType::Dictionary(d)) => tree.owners.get(&d.handle).cloned(),
+            SemanticNodeV1::Object(ObjectType::Dictionary(d)) => {
+                tree.owners.get(&d.handle).cloned()
+            }
             SemanticNodeV1::Object(ObjectType::DictionaryWithDefault(d)) => {
                 tree.owners.get(&d.handle).cloned()
             }

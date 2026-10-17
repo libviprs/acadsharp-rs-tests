@@ -166,10 +166,7 @@ const XDATA: Schema = Schema {
 /// An XRECORD, keyed by the dictionary path that reaches it.
 const XRECORD: Schema = Schema {
     kind: "xrecord",
-    fields: &[
-        ("cloning", Ty::Int),
-        ("entries", Ty::List(CODED_VALUE)),
-    ],
+    fields: &[("cloning", Ty::Int), ("entries", Ty::List(CODED_VALUE))],
 };
 
 /// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
