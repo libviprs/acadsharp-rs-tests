@@ -500,6 +500,7 @@ pub fn dimstyle_records(doc: &CadDocument) -> Vec<Record> {
             Record::Entry(Entry::new("dimstyle", t.name.clone(), values))
         })
         .collect()
+}
 
 /// The DXF object name of an object in a dictionary: what ACadSharp calls
 /// `ObjectName` and ezdxf `dxftype()`. An object acadrust does not model is

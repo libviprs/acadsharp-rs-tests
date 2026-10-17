@@ -458,6 +458,8 @@ def dimstyle_lines(doc) -> list[tuple[str, str, str]]:
             fields.append(("$" + field, text))
         fields.append(("annotative", "true" if annotative(ds) else "false"))
         out.append(line("dimstyle", name, fields))
+    return out
+
 
 def table_entries(doc):
     """The table entries by the kind the owner paths of docs/MODEL_1.md use."""
