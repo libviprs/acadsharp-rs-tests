@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- acadsharp-rs-tests visual reference, svg schema 1 -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1024" height="1024" preserveAspectRatio="xMidYMid meet" viewBox="-4.175 -3.175 22.1 15.85">
+<rect x="-4.175" y="-3.175" width="22.1" height="15.85" fill="#FFFFFF" stroke="none"/>
+<g fill="none" stroke="#000000" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 16.887912809451862 4.852872306978985 A 5.0 5.0 0 0 0 10.419265817264288 2.7035128658715912"/>
+<path d="M -3.7023425154680973 -1.736912579232785 A 0.75 0.75 0 0 0 -2.3541056871288593 -1.6187906918755561"/>
+</g>
+</svg>

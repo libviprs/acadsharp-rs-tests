@@ -39,9 +39,9 @@ const EXPECTED_VERSIONS: &[&str] = &[
 /// Tier C its stress drawings. The two libviprs-dep `real_*` drawings are the
 /// same bytes as two Tier A saves and are not rows of their own.
 const EXPECTED_TIER_A: usize = 22;
-/// libviprs-dep's 41 plus the seven drawings this repository generates
+/// libviprs-dep's 41 plus the seventeen drawings this repository generates
 /// (`reference/ACadSharp.Generator`, source `generated`).
-const EXPECTED_GENERATED: usize = 7;
+const EXPECTED_GENERATED: usize = 17;
 const EXPECTED_TIER_B: usize = 41 + EXPECTED_GENERATED;
 const EXPECTED_TIER_C: usize = 7;
 /// libviprs-dep's recordings of those drawings (two of them point at Tier A).

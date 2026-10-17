@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- acadsharp-rs-tests visual reference, svg schema 1 -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1024" height="1024" preserveAspectRatio="xMidYMid meet" viewBox="-6.73 -3.23 11.96 11.46">
+<rect x="-6.73" y="-3.23" width="11.96" height="11.46" fill="#FFFFFF" stroke="none"/>
+<g fill="none" stroke="#000000" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="1.0" cy="-2.0" rx="4.0" ry="1.0" transform="rotate(0.0 1.0 -2.0)"/>
+<path d="M -6.316373842835559 6.438276615812609 A 3.0 1.5 -90.0 0 0 -3.7982845766795994 6.795416432311869"/>
+</g>
+</svg>
