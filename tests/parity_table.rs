@@ -144,3 +144,42 @@ fn the_pair_tables_load_and_every_issue_in_them_is_a_repository_and_a_number() {
         }
     }
 }
+
+#[test]
+fn every_dxf_twin_has_a_row_against_each_engine_and_every_save_one_against_itself() {
+    let t = table();
+    let have: BTreeSet<(String, String)> = t.rows.iter().map(Table::key).collect();
+    let mut twins = 0;
+    for gt in fixtures::ground_truths() {
+        let has_dwg = fixtures::oracle_inputs()
+            .iter()
+            .any(|i| i.id == gt.input && i.for_fixture.is_some());
+        if !has_dwg {
+            continue;
+        }
+        twins += 1;
+        for pair in ["ezdxf/oracle", "ezdxf/acadsharp", "ezdxf/acadrust"] {
+            assert!(
+                have.contains(&(gt.input.clone(), pair.to_string())),
+                "no {pair} row for the DXF {}",
+                gt.input
+            );
+        }
+    }
+    assert!(twins >= 20, "only {twins} DXF twins with a DWG twin");
+    for save in [
+        "acadsharp-ac1014",
+        "acadsharp-ac1015",
+        "acadsharp-ac1018",
+        "acadsharp-ac1021",
+        "acadsharp-ac1024",
+        "acadsharp-ac1027",
+    ] {
+        for pair in ["self/oracle", "self/acadsharp", "self/acadrust"] {
+            assert!(
+                have.contains(&(save.to_string(), pair.to_string())),
+                "no {pair} row for {save}"
+            );
+        }
+    }
+}
