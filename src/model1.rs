@@ -693,450 +693,666 @@ pub fn load_frozen(engine: &str, id: &str) -> Result<Vec<Record>, String> {
     let f = files
         .iter()
         .find(|f| f.engine == engine && f.id == id)
-       >­ën®x›Ú×ÛÜ—Ù[ÙJ›Ü›X]J››Èœ›Þ™[ˆÙ[™Ú[™_H[Ù[LHÝ™X[H›ÜˆÚYHŠJOÎÂˆ]]H[Ù[WÙ\Š
-Kš›Ú[Š	™‹œ]
-NÂˆ]ž]\ÈHÝŽ™œÎŽœ™XY
-	œ]
-K›X\Ù\œŠ_›Ü›X]JžßNˆÙ_H‹]™\Ü^J
-JJOÎÂˆ]ÛÝˆÝš[™ÈHÂˆ\ÙHÚLŽŽžÑYÙ\ÝÚLMŸNÂˆÚLMŽŽ™YÙ\Ý
-	˜ž]\ÊBˆš]\Š
-Bˆ›X\
-Ÿ›Ü›X]JžØŽŒžHŠJBˆ˜ÛÛXÝ
-
-BˆNÂˆYˆÛÝOH‹œÚLMˆÂˆ™]\›ˆ\œŠ›Ü›X]JˆžßNˆ\Ú\ÈÈÙÛÝKHX[šY™\Ýœ›Þ™HßH‹ˆ]™\Ü^J
-Kˆ‹œÚLM‚ˆ
-JNÂˆBˆ]^HÝš[™ÎŽ™œ›ÛWÝ]Ž
-ž]\ÊK›X\Ù\œŠ_K×ÜÝš[™Ê
-JOÎÂˆ\œÙWÜÝ™X[J	^
-K›X\Ù\œŠ_›Ü›X]JžßNˆÙ_H‹]™\Ü^J
-JJBŸB‚‹ËËÈHÛÛ[Z]Y\š]KÓSÑSKÛ[‚œXˆ›ˆÛÛ[Z]YÜ[\Ê
-HOˆ™\Ý[[\ËÝš[™ÏˆÂˆ]]HÝŽœ]Ž”]Ž›™]Ê[ˆJÐT‘Ó×ÓPS’Q‘TÕÑTˆŠJBˆš›Ú[Šœ\š]HŠBˆš›Ú[Š“SÑSKÛ[ŠNÂˆ]^HÝŽ™œÎŽœ™XYÝ×ÜÝš[™Ê	œ]
-K›X\Ù\œŠ_›Ü›X]JžßNˆÙ_H‹]™\Ü^J
-JJOÎÂˆ[\ÎŽœ\œÙJ	^
-BŸB‚‹ËÈKKKHÛÛ\\š[™ÈKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKB‚‹ËËÈÚ]Ú[™ÙˆY™™\™[˜ÙHHš[™[™È\Ë‚ˆÖÙ\š]™JXYËÛÛ™K\X[\K\JWBœXˆ[[Hš[™[™ÒÚ[™ÂˆÛ›R[KˆÛ›R[‹ˆ\Kˆ˜[YKŸB‚‹ËËÈÚ]Hš[™[™È[[Ý[ÈÈÛ˜ÙHH[\È]™H™Y[ˆ\YY‚ˆÖÙ\š]™JXYËÛÛ™K\X[\K\JWBœXˆ[[H\ÜÜÚ][ÛˆÂˆËËÈ›Ý[™È^Z[œÈ]ˆX‚ˆ™YˆËËÈH\ÝYY™™\™[˜ÙHžHÛÛœÝXÝ[Û‹‚ˆÛ›ÝÛ‹ˆËËÈH˜[YHÛ™H[™Ú[™HØ[››Ý›ÙXÙK\ÝY‚ˆ^ÛYYŸB‚ˆÖÙ\š]™JXYËÛÛ™JWBœXˆÝXÝš[™[™ÈÂˆXˆÚ[™ˆš[™[™ÒÚ[™ˆXˆÙ^NˆÝš[™ËˆXˆ]Z[ˆÝš[™ËˆXˆ\ÜÜÚ][ÛŽˆ\ÜÜÚ][Û‹ˆËËÈH\ÜÝYHÙˆH›ÝÈ]\ÝÈ]Ú[ˆÛ™HÙ\Ë‚ˆXˆ\ÜÝYNˆÝš[™ËˆËËÈ›Üˆ[ˆ^ÛYYš[™[™ËH[™Ú[™HH›ÝÈ^ÛY\Ë‚ˆXˆ^ÛYYˆÜ[ÛÝš[™Ï‹ŸB‚š[\›]Ž‘\Ü^H›Üˆš[™[™ÈÂˆ›ˆ›]
-	œÙ[‹Žˆ	›]]›]Ž‘›Ü›X]\	×ÏŠHOˆ›]Ž”™\Ý[ÂˆÜš]HJˆ‹ˆšXY\ˆßHßHÞÎßWH‹ˆÙ[‹šÙ^KÙ[‹™]Z[Ù[‹™\ÜÜÚ][Û‚ˆ
-BˆBŸB‚‹ËËÈÚ]Û™HÛÛ\\š\ÛÛˆØ[YHË‚ˆÖÙ\š]™JXYËÛÛ™KY˜][
-WBœXˆÝXÝ™\ÜÂˆXˆš[™[™ÜÎˆ™XÏš[™[™Ï‹ˆËËÈÝÈX[žH˜[Y\ÈÙ\™HÛˆ›ÝÚY\È[™ÛÛ\\™Y‚ˆXˆÛÛ\\™Yˆ\Ú^™KŸB‚š[\™\ÜÂˆXˆ›ˆ™Y
-	œÙ[ŠHOˆ™XÏ	‘š[™[™ÏˆÂˆÙ[‹™š[™[™ÜÂˆš]\Š
-Bˆ™š[\ŠŸ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][ÛŽŽ”™Y
-Bˆ˜ÛÛXÝ
-
-BˆB‚ˆXˆ›ˆ™\™XÝ
-	œÙ[ŠHOˆ™\™XÝÂˆ]™YHÙ[‹œ™Y
-
-K›[Š
-NÂˆYˆ™YˆÂˆ™]\›ˆ™\™XÝŽ‘Y™Š™Y
-NÂˆBˆ]Û›ÝÛˆHÙ[‚ˆ™š[™[™ÜÂˆš]\Š
-Bˆ™š[\ŠŸ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][ÛŽŽ’Û›ÝÛŠBˆ˜ÛÝ[
-
-NÂˆYˆÛ›ÝÛˆˆÂˆ™\™XÝŽ’Û›ÝÛŠÛ›ÝÛŠBˆH[ÙHÂˆ™\™XÝŽ“X]ÚˆBˆB‚ˆËËÈH\ÜÝY\ÈÙˆH›ÝÜÈ]\ÝYHY™™\™[˜ÙK[ˆÜ™\‹Û˜ÙHXXÚ‚ˆXˆ›ˆ\ÜÝY\Ê	œÙ[ŠHOˆÝš[™ÈÂˆ]]]ÙY[Žˆ™XÏ	œÝˆH™XÎŽ›™]Ê
-NÂˆ›Üˆˆ[ˆÙ[‚ˆ™š[™[™ÜÂˆš]\Š
-Bˆ™š[\ŠŸ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][ÛŽŽ’Û›ÝÛŠBˆÂˆYˆY‹š\ÜÝYKš\×Ù[\J
-H	‰ˆ\ÙY[‹˜ÛÛZ[œÊ	™‹š\ÜÝYK˜\×ÜÝŠ
-JHÂˆÙY[‹œ\Ú
-	™‹š\ÜÝYJNÂˆBˆBˆÙY[‹š›Ú[Š‹ŠBˆB‚ˆËËÈHš\œÝš[™[™È]ÛÝ[Ë™[™\™Y›ÜˆH™\™XÝš[K‚ˆXˆ›ˆš\œÝ
-	œÙ[ŠHOˆÝš[™ÈÂˆÙ[‹œ™Y
-
-Bˆ™š\œÝ
-
-Bˆ›X\
-Ÿ‹×ÜÝš[™Ê
-JBˆ›Ü—Ù[ÙJÂˆÙ[‹™š[™[™ÜÂˆš]\Š
-Bˆ™š[™
-Ÿ‹™\ÜÜÚ][ÛˆOH\ÜÜÚ][ÛŽŽ’Û›ÝÛŠBˆ›X\
-Ÿ‹×ÜÝš[™Ê
-JBˆJBˆ[Ü˜\ÛÜ—ÙY˜][
-
-BˆBŸB‚™›ˆØ[YJNˆ	•˜[YKŽˆ	•˜[YJHOˆ›ÛÛÂˆ]HˆNˆ“ÕS‘QÚ][ŠJNÂˆX]Ú
-KŠHÂˆ
-˜[YNŽ‘ÝX›J
-K˜[YNŽ‘ÝX›JJJHOˆ
-
-ž
-žJKˆ
-˜[YNŽ”Ú[Š
-K˜[YNŽ”Ú[ŠJJHOˆš]\Š
-Kžš\
-JK˜[
-
-J_
-
-œ
-œJJKˆ
-˜[YNŽ”Ú[Ê
-K˜[YNŽ”Ú[ÊJJHOˆš]\Š
-Kžš\
-JK˜[
-
-J_
-
-œ
-œJJKˆÈOˆHOH‹ˆBŸB‚‹ËËÈÛ™HÚYHÙˆHÛÛ\\š\ÛÛ‹‚œXˆÝXÝÚYO	ØOˆÂˆXˆ[™Ú[™Nˆ	‰ØHÝ‹ˆXˆš^\™Nˆ	‰ØHÝ‹ˆXˆ™XÛÜ™Îˆ	‰ØHÔ™XÛÜ™KŸB‚‹ËËÈH™XÛÜ™\ÈHÛÛ\\˜]ÜˆÙY\È]ˆÛ™H˜[YH
-HXY\ˆ˜\šXX›JHÜˆH\Ý‹ËËÈÙˆ˜[YYØØ[\ˆX]™\È
-HX›H[žKÚ]]È\ÝÈ[œ›ÛY
-K‚™[[H][HÂˆØØ[\Š˜[YJKˆšY[Ê™XÏ
-Ýš[™Ë˜[YJOŠKŸB‚š[\][HÂˆ›ˆÚÝÊ	œÙ[ŠHOˆÝš[™ÈÂˆX]ÚÙ[ˆÂˆÙ[ŽŽ”ØØ[\ŠŠHOˆ‹œÚÝÊ
-KˆÙ[ŽŽ‘šY[ÊŠHOˆ‚ˆš]\Š
-Bˆ›X\
-
-‹Š_›Ü›X]JžÛŸO^ßH‹‹œÚÝÊ
-JJBˆ˜ÛÛXÝŽ™XÏÏŠ
-Bˆš›Ú[ŠˆŠKˆBˆBŸB‚‹ËËÈHÙ^HH™XÛÜ™\ÈÛÛ\\™Y[™\ÝY[™\ŽˆHˆ˜[YH›ÜˆHXY\‚‹ËËÈ˜\šXX›KÚ[™‹Ï˜[YO˜›Üˆ[ž][™È[ÙK‚™›ˆ][WÚÙ^JŽˆ	”™XÛÜ™
-HOˆÝš[™ÈÂˆX]ÚˆÂˆ™XÛÜ™Ž’XY\Š
-HOˆ›˜[YK˜ÛÛ™J
-Kˆ™XÛÜ™Ž‘[žJJHOˆ›Ü›X]JžßKÞßH‹KšÚ[™K›˜[YJKˆBŸB‚‹ËËÈ[œ›ÛH˜[YH[ÈØØ[\ˆX]™\ÎˆH\Ý\È]È[™Ý˜[YK›[˜[™[‚‹ËËÈ˜[YVÚWK™šY[›ÜˆXXÚ[[Y[‚™›ˆX]™\Ê™Yš^ˆ	œÝ‹Nˆ	•KŽˆ	•˜[YKÝ]ˆ	›]]™XÏ
-Ýš[™Ë˜[YJOŠHÂˆX]Ú
-KŠHÂˆ
-NŽ“\Ý
-šY[ÊK˜[YNŽ“\Ý
-][\ÊJHOˆÂˆÝ]œ\Ú
-
-›Ü›X]JžÜ™Yš^K›[ˆŠK˜[YNŽ’[
-][\Ë›[Š
-H\ÈM
-JJNÂˆ›Üˆ
-K][JH[ˆ][\Ëš]\Š
-K™[[Y\˜]J
-HÂˆ›Üˆ
-
-˜[YKJKŠH[ˆšY[Ëš]\Š
-Kžš\
-][JHÂˆX]™\Ê	™›Ü›X]JžÜ™Yš^VÞÚ_WKžÛ˜[Y_HŠKK‹Ý]
-NÂˆBˆBˆBˆÈOˆÝ]œ\Ú
-
-™Yš^×ÜÝš[™Ê
-K‹˜ÛÛ™J
-JJKˆBŸB‚™›ˆ][WÛÙŠŽˆ	”™XÛÜ™
-HOˆ][HÂˆX]ÚˆÂˆ™XÛÜ™Ž’XY\Š
-HOˆ][NŽ”ØØ[\Š˜[YK˜ÛÛ™J
-JKˆ™XÛÜ™Ž‘[žJJHOˆÂˆ]]]Ý]H™XÎŽ›™]Ê
-NÂˆYˆ]ÛÛYJÊHHØÚ[XJKšÚ[™
-HÂˆ›Üˆ
-
-˜[YKJKŠH[ˆË™šY[Ëš]\Š
-Kžš\
-	™K˜[Y\ÊHÂˆX]™\Ê˜[YKK‹	›]]Ý]
-NÂˆBˆBˆ][NŽ‘šY[ÊÝ]
-BˆBˆBŸB‚‹ËËÈÙ\È]\›˜
-ÚXÚX^HÛ
-˜Ý[™[™È›Üˆ[žH[ˆÙˆÚ\˜XÝ\œÊHX]Ú‹ËËÈ^ÈH^Y\ˆ˜[YH\È]KÛÈH[HX›Ý]]™\žH^Y\‰ÜÈÛÛÝ\ˆ\Â‹ËËÈ^Y\‹Ê‹˜ÛÛÜ˜‚œXˆ›ˆÛØŠ]\›Žˆ	œÝ‹^ˆ	œÝŠHOˆ›ÛÛÂˆ]\Îˆ™XÏ	œÝˆH]\›‹œÜ]
-	Ê‰ÊK˜ÛÛXÝ
-
-NÂˆYˆ\Ë›[Š
-HOHHÂˆ™]\›ˆ]\›ˆOH^ÂˆBˆ]]]™\ÝH^Âˆ›Üˆ
-K\
-H[ˆ\Ëš]\Š
-K™[[Y\˜]J
-HÂˆYˆHOHÂˆX]Ú™\ÝœÝš\Ü™Yš^
-\
-HÂˆÛÛYJŠHOˆ™\ÝH‹ˆ›Û™HOˆ™]\›ˆ˜[ÙKˆBˆH[ÙHYˆHOH\Ë›[Š
-HHHÂˆ™]\›ˆ™\Ý™[™×ÝÚ]
-\
-NÂˆH[ÙHÂˆX]Ú™\Ý™š[™
-\
-HÂˆÛÛYJ]
-HOˆ™\ÝH	œ™\ÝØ]
-È\›[Š
-K‹—Kˆ›Û™HOˆ™]\›ˆ˜[ÙKˆBˆBˆBˆYBŸB‚‹ËËÈÛÛ\\™HÛÈÝ™X[\ÈžHÙ^KˆZ\˜\ÈÜ˜XÛKØXØY\Ý[™ÛÈÛ‹H˜[YB‹ËËÈ\š]KÓSÑSKÛ[›ÝÜÈ\ÙK‚œXˆ›ˆÛÛ\\™JZ\Žˆ	œÝ‹Nˆ	”ÚYKŽˆ	”ÚYK[\Îˆ	”[\ÊHOˆ™\ÜÂˆ][™^HÎˆ	”ÚY_Oˆ•™YSX\Ýš[™Ë][OˆÂˆËœ™XÛÜ™Âˆš]\Š
-Bˆ›X\
-Ÿ
-][WÚÙ^JŠK][WÛÙŠŠJJBˆ˜ÛÛXÝ
-
-BˆNÂˆ]
-XKXŠHH
-[™^
-JK[™^
-ŠJNÂˆ]˜[Y\Îˆ•™YTÙ]	”Ýš[™ÏˆHXKšÙ^\Ê
-K˜ÚZ[ŠX‹šÙ^\Ê
-JK˜ÛÛXÝ
-
-NÂˆ]]]™\ÜH™\ÜŽ™Y˜][
-
-NÂˆ]\ÚH™\Üˆ	›]]™\ÜÚ[™ˆš[™[™ÒÚ[™Ù^NˆÝš[™Ë]Z[ˆÝš[™ßÂˆ]Û›ÝÛˆH[\ËšÛ›ÝÛ—Ù›ÜŠZ\‹K™š^\™K	šÙ^JNÂˆ™\Ü™š[™[™ÜËœ\Ú
-š[™[™ÈÂˆÚ[™ˆÙ^Kˆ]Z[ˆ\ÜÜÚ][ÛŽˆYˆÛ›ÝÛ‹š\×ÜÛÛYJ
-HÂˆ\ÜÜÚ][ÛŽŽ’Û›ÝÛ‚ˆH[ÙHÂˆ\ÜÜÚ][ÛŽŽ”™YˆKˆ\ÜÝYNˆÛ›ÝÛ‹›X\
-ßËš\ÜÝYK˜ÛÛ™J
-JK[Ü˜\ÛÜ—ÙY˜][
-
-Kˆ^ÛYYˆ›Û™KˆJNÂˆNÂˆ]ÛÛ\\™WÝ˜[Y\ÈHˆ	•˜[YKNˆ	•˜[Y_OˆÜ[Û
-š[™[™ÒÚ[™Ýš[™ÊOˆÂˆYˆ\WÛ˜[YJ
-HOHK\WÛ˜[YJ
-HÂˆÛÛYJ
-ˆš[™[™ÒÚ[™Ž•\Kˆ›Ü›X]J\HßHœÈßH‹\WÛ˜[YJ
-KK\WÛ˜[YJ
-JKˆ
-JBˆH[ÙHYˆ\Ø[YJJHÂˆÛÛYJ
-š[™[™ÒÚ[™Ž•˜[YK›Ü›X]JžßHœÈßH‹œÚÝÊ
-KKœÚÝÊ
-JJJBˆH[ÙHÂˆ›Û™BˆBˆNÂˆ›Üˆ˜[YH[ˆ˜[Y\ÈÂˆX]Ú
-XK™Ù]
-˜[YJKX‹™Ù]
-˜[YJJHÂˆ
-ÛÛYJ][NŽ”ØØ[\Š
-JKÛÛYJ][NŽ”ØØ[\ŠJJJHOˆÂˆ™\Ü˜ÛÛ\\™Y
-ÏHNÂˆYˆ]ÛÛYJ
-Ú[™]Z[
-JHHÛÛ\\™WÝ˜[Y\ÊJHÂˆ\Ú
-	›]]™\ÜÚ[™˜[YK˜ÛÛ™J
-K]Z[
-NÂˆBˆBˆ
-ÛÛYJ][NŽ‘šY[Ê
-JKÛÛYJ][NŽ‘šY[ÊJJJHOˆÂˆ™\Ü˜ÛÛ\\™Y
-ÏHNÂˆ]Z\œÎˆ•™YSX\	œÝ‹	•˜[YOˆBˆKš]\Š
-K›X\
-
-ËŠ_
-Ë˜\×ÜÝŠ
-KŠJK˜ÛÛXÝ
-
-NÂˆ›Üˆ
-šY[ž
-H[ˆÂˆËÈHXYˆHÝ\ˆÚYHÙ\È›Ý]™H\È[ˆ[[Y[ÙˆBˆËÈÛ™Ù\ˆ\ÝÚXÚ]È›[˜š[™[™È[™XYHØ^\Ë‚ˆ]ÛÛYJžJHHZ\œË™Ù]
-šY[˜\×ÜÝŠ
-JH[ÙHÂˆÛÛ[YNÂˆNÂˆËÈHšY[Hš[HÙ\È›ÝÝÜ™H\È›ÝH˜[YHÈÛÛ\\™K‚ˆYˆX]Ú\ÈJž˜[YNŽXœÙ[
-HX]Ú\ÈJžK˜[YNŽXœÙ[
-HÂˆ][™Ú[™HHYˆX]Ú\ÈJž˜[YNŽXœÙ[
-HÂˆK™[™Ú[™BˆH[ÙHÂˆ‹™[™Ú[™BˆNÂˆ™\Ü™š[™[™ÜËœ\Ú
-š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™Ž•˜[YKˆÙ^Nˆ›Ü›X]JžÛ˜[Y_KžÙšY[HŠKˆ]Z[ˆ›Ü›X]J›YÝ]ˆHš[HÙ[™Ú[™_H™XYÙ\È›ÝÝÜ™H]ŠKˆ\ÜÜÚ][ÛŽˆ\ÜÜÚ][ÛŽŽ‘^ÛYYˆ\ÜÝYNˆÝš[™ÎŽ›™]Ê
-Kˆ^ÛYYˆÛÛYJ[™Ú[™K×ÜÝš[™Ê
-JKˆJNÂˆÛÛ[YNÂˆBˆËÈHšY[[ˆ[™Ú[™HØ[››Ý›ÙXÙH\ÈÜš][ˆ\È]È™\›ÂˆËÈ˜[YH\™H[™YÝ]ÙˆHÛÛ\\š\ÛÛ‹[™BˆËÈ™\ÜÛÝ[È]‚ˆ]XYˆH›Ü›X]JžÛ˜[Y_KžÙšY[HŠNÂˆ]YÛÝ]HØK—Kš[×Ú]\Š
-K™š[™ÛX\
-ÚY_Âˆ[\Âˆ™^ÛYYÙ›ÜŠÚYK™[™Ú[™KÚYK™š^\™K	›XYŠBˆ›X\
-_
-ÚYK™[™Ú[™KKš\ÜÝYK˜ÛÛ™J
-JJBˆJNÂˆYˆ]ÛÛYJ
-[™Ú[™K\ÜÝYJJHHYÛÝ]Âˆ™\Ü™š[™[™ÜËœ\Ú
-š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™Ž•˜[YKˆÙ^NˆXY‹ˆ]Z[ˆ›Ü›X]J›YÝ]ˆÙ[™Ú[™_HØ[››Ý›ÙXÙH]ŠKˆ\ÜÜÚ][ÛŽˆ\ÜÜÚ][ÛŽŽ‘^ÛYYˆ\ÜÝYKˆ^ÛYYˆÛÛYJ[™Ú[™K×ÜÝš[™Ê
-JKˆJNÂˆÛÛ[YNÂˆBˆYˆ]ÛÛYJ
-Ú[™]Z[
-JHHÛÛ\\™WÝ˜[Y\ÊžžJHÂˆ\Ú
-	›]]™\ÜÚ[™›Ü›X]JžÛ˜[Y_KžÙšY[HŠK]Z[
-NÂˆBˆBˆBˆ
-ÛÛYJ
-K›Û™JHOˆÂˆ]^ÛYYH[\Ë™^ÛYYÙ›ÜŠ‹™[™Ú[™K‹™š^\™K˜[YJNÂˆ™\Ü™š[™[™ÜËœ\Ú
-š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™Ž“Û›R[KˆÙ^Nˆ˜[YK˜ÛÛ™J
-Kˆ]Z[ˆ›Ü›X]JžÛ˜[Y_HHßHÛˆßK›ÝÛˆßH‹œÚÝÊ
-KK™[™Ú[™K‹™[™Ú[™JKˆ\ÜÜÚ][ÛŽˆYˆ^ÛYYš\×ÜÛÛYJ
-HÂˆ\ÜÜÚ][ÛŽŽ‘^ÛYYˆH[ÙHÂˆ\ÜÜÚ][ÛŽŽ”™YˆKˆ\ÜÝYNˆ^ÛYY›X\
-_Kš\ÜÝYK˜ÛÛ™J
-JK[Ü˜\ÛÜ—ÙY˜][
-
-Kˆ^ÛYYˆ^ÛYY›X\
-ß‹™[™Ú[™K×ÜÝš[™Ê
-JKˆJNÂˆBˆ
-›Û™KÛÛYJJJHOˆÂˆ]^ÛYYH[\Ë™^ÛYYÙ›ÜŠK™[™Ú[™KK™š^\™K˜[YJNÂˆ™\Ü™š[™[™ÜËœ\Ú
-š[™[™ÈÂˆÚ[™ˆš[™[™ÒÚ[™Ž“Û›R[‹ˆÙ^Nˆ˜[YK˜ÛÛ™J
-Kˆ]Z[ˆ›Ü›X]JžÛ˜[Y_HHßHÛˆßK›ÝÛˆßH‹KœÚÝÊ
-K‹™[™Ú[™KK™[™Ú[™JKˆ\ÜÜÚ][ÛŽˆYˆ^ÛYYš\×ÜÛÛYJ
-HÂˆ\ÜÜÚ][ÛŽŽ‘^ÛYYˆH[ÙHÂˆ\ÜÜÚ][ÛŽŽ”™YˆKˆ\ÜÝYNˆ^ÛYY›X\
-_Kš\ÜÝYK˜ÛÛ™J
-JK[Ü˜\ÛÜ—ÙY˜][
-
-Kˆ^ÛYYˆ^ÛYY›X\
-ßK™[™Ú[™K×ÜÝš[™Ê
-JKˆJNÂˆBˆÈOˆ[œ™XXÚX›HJ›Û™HÙ^H\ÈÛ™HÚ[™Ùˆ™XÛÜ™ŠKˆBˆBˆ™\ÜŸB‚ˆÖØÙ™Ê\Ý
-WB›[Ù\ÝÈÂˆ\ÙHÝ\\ŽŽŠŽÂ‚ˆ›ˆ
-˜[YNˆ	œÝ‹Žˆ˜[YJHOˆ™XÛÜ™Âˆ™XÛÜ™Ž’XY\ŠXY\ˆÂˆ˜[YNˆ˜[YKš[Ê
-Kˆ˜[YNˆ‹ˆJBˆB‚ˆÖÝ\ÝBˆ›ˆWÜÝ™X[WÜ›Ý[™Ýš\×Ø[™Ú\×ÜÛÜYØžWÛ˜[YJ
-HÂˆ]™XÜÈH™XÈVÂˆ
-‰ÐÐSH‹˜[YNŽ‘ÝX›JKŒ
-JKˆ
-‰VRSˆ‹˜[YNŽ”Ú[ÊÌŒLKK‹ŒJJKˆ
-‰ÓVQTˆ‹˜[YNŽ”ÝŠŒ‹š[Ê
-JJKˆ
-‰Ô•ÓSÑH‹˜[YNŽ›ÛÛ
-˜[ÙJJKˆ
-‰ÔÓSÑH‹˜[YNŽ’[
-LÊJKˆ
-‰SSRSˆ‹˜[YNŽ”Ú[ŠÌŒŒJJKˆNÂˆ]^H™[™\—ÜÝ™X[J	œ™XÜÊK[Ü˜\
-
-NÂˆ]˜XÚÈH\œÙWÜÝ™X[J	^
-K[Ü˜\
-
-NÂˆ]˜[Y\Îˆ™XÏ	œÝˆH˜XÚËš]\Š
-K›X\
-™XÛÜ™ŽšÙ^JK˜ÛÛXÝ
-
-NÂˆ\ÜÙ\Ù\HJˆ˜[Y\ËˆÂˆ‰ÓVQTˆ‹ˆ‰VRSˆ‹ˆ‰SSRSˆ‹ˆ‰ÐÐSH‹ˆ‰Ô•ÓSÑH‹ˆ‰ÔÓSÑH‚ˆBˆ
-NÂˆ\ÜÙ\Ù\HJ™[™\—ÜÝ™X[J	˜˜XÚÊK[Ü˜\
-
-K^
-NÂˆ\ÜÙ\J^œÝ\×ÝÚ]
-ž×›[Ù[ŽŒKœ™XÛÜ™Ž—šXY\—‹›˜[YWŽ—‰ÓVQT—ˆŠJNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÜ\œÙ\—Ú\×ÜÝšXÝ
-
-HÂˆ]ÚÈBˆž×›[Ù[ŽŒKœ™XÛÜ™Ž—šXY\—‹›˜[YWŽ—‰W‹\WŽ—š[‹˜[YWŽŒ_WˆŽÂˆ\ÜÙ\J\œÙWÜÝ™X[JÚÊKš\×ÛÚÊ
-JNÂˆËÈHÝX›HÜ[YÚ]Ý]]ÈÚ[ˆ\ÜÙ\J\œÙWÜÝ™X[J	›ÚËœ™\XÙJš[‹™ÝX›HŠJKš\×Ù\œŠ
-JNÂˆËÈÜ›Û™È\H›ÜˆHÚ\Bˆ\ÜÙ\J\œÙWÜÝ™X[J	›ÚËœ™\XÙJ—˜[YWŽŒH‹—˜[YWŽ—žˆŠJKš\×Ù\œŠ
-JNÂˆËÈ›Ý[Ù[Bˆ\ÜÙ\J\œÙWÜÝ™X[J	›ÚËœ™\XÙJ—›[Ù[ŽŒH‹—›[Ù[ŽŒˆŠJKš\×Ù\œŠ
-JNÂˆËÈHØÚ[XHH™XÛÜ™ˆ\ÜÙ\J\œÙWÜÝ™X[Jž×œØÚ[XWŽŒKœ™XÛÜ™Ž—›[™WŸWˆŠKš\×Ù\œŠ
-JNÂˆËÈ›Èš[˜[™]Û[™Bˆ\ÜÙ\J\œÙWÜÝ™X[JÚËš[WÙ[™
-
-JKš\×Ù\œŠ
-JNÂˆËÈÝ]ÙˆÜ™\‚ˆ]ÛÈH›Ü›X]Jžß^ßH‹ÚËœ™\XÙJ‰H‹‰ˆŠKÚÊNÂˆ\ÜÙ\J\œÙWÜÝ™X[J	ÛÊKš\×Ù\œŠ
-JNÂˆËÈH\XØ]HÙ^Bˆ\ÜÙ\J\œÙWÜÝ™X[J	™›Ü›X]JžÛÚß^ÛÚßHŠJKš\×Ù\œŠ
-JNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÝ\WÙ›ÛÝÜ×ÝWÙÜ›Ý\ØÛÙJ
-HÂˆ\ÜÙ\Ù\HJXY\—Ý\J‰‹	–ÍÌJK[Ü˜\
-
-Kš[ŠNÂˆ\ÜÙ\Ù\HJXY\—Ý\J‰‹	–ÍJK[Ü˜\
-
-K™ÝX›HŠNÂˆ\ÜÙ\Ù\HJXY\—Ý\J‰‹	–ÌWJK[Ü˜\
-
-KœÝš[™ÈŠNÂˆ\ÜÙ\Ù\HJXY\—Ý\J‰‹	–ÌŽLJK[Ü˜\
-
-K˜›ÛÛŠNÂˆ\ÜÙ\Ù\HJXY\—Ý\J‰‹	–ÌŽJK[Ü˜\
-
-Kš[ŠNÂˆ\ÜÙ\Ù\HJXY\—Ý\J‰‹	–ÌLŒJK[Ü˜\
-
-KœÚ[ˆŠNÂˆ\ÜÙ\Ù\HJXY\—Ý\J‰‹	–ÌLŒÌJK[Ü˜\
-
-KœÚ[ÈŠNÂˆ\ÜÙ\JXY\—Ý\J‰‹	–ÌÍ×JKš\×Ù\œŠ
-JNÂˆ\ÜÙ\J\×Ú[™WØÛÙJÍÊJNÂˆB‚ˆ›ˆÚYO	ØOŠ[™Ú[™Nˆ	‰ØHÝ‹™XÛÜ™Îˆ	‰ØHÔ™XÛÜ™JHOˆÚYO	ØOˆÂˆÚYHÂˆ[™Ú[™Kˆš^\™Nˆ™ˆ‹ˆ™XÛÜ™ËˆBˆB‚ˆÖÝ\ÝBˆ›ˆ˜[Y\×ØÛÛ\\™WØžWÚÙ^WÛ›ÝØžWÜÜÚ][ÛŠ
-HÂˆ]HH™XÈVÚ
-‰H‹˜[YNŽ’[
-JJK
-‰ˆ‹˜[YNŽ’[
-ŠJWNÂˆ]ˆH™XÈVÚ
-‰ˆ‹˜[YNŽ’[
-ŠJK
-‰H‹˜[YNŽ’[
-JJWNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	˜ŠKˆ	”[\ÎŽ™Y˜][
-
-Kˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ“X]Ú
-NÂˆ\ÜÙ\Ù\HJ‹˜ÛÛ\\™YŠNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÙÝX›WÚ[œÚYWÝWØ›Ý[™ÛX]Ú\×Ø[™ÛÝ]ÚYWÚ]Ú\×ÛÛ™WÙY™Š
-HÂˆ]HH™XÈVÚ
-‰ÐÐSH‹˜[YNŽ‘ÝX›JKŒ
-JWNÂˆ]™X\ˆH™XÈVÚ
-‰ÐÐSH‹˜[YNŽ‘ÝX›JKŒ
-ÈYKN
-JWNÂˆ]˜\ˆH™XÈVÚ
-‰ÐÐSH‹˜[YNŽ‘ÝX›JKŒJJWNÂˆ][\ÈH[\ÎŽ™Y˜][
-
-NÂˆ]HHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	›™X\ŠKˆ	œ[\Ëˆ
-NÂˆ\ÜÙ\Ù\HJK™\™XÝ
-
-K™\™XÝŽ“X]Ú
-NÂˆ]HÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	™˜\ŠKˆ	œ[\Ëˆ
-NÂˆ\ÜÙ\Ù\HJ™\™XÝ
-
-K™\™XÝŽ‘Y™ŠJJNÂˆ\ÜÙ\J™š\œÝ
-
-K˜ÛÛZ[œÊ‰ÐÐSHŠJNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÛ˜[YWÛÛ—ÛÛ™WÜÚYWÚ\×Ü™YÝ[›\Ü×ÝWÜ[\×Ù^ÛYWÚ]Ù›Ü—Ý]Ù[™Ú[™J
-HÂˆ]HH™XÈVÚ
-‰H‹˜[YNŽ’[
-JJK
-‰ˆ‹˜[YNŽ’[
-ŠJWNÂˆ]ˆH™XÈVÚ
-‰H‹˜[YNŽ’[
-JJWNÂˆ]›Û™HH[\ÎŽ™Y˜][
-
-NÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	˜ŠKˆ	››Û™Kˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ‘Y™ŠJJNÂˆ][\ÈH[\ÎŽœ\œÙJˆ–ÖÙ^ÛYYWW™[™Ú[™HH˜XØY\Ý—›˜[Y\ÈH×‰——Wœ™X\ÛÛˆH››ÈšY[—š\ÜÝYHHžÌW—ˆ‹ˆ
-Bˆ[Ü˜\
-
-NÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	˜ŠKˆ	œ[\Ëˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ“X]Ú
-NÂˆ\ÜÙ\Ù\HJ‹™š[™[™ÜË›[Š
-KJNÂˆËÈ[™HØ[YH›ÝÈÙ\È›Ý^Ý\ÙHHÜ˜XÛHXÚÚ[™ÈH˜[YHXØY\Ý\Âˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜ŠKˆ	œÚYJ˜XØY\Ý‹	˜JKˆ	œ[\Ëˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ‘Y™ŠJJNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÚÛ›ÝÛ—Ü›Ý×Ø\Y\×Ý×Ú]×ÜZ\œ×ÛÛ›J
-HÂˆ]HH™XÈVÚ
-‰Ô‘PUH‹˜[YNŽ‘ÝX›JKŒ
-JWNÂˆ]ˆH™XÈVÚ
-‰Ô‘PUH‹˜[YNŽ‘ÝX›J‹Œ
-JWNÂˆ][\ÈH[\ÎŽœ\œÙJˆ–ÖÚÛ›ÝÛ—WW›˜[Y\ÈH×‰Ô‘PUW—WœZ\œÈH×™^™‹ÛÜ˜XÛW—Wœ™X\ÛÛˆHœØ]™Y][›Ý\ˆ[ÛY[—š\ÜÝYHHžÌW—ˆ‹ˆ
-Bˆ[Ü˜\
-
-NÂˆ]ˆHÛÛ\\™Jˆ™^™‹ÛÜ˜XÛH‹ˆ	œÚYJ™^™ˆ‹	˜JKˆ	œÚYJ›Ü˜XÛH‹	˜ŠKˆ	œ[\Ëˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ’Û›ÝÛŠJJNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	˜ŠKˆ	œ[\Ëˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ‘Y™ŠJJNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÜ[WÝÚ]Ý]ØWÜ™X\ÛÛ—ÛÜ—Ø[—Ú\ÜÝYWÚ\×Ü™Y\ÙY
-
-HÂˆ\ÜÙ\Jˆ[\ÎŽœ\œÙJ–ÖÚÛ›ÝÛ—WW›˜[Y\ÈH×‰W—Wœ™X\ÛÛˆH——š\ÜÝYHHž—ˆŠKš\×Ù\œŠ
-Bˆ
-NÂˆ\ÜÙ\J[\ÎŽœ\œÙJ–ÖÙ^ÛYYWW™[™Ú[™HH›Ü˜XÛW—›˜[Y\ÈH×‰W—Wœ™X\ÛÛˆHœ——š\ÜÝYHH——ˆŠKš\×Ù\œŠ
-JNÂˆ\ÜÙ\J[\ÎŽœ\œÙJ–ÖÙ^ÛYYWW™[™Ú[™HH››Ø›ÙW—›˜[Y\ÈH×‰W—Wœ™X\ÛÛˆHœ——š\ÜÝYHHšW—ˆŠKš\×Ù\œŠ
-JNÂˆB‚ˆ›ˆ^Y\Š˜[YNˆ	œÝ‹ÛÛÜŽˆM
-HOˆ™XÛÜ™Âˆ™XÛÜ™Ž‘[žJ[žNŽ›™]Êˆ›^Y\ˆ‹ˆ˜[YKˆ™XÈVÂˆ˜[YNŽ’[
-
-Kˆ˜[YNŽ’[
-ÛÛÜŠKˆ˜[YNŽ’[
-LJKˆ˜[YNŽ›ÛÛ
-YJKˆ˜[YNŽ”ÝŠÛÛ[[Ý\È‹š[Ê
-JKˆ˜[YNŽ’[
-LÊKˆ˜[YNŽ›ÛÛ
-YJKˆKˆ
-JBˆB‚ˆÖÝ\ÝBˆ›ˆWÛ^Y\—Ü›Ý[™Ýš\×Ø[™ÜÛÜ×ØY\—ÝWÚXY\Š
-HÂˆ]™XÜÈH™XÈVÂˆ^Y\Š•Ø[È‹JKˆ
-‰ÐÐSH‹˜[YNŽ‘ÝX›JKŒ
-JKˆ^Y\ŠŒ‹ÊKˆNÂˆ]^H™[™\—ÜÝ™X[J	œ™XÜÊK[Ü˜\
-
-NÂˆ]˜XÚÈH\œÙWÜÝ™X[J	^
-K[Ü˜\
-
-NÂˆ]Ù^\Îˆ™XÏ
-	œÝ‹	œÝŠOˆH˜XÚËš]\Š
-K›X\
-Ÿ
-‹šÚ[™
-
-K‹šÙ^J
-JJK˜ÛÛXÝ
-
-NÂˆ\ÜÙ\Ù\HJˆÙ^\ËˆÊšXY\ˆ‹‰ÐÐSHŠK
-›^Y\ˆ‹ŒŠK
-›^Y\ˆ‹•Ø[ÈŠWBˆ
-NÂˆ\ÜÙ\Ù\HJ™[™\—ÜÝ™X[J	˜˜XÚÊK[Ü˜\
-
-K^
-NÂˆ\ÜÙ\J^˜ÛÛZ[œÊˆž×›[Ù[ŽŒKœ™XÛÜ™Ž—›^Y\—‹›˜[YWŽ—Œ‹™›YÜ×ŽŒ˜ÛÛÜ—ŽËYWØÛÛÜ—Ž‹LK›Û—ŽYK›[™]\WŽ—ÛÛ[[Ý\×‹›[™]ÙZYÚŽ‹LËœÝŽY_H‚ˆ
-JNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÛ^Y\—Û[™WÝÚ]ØWÙšY[ÛZ\ÜÚ[™×ÛÜ—ÛÝ]ÛÙ—ÛÜ™\—Ú\×Ü™Y\ÙY
-
-HÂˆ]ÚÈH™[™\—ÜÝ™X[J	–Û^Y\ŠŒ‹ÊWJK[Ü˜\
-
-NÂˆ\ÜÙ\J\œÙWÜÝ™X[J	›ÚÊKš\×ÛÚÊ
-JNÂˆ\ÜÙ\J\œÙWÜÝ™X[J	›ÚËœ™\XÙJ—œÝŽYH‹—œÝŽŒHŠJKš\×Ù\œŠ
-JNÂˆ\ÜÙ\J\œÙWÜÝ™X[J	›ÚËœ™\XÙJ‹œÝŽYH‹ˆŠJKš\×Ù\œŠ
-JNÂˆ]ÝØ\YHÚËœ™\XÙJ—™›YÜ×ŽŒ˜ÛÛÜ—ŽÈ‹—˜ÛÛÜ—ŽË™›YÜ×ŽŒŠNÂˆ\ÜÙ\J\œÙWÜÝ™X[J	œÝØ\Y
-Kš\×Ù\œŠ
-JNÂˆËÈH^Y\ˆÛÜY™Y›Ü™HHXY\‚ˆ]ÛÈH›Ü›X]JžÛÚß^ßH‹™[™\—ÜÝ™X[J	–Ú
-‰H‹˜[YNŽ’[
-JJWJK[Ü˜\
-
-JNÂˆ\ÜÙ\J\œÙWÜÝ™X[J	ÛÊKš\×Ù\œŠ
-JNÂˆB‚ˆÖÝ\ÝBˆ›ˆWØÚ[™ÙYÛ^Y\—ØÛÛÝ\—Ú\×ÛÛ™WÙš[™[™×Û˜[Z[™×ÝWÛ^Y\—Ø[™ÝWÙšY[
-
-HÂˆ]HH™XÈVÛ^Y\ŠŒ‹ÊK^Y\Š•Ø[È‹JWNÂˆ]ˆH™XÈVÛ^Y\ŠŒ‹ÊK^Y\Š•Ø[È‹ŠWNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	˜ŠKˆ	”[\ÎŽ™Y˜][
-
-Kˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ‘Y™ŠJJNÂˆ\ÜÙ\Ù\HJ‹œ™Y
-
-VÌKšÙ^K›^Y\‹ÕØ[Ë˜ÛÛÜˆŠNÂˆ\ÜÙ\Ù\HJ‹˜ÛÛ\\™YŠNÂˆB‚ˆÖÝ\ÝBˆ›ˆWÛ^Y\—ÛÛ—ÛÛ™WÜÚYWÚ\×Ü™YØ[™ØWÜ[WØØ[—Û˜[YWÛ^Y\œ×ÝÚ]ØWÜÝ\Š
-HÂˆ]HH™XÈVÛ^Y\ŠŒ‹ÊK^Y\Š•Ø[È‹JWNÂˆ]ˆH™XÈVÛ^Y\ŠŒ‹ÊWNÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	˜ŠKˆ	”[\ÎŽ™Y˜][
-
-Kˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ‘Y™ŠJJNÂˆ\ÜÙ\Ù\HJ‹œ™Y
-
-VÌKšÙ^K›^Y\‹ÕØ[ÈŠNÂˆ][\ÈH[\ÎŽœ\œÙJˆ–ÖÙ^ÛYYWW™[™Ú[™HH˜XØY\Ý—›˜[Y\ÈH×›^Y\‹ÕÊ——Wœ™X\ÛÛˆHœ——š\ÜÝYHHšW—ˆ‹ˆ
-Bˆ[Ü˜\
-
-NÂˆ]ˆHÛÛ\\™Jˆ›Ü˜XÛKØXØY\Ý‹ˆ	œÚYJ›Ü˜XÛH‹	˜JKˆ	œÚYJ˜XØY\Ý‹	˜ŠKˆ	œ[\Ëˆ
-NÂˆ\ÜÙ\Ù\HJ‹™\™XÝ
-
-K™\™XÝŽ“X]Ú
-NÂˆB‚ˆÖÝ\ÝBˆ›ˆWÜÝ\—ÛX]Ú\×Ø[žWÜ[—Ø[™Û›Ý[™×Ù[ÙJ
-HÂˆ\ÜÙ\JÛØŠ›^Y\‹Ê‹˜ÛÛÜˆ‹›^Y\‹ÕØ[Ë˜ÛÛÜˆŠJNÂˆ\ÜÙ\JÛØŠ›^Y\‹Ê‹˜ÛÛÜˆ‹›^Y\‹Ë˜ÛÛÜˆŠJNÂˆ\ÜÙ\JYÛØŠ›^Y\‹Ê‹˜ÛÛÜˆ‹›^Y\‹ÕØ[Ë™›YÜÈŠJNÂˆ\ÜÙ\JÛØŠ‰H‹‰HŠJNÂˆ\ÜÙ\JYÛØŠ‰H‹‰PˆŠJNÂˆ\ÜÙ\JÛØŠŠˆ‹˜[ž][™ÈŠJNÂˆ\ÜÙ\JÛØŠ˜J˜Š˜È‹˜V–XÈŠJNÂˆ\ÜÙ\JYÛØŠ˜J˜Š˜È‹˜VÖXˆŠJNÂˆ
+        .ok_or_else(|| format!("no frozen {engine} model-1 stream for {id}"))?;
+    let path = model1_dir().join(&f.path);
+    let bytes = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+    let got: String = {
+        use sha2::{Digest, Sha256};
+        Sha256::digest(&bytes)
+            .iter()
+            .map(|b| format!("{b:02x}"))
+            .collect()
+    };
+    if got != f.sha256 {
+        return Err(format!(
+            "{}: hashes to {got}, the manifest froze {}",
+            path.display(),
+            f.sha256
+        ));
+    }
+    let text = String::from_utf8(bytes).map_err(|e| e.to_string())?;
+    parse_stream(&text).map_err(|e| format!("{}: {e}", path.display()))
+}
+
+/// The committed `parity/MODEL1.toml`.
+pub fn committed_rules() -> Result<Rules, String> {
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("parity")
+        .join("MODEL1.toml");
+    let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+    Rules::parse(&text)
+}
+
+// ---- comparing ----------------------------------------------------------------------
+
+/// What kind of difference a finding is.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum FindingKind {
+    OnlyInA,
+    OnlyInB,
+    Type,
+    Value,
+}
+
+/// What a finding amounts to once the rules have been applied.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Disposition {
+    /// Nothing explains it: debt.
+    Red,
+    /// A listed difference by construction.
+    Known,
+    /// A name one engine cannot produce, listed.
+    Excluded,
+}
+
+#[derive(Debug, Clone)]
+pub struct Finding {
+    pub kind: FindingKind,
+    pub key: String,
+    pub detail: String,
+    pub disposition: Disposition,
+    /// The issue of the row that lists it, when one does.
+    pub issue: String,
+    /// For an `Excluded` finding, the engine the row excludes.
+    pub excluded: Option<String>,
+}
+
+impl fmt::Display for Finding {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "header {} {} [{:?}]",
+            self.key, self.detail, self.disposition
+        )
+    }
+}
+
+/// What one comparison came to.
+#[derive(Debug, Clone, Default)]
+pub struct Report {
+    pub findings: Vec<Finding>,
+    /// How many names were on both sides and compared.
+    pub compared: usize,
+}
+
+impl Report {
+    pub fn red(&self) -> Vec<&Finding> {
+        self.findings
+            .iter()
+            .filter(|f| f.disposition == Disposition::Red)
+            .collect()
+    }
+
+    pub fn verdict(&self) -> Verdict {
+        let red = self.red().len();
+        if red > 0 {
+            return Verdict::Diff(red);
+        }
+        let known = self
+            .findings
+            .iter()
+            .filter(|f| f.disposition == Disposition::Known)
+            .count();
+        if known > 0 {
+            Verdict::Known(known)
+        } else {
+            Verdict::Match
+        }
+    }
+
+    /// The issues of the rows that listed a difference, in order, once each.
+    pub fn issues(&self) -> String {
+        let mut seen: Vec<&str> = Vec::new();
+        for f in self
+            .findings
+            .iter()
+            .filter(|f| f.disposition == Disposition::Known)
+        {
+            if !f.issue.is_empty() && !seen.contains(&f.issue.as_str()) {
+                seen.push(&f.issue);
+            }
+        }
+        seen.join(", ")
+    }
+
+    /// The first finding that counts, rendered, for the verdict file.
+    pub fn first(&self) -> String {
+        self.red()
+            .first()
+            .map(|f| f.to_string())
+            .or_else(|| {
+                self.findings
+                    .iter()
+                    .find(|f| f.disposition == Disposition::Known)
+                    .map(|f| f.to_string())
+            })
+            .unwrap_or_default()
+    }
+}
+
+fn same(a: &Value, b: &Value) -> bool {
+    let t = |x: f64, y: f64| BOUNDED.within(x, y);
+    match (a, b) {
+        (Value::Double(x), Value::Double(y)) => t(*x, *y),
+        (Value::Point2(x), Value::Point2(y)) => x.iter().zip(y).all(|(p, q)| t(*p, *q)),
+        (Value::Point3(x), Value::Point3(y)) => x.iter().zip(y).all(|(p, q)| t(*p, *q)),
+        _ => a == b,
+    }
+}
+
+/// One side of a comparison.
+pub struct Side<'a> {
+    pub engine: &'a str,
+    pub fixture: &'a str,
+    pub records: &'a [Record],
+}
+
+/// A record as the comparator sees it: one value (a header variable) or a list
+/// of named scalar leaves (a table entry, with its lists unrolled).
+enum Item {
+    Scalar(Value),
+    Fields(Vec<(String, Value)>),
+}
+
+impl Item {
+    fn show(&self) -> String {
+        match self {
+            Self::Scalar(v) => v.show(),
+            Self::Fields(f) => f
+                .iter()
+                .map(|(n, v)| format!("{n}={}", v.show()))
+                .collect::<Vec<_>>()
+                .join(" "),
+        }
+    }
+}
+
+/// The key a record is compared and listed under: the DXF name for a header
+/// variable, `<kind>/<name>` for anything else.
+fn item_key(r: &Record) -> String {
+    match r {
+        Record::Header(h) => h.name.clone(),
+        Record::Entry(e) => format!("{}/{}", e.kind, e.name),
+    }
+}
+
+/// Unroll a value into scalar leaves: a list is its length, `name.len`, and then
+/// `name[i].field` for each element.
+fn leaves(prefix: &str, ty: &Ty, v: &Value, out: &mut Vec<(String, Value)>) {
+    match (ty, v) {
+        (Ty::List(fields), Value::List(items)) => {
+            out.push((format!("{prefix}.len"), Value::Int(items.len() as i64)));
+            for (i, item) in items.iter().enumerate() {
+                for ((name, fty), fv) in fields.iter().zip(item) {
+                    leaves(&format!("{prefix}[{i}].{name}"), fty, fv, out);
+                }
+            }
+        }
+        _ => out.push((prefix.to_string(), v.clone())),
+    }
+}
+
+fn item_of(r: &Record) -> Item {
+    match r {
+        Record::Header(h) => Item::Scalar(h.value.clone()),
+        Record::Entry(e) => {
+            let mut out = Vec::new();
+            if let Some(s) = schema(e.kind) {
+                for ((name, ty), v) in s.fields.iter().zip(&e.values) {
+                    leaves(name, ty, v, &mut out);
+                }
+            }
+            Item::Fields(out)
+        }
+    }
+}
+
+/// Does `pattern` (which may hold `*`, standing for any run of characters) match
+/// `text`? A layer name is data, so a rule about every layer's colour is
+/// `layer/*.color`.
+pub fn glob(pattern: &str, text: &str) -> bool {
+    let parts: Vec<&str> = pattern.split('*').collect();
+    if parts.len() == 1 {
+        return pattern == text;
+    }
+    let mut rest = text;
+    for (i, part) in parts.iter().enumerate() {
+        if i == 0 {
+            match rest.strip_prefix(part) {
+                Some(r) => rest = r,
+                None => return false,
+            }
+        } else if i == parts.len() - 1 {
+            return rest.ends_with(part);
+        } else {
+            match rest.find(part) {
+                Some(at) => rest = &rest[at + part.len()..],
+                None => return false,
+            }
+        }
+    }
+    true
+}
+
+/// Compare two streams by key. `pair` is `oracle/acadrust` and so on, the name
+/// `parity/MODEL1.toml` rows use.
+pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
+    let index = |s: &Side| -> BTreeMap<String, Item> {
+        s.records
+            .iter()
+            .map(|r| (item_key(r), item_of(r)))
+            .collect()
+    };
+    let (ia, ib) = (index(a), index(b));
+    let names: BTreeSet<&String> = ia.keys().chain(ib.keys()).collect();
+    let mut report = Report::default();
+    let push = |report: &mut Report, kind: FindingKind, key: String, detail: String| {
+        let known = rules.known_for(pair, a.fixture, &key);
+        report.findings.push(Finding {
+            kind,
+            key,
+            detail,
+            disposition: if known.is_some() {
+                Disposition::Known
+            } else {
+                Disposition::Red
+            },
+            issue: known.map(|k| k.issue.clone()).unwrap_or_default(),
+            excluded: None,
+        });
+    };
+    let compare_values = |x: &Value, y: &Value| -> Option<(FindingKind, String)> {
+        if x.type_name() != y.type_name() {
+            Some((
+                FindingKind::Type,
+                format!("type {} vs {}", x.type_name(), y.type_name()),
+            ))
+        } else if !same(x, y) {
+            Some((FindingKind::Value, format!("{} vs {}", x.show(), y.show())))
+        } else {
+            None
+        }
+    };
+    for name in names {
+        match (ia.get(name), ib.get(name)) {
+            (Some(Item::Scalar(x)), Some(Item::Scalar(y))) => {
+                report.compared += 1;
+                if let Some((kind, detail)) = compare_values(x, y) {
+                    push(&mut report, kind, name.clone(), detail);
+                }
+            }
+            (Some(Item::Fields(x)), Some(Item::Fields(y))) => {
+                report.compared += 1;
+                let theirs: BTreeMap<&str, &Value> =
+                    y.iter().map(|(k, v)| (k.as_str(), v)).collect();
+                for (field, vx) in x {
+                    // A leaf the other side does not have is an element of a
+                    // longer list, which its `.len` finding already says.
+                    let Some(vy) = theirs.get(field.as_str()) else {
+                        continue;
+                    };
+                    // A field the file does not store is not a value to compare.
+                    if matches!(vx, Value::Absent) || matches!(vy, Value::Absent) {
+                        let engine = if matches!(vx, Value::Absent) {
+                            a.engine
+                        } else {
+                            b.engine
+                        };
+                        report.findings.push(Finding {
+                            kind: FindingKind::Value,
+                            key: format!("{name}.{field}"),
+                            detail: format!("left out: the file {engine} read does not store it"),
+                            disposition: Disposition::Excluded,
+                            issue: String::new(),
+                            excluded: Some(engine.to_string()),
+                        });
+                        continue;
+                    }
+                    // A field an engine cannot produce is written as its zero
+                    // value there and left out of the comparison, and the
+                    // report counts it.
+                    let leaf = format!("{name}.{field}");
+                    let left_out = [a, b].into_iter().find_map(|side| {
+                        rules
+                            .excluded_for(side.engine, side.fixture, &leaf)
+                            .map(|e| (side.engine, e.issue.clone()))
+                    });
+                    if let Some((engine, issue)) = left_out {
+                        report.findings.push(Finding {
+                            kind: FindingKind::Value,
+                            key: leaf,
+                            detail: format!("left out: {engine} cannot produce it"),
+                            disposition: Disposition::Excluded,
+                            issue,
+                            excluded: Some(engine.to_string()),
+                        });
+                        continue;
+                    }
+                    if let Some((kind, detail)) = compare_values(vx, vy) {
+                        push(&mut report, kind, format!("{name}.{field}"), detail);
+                    }
+                }
+            }
+            (Some(x), None) => {
+                let excluded = rules.excluded_for(b.engine, b.fixture, name);
+                report.findings.push(Finding {
+                    kind: FindingKind::OnlyInA,
+                    key: name.clone(),
+                    detail: format!("{name} = {} on {}, not on {}", x.show(), a.engine, b.engine),
+                    disposition: if excluded.is_some() {
+                        Disposition::Excluded
+                    } else {
+                        Disposition::Red
+                    },
+                    issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
+                    excluded: excluded.map(|_| b.engine.to_string()),
+                });
+            }
+            (None, Some(y)) => {
+                let excluded = rules.excluded_for(a.engine, a.fixture, name);
+                report.findings.push(Finding {
+                    kind: FindingKind::OnlyInB,
+                    key: name.clone(),
+                    detail: format!("{name} = {} on {}, not on {}", y.show(), b.engine, a.engine),
+                    disposition: if excluded.is_some() {
+                        Disposition::Excluded
+                    } else {
+                        Disposition::Red
+                    },
+                    issue: excluded.map(|e| e.issue.clone()).unwrap_or_default(),
+                    excluded: excluded.map(|_| a.engine.to_string()),
+                });
+            }
+            _ => unreachable!("one key is one kind of record"),
+        }
+    }
+    report
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn h(name: &str, v: Value) -> Record {
+        Record::Header(Header {
+            name: name.into(),
+            value: v,
+        })
+    }
+
+    #[test]
+    fn a_stream_round_trips_and_is_sorted_by_name() {
+        let recs = vec![
+            h("$LTSCALE", Value::Double(1.0)),
+            h("$EXTMIN", Value::Point3([0.0, -1.5, 2.0])),
+            h("$CLAYER", Value::Str("0".into())),
+            h("$ORTHOMODE", Value::Bool(false)),
+            h("$OSMODE", Value::Int(-3)),
+            h("$LIMMIN", Value::Point2([0.0, 0.0])),
+        ];
+        let text = render_stream(&recs).unwrap();
+        let back = parse_stream(&text).unwrap();
+        let names: Vec<&str> = back.iter().map(Record::key).collect();
+        assert_eq!(
+            names,
+            [
+                "$CLAYER",
+                "$EXTMIN",
+                "$LIMMIN",
+                "$LTSCALE",
+                "$ORTHOMODE",
+                "$OSMODE"
+            ]
+        );
+        assert_eq!(render_stream(&back).unwrap(), text);
+        assert!(text.starts_with("{\"model\":1,\"record\":\"header\",\"name\":\"$CLAYER\""));
+    }
+
+    #[test]
+    fn the_parser_is_strict() {
+        let ok =
+            "{\"model\":1,\"record\":\"header\",\"name\":\"$A\",\"type\":\"int\",\"value\":1}\n";
+        assert!(parse_stream(ok).is_ok());
+        // a double spelled without its point
+        assert!(parse_stream(&ok.replace("int", "double")).is_err());
+        // wrong type for the shape
+        assert!(parse_stream(&ok.replace("\"value\":1", "\"value\":\"x\"")).is_err());
+        // not model 1
+        assert!(parse_stream(&ok.replace("\"model\":1", "\"model\":2")).is_err());
+        // a schema 1 record
+        assert!(parse_stream("{\"schema\":1,\"record\":\"line\"}\n").is_err());
+        // no final newline
+        assert!(parse_stream(ok.trim_end()).is_err());
+        // out of order
+        let two = format!("{}{}", ok.replace("$A", "$B"), ok);
+        assert!(parse_stream(&two).is_err());
+        // a duplicate key
+        assert!(parse_stream(&format!("{ok}{ok}")).is_err());
+    }
+
+    #[test]
+    fn the_type_follows_the_group_code() {
+        assert_eq!(header_type("$X", &[70]).unwrap(), "int");
+        assert_eq!(header_type("$X", &[40]).unwrap(), "double");
+        assert_eq!(header_type("$X", &[1]).unwrap(), "string");
+        assert_eq!(header_type("$X", &[290]).unwrap(), "bool");
+        assert_eq!(header_type("$X", &[280]).unwrap(), "int");
+        assert_eq!(header_type("$X", &[10, 20]).unwrap(), "point2");
+        assert_eq!(header_type("$X", &[10, 20, 30]).unwrap(), "point3");
+        assert!(header_type("$X", &[347]).is_err());
+        assert!(is_handle_code(347));
+    }
+
+    fn side<'a>(engine: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: "f",
+            records,
+        }
+    }
+
+    #[test]
+    fn names_compare_by_key_not_by_position() {
+        let a = vec![h("$A", Value::Int(1)), h("$B", Value::Int(2))];
+        let b = vec![h("$B", Value::Int(2)), h("$A", Value::Int(1))];
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
+        assert_eq!(r.verdict(), Verdict::Match);
+        assert_eq!(r.compared, 2);
+    }
+
+    #[test]
+    fn a_double_inside_the_bound_matches_and_outside_it_is_one_diff() {
+        let a = vec![h("$LTSCALE", Value::Double(1.0))];
+        let near = vec![h("$LTSCALE", Value::Double(1.0 + 1e-8))];
+        let far = vec![h("$LTSCALE", Value::Double(1.001))];
+        let rules = Rules::default();
+        let m = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &near),
+            &rules,
+        );
+        assert_eq!(m.verdict(), Verdict::Match);
+        let d = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &far),
+            &rules,
+        );
+        assert_eq!(d.verdict(), Verdict::Diff(1));
+        assert!(d.first().contains("$LTSCALE"));
+    }
+
+    #[test]
+    fn a_name_on_one_side_is_red_unless_the_rules_exclude_it_for_that_engine() {
+        let a = vec![h("$A", Value::Int(1)), h("$B", Value::Int(2))];
+        let b = vec![h("$A", Value::Int(1))];
+        let none = Rules::default();
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &none,
+        );
+        assert_eq!(r.verdict(), Verdict::Diff(1));
+        let rules = Rules::parse(
+            "[[excluded]]\nengine = \"acadrust\"\nnames = [\"$B\"]\nreason = \"no field\"\nissue = \"x#1\"\n",
+        )
+        .unwrap();
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &rules,
+        );
+        assert_eq!(r.verdict(), Verdict::Match);
+        assert_eq!(r.findings.len(), 1);
+        // and the same row does not excuse the oracle lacking a name acadrust has
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &b),
+            &side("acadrust", &a),
+            &rules,
+        );
+        assert_eq!(r.verdict(), Verdict::Diff(1));
+    }
+
+    #[test]
+    fn a_known_row_applies_to_its_pairs_only() {
+        let a = vec![h("$TDCREATE", Value::Double(1.0))];
+        let b = vec![h("$TDCREATE", Value::Double(2.0))];
+        let rules = Rules::parse(
+            "[[known]]\nnames = [\"$TDCREATE\"]\npairs = [\"ezdxf/oracle\"]\nreason = \"saved at another moment\"\nissue = \"x#1\"\n",
+        )
+        .unwrap();
+        let r = compare(
+            "ezdxf/oracle",
+            &side("ezdxf", &a),
+            &side("oracle", &b),
+            &rules,
+        );
+        assert_eq!(r.verdict(), Verdict::Known(1));
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &rules,
+        );
+        assert_eq!(r.verdict(), Verdict::Diff(1));
+    }
+
+    #[test]
+    fn a_rule_without_a_reason_or_an_issue_is_refused() {
+        assert!(
+            Rules::parse("[[known]]\nnames = [\"$A\"]\nreason = \"\"\nissue = \"x\"\n").is_err()
+        );
+        assert!(Rules::parse("[[excluded]]\nengine = \"oracle\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"\"\n").is_err());
+        assert!(Rules::parse("[[excluded]]\nengine = \"nobody\"\nnames = [\"$A\"]\nreason = \"r\"\nissue = \"i\"\n").is_err());
+    }
+
+    fn layer(name: &str, color: i64) -> Record {
+        Record::Entry(Entry::new(
+            "layer",
+            name,
+            vec![
+                Value::Int(0),
+                Value::Int(color),
+                Value::Int(-1),
+                Value::Bool(true),
+                Value::Str("Continuous".into()),
+                Value::Int(-3),
+                Value::Bool(true),
+            ],
+        ))
+    }
+
+    #[test]
+    fn a_layer_round_trips_and_sorts_after_the_header() {
+        let recs = vec![
+            layer("Walls", 1),
+            h("$LTSCALE", Value::Double(1.0)),
+            layer("0", 7),
+        ];
+        let text = render_stream(&recs).unwrap();
+        let back = parse_stream(&text).unwrap();
+        let keys: Vec<(&str, &str)> = back.iter().map(|r| (r.kind(), r.key())).collect();
+        assert_eq!(
+            keys,
+            [("header", "$LTSCALE"), ("layer", "0"), ("layer", "Walls")]
+        );
+        assert_eq!(render_stream(&back).unwrap(), text);
+        assert!(text.contains(
+            "{\"model\":1,\"record\":\"layer\",\"name\":\"0\",\"flags\":0,\"color\":7,\"true_color\":-1,\"on\":true,\"linetype\":\"Continuous\",\"lineweight\":-3,\"plot\":true}"
+        ));
+    }
+
+    #[test]
+    fn a_layer_line_with_a_field_missing_or_out_of_order_is_refused() {
+        let ok = render_stream(&[layer("0", 7)]).unwrap();
+        assert!(parse_stream(&ok).is_ok());
+        assert!(parse_stream(&ok.replace("\"plot\":true", "\"plot\":1")).is_err());
+        assert!(parse_stream(&ok.replace(",\"plot\":true", "")).is_err());
+        let swapped = ok.replace("\"flags\":0,\"color\":7", "\"color\":7,\"flags\":0");
+        assert!(parse_stream(&swapped).is_err());
+        // a layer sorted before a header
+        let two = format!("{ok}{}", render_stream(&[h("$A", Value::Int(1))]).unwrap());
+        assert!(parse_stream(&two).is_err());
+    }
+
+    #[test]
+    fn a_changed_layer_colour_is_one_finding_naming_the_layer_and_the_field() {
+        let a = vec![layer("0", 7), layer("Walls", 1)];
+        let b = vec![layer("0", 7), layer("Walls", 2)];
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
+        assert_eq!(r.verdict(), Verdict::Diff(1));
+        assert_eq!(r.red()[0].key, "layer/Walls.color");
+        assert_eq!(r.compared, 2);
+    }
+
+    #[test]
+    fn a_layer_on_one_side_is_red_and_a_rule_can_name_layers_with_a_star() {
+        let a = vec![layer("0", 7), layer("Walls", 1)];
+        let b = vec![layer("0", 7)];
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &Rules::default(),
+        );
+        assert_eq!(r.verdict(), Verdict::Diff(1));
+        assert_eq!(r.red()[0].key, "layer/Walls");
+        let rules = Rules::parse(
+            "[[excluded]]\nengine = \"acadrust\"\nnames = [\"layer/W*\"]\nreason = \"r\"\nissue = \"i\"\n",
+        )
+        .unwrap();
+        let r = compare(
+            "oracle/acadrust",
+            &side("oracle", &a),
+            &side("acadrust", &b),
+            &rules,
+        );
+        assert_eq!(r.verdict(), Verdict::Match);
+    }
+
+    #[test]
+    fn a_star_matches_any_run_and_nothing_else() {
+        assert!(glob("layer/*.color", "layer/Walls.color"));
+        assert!(glob("layer/*.color", "layer/.color"));
+        assert!(!glob("layer/*.color", "layer/Walls.flags"));
+        assert!(glob("$A", "$A"));
+        assert!(!glob("$A", "$AB"));
+        assert!(glob("*", "anything"));
+        assert!(glob("a*b*c", "aXbYc"));
+        assert!(!glob("a*b*c", "aXcYb"));
+    }
+}
