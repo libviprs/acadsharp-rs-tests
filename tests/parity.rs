@@ -85,6 +85,54 @@ fn emit(bin: &str, engine: &str, id: &str, out: &Path) -> Result<Emitted, String
         .arg(out)
         .output()
         .map_err(|e| format!("the {engine} emitter ({bin}) could not be started: {e}"))?;
+    finish(run, engine, id, out, false)
+}
+
+/// The same, for bytes that are not a manifest row (a round-trip output): they go
+/// in on standard input, so a reader that aborts on a writer's malformed file
+/// takes only its own cell down.
+fn emit_stdin(
+    bin: &str,
+    engine: &str,
+    id: &str,
+    kind: &str,
+    bytes: &[u8],
+    out: &Path,
+) -> Result<Emitted, String> {
+    use std::io::Write;
+    use std::process::Stdio;
+    let mut child = Command::new(bin)
+        .args(["--fixture", id, "--stdin-as", kind, "--out"])
+        .arg(out)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|e| format!("the {engine} emitter ({bin}) could not be started: {e}"))?;
+    let mut stdin = child.stdin.take().expect("stdin was piped");
+    let data = bytes.to_vec();
+    // From a thread: the child may exit before it has read everything.
+    let feeder = std::thread::spawn(move || {
+        let _ = stdin.write_all(&data);
+    });
+    let run = child
+        .wait_with_output()
+        .map_err(|e| format!("the {engine} emitter ({bin}) did not finish: {e}"))?;
+    let _ = feeder.join();
+    finish(run, engine, id, out, true)
+}
+
+/// `lenient`: a stream that is not schema 1 is the cell's outcome (a reader that
+/// emitted garbage for a writer's output is a finding), not a failure of the
+/// run. For the corpus it stays a failure of the run: our own emitter writing an
+/// invalid stream there is a bug in the emitter.
+fn finish(
+    run: std::process::Output,
+    engine: &str,
+    id: &str,
+    out: &Path,
+    lenient: bool,
+) -> Result<Emitted, String> {
     let stderr = String::from_utf8_lossy(&run.stderr).to_string();
     if !run.status.success() {
         if stderr.contains("Unlinked") {
@@ -99,7 +147,15 @@ fn emit(bin: &str, engine: &str, id: &str, out: &Path) -> Result<Emitted, String
     }
     let jsonl = out.join(format!("{id}.{engine}.jsonl"));
     let text = std::fs::read_to_string(&jsonl).map_err(|e| format!("{}: {e}", jsonl.display()))?;
-    let records = parse_stream(&text).map_err(|e| format!("{}: {e}", jsonl.display()))?;
+    let records = match parse_stream(&text) {
+        Ok(r) => r,
+        Err(e) if lenient => {
+            return Ok(Emitted::Failed(format!(
+                "{engine} emitted a stream that is not schema 1: {e}"
+            )));
+        }
+        Err(e) => return Err(format!("{}: {e}", jsonl.display())),
+    };
     let side = out.join(format!("{id}.{engine}.src.jsonl"));
     let sidecar = std::fs::read_to_string(&side)
         .ok()
@@ -402,8 +458,332 @@ fn compute() -> Result<(Computed, Option<Digests>), String> {
     // reader. acadsharp-rs is EXCLUDED: its C ABI opens DWG only.
     dxf_lane(&mut computed, &tables, &out, rust, &oracles, &held)?;
 
+    // R5.3: what each library writes, read back by the readers that are not it.
+    roundtrip_lane(&mut computed, &tables, &out, sharp, rust, &oracles, &held)?;
+
     let digests = digests(&out)?;
     Ok((computed, digests))
+}
+
+// ---- the round-trip lane (R5.3) -------------------------------------------------------
+
+/// The saves AutoCAD itself wrote at a lower version: the lowering table for an
+/// output at that version is R3.4's invariance list for the save.
+fn lowering_save(version: &str) -> String {
+    format!("acadsharp-{}", version.to_ascii_lowercase())
+}
+
+/// One discrepancy, named by the reference record it is about.
+type BaselineKey = (String, usize, String, String, String, String);
+
+fn baseline_key(f: &acadsharp_rs_tests::compare::Finding) -> Option<BaselineKey> {
+    use acadsharp_rs_tests::compare::FindingKind::{FieldMismatch, OnlyInA, RecordTypeMismatch};
+    // Only kinds named by an A-side index: the reference stream is the same in
+    // the baseline and in the cell, so its record index is the one coordinate that
+    // cannot shift. A record only in B has no such name.
+    if !matches!(f.kind, FieldMismatch | OnlyInA | RecordTypeMismatch) {
+        return None;
+    }
+    Some((
+        format!("{:?}", f.kind),
+        f.index_a?,
+        f.record_type.clone(),
+        f.field.clone(),
+        format!("{:?}", f.a),
+        format!("{:?}", f.b),
+    ))
+}
+
+/// What a reader already disagrees about with the writer's reading of the
+/// *source* (R4.1's verdict for the pair), keyed by the reference record. A
+/// round trip inherits those and is not charged for them; anything the output
+/// adds is the writer's to answer for.
+fn baseline_keys(
+    table: &acadsharp_rs_tests::compare::ClassTable,
+    source: &str,
+    reference: &Side,
+    reader_of_source: &Side,
+) -> std::collections::BTreeSet<BaselineKey> {
+    use acadsharp_rs_tests::compare::compare;
+    compare(source, &reference.stream, &reader_of_source.stream, table)
+        .map(|r| r.red().into_iter().filter_map(baseline_key).collect())
+        .unwrap_or_default()
+}
+
+fn lowered_by_list(
+    on: bool,
+    list: &acadsharp_rs_tests::invariance::ExceptionList,
+    save: &str,
+    f: &acadsharp_rs_tests::compare::Finding,
+) -> bool {
+    on && list
+        .row_for(save, f)
+        .is_some_and(|r| r.kind == acadsharp_rs_tests::invariance::Kind::Exception)
+}
+
+/// What one reader made of one round-trip output.
+type Reading<'a> = Result<&'a Side, &'a String>;
+
+/// Judge one cell: `reader`'s reading of `w` against the writer's own reading of
+/// its source.
+fn cell(
+    computed: &mut Computed,
+    tables: &BTreeMap<String, acadsharp_rs_tests::compare::ClassTable>,
+    w: &fixtures::Written,
+    reference: &Side,
+    explained: Option<&dyn Fn(&acadsharp_rs_tests::compare::Finding) -> bool>,
+    reader: &str,
+    got: Reading,
+) -> Result<(), String> {
+    let pair = format!("w-{}:{reader}", w.writer);
+    put(
+        computed,
+        tables,
+        &w.id,
+        &pair,
+        Ok(reference),
+        got,
+        explained,
+    )
+}
+
+fn roundtrip_lane(
+    computed: &mut Computed,
+    base: &BTreeMap<String, acadsharp_rs_tests::compare::ClassTable>,
+    out: &Path,
+    sharp: &str,
+    rust: &str,
+    oracles: &BTreeMap<String, Side>,
+    held: &BTreeMap<(&'static str, String), Emitted>,
+) -> Result<(), String> {
+    use acadsharp_rs_tests::invariance::ExceptionList;
+    let list = ExceptionList::oracle().map_err(|e| e.to_string())?;
+
+    // A cell inherits the divergences its reader already carries on the source:
+    // the table for (writer, reader) starts from the R4.1 table for the same
+    // engines, rows re-keyed to each output. One that stops holding after the
+    // round trip is the comparator's stale-row finding, which is red.
+    let mut tables = base.clone();
+    for (cell, from) in [
+        ("w-acadsharp:acadrust", "oracle/acadrust"),
+        ("w-acadsharp:acadsharp", "oracle/acadsharp"),
+    ] {
+        let rows: Vec<_> = base.get(from).map(|t| t.known.clone()).unwrap_or_default();
+        if let Some(t) = tables.get_mut(cell) {
+            for w in fixtures::written()
+                .iter()
+                .filter(|w| w.writer == "acadsharp")
+            {
+                for r in rows.iter().filter(|r| r.fixture == w.source) {
+                    let mut r = r.clone();
+                    r.fixture = w.id.clone();
+                    t.known.push(r);
+                }
+            }
+        }
+    }
+
+    for w in fixtures::written() {
+        let kind = if w.container == "dwg" { "dwg" } else { "dxf" };
+        let reference: &Side = match w.writer.as_str() {
+            "acadsharp" => oracles
+                .get(&w.source)
+                .ok_or_else(|| format!("{}: its source {} is not a fixture", w.id, w.source))?,
+            _ => match held.get(&("acadrust", w.source.clone())) {
+                Some(Emitted::Ok(s)) => s,
+                _ => {
+                    return Err(format!(
+                        "{}: acadrust did not read its own source {}, so there is no reference",
+                        w.id, w.source
+                    ));
+                }
+            },
+        };
+
+        // The bytes: stored (ACadSharp's) or made again here (acadrust's), and in
+        // both cases the bytes the manifest froze.
+        let bytes: Result<Vec<u8>, String> = if let Some(why) = &w.write_failed {
+            Err(format!("the writer failed: {why}"))
+        } else if w.is_stored() {
+            w.load().map_err(|e| e.to_string())
+        } else {
+            let src = fixtures::load(&w.source).map_err(|e| e.to_string())?;
+            let made = acadsharp_rs_tests::acadrust_emit::rewrite(&src, &w.container, &w.version)
+                .map_err(|e| format!("{}: acadrust cannot write it any more: {e}", w.id))?;
+            w.verify(&made)
+                .map_err(|e| format!("the writer is not deterministic or has moved: {e}"))?;
+            Ok(made)
+        };
+
+        // A finding is explained when R3.4 lists it as the format's own lowering
+        // for this version (ACadSharp's rewrites of the oracle's reference), or
+        // when the reader already disagrees with the writer's reading of the
+        // *source* in exactly that way (R4.1's verdict, inherited).
+        let lowered =
+            w.writer == "acadsharp" && list.fixtures().contains(lowering_save(&w.version).as_str());
+        let make_explained = |baseline: std::collections::BTreeSet<BaselineKey>| {
+            let save = lowering_save(&w.version);
+            let list = &list;
+            let writer_is_acadsharp = w.writer == "acadsharp";
+            move |f: &acadsharp_rs_tests::compare::Finding| {
+                if baseline_key(f).is_some_and(|k| baseline.contains(&k)) {
+                    return true;
+                }
+                lowered_by_list(writer_is_acadsharp && lowered, list, &save, f)
+            }
+        };
+
+        // The oracle's frozen reading.
+        let oracle_side = match (&w.reference_jsonl, &w.no_reference) {
+            (Some(_), _) => {
+                let text = String::from_utf8(
+                    w.load_reference_jsonl()
+                        .map_err(|e| format!("{}: {e}", w.id))?,
+                )
+                .map_err(|e| e.to_string())?;
+                // A file so damaged the oracle's own stream breaks the schema
+                // (a corrupt string in a warning) is that cell's outcome.
+                match parse_stream(&text) {
+                    Ok(records) => Ok(Side {
+                        label: format!("oracle-written:{}", w.id),
+                        stream: Stream::new(records),
+                    }),
+                    Err(e) => Err(format!("the oracle's reading is not schema 1: {e}")),
+                }
+            }
+            (None, Some(why)) => Err(format!("the oracle cannot read it: {why}")),
+            (None, None) => Err(format!(
+                "{}: the oracle neither read it nor said why not",
+                w.id
+            )),
+        };
+        let unwritten = bytes.as_ref().err().cloned();
+        if let Some(why) = &unwritten {
+            // The writer produced nothing, so no reader had anything to open.
+            let readers: &[&str] = if kind == "dwg" {
+                &["oracle", "acadrust", "acadsharp"]
+            } else {
+                &["oracle", "acadrust", "ezdxf"]
+            };
+            for r in readers {
+                cell(computed, &tables, w, reference, None, r, Err(why))?;
+            }
+            computed.insert(
+                (w.id.clone(), format!("w-{}:version", w.writer)),
+                (Verdict::OpenFailed.to_string(), String::new(), why.clone()),
+            );
+            continue;
+        }
+        let bytes = bytes.expect("checked above");
+
+        // The version it says it is: the oracle, a reader that did not write it,
+        // is the witness. Every cell excludes `document.acad_version` (the
+        // version is what was written), so this is where a writer that writes
+        // the wrong one is caught.
+        if let Ok(o) = &oracle_side {
+            let said = match o.stream.records.first() {
+                Some(acadsharp_rs_tests::canonical::Record::Document(d)) => d.acad_version.clone(),
+                _ => String::new(),
+            };
+            computed.insert(
+                (w.id.clone(), format!("w-{}:version", w.writer)),
+                if said == w.version {
+                    (Verdict::Match.to_string(), String::new(), String::new())
+                } else {
+                    (
+                        Verdict::Diff(1).to_string(),
+                        format!("{} wrote {}, the oracle reads {said:?}", w.id, w.version),
+                        String::new(),
+                    )
+                },
+            );
+        } else {
+            computed.insert(
+                (w.id.clone(), format!("w-{}:version", w.writer)),
+                (
+                    Verdict::OpenFailed.to_string(),
+                    String::new(),
+                    "the oracle cannot read it, so nothing independent says its version"
+                        .to_string(),
+                ),
+            );
+        }
+
+        // Each reader's reading of the source, for the baseline it inherits.
+        let held_side = |engine: &'static str| -> Option<&Side> {
+            match held.get(&(engine, w.source.clone())) {
+                Some(Emitted::Ok(s)) => Some(s),
+                _ => None,
+            }
+        };
+        let judge = |computed: &mut Computed,
+                     reader: &str,
+                     of_source: Option<&Side>,
+                     got: Reading|
+         -> Result<(), String> {
+            let pair = format!("w-{}:{reader}", w.writer);
+            let base = match (of_source, tables.get(&pair)) {
+                (Some(side), Some(table)) => baseline_keys(table, &w.source, reference, side),
+                _ => Default::default(),
+            };
+            let explained = make_explained(base);
+            cell(
+                computed,
+                &tables,
+                w,
+                reference,
+                Some(&explained),
+                reader,
+                got,
+            )
+        };
+
+        match &oracle_side {
+            Ok(s) => judge(computed, "oracle", oracles.get(&w.source), Ok(s))?,
+            Err(why) => judge(computed, "oracle", None, Err(why))?,
+        }
+        let rust_run = emit_stdin(rust, "acadrust", &w.id, kind, &bytes, out)?;
+        judge(
+            computed,
+            "acadrust",
+            held_side("acadrust"),
+            as_ref(&rust_run),
+        )?;
+        if kind == "dwg" {
+            let sharp_run = emit_stdin(sharp, "acadsharp", &w.id, kind, &bytes, out)?;
+            judge(
+                computed,
+                "acadsharp",
+                held_side("acadsharp"),
+                as_ref(&sharp_run),
+            )?;
+        } else {
+            // AutoCAD's own DXF of the source is ezdxf's baseline.
+            let twin = fixtures::oracle_inputs()
+                .iter()
+                .find(|i| {
+                    i.for_fixture.as_deref() == Some(w.source.as_str())
+                        && i.encoding.as_deref() == Some("ascii")
+                })
+                .and_then(|i| fixtures::ground_truth(&i.id))
+                .map(ezdxf_side)
+                .transpose()?;
+            match fixtures::ground_truth(&w.id) {
+                Some(gt) => match &gt.failed {
+                    Some(why) => {
+                        let why = format!("ezdxf would not read it: {why}");
+                        judge(computed, "ezdxf", twin.as_ref(), Err(&why))?;
+                    }
+                    None => {
+                        let side = ezdxf_side(gt)?;
+                        judge(computed, "ezdxf", twin.as_ref(), Ok(&side))?;
+                    }
+                },
+                None => return Err(format!("{}: no ezdxf reading of a DXF output", w.id)),
+            }
+        }
+    }
+    Ok(())
 }
 
 // ---- the DXF lane (R5.1) --------------------------------------------------------------
@@ -939,4 +1319,43 @@ fn a_moved_coordinate_in_a_scratch_copy_of_a_twin_turns_its_dxf_against_dwg_row_
         "the finding names the line: {:?}",
         mutated.red
     );
+}
+
+// ---- the round-trip lane's control (R5.3) -------------------------------------------------
+
+/// The control on the hashes: acadrust writes the same bytes twice, at every
+/// version it claims, in every container. The lane regenerates its outputs on every
+/// run and holds them to the manifest's sha256, which only means something while
+/// this holds.
+#[test]
+fn acadrust_writes_the_same_bytes_twice() {
+    use acadsharp_rs_tests::acadrust_emit::rewrite;
+    let source = fixtures::load("acadsharp-ac1032").unwrap();
+    for (container, version) in [
+        ("dwg", "AC1015"),
+        ("dwg", "AC1032"),
+        ("dxf-ascii", "AC1018"),
+        ("dxf-binary", "AC1027"),
+    ] {
+        let a = rewrite(&source, container, version).unwrap();
+        let b = rewrite(&source, container, version).unwrap();
+        assert!(a == b, "{container} {version}: two writes differ");
+        assert!(a.len() > 1000, "{container} {version}: {} bytes", a.len());
+    }
+}
+
+/// A manifest row is the bytes acadrust writes today: if the writer moves, the row
+/// has to be regenerated on purpose.
+#[test]
+fn every_acadrust_row_is_what_acadrust_writes_now() {
+    use acadsharp_rs_tests::acadrust_emit::rewrite;
+    for w in fixtures::written()
+        .iter()
+        .filter(|w| w.writer == "acadrust" && w.write_failed.is_none())
+    {
+        let src = fixtures::load(&w.source).unwrap();
+        let made =
+            rewrite(&src, &w.container, &w.version).unwrap_or_else(|e| panic!("{}: {e}", w.id));
+        w.verify(&made).unwrap_or_else(|e| panic!("{e}"));
+    }
 }

@@ -104,6 +104,15 @@ The DXF lane (R5.1) keys its tables `dxf:a/b` (reader against reader on a DXF, t
 | `dxf:oracle/acadrust`, `dxf:ezdxf/oracle` | `text.text` of the embedded-MTEXT attribute in `dxf-sample-ac1032-*` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
 | `dxf-dwg:oracle`, `dxf-dwg:acadrust` | the spline's `control_points.len`, `knots.len`, `fit_points.len` from AC1027 | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#150 |
 
+The round-trip lane (R5.3) keys its tables `w-<writer>:<reader>`: a reader's reading of a drawing a writer wrote, held against the writer's own reading of the source (the oracle for ACadSharp, acadrust for acadrust). The class is the one the same two engines have on the DWG. A finding is explained, and counts as `KNOWN`, when it is a difference R3.4's invariance list names for that version (ACadSharp's rewrites, judged against the oracle's reference) or one the reader already has against the same reference record on the source itself (R4.1's verdict for the pair, inherited); anything else a round trip adds is the writer's.
+
+| pair | row | class | issue |
+|---|---|---|---|
+| `w-acadsharp:*`, `w-acadrust:*` (eight keys) | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#29 |
+| the same eight | `document.acad_version`, `document.format`, `document.maintenance_version` (what was written is what changed; the version is held by a `w-<writer>:version` row against the oracle) | `EXCLUDED` | libviprs/acadsharp-rs-tests#29 |
+| `w-acadsharp:acadsharp`, `w-acadrust:acadsharp` | the wire 2 gaps above | `EXCLUDED` | as above |
+| `w-acadsharp:acadrust`, `w-acadsharp:acadsharp` | the `KNOWN_DIVERGENCE` rows of `oracle/acadrust` and `oracle/acadsharp` for `acadsharp-ac1032`, copied to each output | `KNOWN_DIVERGENCE` (red if it stops holding) | per row, as in R4.1 |
+
 Everything else the run finds that no row lists is a `DIFF` or a `COUNT` in
 `parity/VERDICTS.toml`, with an issue, and is debt rather than an exception.
 
