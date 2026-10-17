@@ -36,7 +36,7 @@ issue = "libviprs/libviprs-dep#104"
 [[exclude]]
 pairs = ["oracle/acadsharp", "acadsharp/acadrust", "w-acadsharp:acadsharp", "w-acadrust:acadsharp"]
 record = "polygon"
-reason = "the wire carries no entity type, so a hatch loop and a SOLID are both a Polygon, and a hatch loop is one record per loop with bulges where schema 1 sends one analytic record per edge."
+reason = "decided, not a gap (acadsharp-rs-tests#59): the wire draws a hatch loop as the one filled boundary it is, a Polygon with bulges, where schema 1 sends one analytic record per edge. Both describe the same boundary and a viewer paints the same thing, and the wire carries no entity type, so a hatch loop and a SOLID look alike and the kind is excluded for the pairs with the wire in them. Hatch edges are still compared between the oracle and acadrust, and a hatch type bit in a later wire's prologue would let the SOLIDs be compared again."
 issue = "libviprs/acadsharp-rs-tests#59"
 
 [[exclude]]
