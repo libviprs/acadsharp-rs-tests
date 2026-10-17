@@ -110,11 +110,13 @@ reason = "test infrastructure with no assertions of its own"
 path = "DxfMapTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's own DXF property map, an internal acadrust does not share" }
 
 [[test_file]]
 path = "DxfPropertyTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's own DXF property attributes, an internal acadrust does not share" }
 
 [[test_file]]
 path = "Entities/ArcTests.cs"
@@ -329,6 +331,7 @@ reason = "a rendering-contract entity suite. It is covered end to end by the JSO
 path = "GroupCodeValueTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's own group code table, an internal acadrust does not share" }
 
 [[test_file]]
 path = "Header/CadHeaderTests.cs"
@@ -367,36 +370,43 @@ reason = "the DWG reader suite, which is the closest thing upstream has to a spe
 path = "IO/DWG/DwgWriterSingleObjectTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
 
 [[test_file]]
 path = "IO/DWG/DwgWriterTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
 
 [[test_file]]
 path = "IO/DXF/DxfAcdsDataSectionTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's ACDSDATA section handling, which R5.1 does not compare" }
 
 [[test_file]]
 path = "IO/DXF/DxfAcisSatTextTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's ACIS SAT text handling, which R5.1 does not compare" }
 
 [[test_file]]
 path = "IO/DXF/DxfReaderTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1 compares it against its own DWG reading and the oracle's)" }
 
 [[test_file]]
 path = "IO/DXF/DxfWriterSingleObjectTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
 
 [[test_file]]
 path = "IO/DXF/DxfWriterTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
 
 [[test_file]]
 path = "IO/DynamicBlockTests.cs"
@@ -441,6 +451,7 @@ reason = "multileaders, which have no canonical record yet and must therefore su
 path = "IO/RewriteSamplesTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
 
 [[test_file]]
 path = "IO/SVG/SvgWriterTests.cs"
@@ -463,6 +474,7 @@ reason = "viewports as read from a file, which decide what a layout view record 
 path = "IO/WriterSingleObjectTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
 
 [[test_file]]
 path = "IO/XDataTests.cs"
@@ -473,21 +485,25 @@ reason = "extended data through the reader, carried by the object model"
 path = "Internal/DwgHandleWriterTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's own handle section writer, an internal acadrust does not share" }
 
 [[test_file]]
 path = "Internal/DwgHeaderWriterTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's own header section writer, an internal acadrust does not share" }
 
 [[test_file]]
 path = "Internal/DwgSectionWriterTestBase.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
+acadrust = { status = "not_applicable", reason = "test base class for ACadSharp's own section writers" }
 
 [[test_file]]
 path = "Internal/DxfMapTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
+acadrust = { status = "not_applicable", reason = "tests ACadSharp's own DXF property map, an internal acadrust does not share" }
 
 [[test_file]]
 path = "Objects/CadDictionaryTests.cs"
