@@ -921,3 +921,109 @@ fn a_dual_oracle_row_with_no_reason_is_red() {
     });
     assert!(matches!(t.validate(), Err(TableError::NoReason(_))));
 }
+
+// ---- KNOWN_MISSING (a writer that leaves whole records out) --------------------
+
+fn missing(record_type: &str, indices: &[usize]) -> acadsharp_rs_tests::compare::KnownMissing {
+    acadsharp_rs_tests::compare::KnownMissing {
+        fixture: "fixture".into(),
+        record_type: record_type.into(),
+        indices: indices.to_vec(),
+        reason: "the writer does not emit the entity".into(),
+        issue: "libviprs/acadsharp-rs-tests#106".into(),
+    }
+}
+
+fn with_missing(m: acadsharp_rs_tests::compare::KnownMissing) -> ClassTable {
+    let mut t = loose();
+    t.known_missing.push(m);
+    t
+}
+
+#[test]
+fn a_listed_missing_record_is_known_and_not_red() {
+    let mut b = base();
+    b.remove(5);
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&b),
+        &with_missing(missing("arc", &[5])),
+    )
+    .unwrap();
+    let f = only(&report);
+    assert_eq!(f.kind, FindingKind::OnlyInA);
+    assert_eq!(f.class, Class::KnownDivergence);
+    assert_eq!(
+        f.disposition,
+        Disposition::Known {
+            issue: "libviprs/acadsharp-rs-tests#106".into()
+        }
+    );
+    assert!(report.is_match());
+}
+
+#[test]
+fn a_listed_missing_record_that_is_back_is_red_and_asks_for_the_row_to_be_tightened() {
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&base()),
+        &with_missing(missing("arc", &[5])),
+    )
+    .unwrap();
+    let f = only(&report);
+    assert_eq!(f.kind, FindingKind::StaleKnownRow);
+    assert_eq!(f.disposition, Disposition::KnownVanished);
+    assert_eq!(f.index_a, Some(5));
+    assert!(!report.is_match());
+}
+
+#[test]
+fn a_missing_record_nobody_listed_stays_open_beside_a_listed_one() {
+    let mut b = base();
+    b.remove(7);
+    b.remove(5);
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&b),
+        &with_missing(missing("arc", &[5])),
+    )
+    .unwrap();
+    assert_eq!(report.findings.len(), 2);
+    let open: Vec<_> = report.red();
+    assert_eq!(open.len(), 1);
+    assert_eq!(open[0].index_a, Some(7));
+    assert_eq!(open[0].disposition, Disposition::Open);
+}
+
+#[test]
+fn a_listed_index_of_the_wrong_kind_is_not_a_match_for_the_row() {
+    let mut b = base();
+    b.remove(5);
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&b),
+        &with_missing(missing("circle", &[5])),
+    )
+    .unwrap();
+    assert_eq!(report.red().len(), 2, "{:?}", report.findings);
+}
+
+#[test]
+fn a_known_missing_row_with_no_reason_or_no_issue_is_red() {
+    let mut m = missing("arc", &[5]);
+    m.reason.clear();
+    assert!(matches!(
+        with_missing(m).validate(),
+        Err(TableError::NoReason(_))
+    ));
+    let mut m = missing("arc", &[5]);
+    m.issue.clear();
+    assert!(matches!(
+        with_missing(m).validate(),
+        Err(TableError::NoIssue(_))
+    ));
+}

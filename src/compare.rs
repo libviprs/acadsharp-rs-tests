@@ -209,6 +209,21 @@ pub struct KnownDivergence {
     pub issue: String,
 }
 
+/// Records of one kind that the A side has and the B side does not, listed by
+/// their index in A's stream. For a defect that loses whole records (a writer
+/// that leaves an entity out), where a field-level [`KnownDivergence`] has
+/// nothing to hold on to. Only for pairs whose A side is the oracle, because the
+/// index is the oracle's. Every listed index must still be missing, as that kind,
+/// or the row is red: a writer that starts keeping the record makes the row stale.
+#[derive(Debug, Clone, PartialEq)]
+pub struct KnownMissing {
+    pub fixture: String,
+    pub record_type: String,
+    pub indices: Vec<usize>,
+    pub reason: String,
+    pub issue: String,
+}
+
 /// A disagreement no ground truth settles: listed, not scored.
 #[derive(Debug, Clone, PartialEq)]
 pub struct DualOracle {
@@ -236,6 +251,7 @@ pub struct ClassTable {
     pub warnings: WarningRow,
     pub excluded: Vec<Exclusion>,
     pub known: Vec<KnownDivergence>,
+    pub known_missing: Vec<KnownMissing>,
     pub dual_oracle: Vec<DualOracle>,
 }
 
@@ -276,6 +292,7 @@ impl ClassTable {
             warnings,
             excluded: Vec::new(),
             known: Vec::new(),
+            known_missing: Vec::new(),
             dual_oracle: Vec::new(),
         }
     }
@@ -304,6 +321,16 @@ impl ClassTable {
                 &format!(
                     "KNOWN_DIVERGENCE row {}.{} of {}",
                     k.record_type, k.field, k.fixture
+                ),
+                &k.reason,
+                &k.issue,
+            )?;
+        }
+        for k in &self.known_missing {
+            need(
+                &format!(
+                    "KNOWN_MISSING row {} of {}",
+                    k.record_type, k.fixture
                 ),
                 &k.reason,
                 &k.issue,

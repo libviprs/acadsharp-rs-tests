@@ -31,6 +31,14 @@
 //! b = "..."
 //! reason = "..."
 //! issue = "..."
+//!
+//! [[known_missing]]      # whole records the A side (the oracle) has and B lacks
+//! pairs = ["w-acadsharp:oracle"]
+//! fixtures = ["w-acadsharp-ac1032-dxf-ascii-ac1015"]
+//! record_type = "line"
+//! oracle_indices = [126, 127]   # indices in the oracle's stream of the source
+//! reason = "..."
+//! issue = "..."
 //! ```
 //!
 //! Pairs are written `a/b` in the order the verdict file uses.
@@ -40,8 +48,8 @@ use std::collections::BTreeMap;
 use serde::Deserialize;
 
 use crate::compare::{
-    BOUNDED, BOUNDED_TIGHT, Class, ClassTable, Engine, Exclusion, KnownDivergence, Pair, RecordKey,
-    Scope, Val, WarningRow,
+    BOUNDED, BOUNDED_TIGHT, Class, ClassTable, Engine, Exclusion, KnownDivergence, KnownMissing,
+    Pair, RecordKey, Scope, Val, WarningRow,
 };
 
 const TABLES: &str = include_str!("../parity/TABLES.toml");
@@ -172,8 +180,22 @@ struct KnownRow {
     issue: String,
 }
 
+#[derive(Debug, Deserialize)]
+struct MissingRow {
+    pairs: Vec<String>,
+    fixtures: Vec<String>,
+    record_type: String,
+    oracle_indices: Vec<usize>,
+    #[serde(default)]
+    reason: String,
+    #[serde(default)]
+    issue: String,
+}
+
 #[derive(Debug, Default, Deserialize)]
 struct File {
+    #[serde(default)]
+    known_missing: Vec<MissingRow>,
     #[serde(default)]
     warnings: Vec<WarningsRow>,
     #[serde(default)]
@@ -270,6 +292,33 @@ pub fn load(text: &str) -> Result<BTreeMap<String, ClassTable>, String> {
             issue: k.issue.clone(),
         });
     }
+    for m in &file.known_missing {
+        if m.oracle_indices.is_empty() || m.fixtures.is_empty() {
+            return Err(format!(
+                "a known_missing row for {} lists no fixture or no index",
+                m.record_type
+            ));
+        }
+        for p in &m.pairs {
+            let t = tables.get_mut(p).ok_or_else(|| {
+                format!("a known_missing row names {p}, which has no warnings row")
+            })?;
+            if t.pair.a != Engine::Oracle {
+                return Err(format!(
+                    "a known_missing row names {p}, whose A side is not the oracle, so its indices mean nothing there"
+                ));
+            }
+            for f in &m.fixtures {
+                t.known_missing.push(KnownMissing {
+                    fixture: f.clone(),
+                    record_type: m.record_type.clone(),
+                    indices: m.oracle_indices.clone(),
+                    reason: m.reason.clone(),
+                    issue: m.issue.clone(),
+                });
+            }
+        }
+    }
     for t in tables.values() {
         t.validate()
             .map_err(|e| format!("{}: {e}", pair_name(t.pair)))?;
@@ -330,5 +379,25 @@ mod tests {
         let tables = load(&ok).unwrap();
         assert_eq!(tables["oracle/acadrust"].known.len(), 1);
         assert_eq!(tables["oracle/acadrust"].known[0].a, Val::Str("x".into()));
+    }
+
+    const WW: &str = "[[warnings]]\npair = \"w-acadsharp:oracle\"\ncompare = false\nreason = \"r\"\nissue = \"i#1\"\n";
+
+    #[test]
+    fn a_known_missing_row_is_expanded_per_fixture_and_pair() {
+        let text = format!(
+            "{WW}\n[[known_missing]]\npairs=[\"w-acadsharp:oracle\"]\nfixtures=[\"f1\",\"f2\"]\nrecord_type=\"line\"\noracle_indices=[3,4]\nreason=\"r\"\nissue=\"i#2\"\n"
+        );
+        let tables = load(&text).unwrap();
+        let rows = &tables["w-acadsharp:oracle"].known_missing;
+        assert_eq!(rows.len(), 2);
+        assert_eq!(rows[1].fixture, "f2");
+        assert_eq!(rows[0].indices, vec![3, 4]);
+    }
+
+    #[test]
+    fn a_known_missing_row_on_a_pair_whose_a_side_is_not_the_oracle_is_refused() {
+        let text = "[[warnings]]\npair = \"w-acadrust:oracle\"\ncompare = false\nreason = \"r\"\nissue = \"i#1\"\n\n[[known_missing]]\npairs=[\"w-acadrust:oracle\"]\nfixtures=[\"f\"]\nrecord_type=\"line\"\noracle_indices=[3]\nreason=\"r\"\nissue=\"i#2\"\n";
+        assert!(load(text).unwrap_err().contains("not the oracle"));
     }
 }
