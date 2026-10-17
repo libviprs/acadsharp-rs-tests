@@ -331,7 +331,10 @@ public static class Model1Extractor
             // false and left out of the comparison (parity/MODEL1.toml).
             fields.Add(("annotative", "false"));
             records.Add(Model1Record.Of("dimstyle", name, [.. fields]));
+        }
+    }
 
+    /// <summary>
     /// One <c>dictionary</c> record per DICTIONARY (and DICTIONARYWDFLT) reachable
     /// from the root, keyed by the path of entry keys; plus the extension
     /// dictionaries of table entries (<c>table/&lt;kind&gt;/&lt;name&gt;</c>) and of
