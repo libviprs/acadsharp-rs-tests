@@ -354,6 +354,8 @@ pub fn linetype_records(doc: &CadDocument) -> Vec<Record> {
 pub fn textstyle_records(doc: &CadDocument) -> Vec<Record> {
     doc.text_styles
         .iter()
+        // An entry with no name cannot be keyed: it has no record.
+        .filter(|t| !t.name.is_empty())
         .map(|t| {
             Record::Entry(Entry::new(
                 "textstyle",

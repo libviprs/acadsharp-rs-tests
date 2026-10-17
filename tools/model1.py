@@ -312,6 +312,8 @@ def textstyle_lines(doc) -> list[tuple[str, str, str]]:
     for st in doc.styles:
         d = st.dxf
         name = d.name
+        if not name:  # an entry with no name cannot be keyed: it has no record
+            continue
         flags = int(d.get("flags", 0))
         gen = int(d.get("generation_flags", 0))
         fields = [

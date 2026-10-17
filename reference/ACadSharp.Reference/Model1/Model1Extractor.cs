@@ -152,6 +152,15 @@ public static class Model1Extractor
         foreach (TextStyle style in document.TextStyles)
         {
             string name = style.Name ?? string.Empty;
+
+            // An entry with no name cannot be keyed, so it has no record. A STYLE
+            // entry without a name is a shape file that only a linetype segment
+            // points at, and ACadSharp invents unnamed0, unnamed1... for them.
+            if (name.Length == 0 || (style.IsShapeFile && IsInventedName(name)))
+            {
+                continue;
+            }
+
             long mirror = (long)style.MirrorFlag;
             long flags = (long)(short)style.Flags;
 
@@ -172,6 +181,11 @@ public static class Model1Extractor
                 ("xref_dependent", (flags & 16) != 0 ? "true" : "false")));
         }
     }
+
+    private static bool IsInventedName(string name) =>
+        name.StartsWith("unnamed", StringComparison.Ordinal)
+        && name.Length > "unnamed".Length
+        && name["unnamed".Length..].All(char.IsAsciiDigit);
 
     private static void ExtractLinetypes(CadDocument document, List<Model1Record> records)
     {
