@@ -111,6 +111,16 @@ jobs:
       - name: The oracle's own tests
         run: dotnet run --project reference/ACadSharp.Reference.Tests -c Release --no-build --no-restore
 
+      # The DWG generator (reference/ACadSharp.Generator) is its own project, so
+      # it is restored and run on its own. `selftest` writes one drawing twice,
+      # an interval apart, and fails if the bytes differ; it also writes the
+      # same drawing with the stamps unpinned and fails if THAT does not differ,
+      # which is what shows the first comparison could have failed.
+      - name: The generator writes the same bytes every time
+        run: |
+          dotnet restore reference/ACadSharp.Generator --locked-mode
+          dotnet run --project reference/ACadSharp.Generator -c Release --no-restore -- selftest
+
   reference-outputs:
     name: Reference outputs
     runs-on: ubuntu-latest
