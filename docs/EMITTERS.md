@@ -177,6 +177,18 @@ these is hidden by an exclusion; each is a `DIFF` or `COUNT` and the
 | block depth | `g13_dimension_deep` | the decode stops at `max_block_depth`, a terminal `LIMIT_EXCEEDED` | warns and carries on | kept on purpose, see below (acadsharp-rs-tests#68) |
 | spline flags and weights | `export-sample`, `g13_hatch` | `closed` and `periodic` disagree three ways; the oracle writes weights of 0.0 | | acadsharp-rs-tests#65, #67 |
 
+Four of those rows are fixed in libviprs-dep and wait on an archive. The mirrored
+insert (#63) and the non-uniform insert scale (#64) landed in
+libviprs-dep#151, and the maintenance version (#61) and the text alignment,
+width factor, style and anchor (#66) in libviprs-dep#152 (wire 3, which this
+suite cannot read until `acadsharp-rs` decodes it). The rows keep the verdicts
+they have until `NATIVE_ARTIFACT.toml` pins an archive built from that tree. One
+of #64's three fixtures will not flip: `g13_ocs_plane`'s oblique circle is
+written by the oracle as an ellipse of ratio 1.0000000000000002, because the
+oracle (and `emit-acadrust`, which ports it) compares two square roots for exact
+equality and misses on the last bit. The shim's circle is the right record, so
+that row stays a `DIFF` on purpose.
+
 The block depth row is a decision and not a debt (acadsharp-rs-tests#68). The
 wire's bound is `max_block_depth` in `Limits`, which the caller sets and which
 defaults to 64, and `docs/ABI.md` makes passing it a terminal `LIMIT_EXCEEDED`:

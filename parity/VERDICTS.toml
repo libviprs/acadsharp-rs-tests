@@ -2601,7 +2601,7 @@ first = "g13_ocs_mirror oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10
 fixture = "g13_ocs_plane"
 pair = "acadsharp/acadrust"
 verdict = "DIFF:1"
-reason = "acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+reason = "kept on purpose, the oracle is the one that is wrong: the oblique circle (extrusion 1,2,2) is a circle, and the oracle and emit-acadrust, which ports it, decide that by comparing two square roots for exact equality, which misses on the last bit and writes an ellipse of ratio 1.0000000000000002; the shim's circle is the right record (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
 first = 'g13_ocs_plane acadsharp-acadrust: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "circle" vs "ellipse" [EXACT]'
 
@@ -2614,7 +2614,7 @@ verdict = "MATCH"
 fixture = "g13_ocs_plane"
 pair = "oracle/acadsharp"
 verdict = "DIFF:1"
-reason = "under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
+reason = "kept on purpose, the oracle is the one that is wrong: the oblique circle (extrusion 1,2,2) is a circle, and the oracle and emit-acadrust, which ports it, decide that by comparing two square roots for exact equality, which misses on the last bit and writes an ellipse of ratio 1.0000000000000002; the shim's circle is the right record (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
 first = 'g13_ocs_plane oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
