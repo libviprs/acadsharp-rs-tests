@@ -660,7 +660,7 @@ pub fn compare(pair: &str, a: &Side, b: &Side, rules: &Rules) -> Report {
     let (ia, ib) = (index(a), index(b));
     let names: BTreeSet<&String> = ia.keys().chain(ib.keys()).collect();
     let mut report = Report::default();
-    let mut push = |report: &mut Report, kind: FindingKind, key: String, detail: String| {
+    let push = |report: &mut Report, kind: FindingKind, key: String, detail: String| {
         let known = rules.known_for(pair, a.fixture, &key);
         report.findings.push(Finding {
             kind,
