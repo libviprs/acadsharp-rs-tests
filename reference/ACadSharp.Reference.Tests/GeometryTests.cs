@@ -553,6 +553,35 @@ public sealed class GeometryTests
     }
 
     [Fact]
+    public void AHatchEllipseEdgeKeepsItsParametersWhateverWayTheMajorAxisPoints()
+    {
+        // Issue #171, the hatch half of #89. A hatch edge that is an ellipse is
+        // read as the ELLIPSE it converts to, so its start and end are parameters
+        // measured from the major axis and a major axis along -X does not move
+        // them. The edge's arm still added the axis's angle (pi here).
+        CadDocument document = NewDocument();
+        var edge = new Hatch.BoundaryPath.Ellipse
+        {
+            Center = new XY(1, 1),
+            MajorAxisEndPoint = new XY(-3, 0),
+            RadiusRatio = 0.5,
+            StartAngle = 0.5,
+            EndAngle = 2.5,
+            CounterClockWise = true,
+        };
+        var path = new Hatch.BoundaryPath();
+        path.Edges.Add(edge);
+        var hatch = new Hatch();
+        hatch.Paths.Add(path);
+        document.Entities.Add(hatch);
+
+        EllipseRecord ellipse = Assert.Single(Records(document).OfType<EllipseRecord>());
+        AssertPoint(new Point3(-3, 0, 0), ellipse.MajorAxis);
+        Assert.Equal(0.5, ellipse.Start, Tolerance);
+        Assert.Equal(2.5, ellipse.End, Tolerance);
+    }
+
+    [Fact]
     public void ABulgingHatchPolylineEdgeLiesAtTheHatchElevationNotAtItsBulge()
     {
         // Issue #56. ACadSharp stores a hatch polyline edge's bulge in each
