@@ -107,9 +107,10 @@ first = 'header $HANDSEED "1551" vs "154D" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "OPEN_FAILED"
-reason = "exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6"
-issue = "libviprs/acadsharp-rs-tests#95"
+verdict = "DIFF:12"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#122"
+first = "header dimstyle/Annotative.$DIMFXL 1.0 vs 0.0 [Red]"
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
@@ -122,9 +123,10 @@ first = "header $CECOLOR 193 vs -1 [Known]"
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "ezdxf/acadrust"
-verdict = "OPEN_FAILED"
-reason = "exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6"
-issue = "libviprs/acadsharp-rs-tests#95"
+verdict = "KNOWN:96"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#137"
+first = "header $XCLIPFRAME type bool vs int [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
@@ -137,9 +139,10 @@ first = 'header $HANDSEED "1484" vs "1488" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "oracle/acadrust"
-verdict = "OPEN_FAILED"
-reason = "exit 1: emit-acadrust: dxf-sample-ac1018-ascii: acadrust could not read this DXF: Not implemented: DATATABLE cell type 6"
-issue = "libviprs/acadsharp-rs-tests#95"
+verdict = "DIFF:8"
+reason = "listed in parity/MODEL1.toml"
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
+first = "header $LENSLENGTH 0.0 vs 50.0 [Red]"
 
 [[row]]
 fixture = "dxf-sample-ac1021-ascii"
