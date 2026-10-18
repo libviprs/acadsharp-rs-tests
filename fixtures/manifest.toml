@@ -4071,6 +4071,902 @@ image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afa
 records = 279
 schema = 1
 
+[[ground_truth]]
+id = "cp-acadrust-1250-dxf-ascii-ac1015"
+input = "cp-acadrust-1250-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c15b0ef58b71deee3b5176cdf5b20512557b87cdcfe657543f8016505e111a96"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "d915c7ed38270f37abb3ef542f8217a1dfde739c2e6426b6d1fecfa7ffc448ad"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1250-dxf-ascii-ac1018"
+input = "cp-acadrust-1250-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "34efa4475c070ca702d7a09322cc8a9b11d5cd0eb7eb3990264e88e0805a7c20"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "d1f22b6af712850ee8879d7a258efcb9f5d905133bd655e0b08bb5aea45ef5c4"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1251-dxf-ascii-ac1015"
+input = "cp-acadrust-1251-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "dab1cdbd14029373bd0654aba44231743a29cfff4fd163f50ab940f2da4a69ea"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "028082da688d5b6f73aaaed6a9c0e4516f96b5e0b72cc2d7d80571f7c5478562"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1251-dxf-ascii-ac1018"
+input = "cp-acadrust-1251-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "fb25345715c273ec682efc8cc4f8dfa90b748f359d2e32bac47b726901a41a6a"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "4afe6206ec69b305c4ef734539d18f04d62534a0ee54249be1cd655f0a1e6d47"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1252-dxf-ascii-ac1015"
+input = "cp-acadrust-1252-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ebaa3dd921a5475f3d0bb27cb5adab3c72aa153eac88139c6dbf7c5a7738b83a"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "50bb5394c8a86e012f666f440aa398bb29af0a176eb6838be2c67cc7cd1715b6"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1252-dxf-ascii-ac1018"
+input = "cp-acadrust-1252-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f9f175df93155e85d38df20d34da273d16d1e27b63cb273a66f47a3cd51f0f0f"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "5b18cd09bbc1a381ac507bd9f1801df4450fdd4311ed7f46f484088c6a0a9a73"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1253-dxf-ascii-ac1015"
+input = "cp-acadrust-1253-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ce4ef6e07aadcf8f10891111205cd3b57ee29485515d0474bdace77a8a5aceef"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "abe7fa7857b2a2ee6adbc0aaa6c2c42e6277de822f30acc5c5fd53034e7d376c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1253-dxf-ascii-ac1018"
+input = "cp-acadrust-1253-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "62c03930bc2545a041520157000da674e248016312885f73bac51914fb8f7857"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "5401561e666d596285ff2c71d9b1c563abffd911ecffc572124233fc682dd50c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1254-dxf-ascii-ac1015"
+input = "cp-acadrust-1254-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "10cfc2f3965df2103ff33b48ddeab7cb2bef0170d094a7b8c9e95dba628e163b"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "8b02b2f07d1d85715faec48d96925b2bf485e8fa9d071e8153cbc6c5bc0da5de"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1254-dxf-ascii-ac1018"
+input = "cp-acadrust-1254-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "7392762a6ca8eea75620f97bc2c80a749ae56937688a73c80997a84050789c2b"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6506bd20f25cd3b35b39c8f027a5eeba0239da287828fa2dcbbab80bec61c7ce"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1255-dxf-ascii-ac1015"
+input = "cp-acadrust-1255-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "b48bc2aca9e7ec7c77ba56c5726fc1ac5ee34dd9a505cf22c8976b9a3f2987e3"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "925d1b94b7938958f6e45d24a27be72708a67b6b096c3979b00ec6e76ea48da7"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1255-dxf-ascii-ac1018"
+input = "cp-acadrust-1255-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8bdb20aa9dc5066a25a380c140e65aa6b0dc3862d7c1027db8432b4093d5b3d9"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "ac2c1e1ab100eef934cc454954d42c364c64932b8a3f371104ea7124bed4d1e7"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1256-dxf-ascii-ac1015"
+input = "cp-acadrust-1256-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "77e744379762c47b2b30620aa6f2aaf6197eef3de36000045e89b9a1c3f5af51"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "dcc253a67fb725103c6c46bae1f22c0e3b8906090b2b34313415e3d800e2f52e"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1256-dxf-ascii-ac1018"
+input = "cp-acadrust-1256-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "0ccd2f4adf9f7d61ec73cc97d8b1faa49dd11f3ed5dad32bd89dfa1e760c6948"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "d797e289b4ec3646e8d9468e815ceaf3e3a1bd5b130c93d5391ca899d5e16afe"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1257-dxf-ascii-ac1015"
+input = "cp-acadrust-1257-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "fd0a3cd781d9375af53cf1ec7d9e143d29fd9ef69a6b5e09e2eb9805d1ad28a2"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "bafcbd8c00014f18f51b5e3067e039aa034d248f0e47920d55ac7e2755611296"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1257-dxf-ascii-ac1018"
+input = "cp-acadrust-1257-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "0d13023dc0c9495f5cebc8338c77658230faeebf121d94ec1a186f23b9f02755"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "597b960aa7207b4b7f64b221b9209d33ba69408b5a7ad0119656aa63c332024f"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1258-dxf-ascii-ac1015"
+input = "cp-acadrust-1258-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ebc575fa2f98e4fd88a85180ee8a924fee5a2541b9b1a77ff20970ce8ed2aa0b"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3e11e1790f08dc616cee16eba598a539c11051fca2881ccbbe75bec9634a2a57"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1258-dxf-ascii-ac1018"
+input = "cp-acadrust-1258-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "72d7fef506f70e2a4a001ee947013d42b0119350804f351f44c2abd0932cfd70"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "380517486ed520a296f95a0bc4b54ab4a3da7d0dc6b64745e0fcc41514d3760d"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-874-dxf-ascii-ac1015"
+input = "cp-acadrust-874-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8afb8326b98f8ad5478cd892753ff51a95bf6dfb366442400879d161f60508fd"
+sidecar = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "0427c8dcc0ba92240fcee9fca013b70ccd34675798cc2a688cdbf6050a957309"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-874-dxf-ascii-ac1018"
+input = "cp-acadrust-874-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "48635266db0c3303565672e471f649f017e3bc4d7bd19393e9ca8be3acf32bf4"
+sidecar = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "8cf734389b0ecbe51285e1da116a8be6477bd31c6bd611e7e10f85af15d66b26"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-932-dxf-ascii-ac1015"
+input = "cp-acadrust-932-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "2cb6e608b372ed1e9dff051882c0aa4ee930ac19f864a6e3097573809f636f2d"
+sidecar = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "fde61c18497a793a2dfd899654af9004acf44f0dd113304ee181e1e7a622cd90"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-932-dxf-ascii-ac1018"
+input = "cp-acadrust-932-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "517fce216a8393031be70f616f42b5249f79f7cff7ceb1a1b62369e2353fdebf"
+sidecar = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "bff8e496356a2afa7246bda9612367417492d0d8f06ff3a2e5b9a0b35933094d"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-936-dxf-ascii-ac1015"
+input = "cp-acadrust-936-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "692c7547fa1c38b20136f2743d2e84093c4e5c9c7d26df5f171e874d6bbd377d"
+sidecar = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "6bc2f3208898e9be413f631485823ec56dbc1e20688cab7aaf5364fdcadd1901"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-936-dxf-ascii-ac1018"
+input = "cp-acadrust-936-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f3fba2273d82b67766d26c4faf4f0e36dd848b3b0393a39c8b701e119f715307"
+sidecar = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6976c2f6a7cb22cba96d01078a5f5b53077bda029ac005dfa33a4590e0b1bce8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-949-dxf-ascii-ac1015"
+input = "cp-acadrust-949-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f43307de3cb968b3a91c559508c8dfd9366c11c01b6662d87fe1ee6cb00bb95e"
+sidecar = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "4b1b8c12fc920bef51c09d9ba8121d4dec9d3a0907b85d4009a5ffaf415ed495"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-949-dxf-ascii-ac1018"
+input = "cp-acadrust-949-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "9f618cbef5695121b392a8515ee67d982a9118b94549010711a96be07491a948"
+sidecar = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "7cd2dbfb40825d3df1135c21d38700e96b0bf01c2e3ce32538d1bde3773c247b"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-950-dxf-ascii-ac1015"
+input = "cp-acadrust-950-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "d715098bca1ba2525967ee4052086e364f0301cdb616721144f816b53a1329bf"
+sidecar = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3b3c27e9ee12d07b74651e55ff7fd76057796fb785e4545247681b5ff4be28d0"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-950-dxf-ascii-ac1018"
+input = "cp-acadrust-950-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "b1503688d979e553659f4673719a14637f84238f879bfb327ce7bbabdb1337c2"
+sidecar = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6a5ed72f8bb05fd183b64c0b195bc130845f16b8cd73b8386988b9252239acf5"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1250-dxf-ascii-ac1015"
+input = "cp-acadsharp-1250-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "11886d1db39bf9053eedaf8afe78aece5acf0aea11efc4848327edecb8315e45"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "866f99b357e3878bf9a9bc7950730a20ece6a6507405aa2ab568f82efb3e0d6a"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1250-dxf-ascii-ac1018"
+input = "cp-acadsharp-1250-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "034e465f71cfdfde113af5e0c3d3aaf78189c83be1d5ae568b3a7b3ec4805755"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "0359b17ec7b7052a87c4f6efa13ed67d1363c736447c57e21c1f97a3968f9cf7"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1251-dxf-ascii-ac1015"
+input = "cp-acadsharp-1251-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ac66d8c1ae437c6b883e128007ef001b99b8b46a5f73335a3e1bf482a7faf074"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "83cc8a972418a201f4ac4b0d17695c798bf0e7c6884d2154e83fc2893673e9ab"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1251-dxf-ascii-ac1018"
+input = "cp-acadsharp-1251-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c5e1101808e79425266aa7f803ebba6d8568a729498841485414c784c41b66f7"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "a40d14bdf3d94ddc6c80630b9f12ecc313ba5340400e29e8a4d38ebc8f336a57"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1252-dxf-ascii-ac1015"
+input = "cp-acadsharp-1252-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "79040b65bbcb1d28a85401cdaa8e970eeb337401faa06367125830fbd423e8cf"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "edbe567467ed42a86ea1a5843002e36628fc642d69ca5dade07a2cb67fd2df02"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1252-dxf-ascii-ac1018"
+input = "cp-acadsharp-1252-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "e110cdfc4adbf80bfb6c0e31cc1c9199995affab460b182db67db36c2ca6e7f0"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "753f7c5226cf0378c2e0c99d397d9e1d232ef0f9403876cd168d80d430783b23"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1253-dxf-ascii-ac1015"
+input = "cp-acadsharp-1253-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "dbfb31bc8bc458468e8cabd1b442761f57abf09f2d92df1202b4010897113137"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "89666925825f8f5db2d2b6df3f3d24cb1f6be6b67d1c594836936c48d08b3e89"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1253-dxf-ascii-ac1018"
+input = "cp-acadsharp-1253-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "434eea91fcd3aef253277dab4d4026d6e234d19d22cd96c70438faa3c48eee06"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "ddd7814ee50049a2855ece89a686239359c9250e3290214c0d004c1554f37b67"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1254-dxf-ascii-ac1015"
+input = "cp-acadsharp-1254-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "db8f2b17165e72d51786a7bb97bab30d569fbc0350546ab4fc4bfe216da25c81"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "43c7879593c37f26aabba31c71f3986a5f79c617ea97a460b24cb5d3b9495910"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1254-dxf-ascii-ac1018"
+input = "cp-acadsharp-1254-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "b421b1fa8af1d45e133790e1235c7b925cb166f772bfde9289ed32724b938fd5"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6e5a40f720d9df44871b1d423c17de4165f828fefbfc7282069bc4e000e63044"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1255-dxf-ascii-ac1015"
+input = "cp-acadsharp-1255-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "973759065841bfef62fb6add44e6c3ad5e665ad44ebca6ba01bdf073c498f8aa"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3c863de1d8d57b3b2c9155d325b854c31de49805bbb389ecf065a36e1950203c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1255-dxf-ascii-ac1018"
+input = "cp-acadsharp-1255-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "d442a233687dfecad0a27cd500ae346741685975930d796b7328adf56db3f852"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "3abc446bbee59d3297d79752303c8a3d2711e760801dd5d12734647ccf7f1601"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1256-dxf-ascii-ac1015"
+input = "cp-acadsharp-1256-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "77997816b350393804c2620533cf29823abf92331325871637e3a357e358d37d"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "fd6cc80e4e275ddbf868a588b23bc2b74bde5a2218cd9c25483999b91ffdf2fe"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1256-dxf-ascii-ac1018"
+input = "cp-acadsharp-1256-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8eda230276c97a5f228ba1e2ff2ea72ce40ea51d71de4b50184dfb8b175ba6fb"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "e37e9773bae60ae32847f60430aed405cddbbbb2815ac7f03e4dc8e6c9a578f3"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1257-dxf-ascii-ac1015"
+input = "cp-acadsharp-1257-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f2e9cb1581e754be49935936e424a2d6b2978cf870bc598906f57f951b3307b8"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3fc9ead6c460e6dc3c83cf7edcd2093270791f03bfb0762ab3aca2f6a1650403"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1257-dxf-ascii-ac1018"
+input = "cp-acadsharp-1257-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c341d79c5ff7ddc408f4be34093dea8c4b68e8578194d4d26993183eb56c810c"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "575b31cd2ad25bdb8c5a0ef69c579d449ab126b3453a21d88b3058e703ef087c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1258-dxf-ascii-ac1015"
+input = "cp-acadsharp-1258-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "2210b4dbfab98a0ce7a6bc1901c814ba8d8e4d1f6a518f2a2f9e61e1fc60464f"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "6ad37da00d950fb6fece8ba1f444300e5bb8e26f4dcf6ee24b38c0156944e514"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1258-dxf-ascii-ac1018"
+input = "cp-acadsharp-1258-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "24685c15bb7c64fc2f49ba3850c04e519cfef95a9a4ff1bbfd1359bae0680f8d"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "754f7dfd8ce525648de9a3aa5181935a30097d1e7e8b944d7f502e85ab1d6f73"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-874-dxf-ascii-ac1015"
+input = "cp-acadsharp-874-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "95c8aa0072c0c1d7fd8540edeac527faf0d1a50f942278f310303a7fa38556e8"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "1ad862ce47d7ab917a567258424cc17b07157f63c67c24fcfe884a3f381d3358"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-874-dxf-ascii-ac1018"
+input = "cp-acadsharp-874-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "453d8b12a4aa680434a5eb767f0b6696666c6d7e6734dea2c66f26860626f564"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "253e09b3be38322f8001b59b426d08bb1cdb8cf2d45d39a2df1268171927273e"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-932-dxf-ascii-ac1015"
+input = "cp-acadsharp-932-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ca893f29c7dc0ae365a6af1842a5025becdf605e351ee44f400a57a43e5d50b5"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "da7d8c1654b229ccae1ff6d9ee6f83b95ec8d556a2e26df373d6b56c5d1a2f11"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-932-dxf-ascii-ac1018"
+input = "cp-acadsharp-932-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c8a23d290ee8e02c793d848be4fec67ed4a1482284010312b7d7a075764386ca"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "7b40c5d137f70d112bb6f0da6ecab614b635c9d8af34efa2a94b23191ff0c8b8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-936-dxf-ascii-ac1015"
+input = "cp-acadsharp-936-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c326fb1f144545febaf363b5dad2f678de2951c1256d7a655b64bede724599ea"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "330405fe8f9a4511892824dbec0857faefdb0835fc6a5345df8b23860bde482e"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-936-dxf-ascii-ac1018"
+input = "cp-acadsharp-936-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8ae09ac5329e78471a8fb6735d963f09f34f9a8499d5e33f1d0bd8fae9ca6aa3"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "936e5fdef7684ded2971ee96d0a94181bbf7e19b665138087bc1a92a1ce54bf8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-949-dxf-ascii-ac1015"
+input = "cp-acadsharp-949-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "243af06bde6f6642be61f5cc5d3d266428a165e9e335cd19c8500c81b5fdda95"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "555468b585f76c7973c299c842ef3f1ae96ac8edd1aeadbaadbb975dcb63fcc8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-949-dxf-ascii-ac1018"
+input = "cp-acadsharp-949-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "0d70b95dd13447b5d5bb29b263916f032215c004ec39f5782097e7f566303e23"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "386326133fd1af60c4908586cee1879a860fd8973d0a05f43088e889e8bf9b45"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-950-dxf-ascii-ac1015"
+input = "cp-acadsharp-950-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "fbad03161a264a10686896c08e0d1d8d1ade6b07f4c3ad9cf08b827e883c2f63"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "0a1be877e9aba85c6d0f1dff1d84a1c39ee6a1a295455b5a9ea5591320778f95"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-950-dxf-ascii-ac1018"
+input = "cp-acadsharp-950-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "907c48de61ee0b0092011a8e28335d2af614fe50707092aa2baf9289436dd2d8"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "c0b3846a24af6bfebaaa0ff62f7e7f1f860ea93a2a873967df53f9eb3af96059"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
 # ---- end of the generated ground truths ----
 
 
