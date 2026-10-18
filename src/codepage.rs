@@ -49,12 +49,24 @@ impl Family {
     /// The strings of the drawing, in the order they are written.
     pub fn texts(&self, unheld: &str) -> Vec<Authored> {
         let mut v = vec![
-            Authored { kind: "held", text: self.held.clone() },
-            Authored { kind: "unheld", text: unheld.to_string() },
-            Authored { kind: "literal", text: self.literal.clone() },
+            Authored {
+                kind: "held",
+                text: self.held.clone(),
+            },
+            Authored {
+                kind: "unheld",
+                text: unheld.to_string(),
+            },
+            Authored {
+                kind: "literal",
+                text: self.literal.clone(),
+            },
         ];
         if let Some(m) = &self.mif {
-            v.push(Authored { kind: "mif", text: m.clone() });
+            v.push(Authored {
+                kind: "mif",
+                text: m.clone(),
+            });
         }
         v
     }
@@ -82,7 +94,11 @@ impl Output {
     }
 
     pub fn extension(&self) -> &'static str {
-        if self.container == "dwg" { "dwg" } else { "dxf" }
+        if self.container == "dwg" {
+            "dwg"
+        } else {
+            "dxf"
+        }
     }
 }
 

@@ -32,8 +32,15 @@ fn main() -> ExitCode {
         return ExitCode::from(1);
     }
     let plan = codepage::plan();
-    for o in codepage::outputs().into_iter().filter(|o| o.writer == "acadrust") {
-        let family = plan.family.iter().find(|f| f.page == o.page).expect("a family");
+    for o in codepage::outputs()
+        .into_iter()
+        .filter(|o| o.writer == "acadrust")
+    {
+        let family = plan
+            .family
+            .iter()
+            .find(|f| f.page == o.page)
+            .expect("a family");
         let texts: Vec<String> = family
             .texts(&plan.unheld.text)
             .into_iter()

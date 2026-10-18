@@ -115,8 +115,10 @@ pub fn author(
     doc.header.code_page = header_code_page.to_string();
     for (i, t) in texts.iter().enumerate() {
         let at = Vector3::new(0.0, 10.0 * i as f64, 0.0);
-        doc.add_entity(EntityType::Text(Text::with_value(t.clone(), at).with_height(2.5)))
-            .map_err(|e| format!("add_entity: {e}"))?;
+        doc.add_entity(EntityType::Text(
+            Text::with_value(t.clone(), at).with_height(2.5),
+        ))
+        .map_err(|e| format!("add_entity: {e}"))?;
     }
     match container {
         "dwg" => DwgWriter::write_to_vec(&doc).map_err(|e| format!("DwgWriter: {e}")),

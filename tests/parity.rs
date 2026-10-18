@@ -31,11 +31,11 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use acadsharp_rs_tests::canonical::{Sidecar, parse_stream};
+use acadsharp_rs_tests::canonical::{parse_stream, Sidecar};
 use acadsharp_rs_tests::compare::Stream;
 use acadsharp_rs_tests::digest;
 use acadsharp_rs_tests::fixtures::{self, DwgFixture};
-use acadsharp_rs_tests::parity_run::{Side, judge_pair, open_failed_reason};
+use acadsharp_rs_tests::parity_run::{judge_pair, open_failed_reason, Side};
 use acadsharp_rs_tests::tables;
 use acadsharp_rs_tests::verdict::{Row, Table, Verdict};
 
@@ -314,14 +314,12 @@ fn compute() -> Result<(Computed, Option<Digests>), String> {
     let results: std::sync::Mutex<BTreeMap<usize, Both>> = std::sync::Mutex::new(BTreeMap::new());
     std::thread::scope(|s| {
         for _ in 0..workers {
-            s.spawn(|| {
-                loop {
-                    let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                    let Some(f) = all.get(i) else { break };
-                    let a = emit(sharp, "acadsharp", &f.id, &out);
-                    let b = emit(rust, "acadrust", &f.id, &out);
-                    results.lock().unwrap().insert(i, (a, b));
-                }
+            s.spawn(|| loop {
+                let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                let Some(f) = all.get(i) else { break };
+                let a = emit(sharp, "acadsharp", &f.id, &out);
+                let b = emit(rust, "acadrust", &f.id, &out);
+                results.lock().unwrap().insert(i, (a, b));
             });
         }
     });
@@ -832,13 +830,11 @@ fn dxf_lane(
         std::sync::Mutex::new(BTreeMap::new());
     std::thread::scope(|s| {
         for _ in 0..4 {
-            s.spawn(|| {
-                loop {
-                    let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                    let Some(input) = inputs.get(i) else { break };
-                    let r = emit(rust, "acadrust", &input.id, out);
-                    runs.lock().unwrap().insert(i, r);
-                }
+            s.spawn(|| loop {
+                let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                let Some(input) = inputs.get(i) else { break };
+                let r = emit(rust, "acadrust", &input.id, out);
+                runs.lock().unwrap().insert(i, r);
             });
         }
     });
@@ -1390,7 +1386,12 @@ fn texts_of(records: &[acadsharp_rs_tests::canonical::Record]) -> Vec<String> {
 
 /// `got` against `authored`: the verdict word and the first difference, naming the code
 /// page, the kind of string and both strings with their code points.
-fn judge_texts(page: &str, kinds: &[&str], authored: &[String], got: &[String]) -> (String, String) {
+fn judge_texts(
+    page: &str,
+    kinds: &[&str],
+    authored: &[String],
+    got: &[String],
+) -> (String, String) {
     let cp = |s: &str| {
         s.chars()
             .map(|c| format!("U+{:04X}", c as u32))
@@ -1400,10 +1401,16 @@ fn judge_texts(page: &str, kinds: &[&str], authored: &[String], got: &[String]) 
     if authored.len() != got.len() {
         return (
             Verdict::Count(authored.len(), got.len()).to_string(),
-            format!("{page}: {} texts authored, {} read: {got:?}", authored.len(), got.len()),
+            format!(
+                "{page}: {} texts authored, {} read: {got:?}",
+                authored.len(),
+                got.len()
+            ),
         );
     }
-    let bad: Vec<usize> = (0..authored.len()).filter(|&i| authored[i] != got[i]).collect();
+    let bad: Vec<usize> = (0..authored.len())
+        .filter(|&i| authored[i] != got[i])
+        .collect();
     match bad.first() {
         None => (Verdict::Match.to_string(), String::new()),
         Some(&i) => (
@@ -1456,8 +1463,9 @@ fn codepage_computed(sharp: &str, rust: &str, out: &Path) -> Result<Computed, St
             let got: Result<Vec<String>, String> = match *reader {
                 "oracle" => match (&a.reference_jsonl, &a.no_reference) {
                     (Some(_), _) => {
-                        let t = String::from_utf8(a.load_reference_jsonl().map_err(|e| e.to_string())?)
-                            .map_err(|e| e.to_string())?;
+                        let t =
+                            String::from_utf8(a.load_reference_jsonl().map_err(|e| e.to_string())?)
+                                .map_err(|e| e.to_string())?;
                         parse_stream(&t)
                             .map(|r| texts_of(&r))
                             .map_err(|e| format!("the oracle's reading is not schema 1: {e}"))
@@ -1485,7 +1493,10 @@ fn codepage_computed(sharp: &str, rust: &str, out: &Path) -> Result<Computed, St
                     let (v, first) = judge_texts(&a.id, &kinds, &authored, &g);
                     // The page named in the first difference, not the id.
                     let first = first.replacen(&a.id, &family.header, 1);
-                    computed.insert((a.id.clone(), format!("cp:{reader}")), (v, first, String::new()));
+                    computed.insert(
+                        (a.id.clone(), format!("cp:{reader}")),
+                        (v, first, String::new()),
+                    );
                 }
                 Err(why) => put_open_failed(&mut computed, reader, why),
             }
@@ -1529,7 +1540,8 @@ fn the_code_page_lane_agrees_with_the_committed_verdicts() {
                 pair: pair.clone(),
                 verdict: verdict.clone(),
                 reason: if needs && !moved {
-                    kept.map(|r| r.reason.clone()).unwrap_or_else(|| why.clone())
+                    kept.map(|r| r.reason.clone())
+                        .unwrap_or_else(|| why.clone())
                 } else if verdict == "OPEN_FAILED" {
                     why.clone()
                 } else {
@@ -1557,13 +1569,23 @@ fn the_code_page_lane_agrees_with_the_committed_verdicts() {
         "{} code page verdict(s) moved against {}:\n  {}",
         moved.len(),
         path.display(),
-        moved.iter().take(40).cloned().collect::<Vec<_>>().join("\n  ")
+        moved
+            .iter()
+            .take(40)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n  ")
     );
     let refusals = committed.refusals();
     assert!(
         refusals.is_empty(),
         "{}:\n  {}",
         path.display(),
-        refusals.iter().take(40).cloned().collect::<Vec<_>>().join("\n  ")
+        refusals
+            .iter()
+            .take(40)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n  ")
     );
 }

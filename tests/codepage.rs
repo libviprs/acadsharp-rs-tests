@@ -26,7 +26,11 @@ fn every_family_has_held_unheld_and_literal_text() {
     let p = plan();
     for f in &p.family {
         let kinds: Vec<_> = f.texts(&p.unheld.text).iter().map(|a| a.kind).collect();
-        assert!(kinds.starts_with(&["held", "unheld", "literal"]), "{}", f.header);
+        assert!(
+            kinds.starts_with(&["held", "unheld", "literal"]),
+            "{}",
+            f.header
+        );
     }
     let cjk = p.family.iter().filter(|f| f.mif.is_some()).count();
     assert_eq!(cjk, 4, "932, 936, 949 and 950 carry a MIF string");
@@ -59,7 +63,11 @@ fn every_row_that_is_not_a_match_has_a_reason_and_an_issue() {
         if r["verdict"].as_str().unwrap() != "MATCH" {
             for k in ["reason", "issue", "first"] {
                 assert!(
-                    !r.get(k).and_then(|v| v.as_str()).unwrap_or("").trim().is_empty(),
+                    !r.get(k)
+                        .and_then(|v| v.as_str())
+                        .unwrap_or("")
+                        .trim()
+                        .is_empty(),
                     "{} {} has no {k}",
                     r["fixture"],
                     r["pair"]
