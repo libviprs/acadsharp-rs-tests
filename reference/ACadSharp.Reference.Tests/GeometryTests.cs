@@ -482,6 +482,23 @@ public sealed class GeometryTests
         Assert.Equal([1.0, 2.0, 2.0, 1.0], spline.Weights);
     }
 
+    [Fact]
+    public void ANonRationalHatchSplineHasNoWeightsWhateverTheReaderFilledIn()
+    {
+        // Issue #159. ACadSharp's DXF reader gives the weights of an edge whose
+        // rational flag is 0 the default of 1.0, where its DWG reader leaves them
+        // zero. The flag is what says whether the curve is rational.
+        CadDocument document = HatchWithSpline(rational: false);
+        var edge = (Hatch.BoundaryPath.Spline)((Hatch)document.Entities.Single()).Paths[0].Edges[0];
+        for (int i = 0; i < edge.ControlPoints.Count; i++)
+        {
+            edge.ControlPoints[i] = new XYZ(edge.ControlPoints[i].X, edge.ControlPoints[i].Y, 1.0);
+        }
+
+        SplineRecord spline = Assert.Single(Records(document).OfType<SplineRecord>());
+        Assert.Empty(spline.Weights);
+    }
+
     private static CadDocument HatchWithSpline(bool rational)
     {
         CadDocument document = NewDocument();
