@@ -754,7 +754,7 @@ pin_matrix!(
     acadrust,
     name: "acadrust",
     file: "ACADRUST_REV",
-    today: "39a11909acf56747f22c7309a0681bef8e6b61b8",
+    today: "f2abfc9ee1527205b641c6d292fe107d5e7aac1c",
     require: "ACADRUST_REQUIRE",
     expected: "ACADRUST_EXPECTED_SHA",
 );
