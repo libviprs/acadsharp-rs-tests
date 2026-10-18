@@ -43,7 +43,7 @@ date = "2026-10-16"
 arch = "x86_64"
 archive = "3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...); stage two of the round-trip matrix, 2,304 outputs and 9,216 cells (parity/VERDICTS_STAGE2.toml), tools/stage_two.py on MARS"
 acadsharp_rs = "f23f37bd453e02e660ef655faa381c45509d8ac1"
-acadrust = "f53d2c5b768d4145ec240d300875386b3006266d"
+acadrust = "72af48970e306ef1d50dd751b227df2b4fc3fb99"
 date = "2026-10-18"
 
 [[row]]

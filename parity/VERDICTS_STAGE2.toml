@@ -61,7 +61,7 @@ fixture = "w-acadrust-ac1014-dwg-ac1014"
 pair = "w-acadrust:oracle"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dwg-ac1014 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
@@ -87,7 +87,7 @@ fixture = "w-acadrust-ac1014-dwg-ac1015"
 pair = "w-acadrust:oracle"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
@@ -744,7 +744,7 @@ fixture = "w-acadrust-ac1015-dwg-ac1015"
 pair = "w-acadrust:oracle"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
@@ -1401,7 +1401,7 @@ fixture = "w-acadrust-ac1018-dwg-ac1015"
 pair = "w-acadrust:oracle"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1018-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
@@ -1427,7 +1427,7 @@ fixture = "w-acadrust-ac1018-dwg-ac1018"
 pair = "w-acadrust:oracle"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1018-dwg-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
@@ -10084,7 +10084,7 @@ fixture = "w-acadrust-g13_hatch-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadrust-g13_hatch-dwg-ac1015 acadrust-acadsharp: view 0 a#3 A handles 49 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -10107,7 +10107,7 @@ fixture = "w-acadrust-g13_hatch-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadrust-g13_hatch-dwg-ac1018 acadrust-acadsharp: view 0 a#3 A handles 49 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -10130,7 +10130,7 @@ fixture = "w-acadrust-g13_hatch-dwg-ac1021"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadrust-g13_hatch-dwg-ac1021 acadrust-acadsharp: view 0 a#3 A handles 49 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -10153,7 +10153,7 @@ fixture = "w-acadrust-g13_hatch-dwg-ac1024"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadrust-g13_hatch-dwg-ac1024 acadrust-acadsharp: view 0 a#3 A handles 49 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -10176,7 +10176,7 @@ fixture = "w-acadrust-g13_hatch-dwg-ac1027"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadrust-g13_hatch-dwg-ac1027 acadrust-acadsharp: view 0 a#3 A handles 49 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -10199,7 +10199,7 @@ fixture = "w-acadrust-g13_hatch-dwg-ac1032"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadrust-g13_hatch-dwg-ac1032 acadrust-acadsharp: view 0 a#3 A handles 49 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -10249,18 +10249,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1012"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1012 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1012 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1012 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1012"
@@ -10275,18 +10272,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1014"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1014 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1014 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1014 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1014"
@@ -10301,18 +10295,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1015"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1015 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1015 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1015 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1015"
@@ -10327,18 +10318,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1018"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1018 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1018 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1018 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1018"
@@ -10353,18 +10341,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1021"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1021 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1021 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1021 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1021"
@@ -10379,18 +10364,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1024"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1024 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1024 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1024 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1024"
@@ -10405,18 +10387,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1027"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1027 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1027 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1027 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1027"
@@ -10431,18 +10410,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1032"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1032 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-ascii-ac1032 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-ascii-ac1032 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1032"
@@ -10486,18 +10462,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1012"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1012 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1012 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1012 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1012"
@@ -10512,18 +10485,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1014"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1014 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1014 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1014 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1014"
@@ -10538,18 +10508,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1015"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1015 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1015 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1015 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1015"
@@ -10564,18 +10531,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1018"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1018 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1018 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1018 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1018"
@@ -10590,18 +10554,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1021"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1021 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1021 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1021 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1021"
@@ -10616,18 +10577,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1024"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1024 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1024 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1024 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1024"
@@ -10642,18 +10600,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1027"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1027 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1027 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1027 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1027"
@@ -10668,18 +10623,15 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1032"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1032 acadrust-ezdxf: view 0 a#12 b#12 A handles 4B B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadrust-g13_hatch-dxf-binary-ac1032 acadrust-oracle: view 0 a#15 b#15 A handles 4C spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED]"
+first = "w-acadrust-g13_hatch-dxf-binary-ac1032 acadrust-oracle: view 0 a#12 b#12 A handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadrust-g13_hatch-dxf-binary-ac1032"
@@ -13909,7 +13861,7 @@ fixture = "w-acadrust-g13_mirrored_bulge-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_mirrored_bulge-dwg-ac1015 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -13932,7 +13884,7 @@ fixture = "w-acadrust-g13_mirrored_bulge-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_mirrored_bulge-dwg-ac1018 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -13955,7 +13907,7 @@ fixture = "w-acadrust-g13_mirrored_bulge-dwg-ac1021"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_mirrored_bulge-dwg-ac1021 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -13978,7 +13930,7 @@ fixture = "w-acadrust-g13_mirrored_bulge-dwg-ac1024"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_mirrored_bulge-dwg-ac1024 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -14001,7 +13953,7 @@ fixture = "w-acadrust-g13_mirrored_bulge-dwg-ac1027"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_mirrored_bulge-dwg-ac1027 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -14024,7 +13976,7 @@ fixture = "w-acadrust-g13_mirrored_bulge-dwg-ac1032"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_mirrored_bulge-dwg-ac1032 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -14977,7 +14929,7 @@ fixture = "w-acadrust-g13_nonuniform-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_nonuniform-dwg-ac1015 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -15000,7 +14952,7 @@ fixture = "w-acadrust-g13_nonuniform-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_nonuniform-dwg-ac1018 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -15023,7 +14975,7 @@ fixture = "w-acadrust-g13_nonuniform-dwg-ac1021"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_nonuniform-dwg-ac1021 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -15046,7 +14998,7 @@ fixture = "w-acadrust-g13_nonuniform-dwg-ac1024"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_nonuniform-dwg-ac1024 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -15069,7 +15021,7 @@ fixture = "w-acadrust-g13_nonuniform-dwg-ac1027"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_nonuniform-dwg-ac1027 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -15092,7 +15044,7 @@ fixture = "w-acadrust-g13_nonuniform-dwg-ac1032"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_nonuniform-dwg-ac1032 acadrust-acadsharp: view 0 a#3 b#3 A handles 4D/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -15520,7 +15472,7 @@ fixture = "w-acadrust-g13_ocs_mirror-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_ocs_mirror-dwg-ac1015 acadrust-acadsharp: view 0 a#6 b#6 A handles 50/4C B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -15543,7 +15495,7 @@ fixture = "w-acadrust-g13_ocs_mirror-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_ocs_mirror-dwg-ac1018 acadrust-acadsharp: view 0 a#6 b#6 A handles 50/4C B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -15566,7 +15518,7 @@ fixture = "w-acadrust-g13_ocs_mirror-dwg-ac1021"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_ocs_mirror-dwg-ac1021 acadrust-acadsharp: view 0 a#6 b#6 A handles 50/4C B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -15589,7 +15541,7 @@ fixture = "w-acadrust-g13_ocs_mirror-dwg-ac1024"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_ocs_mirror-dwg-ac1024 acadrust-acadsharp: view 0 a#6 b#6 A handles 50/4C B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -15612,7 +15564,7 @@ fixture = "w-acadrust-g13_ocs_mirror-dwg-ac1027"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_ocs_mirror-dwg-ac1027 acadrust-acadsharp: view 0 a#6 b#6 A handles 50/4C B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -15635,7 +15587,7 @@ fixture = "w-acadrust-g13_ocs_mirror-dwg-ac1032"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadrust-g13_ocs_mirror-dwg-ac1032 acadrust-acadsharp: view 0 a#6 b#6 A handles 50/4C B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED]"
 
 [[row]]
@@ -16081,7 +16033,7 @@ fixture = "w-acadrust-g13_ocs_plane-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_plane-dwg-ac1015 acadrust-acadsharp: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -16104,7 +16056,7 @@ fixture = "w-acadrust-g13_ocs_plane-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_plane-dwg-ac1018 acadrust-acadsharp: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -16127,7 +16079,7 @@ fixture = "w-acadrust-g13_ocs_plane-dwg-ac1021"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_plane-dwg-ac1021 acadrust-acadsharp: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -16150,7 +16102,7 @@ fixture = "w-acadrust-g13_ocs_plane-dwg-ac1024"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_plane-dwg-ac1024 acadrust-acadsharp: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -16173,7 +16125,7 @@ fixture = "w-acadrust-g13_ocs_plane-dwg-ac1027"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_plane-dwg-ac1027 acadrust-acadsharp: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -16196,7 +16148,7 @@ fixture = "w-acadrust-g13_ocs_plane-dwg-ac1032"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_plane-dwg-ac1032 acadrust-acadsharp: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -16212,26 +16164,17 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1009"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1009 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 35 polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1009"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1009 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 15 polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1009"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1009 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1009"
@@ -16241,26 +16184,17 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1012"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1012 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1012"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1012 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1012 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1012"
@@ -16270,26 +16204,17 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1014"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1014 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1014"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1014 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1014 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1014"
@@ -16299,26 +16224,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
@@ -16328,26 +16253,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
@@ -16357,26 +16282,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
@@ -16386,26 +16311,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
@@ -16415,26 +16340,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
@@ -16444,26 +16369,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
@@ -16473,26 +16398,17 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1009"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1009 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 35 polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1009"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1009 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 15 polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1009"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1009 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1009"
@@ -16502,26 +16418,17 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1012"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1012 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1012"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1012 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1012 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1012"
@@ -16531,26 +16438,17 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1014"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1014 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1014"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1014 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1014 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1014"
@@ -16560,26 +16458,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
@@ -16589,26 +16487,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
@@ -16618,26 +16516,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
@@ -16647,26 +16545,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
@@ -16676,26 +16574,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
@@ -16705,26 +16603,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032 acadrust-acadrust: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032 acadrust-ezdxf: view 0 a#7 b#7 A handles 4D B handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "a lightweight polyline in an OCS plane reads back with another normal and elevation (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#160"
-first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [BOUNDED]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#160, libviprs/acadsharp-rs-tests#64"
+first = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032 acadrust-oracle: view 0 a#7 b#7 A handles 4D polyline.points[0].z: 0.0 vs 2.0 (abs 2e0, rel 1e0) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#160"
 
 [[row]]
 fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
@@ -17311,7 +17209,7 @@ fixture = "w-acadrust-g13_ocs_skew-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_skew-dwg-ac1015 acadrust-acadsharp: view 0 a#3 b#3 A handles 52/51/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -17334,7 +17232,7 @@ fixture = "w-acadrust-g13_ocs_skew-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_skew-dwg-ac1018 acadrust-acadsharp: view 0 a#3 b#3 A handles 52/51/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -17357,7 +17255,7 @@ fixture = "w-acadrust-g13_ocs_skew-dwg-ac1021"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_skew-dwg-ac1021 acadrust-acadsharp: view 0 a#3 b#3 A handles 52/51/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -17380,7 +17278,7 @@ fixture = "w-acadrust-g13_ocs_skew-dwg-ac1024"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_skew-dwg-ac1024 acadrust-acadsharp: view 0 a#3 b#3 A handles 52/51/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -17403,7 +17301,7 @@ fixture = "w-acadrust-g13_ocs_skew-dwg-ac1027"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_skew-dwg-ac1027 acadrust-acadsharp: view 0 a#3 b#3 A handles 52/51/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -17426,7 +17324,7 @@ fixture = "w-acadrust-g13_ocs_skew-dwg-ac1032"
 pair = "w-acadrust:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadrust-g13_ocs_skew-dwg-ac1032 acadrust-acadsharp: view 0 a#3 b#3 A handles 52/51/4C B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -35680,7 +35578,7 @@ fixture = "w-acadsharp-g13_hatch-dwg-ac1015"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadsharp-g13_hatch-dwg-ac1015 oracle-acadsharp: view 0 a#3 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -35703,7 +35601,7 @@ fixture = "w-acadsharp-g13_hatch-dwg-ac1018"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadsharp-g13_hatch-dwg-ac1018 oracle-acadsharp: view 0 a#3 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -35726,7 +35624,7 @@ fixture = "w-acadsharp-g13_hatch-dwg-ac1024"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadsharp-g13_hatch-dwg-ac1024 oracle-acadsharp: view 0 a#3 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -35749,7 +35647,7 @@ fixture = "w-acadsharp-g13_hatch-dwg-ac1027"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadsharp-g13_hatch-dwg-ac1027 oracle-acadsharp: view 0 a#3 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -35772,7 +35670,7 @@ fixture = "w-acadsharp-g13_hatch-dwg-ac1032"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:13"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#159"
 first = "w-acadsharp-g13_hatch-dwg-ac1032 oracle-acadsharp: view 0 a#3 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -35788,23 +35686,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1012 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1012 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1012 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1012 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
@@ -35814,23 +35712,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1014 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1014 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1014 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1014 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
@@ -35840,23 +35738,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1015 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1015 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1015 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1015 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
@@ -35866,23 +35764,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1018 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1018 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1018 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1018 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
@@ -35892,23 +35790,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1021 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1021 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1021 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1021 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
@@ -35918,23 +35816,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1024 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1024 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1024 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1024 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
@@ -35944,23 +35842,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1027 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1027 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1027 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1027 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
@@ -35970,23 +35868,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1032 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1032 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-ascii-ac1032 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-ascii-ac1032 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
@@ -35996,23 +35894,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1012 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1012 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1012 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1012 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
@@ -36022,23 +35920,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1014 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1014 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1014 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1014 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
@@ -36048,23 +35946,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1015 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1015 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1015 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1015 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
@@ -36074,23 +35972,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1018 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1018 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1018 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1018 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
@@ -36100,23 +35998,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1021 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1021 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1021 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1021 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
@@ -36126,23 +36024,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1024 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1024 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1024 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1024 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
@@ -36152,23 +36050,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1027 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1027 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1027 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1027 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
@@ -36178,23 +36076,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
 pair = "w-acadsharp:acadrust"
-verdict = "MATCH"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#159"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1032 oracle-acadrust: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
 pair = "w-acadsharp:ezdxf"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (2 findings)"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
 issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1032 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [ANGLE]"
+first = "w-acadsharp-g13_hatch-dxf-binary-ac1032 oracle-ezdxf: view 0 a#12 b#12 B handles 4B arc.start: 4.71238898038469 vs 1.5707963267948966 (abs 3.141592653589793e0, rel 6.666666666666666e-1) [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#159"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
 pair = "w-acadsharp:oracle"
-verdict = "DIFF:1"
-reason = "a hatch boundary spline reads back with z 1.0 where the source reading has 0.0, and ezdxf reads a boundary arc half a turn from the source reading (5 findings)"
-issue = "libviprs/acadsharp-rs-tests#159"
-first = "w-acadsharp-g13_hatch-dxf-binary-ac1032 oracle-oracle: view 0 a#15 b#15 spline.control_points[0].z: 0.0 vs 1.0 (abs 1e0, rel 1e0) [BOUNDED_TIGHT]"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
@@ -38921,7 +38819,7 @@ fixture = "w-acadsharp-g13_mirrored_bulge-dwg-ac1015"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_mirrored_bulge-dwg-ac1015 oracle-acadsharp: view 0 a#3 b#3 B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -38944,7 +38842,7 @@ fixture = "w-acadsharp-g13_mirrored_bulge-dwg-ac1018"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_mirrored_bulge-dwg-ac1018 oracle-acadsharp: view 0 a#3 b#3 B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -38967,7 +38865,7 @@ fixture = "w-acadsharp-g13_mirrored_bulge-dwg-ac1024"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_mirrored_bulge-dwg-ac1024 oracle-acadsharp: view 0 a#3 b#3 B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -38990,7 +38888,7 @@ fixture = "w-acadsharp-g13_mirrored_bulge-dwg-ac1027"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_mirrored_bulge-dwg-ac1027 oracle-acadsharp: view 0 a#3 b#3 B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -39013,7 +38911,7 @@ fixture = "w-acadsharp-g13_mirrored_bulge-dwg-ac1032"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_mirrored_bulge-dwg-ac1032 oracle-acadsharp: view 0 a#3 b#3 B handles 4C polyline.nz: -1.0 vs 1.0 (abs 2e0, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -39825,7 +39723,7 @@ fixture = "w-acadsharp-g13_nonuniform-dwg-ac1015"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_nonuniform-dwg-ac1015 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -39848,7 +39746,7 @@ fixture = "w-acadsharp-g13_nonuniform-dwg-ac1018"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_nonuniform-dwg-ac1018 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -39871,7 +39769,7 @@ fixture = "w-acadsharp-g13_nonuniform-dwg-ac1024"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_nonuniform-dwg-ac1024 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -39894,7 +39792,7 @@ fixture = "w-acadsharp-g13_nonuniform-dwg-ac1027"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_nonuniform-dwg-ac1027 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -39917,7 +39815,7 @@ fixture = "w-acadsharp-g13_nonuniform-dwg-ac1032"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_nonuniform-dwg-ac1032 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -40289,7 +40187,7 @@ fixture = "w-acadsharp-g13_ocs_mirror-dwg-ac1015"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_ocs_mirror-dwg-ac1015 oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -40312,7 +40210,7 @@ fixture = "w-acadsharp-g13_ocs_mirror-dwg-ac1018"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_ocs_mirror-dwg-ac1018 oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -40335,7 +40233,7 @@ fixture = "w-acadsharp-g13_ocs_mirror-dwg-ac1024"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_ocs_mirror-dwg-ac1024 oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -40358,7 +40256,7 @@ fixture = "w-acadsharp-g13_ocs_mirror-dwg-ac1027"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_ocs_mirror-dwg-ac1027 oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -40381,7 +40279,7 @@ fixture = "w-acadsharp-g13_ocs_mirror-dwg-ac1032"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:3"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#63"
 first = "w-acadsharp-g13_ocs_mirror-dwg-ac1032 oracle-acadsharp: view 0 a#6 b#6 B handles 4C arc.cx: 10.0 vs -10.0 (abs 2e1, rel 2e0) [BOUNDED_TIGHT]"
 
 [[row]]
@@ -40750,7 +40648,7 @@ fixture = "w-acadsharp-g13_ocs_plane-dwg-ac1015"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_plane-dwg-ac1015 oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -40773,7 +40671,7 @@ fixture = "w-acadsharp-g13_ocs_plane-dwg-ac1018"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_plane-dwg-ac1018 oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -40796,7 +40694,7 @@ fixture = "w-acadsharp-g13_ocs_plane-dwg-ac1024"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_plane-dwg-ac1024 oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -40819,7 +40717,7 @@ fixture = "w-acadsharp-g13_ocs_plane-dwg-ac1027"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_plane-dwg-ac1027 oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -40842,7 +40740,7 @@ fixture = "w-acadsharp-g13_ocs_plane-dwg-ac1032"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_plane-dwg-ac1032 oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -41663,7 +41561,7 @@ fixture = "w-acadsharp-g13_ocs_skew-dwg-ac1015"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_skew-dwg-ac1015 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -41686,7 +41584,7 @@ fixture = "w-acadsharp-g13_ocs_skew-dwg-ac1018"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_skew-dwg-ac1018 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -41709,7 +41607,7 @@ fixture = "w-acadsharp-g13_ocs_skew-dwg-ac1024"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_skew-dwg-ac1024 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -41732,7 +41630,7 @@ fixture = "w-acadsharp-g13_ocs_skew-dwg-ac1027"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_skew-dwg-ac1027 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
@@ -41755,7 +41653,7 @@ fixture = "w-acadsharp-g13_ocs_skew-dwg-ac1032"
 pair = "w-acadsharp:acadsharp"
 verdict = "KNOWN:1"
 reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+issue = "libviprs/acadsharp-rs-tests#64"
 first = 'w-acadsharp-g13_ocs_skew-dwg-ac1032 oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]

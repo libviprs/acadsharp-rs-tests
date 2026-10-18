@@ -171,6 +171,32 @@ def failed_issue(fx: str, pair: str, reason: str) -> list[str]:
     return issue("41")
 
 
+SAVES = ("ac1014", "ac1015", "ac1018", "ac1021", "ac1024", "ac1027", "sample-base")
+
+
+def known_issues(fx: str, pair: str) -> list[str]:
+    """The issues a cell whose every difference is listed as known answers to, by what it is."""
+    source = re.sub(r"-(dwg|dxf-ascii|dxf-binary)-ac\d+$", "", re.sub(r"^w-acad(rust|sharp)-", "", fx))
+    out: list[str] = []
+    if fx.startswith("w-acadsharp") and source in SAVES:
+        out += issue("106")
+        if "-dwg-" in fx:
+            out += issue("108")
+        if "dxf-binary" in fx and pair.endswith("acadrust"):
+            out += issue("109")
+    if fx.startswith("w-acadrust") and source in ("ac1014", "ac1015", "ac1018"):
+        out += [DEP + "111"]
+    if source == "g13_hatch":
+        out += issue("159")
+    if source == "g13_ocs_plane":
+        out += issue("160", "64") if fx.startswith("w-acadrust") else issue("64")
+    if source in ("g13_nonuniform", "g13_ocs_skew"):
+        out += issue("64")
+    if source in ("g13_mirrored_bulge", "g13_ocs_mirror"):
+        out += issue("63")
+    return out or issue("41")
+
+
 def main() -> int:
     table_path, explain_path = sys.argv[1:3]
     text = open(table_path, encoding="utf-8").read()
@@ -230,11 +256,7 @@ def main() -> int:
                     issues.append(i)
         if verdict.startswith("KNOWN"):
             reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
-            iss = issue("106")
-            if "-dwg-" in fx:
-                iss += issue("108")
-            if "dxf-binary" in fx and pair.endswith("acadrust"):
-                iss += issue("109")
+            iss = known_issues(fx, pair)
             if any("libviprs-dep#111" in b for b in cells.get((fx, pair), [])):
                 iss += [DEP + "111"]
         else:
