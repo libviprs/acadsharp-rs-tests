@@ -901,6 +901,76 @@ pub fn block_record_records(doc: &CadDocument) -> Vec<Record> {
         .collect()
 }
 
+/// One `layout` record per LAYOUT object (docs/MODEL_1.md). acadrust flattens the
+/// layout and the plot settings it embeds into one struct; the block record is
+/// resolved from its handle to the name. A plot settings code it did not type
+/// stays in `raw_plot_settings_codes` and is not a field here.
+pub fn layout_records(doc: &CadDocument) -> Vec<Record> {
+    use acadrust::objects::ObjectType;
+    let t3 = |v: (f64, f64, f64)| Value::Point3([v.0, v.1, v.2]);
+    let s = |v: &str| Value::Str(v.replace("\r\n", "\n").replace('\r', "\n"));
+    doc.objects
+        .values()
+        .filter_map(|o| match o {
+            ObjectType::Layout(l) => Some(l),
+            _ => None,
+        })
+        .map(|l| {
+            let block = doc
+                .block_records
+                .iter()
+                .find(|b| !l.block_record.is_null() && b.handle == l.block_record)
+                .map(|b| b.name.clone())
+                .unwrap_or_default();
+            Record::Entry(Entry::new(
+                "layout",
+                l.name.clone(),
+                vec![
+                    Value::Int(i64::from(l.tab_order)),
+                    Value::Int(i64::from(l.flags)),
+                    Value::Point2([l.min_limits.0, l.min_limits.1]),
+                    Value::Point2([l.max_limits.0, l.max_limits.1]),
+                    t3(l.insertion_base),
+                    t3(l.min_extents),
+                    t3(l.max_extents),
+                    Value::Double(l.elevation),
+                    t3(l.ucs_origin),
+                    t3(l.ucs_x_axis),
+                    t3(l.ucs_y_axis),
+                    Value::Int(i64::from(l.ucs_ortho_type)),
+                    Value::Str(block),
+                    s(&l.plot_page_name),
+                    s(&l.plot_printer_name),
+                    s(&l.paper_size),
+                    s(&l.plot_view_name),
+                    s(&l.plot_style_sheet),
+                    Value::Double(l.plot_margin_left),
+                    Value::Double(l.plot_margin_bottom),
+                    Value::Double(l.plot_margin_right),
+                    Value::Double(l.plot_margin_top),
+                    Value::Double(l.paper_width),
+                    Value::Double(l.paper_height),
+                    Value::Point2([l.plot_origin_x, l.plot_origin_y]),
+                    Value::Point2([l.plot_window_min_x, l.plot_window_min_y]),
+                    Value::Point2([l.plot_window_max_x, l.plot_window_max_y]),
+                    Value::Double(l.plot_scale_numerator),
+                    Value::Double(l.plot_scale_denominator),
+                    Value::Int(i64::from(l.plot_flags.to_bits())),
+                    Value::Int(i64::from(l.plot_paper_units)),
+                    Value::Int(i64::from(l.plot_rotation)),
+                    Value::Int(i64::from(l.plot_type)),
+                    Value::Int(i64::from(l.plot_scale_type)),
+                    Value::Int(i64::from(l.shade_plot_mode)),
+                    Value::Int(i64::from(l.shade_plot_resolution)),
+                    Value::Int(i64::from(l.shade_plot_dpi)),
+                    Value::Double(l.plot_scale_factor),
+                    Value::Point2([l.paper_image_origin_x, l.paper_image_origin_y]),
+                ],
+            ))
+        })
+        .collect()
+}
+
 /// What `emit-acadrust` writes beside the schema 1 stream.
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     let mut all = header_records(doc);
@@ -913,6 +983,7 @@ pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     all.extend(tree.dictionaries);
     all.extend(tree.xrecords);
     all.extend(block_record_records(doc));
+    all.extend(layout_records(doc));
     all
 }
 

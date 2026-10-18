@@ -452,6 +452,38 @@ defines. The fields are by DXF code:
 - The xref "unloaded" bit (the BLOCK entity's 71) is not a field. None of the
   thirteen files has an xref.
 
+## `layout`
+
+```json
+{"model":1,"record":"layout","name":"Layout1","tab_order":1,"flags":1,"min_limits":[-0.25,-0.25],"max_limits":[10.75,8.25],"insertion_base":[0.0,0.0,0.0],"min_extents":[1.05,0.8,0.0],"max_extents":[9.45,7.2,0.0],"elevation":0.0,"ucs_origin":[0.0,0.0,0.0],"ucs_x_axis":[1.0,0.0,0.0],"ucs_y_axis":[0.0,1.0,0.0],"ucs_ortho_type":0,"block_record":"*Paper_Space0","page_name":"","printer_name":"none_device","paper_size":"Letter_(8.50_x_11.00_Inches)","plot_view_name":"","style_sheet":"","margin_left":6.35,"margin_bottom":6.35,"margin_right":6.35,"margin_top":6.35,"paper_width":215.9,"paper_height":279.4,"plot_origin":[0.0,0.0],"plot_window_min":[0.0,0.0],"plot_window_max":[0.0,0.0],"scale_numerator":1.0,"scale_denominator":1.0,"plot_flags":688,"paper_units":0,"rotation":1,"plot_type":5,"scale_type":16,"shade_plot_mode":0,"shade_plot_resolution":2,"shade_plot_dpi":300,"standard_scale":1.0,"paper_image_origin":[0.0,0.0]}
+```
+
+One record per LAYOUT object, keyed by the layout's name (`Model`, `Layout1`).
+The layout's own fields are `tab_order` (71), `flags` (70), `min_limits` and
+`max_limits` (10, 20 and 11, 21), `insertion_base` (12, 22, 32), `min_extents`
+and `max_extents` (14, 24, 34 and 15, 25, 35), `elevation` (146), `ucs_origin`
+(13, 23, 33), `ucs_x_axis` and `ucs_y_axis` (16, 26, 36 and 17, 27, 37),
+`ucs_ortho_type` (76) and `block_record` (330, written as the block's **name**).
+The plot settings it inherits are `page_name` (1), `printer_name` (2),
+`paper_size` (4), `plot_view_name` (6), `style_sheet` (7), the four margins (40
+to 43, left, bottom, right, top), `paper_width` and `paper_height` (44, 45),
+`plot_origin` (46, 47), `plot_window_min` (48, 49) and `plot_window_max` (140,
+141), `scale_numerator` and `scale_denominator` (142, 143), `plot_flags` (70 of
+the plot settings), `paper_units` (72), `rotation` (73), `plot_type` (74),
+`scale_type` (75), `shade_plot_mode` (76), `shade_plot_resolution` (77),
+`shade_plot_dpi` (78), `standard_scale` (147) and `paper_image_origin` (148,
+149).
+
+- **Against the `view` record first.** Schema 1's `view` is a three-field slice of
+  this object, so inside one emitter the layouts ordered by (`tab_order`, name)
+  must be the `view` names in `index` order. `tests/model1_fixtures.rs` holds the
+  oracle and ezdxf streams to it and `tests/parity_model1.rs` holds acadrust's.
+- **Handles stay out:** the viewport (331), the UCS (345, 346), the viewport
+  list, the plot view and visual style handles, and 333 (which ACadSharp ignores).
+- A plot settings code acadrust did not type is kept only in
+  `raw_plot_settings_codes`; a field that shows up only there is a gap in the
+  acadrust record, listed by name in `parity/MODEL1.toml`.
+
 ## Comparing
 
 `src/model1.rs` compares two streams by key, never by position. A double passes

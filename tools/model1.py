@@ -692,6 +692,84 @@ def block_record_lines(doc) -> list[tuple[str, str, str]]:
     return out
 
 
+def point2(v) -> str:
+    return "[" + ",".join(real(float(c)) for c in (v[0], v[1])) + "]"
+
+
+def layout_lines(doc) -> list[tuple[str, str, str]]:
+    """One `layout` record per LAYOUT object, keyed by name (docs/MODEL_1.md).
+
+    The layout's own fields and the plot settings it embeds, by DXF code. A
+    code the file does not write reads as the default ezdxf's DXF attribute
+    table gives. The block record is the name of the record the 330 points at.
+    """
+    out = []
+    for layout in doc.layouts:
+        d = layout.dxf_layout.dxf
+        name = d.name
+        block = ""
+        target = doc.entitydb.get(d.get("block_record_handle", "0"))
+        if target is not None and target.dxf.hasattr("name"):
+            block = target.dxf.name
+
+        def text(attr: str) -> str:
+            return quote(normalize_newlines(str(d.get(attr, ""))))
+
+        def num(attr: str) -> str:
+            # an attribute the DXF version does not define has no default: zero
+            v = d.get(attr)
+            return real(float(0 if v is None else v))
+
+        def whole(attr: str) -> str:
+            v = d.get(attr)
+            return str(int(0 if v is None else v))
+
+        fields = [
+            ("name", quote(name)),
+            ("tab_order", whole("taborder")),
+            ("flags", whole("layout_flags")),
+            ("min_limits", point2(d.get("limmin"))),
+            ("max_limits", point2(d.get("limmax"))),
+            ("insertion_base", point3(d.get("insert_base"))),
+            ("min_extents", point3(d.get("extmin"))),
+            ("max_extents", point3(d.get("extmax"))),
+            ("elevation", num("elevation")),
+            ("ucs_origin", point3(d.get("ucs_origin"))),
+            ("ucs_x_axis", point3(d.get("ucs_xaxis"))),
+            ("ucs_y_axis", point3(d.get("ucs_yaxis"))),
+            ("ucs_ortho_type", whole("ucs_type")),
+            ("block_record", quote(block)),
+            ("page_name", text("page_setup_name")),
+            ("printer_name", text("plot_configuration_file")),
+            ("paper_size", text("paper_size")),
+            ("plot_view_name", text("plot_view_name")),
+            ("style_sheet", text("current_style_sheet")),
+            ("margin_left", num("left_margin")),
+            ("margin_bottom", num("bottom_margin")),
+            ("margin_right", num("right_margin")),
+            ("margin_top", num("top_margin")),
+            ("paper_width", num("paper_width")),
+            ("paper_height", num("paper_height")),
+            ("plot_origin", point2((d.get("plot_origin_x_offset"), d.get("plot_origin_y_offset")))),
+            ("plot_window_min", point2((d.get("plot_window_x1"), d.get("plot_window_y1")))),
+            ("plot_window_max", point2((d.get("plot_window_x2"), d.get("plot_window_y2")))),
+            ("scale_numerator", num("scale_numerator")),
+            ("scale_denominator", num("scale_denominator")),
+            ("plot_flags", whole("plot_layout_flags")),
+            ("paper_units", whole("plot_paper_units")),
+            ("rotation", whole("plot_rotation")),
+            ("plot_type", whole("plot_type")),
+            ("scale_type", whole("standard_scale_type")),
+            ("shade_plot_mode", whole("shade_plot_mode")),
+            ("shade_plot_resolution", whole("shade_plot_resolution_level")),
+            ("shade_plot_dpi", whole("shade_plot_custom_dpi")),
+            ("standard_scale", num("unit_factor")),
+            ("paper_image_origin", point2((d.get("paper_image_origin_x"), d.get("paper_image_origin_y")))),
+        ]
+        out.append(line("layout", name, fields))
+    return out
+
+
 def command_extract_ezdxf(args) -> int:
     import ezdxf  # only here: `freeze` and `verify` must run without it
 
@@ -711,6 +789,7 @@ def command_extract_ezdxf(args) -> int:
         text = encode(
             records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc) + dimstyle_lines(doc) + tree + xdata_lines(doc, owners)
             + block_record_lines(doc)
+            + layout_lines(doc)
         )
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
