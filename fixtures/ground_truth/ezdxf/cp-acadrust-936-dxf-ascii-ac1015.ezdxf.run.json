@@ -5,7 +5,7 @@
   "image": "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170",
   "input": "cp-acadrust-936-dxf-ascii-ac1015",
   "input_file": "authored/cp-acadrust-936-dxf-ascii-ac1015.dxf",
-  "input_sha256": "60df95529332c534e36ea617ac2326c2219127eed27a6d677df3e35382963d0a",
+  "input_sha256": "ade5598eaf41b8c4ad793b92baa235ea72ed89cc7bcf9cea4670ef66e733d108",
   "python": "3.14.8",
   "records": 7,
   "requirements_sha256": "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"

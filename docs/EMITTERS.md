@@ -480,12 +480,15 @@ authored text, kind by kind: `MATCH`, `DIFF:n` or `COUNT:a/b`. The 336 verdicts 
 `parity/CODEPAGE_VERDICTS.toml`, each one that is not `MATCH` with a reason and an issue. The
 R12 twin's case is `parity/r12_codepage.toml` (see above).
 
-What the table says: acadrust reads its own DWG back whole, and writes what the page cannot
-hold as the `\U+XXXX` escape, which ACadSharp does not decode (libviprs/acadsharp-rs-tests#151,
-upstream). acadrust's ASCII DXF carries UTF-8 under a legacy page (#152, fork fix with acadrust#9
-and #12). ACadSharp's writer best-fits the unrepresentable character and mangles 949 and 1258
-(#153, upstream), and acadrust's DXF reader decodes ACadSharp's text with the wrong page (#154).
-Nothing in an upstream engine is patched here.
+What the table says: acadrust reads its own DWG and DXF back whole, and writes what the page
+cannot hold as the `\U+XXXX` escape, which ACadSharp's readers keep verbatim and ezdxf keeps
+as the schema's text field says (libviprs/acadsharp-rs-tests#151, upstream; libviprs-dep#111
+for the schema question). ACadSharp's writer best-fits the unrepresentable character, and
+writes and reads ANSI_949 and ANSI_1258 as UTF-8 whatever the header says (#153, upstream). Two
+findings were acadrust's own and are fixed in the fork (libviprs/acadrust#38): its pre-2007 DXF
+carried UTF-8 under a legacy `$DWGCODEPAGE` (#152), and its reader ignored the page when
+`$DWGCODEPAGE` came before `$ACADVER`, which is how ACadSharp writes them, and never decoded
+the escapes in DXF (#154). Nothing in an upstream engine is patched here.
 
 **libviprs-dep#125 (AOT against JIT).** For all 56 DWG drawings the oracle (JIT ACadSharp)
 and acadsharp-rs (the AOT archive) give the same verdict and the same first difference, so

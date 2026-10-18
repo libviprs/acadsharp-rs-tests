@@ -21,10 +21,10 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `dxf-ascii-binary:acadrust` | 7 | 6 | 0 | 1 | 0 | 0 | 0 | 0 |
 | `dxf-ascii-binary:ezdxf` | 7 | 1 | 5 | 1 | 0 | 0 | 0 | 0 |
 | `dxf-ascii-binary:oracle` | 7 | 6 | 0 | 1 | 0 | 0 | 0 | 0 |
-| `dxf-dwg:acadrust` | 25 | 14 | 9 | 0 | 2 | 0 | 0 | 0 |
+| `dxf-dwg:acadrust` | 25 | 18 | 5 | 0 | 2 | 0 | 0 | 0 |
 | `dxf-dwg:acadsharp` | 25 | 0 | 0 | 0 | 0 | 0 | 25 | 0 |
 | `dxf-dwg:oracle` | 25 | 10 | 1 | 12 | 2 | 0 | 0 | 0 |
-| `dxf:ezdxf/acadrust` | 26 | 20 | 5 | 1 | 0 | 0 | 0 | 0 |
+| `dxf:ezdxf/acadrust` | 26 | 17 | 8 | 1 | 0 | 0 | 0 | 0 |
 | `dxf:ezdxf/oracle` | 26 | 12 | 0 | 14 | 0 | 0 | 0 | 0 |
 | `dxf:oracle/acadrust` | 26 | 12 | 0 | 14 | 0 | 0 | 0 | 0 |
 | `ezdxf/acadrust` | 25 | 12 | 1 | 10 | 2 | 0 | 0 | 0 |
@@ -106,10 +106,6 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `dxf-blockpolarparameter` | KNOWN:4 | libviprs/acadsharp-rs-tests#79 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1009-ascii` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1009-binary` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
-| `dxf-sample-ac1015-ascii` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
-| `dxf-sample-ac1015-binary` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
-| `dxf-sample-ac1018-ascii` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
-| `dxf-sample-ac1018-binary` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1027-ascii` | KNOWN:1 | libviprs/libviprs-dep#150 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1027-binary` | KNOWN:1 | libviprs/libviprs-dep#150 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1032-ascii` | KNOWN:1 | libviprs/libviprs-dep#150 | listed in parity/TABLES.toml |
@@ -170,7 +166,10 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | fixture | verdict | issue | reason |
 |---|---|---|---|
 | `dxf-sample-ac1009-binary` | DIFF:1 | libviprs/acadsharp-rs-tests#28 | the diameter callout's raw byte 0xD8: ezdxf decodes it as Windows-1252 (Ø) and acadrust as UTF-8 for a binary DXF (U+FFFD); the R12 file declares no code page (parity/r12_codepage.toml) |
-| `dxf-sample-ac1018-binary` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
+| `dxf-sample-ac1015-ascii` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
+| `dxf-sample-ac1015-binary` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
+| `dxf-sample-ac1018-ascii` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
+| `dxf-sample-ac1018-binary` | KNOWN:5 | libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1021-binary` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1024-binary` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1027-binary` | KNOWN:4 | libviprs/acadsharp-rs-tests#24 | listed in parity/TABLES.toml |
@@ -201,10 +200,10 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 |---|---|---|---|
 | `dxf-sample-ac1009-ascii` | DIFF:226 | libviprs/acadsharp-rs-tests#130 | the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names |
 | `dxf-sample-ac1009-binary` | DIFF:226 | libviprs/acadsharp-rs-tests#130 | the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names |
-| `dxf-sample-ac1015-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
-| `dxf-sample-ac1015-binary` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
-| `dxf-sample-ac1018-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
-| `dxf-sample-ac1018-binary` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
+| `dxf-sample-ac1015-ascii` | DIFF:25 | libviprs/acadsharp-rs-tests#94, libviprs/libviprs-dep#111 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records), and the callout text at handle 64B, where the oracle keeps the MIF escape the drawing stores and acadrust decodes it (libviprs/libviprs-dep#111). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other on the rest |
+| `dxf-sample-ac1015-binary` | DIFF:25 | libviprs/acadsharp-rs-tests#94, libviprs/libviprs-dep#111 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records), and the callout text at handle 64B, where the oracle keeps the MIF escape the drawing stores and acadrust decodes it (libviprs/libviprs-dep#111). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other on the rest |
+| `dxf-sample-ac1018-ascii` | DIFF:25 | libviprs/acadsharp-rs-tests#94, libviprs/libviprs-dep#111 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records), and the callout text at handle 64B, where the oracle keeps the MIF escape the drawing stores and acadrust decodes it (libviprs/libviprs-dep#111). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other on the rest |
+| `dxf-sample-ac1018-binary` | DIFF:25 | libviprs/acadsharp-rs-tests#94, libviprs/libviprs-dep#111 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records), and the callout text at handle 64B, where the oracle keeps the MIF escape the drawing stores and acadrust decodes it (libviprs/libviprs-dep#111). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other on the rest |
 | `dxf-sample-ac1021-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1021-binary` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
 | `dxf-sample-ac1024-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |

@@ -352,28 +352,6 @@ issue = "libviprs/acadsharp-rs-tests#27"
 # the comparator is red on any of them that stops diverging or diverges differently.
 
 [[known]]
-pair = "dxf-dwg:acadrust"
-fixture = "dxf-sample-ac1015-ascii"
-record_type = "text"
-field = "text"
-handles = ["522", "64B"]
-a = "\\U+220545,6"
-b = "∅45,6"
-reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that, and the ASCII and binary files agree). acadrust's DXF reader keeps what the file stores; its DWG reader decodes the escape to the character, so one reader gives two answers for one drawing."
-issue = "libviprs/libviprs-dep#111"
-
-[[known]]
-pair = "dxf-dwg:acadrust"
-fixture = "dxf-sample-ac1015-binary"
-record_type = "text"
-field = "text"
-handles = ["522", "64B"]
-a = "\\U+220545,6"
-b = "∅45,6"
-reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that, and the ASCII and binary files agree). acadrust's DXF reader keeps what the file stores; its DWG reader decodes the escape to the character, so one reader gives two answers for one drawing."
-issue = "libviprs/libviprs-dep#111"
-
-[[known]]
 pair = "dxf:ezdxf/oracle"
 fixture = "dxf-sample-ac1018-binary"
 record_type = "text"
@@ -1940,28 +1918,6 @@ reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF do
 issue = "libviprs/acadsharp-rs-tests#109"
 
 [[known]]
-pair = "dxf-dwg:acadrust"
-fixture = "dxf-sample-ac1018-ascii"
-record_type = "text"
-field = "text"
-handles = ["522", "64B"]
-a = "\\U+220545,6"
-b = "∅45,6"
-reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that, and the ASCII and binary files agree). acadrust's DXF reader keeps what the file stores; its DWG reader decodes the escape to the character, so one reader gives two answers for one drawing."
-issue = "libviprs/libviprs-dep#111"
-
-[[known]]
-pair = "dxf-dwg:acadrust"
-fixture = "dxf-sample-ac1018-binary"
-record_type = "text"
-field = "text"
-handles = ["522", "64B"]
-a = "\\U+220545,6"
-b = "∅45,6"
-reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that, and the ASCII and binary files agree). acadrust's DXF reader keeps what the file stores; its DWG reader decodes the escape to the character, so one reader gives two answers for one drawing."
-issue = "libviprs/libviprs-dep#111"
-
-[[known]]
 pair = "dxf:ezdxf/acadrust"
 fixture = "dxf-sample-ac1018-binary"
 record_type = "text"
@@ -2336,3 +2292,46 @@ oracle_indices = [52]
 reason = "The spline (oracle index 52) is not in the DWG ACadSharp 3.7.1 writes at AC1015, AC1018 or AC1024, and the oracle and acadrust agree it is absent; AC1027 and AC1032 keep it. The cause is not established."
 issue = "libviprs/acadsharp-rs-tests#108"
 
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1015-ascii"
+record_type = "text"
+field = "text"
+handles = ["522", "64B"]
+a = "\\U+220545,6"
+b = "∅45,6"
+reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that). ezdxf keeps what the file stores, as the schema says the text field does; acadrust decodes the escape to the character in its DXF reader now as it does in its DWG reader, so the two readers of acadrust agree and the other readers keep the escape."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1015-binary"
+record_type = "text"
+field = "text"
+handles = ["522", "64B"]
+a = "\\U+220545,6"
+b = "∅45,6"
+reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that). ezdxf keeps what the file stores, as the schema says the text field does; acadrust decodes the escape to the character in its DXF reader now as it does in its DWG reader, so the two readers of acadrust agree and the other readers keep the escape."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1018-ascii"
+record_type = "text"
+field = "text"
+handles = ["522", "64B"]
+a = "\\U+220545,6"
+b = "∅45,6"
+reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that). ezdxf keeps what the file stores, as the schema says the text field does; acadrust decodes the escape to the character in its DXF reader now as it does in its DWG reader, so the two readers of acadrust agree and the other readers keep the escape."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1018-binary"
+record_type = "text"
+field = "text"
+handles = ["522", "64B"]
+a = "\\U+220545,6"
+b = "∅45,6"
+reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that). ezdxf keeps what the file stores, as the schema says the text field does; acadrust decodes the escape to the character in its DXF reader now as it does in its DWG reader, so the two readers of acadrust agree and the other readers keep the escape."
+issue = "libviprs/libviprs-dep#111"
