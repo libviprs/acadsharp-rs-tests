@@ -42,6 +42,7 @@ test_root = "src/ACadSharp.Tests"
 path = "Entities/ArcTests.cs"
 status = "differential"
 reason = "covered by the JSONL comparison"
+evidence = ["path:Cargo.toml"]
 "#;
 
 #[test]
@@ -305,7 +306,7 @@ const DXF_ROW: &str = r#"
 path = "IO/DXF/DxfReaderTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
-acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1)" }
+acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1)", evidence = ["path:Cargo.toml"] }
 "#;
 
 #[test]
@@ -326,7 +327,7 @@ fn validate_refuses_an_acadrust_override_that_restates_the_row() {
     let bad = format!(
         "{GOOD}{}",
         DXF_ROW.replace(
-            r#"acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1)" }"#,
+            r#"acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1)", evidence = ["path:Cargo.toml"] }"#,
             r#"acadrust = { status = "not_applicable", reason = "DXF, and the crate opens only DWG" }"#
         )
     );
@@ -343,8 +344,8 @@ fn validate_accepts_an_acadrust_override() {
 fn validate_refuses_evidence_that_resolves_to_nothing() {
     let with = |ev: &str| {
         GOOD.replace(
-            r#"status = "differential""#,
-            &format!("status = \"differential\"\nevidence = [{ev}]"),
+            r#"evidence = ["path:Cargo.toml"]"#,
+            &format!("evidence = [{ev}]"),
         )
     };
 
@@ -355,10 +356,10 @@ fn validate_refuses_evidence_that_resolves_to_nothing() {
     let p = problems_for(&with(r#""path:tests/does_not_exist.rs""#));
     assert!(p.contains("does_not_exist.rs"), "{p}");
 
-    let p = problems_for(&with(r#""verdict:sample_AC1032:oracle-vs-acadrust""#));
+    let p = problems_for(&with(r#""bogus:sample_AC1032""#));
     assert!(
-        p.contains("verdict:"),
-        "a kind with no source yet is refused, not trusted: {p}"
+        p.contains("bogus:"),
+        "a kind with no source is refused, not trusted: {p}"
     );
 
     // controls: evidence that does resolve is quiet
@@ -437,5 +438,150 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
             Some("not_applicable"),
             "{p} stays out"
         );
+    }
+}
+
+// ---------------------------------------------------------------------------
+// #32: every applicable row has evidence or a reasoned exclusion, and the
+// evidence has to resolve.
+// ---------------------------------------------------------------------------
+
+fn with_evidence(ev: &str) -> String {
+    GOOD.replace(r#"evidence = ["path:Cargo.toml"]"#, &format!("evidence = [{ev}]"))
+}
+
+#[test]
+fn validate_refuses_a_record_the_fixture_does_not_hold() {
+    // parity_circle holds circles and no hatch edges as polylines, and is compared.
+    assert_eq!(
+        problems_for(&with_evidence(r#""record:circle@parity_circle""#)),
+        ""
+    );
+    let p = problems_for(&with_evidence(r#""record:ellipse@parity_circle""#));
+    assert!(p.contains("holds no ellipse record"), "{p}");
+
+    let p = problems_for(&with_evidence(r#""record:circle@no-such-fixture""#));
+    assert!(p.contains("no-such-fixture"), "{p}");
+
+    let p = problems_for(&with_evidence(r#""record:circle""#));
+    assert!(p.contains("record:<kind>@<fixture>"), "{p}");
+}
+
+#[test]
+fn validate_refuses_a_record_of_a_fixture_nothing_compares() {
+    // A corpus fixture with no row in parity/VERDICTS.toml would be evidence nobody checks.
+    let p = problems_for(&with_evidence(r#""record:circle@parity_nothing_compared""#));
+    assert!(p.contains("does not compare"), "{p}");
+}
+
+#[test]
+fn validate_refuses_a_verdict_row_that_does_not_exist() {
+    assert_eq!(
+        problems_for(&with_evidence(r#""verdict:acadsharp-ac1032@oracle/acadrust""#)),
+        ""
+    );
+    let p = problems_for(&with_evidence(r#""verdict:acadsharp-ac1032@oracle/nobody""#));
+    assert!(p.contains("not a row of parity/VERDICTS.toml"), "{p}");
+    let p = problems_for(&with_evidence(r#""verdict:acadsharp-ac1032""#));
+    assert!(p.contains("verdict:<fixture>@<pair>"), "{p}");
+}
+
+#[test]
+fn validate_refuses_a_model_kind_that_is_not_in_the_schema() {
+    assert_eq!(problems_for(&with_evidence(r#""model1:header""#)), "");
+    assert_eq!(problems_for(&with_evidence(r#""model1:layer""#)), "");
+    let p = problems_for(&with_evidence(r#""model1:no_such_kind""#));
+    assert!(p.contains("model-1 schema"), "{p}");
+}
+
+#[test]
+fn validate_refuses_an_applicable_row_with_neither_evidence_nor_exclusion() {
+    let bare = GOOD.replace("evidence = [\"path:Cargo.toml\"]\n", "");
+    let p = problems_for(&bare);
+    assert!(p.contains("ArcTests.cs"), "{p}");
+    assert!(p.contains("no evidence and no reasoned exclusion"), "{p}");
+
+    // a reasoned exclusion makes it quiet, an empty one does not
+    let excluded = bare.replace(
+        "reason = \"covered by the JSONL comparison\"",
+        "reason = \"covered by the JSONL comparison\"\nexclusion = \"no fixture exercises it\"",
+    );
+    assert_eq!(problems_for(&excluded), "");
+    let blank = excluded.replace("no fixture exercises it", "  ");
+    assert!(problems_for(&blank).contains("no evidence and no reasoned exclusion"));
+}
+
+#[test]
+fn validate_refuses_a_row_that_is_both_covered_and_excluded() {
+    let both = GOOD.replace(
+        "evidence = [\"path:Cargo.toml\"]",
+        "evidence = [\"path:Cargo.toml\"]\nexclusion = \"no fixture exercises it\"",
+    );
+    assert!(problems_for(&both).contains("covered or it is not"));
+}
+
+#[test]
+fn validate_refuses_evidence_on_a_row_that_is_out_of_scope() {
+    let out = GOOD.replace(r#"status = "differential""#, r#"status = "not_applicable""#);
+    assert!(problems_for(&out).contains("nothing to cover"));
+}
+
+#[test]
+fn an_acadrust_override_carries_its_own_evidence() {
+    // The row is covered for acadsharp-rs and the override is the whole answer for acadrust.
+    let no_evidence = format!(
+        "{GOOD}\n[[test_file]]\npath = \"IO/DXF/DxfReaderTests.cs\"\nstatus = \"differential\"\nreason = \"r\"\nevidence = [\"path:Cargo.toml\"]\nacadrust = {{ status = \"native_conformance\", reason = \"model-1\" }}\n"
+    );
+    let p = problems_for(&no_evidence);
+    assert!(p.contains("DxfReaderTests.cs"), "{p}");
+    assert!(p.contains("acadrust"), "{p}");
+    assert!(p.contains("no evidence and no reasoned exclusion"), "{p}");
+}
+
+#[test]
+fn every_applicable_row_of_the_real_manifest_is_accounted_for() {
+    use acadsharp_rs_tests::parity::Provider;
+    let m = parity::manifest();
+    // Written out by hand, per provider: applicable, evidenced, excluded. A row moving
+    // between the last two is a decision, and this is where it shows.
+    for (p, applicable, evidenced, excluded) in [
+        (Provider::Acadsharp, 83, 38, 45),
+        (Provider::Acadrust, 90, 60, 30),
+    ] {
+        let b = m.burndown(p);
+        assert_eq!(b.total, EXPECTED_ROWS);
+        assert_eq!(b.applicable, applicable, "{p:?}");
+        assert_eq!(b.evidenced, evidenced, "{p:?}");
+        assert_eq!(b.excluded, excluded, "{p:?}");
+        assert_eq!(b.evidenced + b.excluded, b.applicable, "{p:?}: every row is accounted for");
+    }
+}
+
+#[test]
+fn a_header_row_is_covered_for_acadrust_and_excluded_for_acadsharp_rs() {
+    use acadsharp_rs_tests::parity::Provider;
+    let m = parity::manifest();
+    let row = m
+        .test_files
+        .iter()
+        .find(|f| f.path == "Header/CadHeaderTests.cs")
+        .unwrap();
+    assert_eq!(row.evidence_for(Provider::Acadrust), ["model1:header"]);
+    assert!(row.evidence_for(Provider::Acadsharp).is_empty());
+    assert!(row.exclusion_for(Provider::Acadsharp).is_some());
+}
+
+#[test]
+fn the_arc_dimension_suite_is_an_exclusion_not_a_silent_differential() {
+    use acadsharp_rs_tests::parity::Provider;
+    let row = parity::manifest()
+        .test_files
+        .iter()
+        .find(|f| f.path == "Entities/DimensionArcTests.cs")
+        .unwrap();
+    assert_eq!(row.status, Status::Differential);
+    for p in [Provider::Acadsharp, Provider::Acadrust] {
+        assert!(row.evidence_for(p).is_empty());
+        assert!(row.exclusion_for(p).unwrap().contains("arc dimension"));
     }
 }
