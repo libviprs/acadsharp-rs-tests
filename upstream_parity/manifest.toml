@@ -50,21 +50,25 @@ reason = "upstream's own expected document structure per generation, usable as a
 path = "CadDocumentTests.cs"
 status = "native_conformance"
 reason = "document object model: the oracle walks the same structure, so this is checked against ACadSharp itself rather than mirrored in Rust"
+exclusion = "the document model's identity and ownership (handles, owners, reactors) is in neither stream. Needs a model-1 object-graph kind"
 
 [[test_file]]
 path = "CadObjectTests.cs"
 status = "native_conformance"
 reason = "object-model identity and ownership, checked through the oracle"
+exclusion = "the document model's identity and ownership (handles, owners, reactors) is in neither stream. Needs a model-1 object-graph kind"
 
 [[test_file]]
 path = "ColorTests.cs"
 status = "native_conformance"
 reason = "the colour model. The SVG reference deliberately does no source colour fidelity, so colour is an oracle-side contract, not a rendering one"
+exclusion = "colour is deliberately outside schema 1 (docs/CANONICAL_SCHEMA.md) and model-1 holds colour only as a table field. Needs an entity-level colour kind in model-1"
 
 [[test_file]]
 path = "Common/AssertUtils.cs"
 status = "native_conformance"
 reason = "defines upstream's numeric tolerance conventions, which the comparator in H1.4 has to match or consciously diverge from"
+evidence = ["path:docs/TOLERANCES.md"]
 
 [[test_file]]
 path = "Common/CSMathRandom.cs"
@@ -85,11 +89,13 @@ reason = "test infrastructure with no assertions of its own"
 path = "Common/DocumentIntegrity.cs"
 status = "native_conformance"
 reason = "structural invariants every read document must satisfy (handles resolve, owners agree, tables populated); the oracle asserts the same set"
+exclusion = "the document model's identity and ownership (handles, owners, reactors) is in neither stream. Needs a model-1 object-graph kind"
 
 [[test_file]]
 path = "Common/EntityComparator.cs"
 status = "native_conformance"
 reason = "upstream's entity equality semantics, which is exactly what H1.4's comparator reimplements independently"
+exclusion = "the document model's identity and ownership (handles, owners, reactors) is in neither stream. Needs a model-1 object-graph kind"
 
 [[test_file]]
 path = "Common/EntityFactory.cs"
@@ -122,210 +128,242 @@ acadrust = { status = "not_applicable", reason = "tests ACadSharp's own DXF prop
 path = "Entities/ArcTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/arc.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:arc@parity_arc"] }
+evidence = ["record:arc@parity_arc"]
 
 [[test_file]]
 path = "Entities/AttributeDefinitionTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/text.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:text@parity_text"] }
+evidence = ["record:text@parity_text"]
 
 [[test_file]]
 path = "Entities/AttributeEntityTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/text.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:text@parity_text"] }
+evidence = ["record:text@parity_text"]
 
 [[test_file]]
 path = "Entities/CircleTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/circle.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:circle@parity_circle"] }
+evidence = ["record:circle@parity_circle"]
 
 [[test_file]]
 path = "Entities/CommonDimensionTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/CommonEntityTests.cs"
 status = "differential"
-planned_rust = "tests/entities/common.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+reason = "a rendering-contract entity suite. The JSONL comparison against the oracle is the check (the stronger one, since it holds the shim to ACadSharp's own output), but it only covers the row once a fixture exercises what the suite asserts, which the exclusion says is missing; no mirrored Rust test is planned"
+exclusion = "the common entity fields it asserts (layer, colour, linetype, lineweight, transparency, handles) are not in schema 1, which carries geometry only, and model-1 has no entity record. Needs a model-1 entity kind (R5.5)"
 
 [[test_file]]
 path = "Entities/CommonPolylineTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/polyline.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:polyline@parity_polyline"] }
+evidence = ["record:polyline@parity_polyline"]
 
 [[test_file]]
 path = "Entities/CommonVertexTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/polyline.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:polyline@parity_polyline"] }
+evidence = ["record:polyline@parity_polyline"]
 
 [[test_file]]
 path = "Entities/DimensionAlignedTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/DimensionAngular2LineTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/DimensionAngular3PtTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/DimensionArcTests.cs"
 status = "differential"
-planned_rust = "tests/entities/dimension.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+reason = "a rendering-contract entity suite. The JSONL comparison against the oracle is the check (the stronger one, since it holds the shim to ACadSharp's own output), but it only covers the row once a fixture exercises what the suite asserts, which the exclusion says is missing; no mirrored Rust test is planned"
+exclusion = "no fixture exercises an arc dimension: the generator's dimension drawing (regression_dimension_fields) holds the aligned, angular, diameter, linear, ordinate and radius kinds. Needs a fixture with a DimensionArc, in the generator"
 
 [[test_file]]
 path = "Entities/DimensionDiameterTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/DimensionDimensionLinearTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/DimensionOrdinateTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/DimensionRadiusTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/dimensions.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@regression_dimension_fields"] }
+evidence = ["record:line@regression_dimension_fields"]
 
 [[test_file]]
 path = "Entities/EllipseTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/ellipse.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:ellipse@parity_ellipse"] }
+evidence = ["record:ellipse@parity_ellipse"]
 
 [[test_file]]
 path = "Entities/HatchTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/hatch.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:polyline@parity_hatch"] }
+evidence = ["record:polyline@parity_hatch"]
 
 [[test_file]]
 path = "Entities/InsertTest.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/insert.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@parity_insert"] }
+evidence = ["record:line@parity_insert"]
 
 [[test_file]]
 path = "Entities/LineTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/line.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@parity_line"] }
+evidence = ["record:line@parity_line"]
 
 [[test_file]]
 path = "Entities/LwPolylineTest.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/polyline.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:polyline@parity_polyline"] }
+evidence = ["record:polyline@parity_polyline"]
 
 [[test_file]]
 path = "Entities/MTextTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/text.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:text@parity_text"] }
+evidence = ["record:text@parity_text"]
 
 [[test_file]]
 path = "Entities/MeshTests.cs"
 status = "native_conformance"
 reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+exclusion = "schema 1 has no mesh record: the oracle warns (g13_mesh, g13_polyface_mesh, g13_polygon_mesh) and acadsharp-rs flattens polyface and polygon meshes as polylines (libviprs/acadsharp-rs-tests#62), and model-1 has no kind for them. Needs a model-1 mesh kind"
 
 [[test_file]]
 path = "Entities/PointTests.cs"
 status = "native_conformance"
 reason = "POINT has no canonical record in the schema, so there is nothing for a rendering comparison to assert. It reaches the oracle as a warning row"
+evidence = ["record:point@g13_point"]
 
 [[test_file]]
 path = "Entities/PolyfaceMeshTests.cs"
 status = "native_conformance"
 reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+exclusion = "schema 1 has no mesh record: the oracle warns (g13_mesh, g13_polyface_mesh, g13_polygon_mesh) and acadsharp-rs flattens polyface and polygon meshes as polylines (libviprs/acadsharp-rs-tests#62), and model-1 has no kind for them. Needs a model-1 mesh kind"
 
 [[test_file]]
 path = "Entities/PolygonMeshTests.cs"
 status = "native_conformance"
 reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+exclusion = "schema 1 has no mesh record: the oracle warns (g13_mesh, g13_polyface_mesh, g13_polygon_mesh) and acadsharp-rs flattens polyface and polygon meshes as polylines (libviprs/acadsharp-rs-tests#62), and model-1 has no kind for them. Needs a model-1 mesh kind"
 
 [[test_file]]
 path = "Entities/Polyline2DTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/polyline.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:polyline@parity_polyline"] }
+evidence = ["record:polyline@parity_polyline"]
 
 [[test_file]]
 path = "Entities/Polyline3DTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/polyline.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:polyline@parity_polyline"] }
+evidence = ["record:polyline@parity_polyline"]
 
 [[test_file]]
 path = "Entities/SeqendTests.cs"
 status = "native_conformance"
 reason = "SEQEND is a structural marker rather than drawable geometry; it never reaches a canonical record"
+exclusion = "schema 1 has no mesh record: the oracle warns (g13_mesh, g13_polyface_mesh, g13_polygon_mesh) and acadsharp-rs flattens polyface and polygon meshes as polylines (libviprs/acadsharp-rs-tests#62), and model-1 has no kind for them. Needs a model-1 mesh kind"
 
 [[test_file]]
 path = "Entities/SplineTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/spline.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:spline@parity_spline"] }
+evidence = ["record:spline@parity_spline"]
 
 [[test_file]]
 path = "Entities/TextTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/text.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:text@parity_text"] }
+evidence = ["record:text@parity_text"]
 
 [[test_file]]
 path = "Entities/Vertex2DTests.cs"
 status = "differential"
-planned_rust = "tests/entities/polyline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle, which is the stronger check (it holds the shim to ACadSharp's own output, not to a reading of the upstream assertion), so no mirrored Rust test is planned"
+evidence = ["record:polyline@parity_polyline"]
 
 [[test_file]]
 path = "Entities/Vertex3DTests.cs"
 status = "differential"
-planned_rust = "tests/entities/polyline.rs"
-reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle until H4.2 writes the mirrored unit test"
+reason = "a rendering-contract entity suite. It is covered end to end by the JSONL comparison against the oracle, which is the stronger check (it holds the shim to ACadSharp's own output, not to a reading of the upstream assertion), so no mirrored Rust test is planned"
+evidence = ["record:polyline@parity_polyline"]
 
 [[test_file]]
 path = "Entities/VertexFaceMeshTests.cs"
 status = "native_conformance"
 reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+exclusion = "schema 1 has no mesh record: the oracle warns (g13_mesh, g13_polyface_mesh, g13_polygon_mesh) and acadsharp-rs flattens polyface and polygon meshes as polylines (libviprs/acadsharp-rs-tests#62), and model-1 has no kind for them. Needs a model-1 mesh kind"
 
 [[test_file]]
 path = "Entities/VertexFaceRecordTests.cs"
 status = "native_conformance"
 reason = "mesh geometry, which the canonical schema has no record for. Checked against the oracle rather than rendered"
+exclusion = "schema 1 has no mesh record: the oracle warns (g13_mesh, g13_polyface_mesh, g13_polygon_mesh) and acadsharp-rs flattens polyface and polygon meshes as polylines (libviprs/acadsharp-rs-tests#62), and model-1 has no kind for them. Needs a model-1 mesh kind"
 
 [[test_file]]
 path = "Entities/ViewportTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/viewport.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:view@parity_viewport"] }
+evidence = ["record:view@parity_viewport"]
 
 [[test_file]]
 path = "GroupCodeValueTests.cs"
@@ -337,46 +375,52 @@ acadrust = { status = "not_applicable", reason = "tests ACadSharp's own group co
 path = "Header/CadHeaderTests.cs"
 status = "native_conformance"
 reason = "header variables. The oracle's schema 1 stream has no header record (its document record carries the version and the maintenance version and nothing else); the model-1 stream (docs/MODEL_1.md) writes one record per CadHeader variable (249, 247 of them frozen) and compares them by DXF name against acadrust and ezdxf. acadsharp-rs is excluded: its C ABI exposes flattened primitives only"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the header records and compares acadrust against the oracle and ezdxf", evidence = ["model1:header"] }
 
 [[test_file]]
 path = "IO/AcisTextCodecTests.cs"
 status = "native_conformance"
 reason = "the ACIS SAT text codec for solids, which the canonical schema has no record for"
+exclusion = "the ACIS text codec has no record in either stream and no fixture carries ACIS data for the comparison to read back. Needs an ACIS fixture and a decision on what is compared"
 
 [[test_file]]
 path = "IO/AecWallsTest.cs"
 status = "differential"
-planned_rust = "tests/io/unsupported_entities.rs"
 reason = "AEC custom objects, which must surface as warning rows rather than being dropped"
+evidence = ["record:warning@acadsharp-aecobjects"]
 
 [[test_file]]
 path = "IO/CadReaderTestsBase.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/reader.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:view@acadsharp-ac1014", "record:view@acadsharp-ac1032"] }
+evidence = ["record:view@acadsharp-ac1014", "record:view@acadsharp-ac1032"]
 
 [[test_file]]
 path = "IO/ColorTests.cs"
 status = "native_conformance"
 reason = "colour resolution through the reader; the SVG reference does no colour fidelity by design"
+exclusion = "colour is deliberately outside schema 1 (docs/CANONICAL_SCHEMA.md) and model-1 holds colour only as a table field. Needs an entity-level colour kind in model-1"
 
 [[test_file]]
 path = "IO/DWG/DwgReaderTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/reader.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:view@acadsharp-ac1014", "record:view@acadsharp-ac1032"] }
+evidence = ["record:view@acadsharp-ac1014", "record:view@acadsharp-ac1032"]
 
 [[test_file]]
 path = "IO/DWG/DwgWriterSingleObjectTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
-acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)", evidence = ["verdict:w-acadrust-ac1032-dwg-ac1015@w-acadrust:oracle"] }
 
 [[test_file]]
 path = "IO/DWG/DwgWriterTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
-acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)", evidence = ["verdict:w-acadrust-ac1032-dwg-ac1015@w-acadrust:oracle"] }
 
 [[test_file]]
 path = "IO/DXF/DxfAcdsDataSectionTests.cs"
@@ -394,47 +438,51 @@ acadrust = { status = "not_applicable", reason = "tests ACadSharp's ACIS SAT tex
 path = "IO/DXF/DxfReaderTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
-acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1 compares it against its own DWG reading and the oracle's)" }
+acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1 compares it against its own DWG reading and the oracle's)", evidence = ["verdict:dxf-sample-ac1015@dxf-ascii-binary:acadrust", "verdict:dxf-blockalignmentparameter@dxf-dwg:acadrust"] }
 
 [[test_file]]
 path = "IO/DXF/DxfWriterSingleObjectTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
-acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)", evidence = ["verdict:w-acadrust-ac1032-dxf-ascii-ac1015@w-acadrust:oracle"] }
 
 [[test_file]]
 path = "IO/DXF/DxfWriterTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
-acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)", evidence = ["verdict:w-acadrust-ac1032-dxf-ascii-ac1015@w-acadrust:oracle"] }
 
 [[test_file]]
 path = "IO/DynamicBlockTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/insert.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:line@acadsharp-blockrotationparameter"] }
+evidence = ["record:line@acadsharp-blockrotationparameter"]
 
 [[test_file]]
 path = "IO/GeoDataTests.cs"
 status = "native_conformance"
 reason = "geodata, which libviprs georeferencing will consume directly rather than through a canonical record"
+exclusion = "acadsharp-geoloc is compared, but the geodata object itself is in neither stream. Needs a model-1 kind for GEODATA"
 
 [[test_file]]
 path = "IO/IOTests.cs"
 status = "differential"
-planned_rust = "tests/io/reader.rs"
 reason = "reads every sample and asserts integrity, which is what the JSONL comparison does end to end"
+evidence = ["record:view@acadsharp-ac1014", "record:view@acadsharp-ac1032"]
 
 [[test_file]]
 path = "IO/IOTestsBase.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/reader.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:view@acadsharp-ac1014", "record:view@acadsharp-ac1032"] }
+evidence = ["record:view@acadsharp-ac1014", "record:view@acadsharp-ac1032"]
 
 [[test_file]]
 path = "IO/LoadPatternsTests.cs"
 status = "native_conformance"
 reason = "hatch pattern (.pat) loading, an oracle-side contract behind the polygon records"
+exclusion = "hatch patterns are not in either stream; only the boundary edges of a hatch are. Needs a model-1 kind for the pattern definitions"
 
 [[test_file]]
 path = "IO/LocalSampleTests.cs"
@@ -444,14 +492,14 @@ reason = "reads sample files upstream does not ship, so it cannot run anywhere b
 [[test_file]]
 path = "IO/MultiLeaderTests.cs"
 status = "differential"
-planned_rust = "tests/io/unsupported_entities.rs"
 reason = "multileaders, which have no canonical record yet and must therefore surface as warnings"
+evidence = ["record:warning@g13_leader"]
 
 [[test_file]]
 path = "IO/RewriteSamplesTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
-acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)", evidence = ["verdict:w-acadrust-ac1032-dwg-ac1015@w-acadrust:oracle", "verdict:w-acadrust-ac1032-dxf-ascii-ac1015@w-acadrust:oracle"] }
 
 [[test_file]]
 path = "IO/SVG/SvgWriterTests.cs"
@@ -461,25 +509,28 @@ reason = "upstream's own SVG writer. The visual reference is generated from inde
 [[test_file]]
 path = "IO/TableEntityTests.cs"
 status = "differential"
-planned_rust = "tests/io/unsupported_entities.rs"
 reason = "the ACAD_TABLE entity, no canonical record yet, so it must surface as a warning"
+exclusion = "no fixture holds a TABLE entity, and schema 1 has no record for one. Needs a fixture, and a decision on how a table is drawn"
 
 [[test_file]]
 path = "IO/ViewportTests.cs"
 status = "mirrored"
 rust = ["tests/upstream_parity/viewport.rs"]
-acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it" }
+acadrust = { status = "differential", reason = "the mirrored test goes through acadsharp-rs's safe API; acadrust has no Rust mirror of this suite, and the oracle comparison is what covers it", evidence = ["record:view@parity_viewport"] }
+evidence = ["record:view@parity_viewport"]
 
 [[test_file]]
 path = "IO/WriterSingleObjectTests.cs"
 status = "not_applicable"
 reason = "the crate exposes no writer, so there is nothing on our side for a writer suite to compare against"
-acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)" }
+acadrust = { status = "differential", reason = "acadrust writes DWG and DXF (R5.3 reads each output back with the other readers)", evidence = ["verdict:w-acadrust-ac1032-dwg-ac1015@w-acadrust:oracle", "verdict:w-acadrust-ac1032-dxf-ascii-ac1015@w-acadrust:oracle"] }
 
 [[test_file]]
 path = "IO/XDataTests.cs"
 status = "native_conformance"
 reason = "extended data through the reader, carried by the object model"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the xdata records and compares acadrust against the oracle and ezdxf", evidence = ["model1:xdata"] }
 
 [[test_file]]
 path = "Internal/DwgHandleWriterTests.cs"
@@ -509,98 +560,127 @@ acadrust = { status = "not_applicable", reason = "tests ACadSharp's own DXF prop
 path = "Objects/CadDictionaryTests.cs"
 status = "native_conformance"
 reason = "non-graphical object model, checked against the oracle rather than rendered"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the dictionary records and compares acadrust against the oracle and ezdxf", evidence = ["model1:dictionary"] }
 
 [[test_file]]
 path = "Objects/Collections/DictionaryVariableCollectionTests.cs"
 status = "native_conformance"
 reason = "object dictionary collections, part of the object model rather than the rendering contract"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the dictionary records and compares acadrust against the oracle and ezdxf", evidence = ["model1:dictionary"] }
 
 [[test_file]]
 path = "Objects/Collections/ObjectDictionaryCollectionTests.cs"
 status = "native_conformance"
 reason = "object dictionary collections, part of the object model rather than the rendering contract"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the dictionary records and compares acadrust against the oracle and ezdxf", evidence = ["model1:dictionary"] }
 
 [[test_file]]
 path = "Objects/Collections/ScaleCollectionTests.cs"
 status = "native_conformance"
 reason = "object dictionary collections, part of the object model rather than the rendering contract"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the dictionary records and compares acadrust against the oracle and ezdxf", evidence = ["model1:dictionary"] }
 
 [[test_file]]
 path = "Objects/GroupTests.cs"
 status = "native_conformance"
 reason = "non-graphical object model, checked against the oracle rather than rendered"
+exclusion = "model-1's dictionary kind lists the entries of a dictionary by name, not the fields of the objects they point to. Needs a model-1 kind for each object type"
 
 [[test_file]]
 path = "Objects/LayoutTests.cs"
 status = "differential"
-planned_rust = "tests/document/layout.rs"
 reason = "layouts are the canonical `view` record, so this maps straight onto a record the comparison checks"
+evidence = ["record:view@acadsharp-ac1032"]
 
 [[test_file]]
 path = "Objects/MaterialTests.cs"
 status = "native_conformance"
 reason = "non-graphical object model, checked against the oracle rather than rendered"
+exclusion = "model-1's dictionary kind lists the entries of a dictionary by name, not the fields of the objects they point to. Needs a model-1 kind for each object type"
 
 [[test_file]]
 path = "Objects/NonGraphicalObjectTests.cs"
 status = "native_conformance"
 reason = "non-graphical object model, checked against the oracle rather than rendered"
+exclusion = "model-1's dictionary kind lists the entries of a dictionary by name, not the fields of the objects they point to. Needs a model-1 kind for each object type"
 
 [[test_file]]
 path = "Objects/SortEntitiesTableTests.cs"
 status = "differential"
-planned_rust = "tests/document/draw_order.rs"
 reason = "the sort-entities table decides draw order, and draw order is explicitly part of the canonical ordering rules"
+exclusion = "the canonical stream keeps the document's own entity order and no fixture reorders by sort handle, so nothing compares the draw order. Needs a fixture with a SORTENTSTABLE"
 
 [[test_file]]
 path = "Tables/BlockRecordTests.cs"
 status = "native_conformance"
 reason = "symbol table entries, which back the entity records but are not records themselves"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the block_record records and compares acadrust against the oracle and ezdxf", evidence = ["model1:block_record"] }
 
 [[test_file]]
 path = "Tables/Collections/BlockRecordsTableTests.cs"
 status = "native_conformance"
 reason = "symbol table collections, part of the object model"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the block_record records and compares acadrust against the oracle and ezdxf", evidence = ["model1:block_record"] }
 
 [[test_file]]
 path = "Tables/Collections/TextStylesTableTests.cs"
 status = "native_conformance"
 reason = "symbol table collections, part of the object model"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the textstyle records and compares acadrust against the oracle and ezdxf", evidence = ["model1:textstyle"] }
 
 [[test_file]]
 path = "Tables/DimensionStyleTests.cs"
 status = "native_conformance"
 reason = "symbol table entries, which back the entity records but are not records themselves"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the dimstyle records and compares acadrust against the oracle and ezdxf", evidence = ["model1:dimstyle"] }
 
 [[test_file]]
 path = "Tables/LayerTests.cs"
 status = "native_conformance"
 reason = "symbol table entries, which back the entity records but are not records themselves"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the layer records and compares acadrust against the oracle and ezdxf", evidence = ["model1:layer"] }
 
 [[test_file]]
 path = "Tables/LineSegmentTests.cs"
 status = "native_conformance"
 reason = "symbol table entries, which back the entity records but are not records themselves"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the linetype records and compares acadrust against the oracle and ezdxf", evidence = ["model1:linetype"] }
 
 [[test_file]]
 path = "Tables/LineTypeTests.cs"
 status = "native_conformance"
 reason = "symbol table entries, which back the entity records but are not records themselves"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the linetype records and compares acadrust against the oracle and ezdxf", evidence = ["model1:linetype"] }
 
 [[test_file]]
 path = "Tables/TableEntryCommonTests.cs"
 status = "native_conformance"
 reason = "symbol table entries, which back the entity records but are not records themselves"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the layer records and compares acadrust against the oracle and ezdxf", evidence = ["model1:layer"] }
 
 [[test_file]]
 path = "TestModels/BlockRecordNode.cs"
 status = "native_conformance"
 reason = "the deserialisation model for upstream's Data/sample_AC10xx_tree.json baselines, which the oracle may consult"
+exclusion = "these load upstream's Data/sample_AC10xx_tree.json document trees, which the manifest records as a second oracle and no test here consumes yet. Needs a comparison of model-1 against the trees"
 
 [[test_file]]
 path = "TestModels/CadDocumentTree.cs"
 status = "native_conformance"
 reason = "the deserialisation model for upstream's Data/sample_AC10xx_tree.json baselines, which the oracle may consult"
+exclusion = "these load upstream's Data/sample_AC10xx_tree.json document trees, which the manifest records as a second oracle and no test here consumes yet. Needs a comparison of model-1 against the trees"
 
 [[test_file]]
 path = "TestModels/ColorData.cs"
@@ -616,6 +696,7 @@ reason = "test infrastructure with no assertions of its own"
 path = "TestModels/EntityNode.cs"
 status = "native_conformance"
 reason = "the deserialisation model for upstream's Data/sample_AC10xx_tree.json baselines, which the oracle may consult"
+exclusion = "these load upstream's Data/sample_AC10xx_tree.json document trees, which the manifest records as a second oracle and no test here consumes yet. Needs a comparison of model-1 against the trees"
 
 [[test_file]]
 path = "TestModels/FileModel.cs"
@@ -626,21 +707,25 @@ reason = "test infrastructure with no assertions of its own"
 path = "TestModels/LayerNode.cs"
 status = "native_conformance"
 reason = "the deserialisation model for upstream's Data/sample_AC10xx_tree.json baselines, which the oracle may consult"
+exclusion = "these load upstream's Data/sample_AC10xx_tree.json document trees, which the manifest records as a second oracle and no test here consumes yet. Needs a comparison of model-1 against the trees"
 
 [[test_file]]
 path = "TestModels/Node.cs"
 status = "native_conformance"
 reason = "the deserialisation model for upstream's Data/sample_AC10xx_tree.json baselines, which the oracle may consult"
+exclusion = "these load upstream's Data/sample_AC10xx_tree.json document trees, which the manifest records as a second oracle and no test here consumes yet. Needs a comparison of model-1 against the trees"
 
 [[test_file]]
 path = "TestModels/TableEntryNode.cs"
 status = "native_conformance"
 reason = "the deserialisation model for upstream's Data/sample_AC10xx_tree.json baselines, which the oracle may consult"
+exclusion = "these load upstream's Data/sample_AC10xx_tree.json document trees, which the manifest records as a second oracle and no test here consumes yet. Needs a comparison of model-1 against the trees"
 
 [[test_file]]
 path = "TestModels/TableNode.cs"
 status = "native_conformance"
 reason = "the deserialisation model for upstream's Data/sample_AC10xx_tree.json baselines, which the oracle may consult"
+exclusion = "these load upstream's Data/sample_AC10xx_tree.json document trees, which the manifest records as a second oracle and no test here consumes yet. Needs a comparison of model-1 against the trees"
 
 [[test_file]]
 path = "TestSetup.cs"
@@ -656,8 +741,11 @@ reason = "test infrastructure with no assertions of its own"
 path = "Units/UnitStyleFormatTests.cs"
 status = "native_conformance"
 reason = "unit and angle formatting, which decides what dimension text reads as; an oracle-side contract"
+exclusion = "unit formatting is a string function of ACadSharp and neither stream holds a formatted unit. Needs a decision on whether the suite compares it at all"
 
 [[test_file]]
 path = "XData/ExtendedDataTests.cs"
 status = "native_conformance"
 reason = "extended entity data, carried by the object model and not by any canonical record"
+exclusion = "acadsharp-rs's C ABI exposes flattened primitives only, so it has no reading of this to compare; model-1 (docs/MODEL_1.md) holds it for acadrust against the oracle and ezdxf, and acadsharp-rs is excluded from it"
+acadrust = { status = "native_conformance", reason = "model-1 (docs/MODEL_1.md) holds the xdata records and compares acadrust against the oracle and ezdxf", evidence = ["model1:xdata"] }

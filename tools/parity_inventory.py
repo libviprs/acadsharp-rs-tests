@@ -115,32 +115,56 @@ def status_for(row: dict, provider: str) -> str:
     return row["status"]
 
 
+def evidence_for(row: dict, provider: str) -> list[str]:
+    """The evidence `provider` has for a row. An acadrust override is the whole answer
+    for acadrust, evidence included; a mirrored row's `rust` files count for acadsharp-rs."""
+    if provider == "acadrust" and "acadrust" in row:
+        return list(row["acadrust"].get("evidence", []))
+    return list(row.get("evidence", [])) + [f"path:{r}" for r in row.get("rust", [])]
+
+
+def exclusion_for(row: dict, provider: str) -> str:
+    src = row["acadrust"] if provider == "acadrust" and "acadrust" in row else row
+    return (src.get("exclusion") or "").strip()
+
+
 def provider_counts(rows: list[dict], provider: str) -> dict:
     counts = {s: 0 for s in STATUSES}
     evidenced = 0
-    unevidenced = []
+    excluded = []
+    unaccounted = []
+    both = []
     for r in rows:
         st = status_for(r, provider)
         if st not in counts:
             raise SystemExit(f"error: {r['path']}: status {st!r} is not one of the four")
         counts[st] += 1
-        if st != "not_applicable":
-            if r.get("evidence"):
-                evidenced += 1
-            else:
-                unevidenced.append(r["path"])
+        if st == "not_applicable":
+            continue
+        ev, ex = evidence_for(r, provider), exclusion_for(r, provider)
+        if ev and ex:
+            both.append(r["path"])
+        elif ev:
+            evidenced += 1
+        elif ex:
+            excluded.append(r["path"])
+        else:
+            unaccounted.append(r["path"])
     total = sum(counts.values())
     return {
         "counts": counts,
         "total": total,
         "applicable": total - counts["not_applicable"],
         "evidenced": evidenced,
-        "unevidenced": unevidenced,
+        "excluded": excluded,
+        "unaccounted": unaccounted,
+        "both": both,
     }
 
 
 def report_coverage(rows: list[dict]) -> list[str]:
-    """Print the burn-down per provider; return the applicable rows with no evidence."""
+    """Print the burn-down per provider; return the applicable rows that are neither
+    evidenced nor reasonably excluded (or are both)."""
     missing: list[str] = []
     for provider in ("acadsharp", "acadrust"):
         c = provider_counts(rows, provider)
@@ -150,12 +174,14 @@ def report_coverage(rows: list[dict]) -> list[str]:
         print(f"    {'-' * 20} {'-' * 4}")
         print(f"    {'total':<20} {c['total']:>4}")
         print(f"    {'applicable':<20} {c['applicable']:>4}   (total minus not_applicable)")
-        print(f"    {'evidenced':<20} {c['evidenced']:>4}   (applicable rows with an `evidence` entry)")
-        print(f"    {'unevidenced':<20} {len(c['unevidenced']):>4}")
+        print(f"    {'evidenced':<20} {c['evidenced']:>4}   (applicable rows that name evidence)")
+        print(f"    {'excluded':<20} {len(c['excluded']):>4}   (applicable rows with a reasoned exclusion)")
+        print(f"    {'unaccounted':<20} {len(c['unaccounted']) + len(c['both']):>4}")
         if c["applicable"]:
             pct = 100.0 * c["counts"]["mirrored"] / c["applicable"]
             print(f"    mirrored in Rust: {c['counts']['mirrored']}/{c['applicable']} ({pct:.1f}% of applicable)")
-        missing += [f"{provider}: {p}" for p in c["unevidenced"]]
+        missing += [f"{provider}: {p} (no evidence and no exclusion)" for p in c["unaccounted"]]
+        missing += [f"{provider}: {p} (evidence and an exclusion)" for p in c["both"]]
     return missing
 
 
@@ -170,7 +196,7 @@ def main() -> int:
     ap.add_argument("--write-snapshot", action="store_true",
                     help="write the inventory to upstream_parity/inventory.<sha>.txt")
     ap.add_argument("--require-evidence", action="store_true",
-                    help="fail on any applicable row with no `evidence` entry, per provider")
+                    help="fail on any applicable row with neither evidence nor a reasoned exclusion, per provider")
     args = ap.parse_args()
 
     manifest = load_manifest()
@@ -231,7 +257,7 @@ def main() -> int:
         print("\nin sync: every upstream test file has a row, every row has a file")
         missing = report_coverage(rows)
         if args.require_evidence and missing:
-            print(f"\nerror: {len(missing)} applicable row(s) name no evidence:", file=sys.stderr)
+            print(f"\nerror: {len(missing)} applicable row(s) are not accounted for:", file=sys.stderr)
             for m in missing:
                 print(f"  ? {m}", file=sys.stderr)
             rc = 1

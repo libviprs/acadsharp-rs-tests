@@ -116,17 +116,57 @@ class TestPerProvider(unittest.TestCase):
         rust = tool.provider_counts(self.ROWS, "acadrust")
         self.assertEqual((sharp["applicable"], rust["applicable"]), (2, 3))
 
-    def test_unevidenced_rows_are_listed_per_provider(self):
+    def test_unaccounted_rows_are_listed_per_provider(self):
         sharp = tool.provider_counts(self.ROWS, "acadsharp")
         rust = tool.provider_counts(self.ROWS, "acadrust")
-        self.assertEqual(sharp["unevidenced"], ["c.cs"])
-        self.assertEqual(rust["unevidenced"], ["b.cs", "c.cs"])
+        self.assertEqual(sharp["unaccounted"], ["c.cs"])
+        self.assertEqual(rust["unaccounted"], ["b.cs", "c.cs"])
         self.assertEqual(sharp["evidenced"], 1)
+
+    def test_a_reasoned_exclusion_accounts_for_a_row_and_is_counted_apart(self):
+        rows = [
+            {"path": "a.cs", "status": "differential", "exclusion": "no fixture exercises it"},
+            {"path": "b.cs", "status": "differential", "exclusion": "   "},
+        ]
+        c = tool.provider_counts(rows, "acadsharp")
+        self.assertEqual(c["excluded"], ["a.cs"])
+        self.assertEqual(c["unaccounted"], ["b.cs"])
+        self.assertEqual(c["evidenced"], 0)
+
+    def test_evidence_and_an_exclusion_together_are_refused(self):
+        rows = [{"path": "a.cs", "status": "differential", "evidence": ["path:Cargo.toml"],
+                 "exclusion": "also not covered"}]
+        c = tool.provider_counts(rows, "acadsharp")
+        self.assertEqual(c["both"], ["a.cs"])
+        with unittest.mock.patch("sys.stdout", io.StringIO()):
+            self.assertEqual(tool.report_coverage(rows),
+                             ["acadsharp: a.cs (evidence and an exclusion)",
+                              "acadrust: a.cs (evidence and an exclusion)"])
+
+    def test_an_override_is_the_whole_answer_for_acadrust(self):
+        rows = [{"path": "a.cs", "status": "native_conformance", "exclusion": "no C ABI for it",
+                 "acadrust": {"status": "native_conformance", "reason": "model-1",
+                              "evidence": ["model1:layer"]}}]
+        self.assertEqual(tool.provider_counts(rows, "acadsharp")["excluded"], ["a.cs"])
+        self.assertEqual(tool.provider_counts(rows, "acadrust")["evidenced"], 1)
+
+    def test_a_mirrored_rows_rust_files_are_evidence_for_acadsharp_rs(self):
+        rows = [{"path": "a.cs", "status": "mirrored", "rust": ["tests/x.rs"],
+                 "acadrust": {"status": "differential", "reason": "r"}}]
+        self.assertEqual(tool.provider_counts(rows, "acadsharp")["evidenced"], 1)
+        self.assertEqual(tool.provider_counts(rows, "acadrust")["unaccounted"], ["a.cs"])
 
     def test_report_returns_the_rows_that_name_nothing(self):
         with unittest.mock.patch("sys.stdout", io.StringIO()):
             missing = tool.report_coverage(self.ROWS)
-        self.assertEqual(missing, ["acadsharp: c.cs", "acadrust: b.cs", "acadrust: c.cs"])
+        self.assertEqual(missing, ["acadsharp: c.cs (no evidence and no exclusion)",
+                                   "acadrust: b.cs (no evidence and no exclusion)",
+                                   "acadrust: c.cs (no evidence and no exclusion)"])
+
+    def test_the_committed_manifest_accounts_for_every_applicable_row(self):
+        rows = tool.load_manifest()["test_file"]
+        with unittest.mock.patch("sys.stdout", io.StringIO()):
+            self.assertEqual(tool.report_coverage(rows), [])
 
 
 class TestDirectoryInventory(unittest.TestCase):

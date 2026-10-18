@@ -4,8 +4,8 @@ ACadSharp's own test suite is the closest thing to a specification of what a DWG
 reader has to do. This directory records where every one of its test files
 stands relative to this suite, so upstream coverage stops drifting silently.
 
-It classifies. It does not port. Turning rows into real Rust tests is
-[H4.2](https://github.com/libviprs/acadsharp-rs-tests/issues/10).
+It classifies. It does not port. The mirrored Rust tests are H4.2
+(libviprs/acadsharp-rs-tests#10), which the evidence column below supersedes.
 
 ```
 ACadSharp @ d7dc111
@@ -70,20 +70,46 @@ reason that says so for acadrust.
 
 An override that restates its row, or has no reason, is refused by `validate`.
 
-A row can also name what covers it in `evidence`: `fixture:<id>` (a row of
-`fixtures/manifest.toml`) or `path:<relative path>` (a file here). `validate`
-refuses either when it resolves to nothing, and refuses any other kind until
-the thing it would resolve against exists (R4.1's verdicts, R5.5's model kinds).
-`parity_inventory.py --require-evidence` fails on an applicable row with no
-evidence; the committed run does not pass it yet because mapping the rows onto
-the corpus waits on R4.1 (libviprs/acadsharp-rs-tests#32).
+## Evidence, or a reasoned exclusion
+
+An applicable row (for an engine) is either covered or it says what is missing. It carries
+`evidence`, a list of what covers it, or `exclusion`, one sentence on what would cover it and
+what is missing, and never both and never neither. `validate` refuses all three mistakes, and
+`tools/parity_inventory.py --require-evidence` (which CI runs) fails on the first two.
+
+| kind | resolves against | what it shows |
+| ---- | ---------------- | ------------- |
+| `record:<kind>@<fixture>` | the fixture's canonical reading holds a record of that kind, and `parity/VERDICTS.toml` compares the fixture | the corpus exercises the thing the upstream test asserts, and the engines are held to each other on it |
+| `verdict:<fixture>@<pair>` | a row of `parity/VERDICTS.toml` | a lane (DXF, round trip) that covers the row |
+| `model1:<kind>` | `header` or a kind of the model-1 schema (`src/model1.rs`) | the model-1 comparison holds it |
+| `fixture:<id>` | a row of `fixtures/manifest.toml` | the fixture exists |
+| `path:<relative path>` | a file in this crate | a test, or a document, that covers it |
+
+A mirrored row's `rust` files count as evidence for acadsharp-rs without being repeated. An
+`acadrust` override is the whole answer for acadrust: its status, reason, evidence and
+exclusion replace the row's. That is how a row can be covered by model-1 for acadrust and
+excluded for acadsharp-rs, whose C ABI exposes flattened primitives only.
+
+An exclusion keeps the row's status. A `differential` row with an exclusion is applicable and
+uncovered: it is what the burn-down is made of, and the exclusion says which fixture, record
+kind or decision closes it. The one for `Entities/DimensionArcTests.cs` is that no fixture
+holds an arc dimension.
+
+The `planned_rust` paths from H4.2 (libviprs/acadsharp-rs-tests#10) are gone. Each row either
+names evidence or says why the oracle comparison is the stronger check, and #10 closes as
+superseded by this.
 
 Burn-down at `d7dc111`, as `tools/parity_inventory.py` prints it:
 
-| provider  | total | not_applicable | applicable | evidenced | unevidenced |
-| --------- | ----- | -------------- | ---------- | --------- | ----------- |
-| acadsharp | 112   | 29             | 83         | 0         | 83          |
-| acadrust  | 112   | 22             | 90         | 0         | 90          |
+| provider  | total | not_applicable | applicable | evidenced | excluded |
+| --------- | ----- | -------------- | ---------- | --------- | -------- |
+| acadsharp | 112   | 29             | 83         | 38        | 45       |
+| acadrust  | 112   | 22             | 90         | 60        | 30       |
+
+The 45 and 30 are the work left. For acadsharp-rs, 15 are the model-1 rows its C ABI cannot
+reach; the others need a model-1 kind (entity fields, meshes, geodata, hatch patterns, the
+object graph), a fixture (an arc dimension, a table entity, a sort table) or a decision
+(unit formatting, the ACIS codec), and each exclusion says which.
 
 ## What is mirrored (H4.2)
 

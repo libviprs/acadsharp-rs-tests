@@ -291,7 +291,7 @@ jobs:
       # A bump that adds or renames a test file fails here until somebody
       # decides what it means, which is the whole point of the manifest.
       - name: Upstream test parity is classified
-        run: python3 tools/parity_inventory.py
+        run: python3 tools/parity_inventory.py --require-evidence
 
   # --- The native lane (H3.2) ------------------------------------------------
   #

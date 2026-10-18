@@ -94,11 +94,23 @@ pub struct TestFile {
     /// override means acadrust shares the row's status and reason.
     #[serde(default)]
     pub acadrust: Option<Override>,
-    /// What covers the row: `fixture:<id>` (a row of `fixtures/manifest.toml`)
-    /// or `path:<relative path>` (a file in this crate). Other kinds are
-    /// refused until the thing they would resolve against exists.
+    /// What covers the row, one entry per piece of evidence:
+    ///
+    /// - `fixture:<id>`, a row of `fixtures/manifest.toml`;
+    /// - `path:<relative path>`, a file in this crate;
+    /// - `record:<kind>@<fixture>`, a fixture whose canonical reading holds at
+    ///   least one record of that kind and which `parity/VERDICTS.toml` compares;
+    /// - `verdict:<fixture>@<pair>`, a row of `parity/VERDICTS.toml`;
+    /// - `model1:<kind>`, `header` or a kind of the model-1 schema.
+    ///
+    /// Anything else is refused.
     #[serde(default)]
     pub evidence: Vec<String>,
+    /// Why an applicable row has no evidence yet: the thing that would cover
+    /// it, and what is missing. An applicable row has evidence or this, never
+    /// both and never neither.
+    #[serde(default)]
+    pub exclusion: Option<String>,
 }
 
 /// One engine's own answer for a row.
@@ -107,6 +119,12 @@ pub struct Override {
     pub status: Status,
     #[serde(default)]
     pub reason: Option<String>,
+    /// For acadrust, in place of the row's own: an override is the whole answer
+    /// for the engine, evidence and exclusion included.
+    #[serde(default)]
+    pub evidence: Vec<String>,
+    #[serde(default)]
+    pub exclusion: Option<String>,
 }
 
 /// An engine a row can be read for.
@@ -124,6 +142,29 @@ impl TestFile {
             (Provider::Acadrust, Some(o)) => o.status,
             _ => self.status,
         }
+    }
+
+    /// The evidence `p` has for this row. An acadrust override replaces the
+    /// row's evidence; a mirrored row's `rust` files are evidence for the engine
+    /// whose API they go through.
+    pub fn evidence_for(&self, p: Provider) -> Vec<String> {
+        match (p, &self.acadrust) {
+            (Provider::Acadrust, Some(o)) => o.evidence.clone(),
+            _ => {
+                let mut v = self.evidence.clone();
+                v.extend(self.rust.iter().map(|r| format!("path:{r}")));
+                v
+            }
+        }
+    }
+
+    /// The reasoned exclusion `p` has for this row, if any.
+    pub fn exclusion_for(&self, p: Provider) -> Option<&str> {
+        let e = match (p, &self.acadrust) {
+            (Provider::Acadrust, Some(o)) => o.exclusion.as_deref(),
+            _ => self.exclusion.as_deref(),
+        };
+        e.map(str::trim).filter(|s| !s.is_empty())
     }
 }
 
@@ -165,7 +206,36 @@ impl Coverage {
     }
 }
 
+/// The burn-down for one engine: of the applicable rows, how many name
+/// evidence and how many carry a reasoned exclusion.
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
+pub struct Burndown {
+    pub total: usize,
+    pub not_applicable: usize,
+    pub applicable: usize,
+    pub evidenced: usize,
+    pub excluded: usize,
+}
+
 impl Manifest {
+    pub fn burndown(&self, p: Provider) -> Burndown {
+        let mut b = Burndown::default();
+        for f in &self.test_files {
+            b.total += 1;
+            if f.status_for(p) == Status::NotApplicable {
+                b.not_applicable += 1;
+                continue;
+            }
+            b.applicable += 1;
+            if !f.evidence_for(p).is_empty() {
+                b.evidenced += 1;
+            } else if f.exclusion_for(p).is_some() {
+                b.excluded += 1;
+            }
+        }
+        b
+    }
+
     pub fn coverage(&self) -> Coverage {
         self.coverage_for(Provider::Acadsharp)
     }
@@ -290,31 +360,44 @@ pub fn validate(m: &Manifest, crate_root: &Path) -> Vec<String> {
             }
         }
 
-        for e in &f.evidence {
-            match e.split_once(':') {
-                Some(("fixture", id)) => {
-                    if !fixture_ids().contains(id) {
-                        problems.push(format!(
-                            "{}: evidence {e:?} names a fixture that is not a row of \
-                             fixtures/manifest.toml.",
-                            f.path
-                        ));
-                    }
+        for (who, p) in [
+            ("acadsharp-rs", Provider::Acadsharp),
+            ("acadrust", Provider::Acadrust),
+        ] {
+            let status = f.status_for(p);
+            let evidence = f.evidence_for(p);
+            let exclusion = f.exclusion_for(p);
+            if status == Status::NotApplicable {
+                if !evidence.is_empty() || exclusion.is_some() {
+                    problems.push(format!(
+                        "{}: not_applicable for {who} but names evidence or an exclusion. A row \
+                         that is out of scope has nothing to cover.",
+                        f.path
+                    ));
                 }
-                Some(("path", rel)) => {
-                    if !crate_root.join(rel).exists() {
-                        problems.push(format!(
-                            "{}: evidence {e:?} is a path that does not exist.",
-                            f.path
-                        ));
-                    }
-                }
-                _ => problems.push(format!(
-                    "{}: evidence {e:?} has a kind this crate cannot resolve yet (only fixture: \
-                     and path:). A kind with no source to check it against is a claim, not \
-                     evidence.",
+                continue;
+            }
+            match (evidence.is_empty(), exclusion) {
+                (true, None) => problems.push(format!(
+                    "{}: applicable for {who} with no evidence and no reasoned exclusion. Name \
+                     what covers it, or say what is missing in `exclusion`.",
                     f.path
                 )),
+                (false, Some(_)) => problems.push(format!(
+                    "{}: {who} has evidence and an exclusion. It is covered or it is not.",
+                    f.path
+                )),
+                _ => {}
+            }
+        }
+
+        let mut named: Vec<&String> = f.evidence.iter().collect();
+        if let Some(o) = &f.acadrust {
+            named.extend(o.evidence.iter());
+        }
+        for e in named {
+            if let Some(why) = unresolved(e, crate_root) {
+                problems.push(format!("{}: evidence {e:?} {why}", f.path));
             }
         }
 
@@ -347,6 +430,74 @@ pub fn validate(m: &Manifest, crate_root: &Path) -> Vec<String> {
     }
 
     problems
+}
+
+/// Why an evidence entry resolves to nothing, or `None` when it resolves.
+fn unresolved(e: &str, crate_root: &Path) -> Option<String> {
+    let Some((kind, rest)) = e.split_once(':') else {
+        return Some("has no kind (fixture:, path:, record:, verdict: or model1:).".into());
+    };
+    match kind {
+        "fixture" => (!fixture_ids().contains(rest))
+            .then(|| "names a fixture that is not a row of fixtures/manifest.toml.".to_string()),
+        "path" => {
+            (!crate_root.join(rest).exists()).then(|| "is a path that does not exist.".to_string())
+        }
+        "verdict" => {
+            let Some((fixture, pair)) = rest.split_once('@') else {
+                return Some("is not verdict:<fixture>@<pair>.".into());
+            };
+            (!verdicts().contains(&(fixture.to_string(), pair.to_string()))).then(|| {
+                "is not a row of parity/VERDICTS.toml (fixture and pair as the table spells them)."
+                    .to_string()
+            })
+        }
+        "record" => {
+            let Some((record, fixture)) = rest.split_once('@') else {
+                return Some("is not record:<kind>@<fixture>.".into());
+            };
+            if !verdicts().iter().any(|(f, _)| f == fixture) {
+                return Some(format!(
+                    "names {fixture}, which parity/VERDICTS.toml does not compare, so nothing \
+                     would notice the engines disagreeing on it."
+                ));
+            }
+            let Some(fx) = crate::fixtures::all().iter().find(|f| f.id == fixture) else {
+                return Some(format!("names {fixture}, which is not a corpus fixture."));
+            };
+            let bytes = match fx.load_reference_jsonl() {
+                Ok(b) => b,
+                Err(err) => {
+                    return Some(format!("cannot read {fixture}'s canonical reading: {err}"));
+                }
+            };
+            let needle = format!("\"record\":\"{record}\"");
+            (!String::from_utf8_lossy(&bytes).contains(&needle)).then(|| {
+                format!("names a fixture whose canonical reading holds no {record} record.")
+            })
+        }
+        "model1" => (rest != "header" && crate::model1::schema(rest).is_none()).then(|| {
+            "is not `header` or a kind of the model-1 schema (src/model1.rs).".to_string()
+        }),
+        _ => Some(
+            "has a kind this crate cannot resolve (fixture:, path:, record:, verdict: and \
+             model1: only). A kind with no source to check it against is a claim, not evidence."
+                .to_string(),
+        ),
+    }
+}
+
+/// Every `(fixture, pair)` of `parity/VERDICTS.toml`.
+fn verdicts() -> &'static std::collections::BTreeSet<(String, String)> {
+    static V: OnceLock<std::collections::BTreeSet<(String, String)>> = OnceLock::new();
+    V.get_or_init(|| {
+        let t = crate::verdict::Table::parse(include_str!("../parity/VERDICTS.toml"))
+            .expect("parity/VERDICTS.toml must parse");
+        t.rows
+            .iter()
+            .map(|r| (r.fixture.clone(), r.pair.clone()))
+            .collect()
+    })
 }
 
 /// Parses any text as a parity manifest and returns how many test files it

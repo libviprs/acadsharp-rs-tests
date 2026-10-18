@@ -31,11 +31,11 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use acadsharp_rs_tests::canonical::{parse_stream, Sidecar};
+use acadsharp_rs_tests::canonical::{Sidecar, parse_stream};
 use acadsharp_rs_tests::compare::Stream;
 use acadsharp_rs_tests::digest;
 use acadsharp_rs_tests::fixtures::{self, DwgFixture};
-use acadsharp_rs_tests::parity_run::{judge_pair, open_failed_reason, Side};
+use acadsharp_rs_tests::parity_run::{Side, judge_pair, open_failed_reason};
 use acadsharp_rs_tests::tables;
 use acadsharp_rs_tests::verdict::{Row, Table, Verdict};
 
@@ -314,12 +314,14 @@ fn compute() -> Result<(Computed, Option<Digests>), String> {
     let results: std::sync::Mutex<BTreeMap<usize, Both>> = std::sync::Mutex::new(BTreeMap::new());
     std::thread::scope(|s| {
         for _ in 0..workers {
-            s.spawn(|| loop {
-                let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                let Some(f) = all.get(i) else { break };
-                let a = emit(sharp, "acadsharp", &f.id, &out);
-                let b = emit(rust, "acadrust", &f.id, &out);
-                results.lock().unwrap().insert(i, (a, b));
+            s.spawn(|| {
+                loop {
+                    let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    let Some(f) = all.get(i) else { break };
+                    let a = emit(sharp, "acadsharp", &f.id, &out);
+                    let b = emit(rust, "acadrust", &f.id, &out);
+                    results.lock().unwrap().insert(i, (a, b));
+                }
             });
         }
     });
@@ -830,11 +832,13 @@ fn dxf_lane(
         std::sync::Mutex::new(BTreeMap::new());
     std::thread::scope(|s| {
         for _ in 0..4 {
-            s.spawn(|| loop {
-                let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                let Some(input) = inputs.get(i) else { break };
-                let r = emit(rust, "acadrust", &input.id, out);
-                runs.lock().unwrap().insert(i, r);
+            s.spawn(|| {
+                loop {
+                    let i = next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    let Some(input) = inputs.get(i) else { break };
+                    let r = emit(rust, "acadrust", &input.id, out);
+                    runs.lock().unwrap().insert(i, r);
+                }
             });
         }
     });
