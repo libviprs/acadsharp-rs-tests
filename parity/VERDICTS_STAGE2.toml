@@ -1,4 +1,3 @@
-0
 # parity/VERDICTS.toml: one row per (fixture, pair).
 #
 # The words are defined in src/verdict.rs. `tests/parity.rs` recomputes every
