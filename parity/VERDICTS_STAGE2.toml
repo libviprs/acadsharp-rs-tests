@@ -15,8 +15,8 @@
 arch = "x86_64"
 archive = "3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...)"
 acadsharp_rs = "f23f37bd453e02e660ef655faa381c45509d8ac1"
-acadrust = "97745114f9ef4b0ec69469cbf8f6ea08b7a8deac"
-date = "2026-10-17"
+acadrust = "72af48970e306ef1d50dd751b227df2b4fc3fb99"
+date = "2026-10-18"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1012"
