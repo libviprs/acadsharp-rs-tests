@@ -158,11 +158,7 @@ pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
     }))];
 
     for (index, (name, block_name)) in views.iter().enumerate() {
-        let kind = match block_name {
-            Some(n) if n.eq_ignore_ascii_case("*Model_Space") => "model",
-            Some(n) if n.to_ascii_uppercase().starts_with("*PAPER_SPACE") => "layout",
-            _ => "unknown",
-        };
+        let kind = view_kind(name, block_name.is_some());
         head.push(Item::framing(Record::View(View {
             index: index as u64,
             name: name.clone(),
@@ -211,6 +207,24 @@ pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
         out.records.push(item.record);
     }
     out
+}
+
+/// The `view.kind` of a layout: `model` for the layout called Model, `layout` for
+/// any other layout that has a block record behind it, `unknown` when it has none.
+///
+/// This is the oracle's rule (`DocumentExtractor.KindOf`), which reads the
+/// layout's name and never the name of its block record. The block record of a
+/// layout that AutoCAD made is called `*Paper_Space<n>`, but one that a writer
+/// built by name (`new Layout("Plan A")`) is called after the layout, so a rule
+/// that looked for `*Paper_Space` called every such layout unknown (#90).
+fn view_kind(layout_name: &str, has_block_record: bool) -> &'static str {
+    if layout_name.eq_ignore_ascii_case("Model") {
+        "model"
+    } else if has_block_record {
+        "layout"
+    } else {
+        "unknown"
+    }
 }
 
 /// One record, and where it came from.
@@ -741,14 +755,21 @@ impl Extractor<'_> {
                     );
                     return;
                 }
-                let (mut s, mut e) = sweep(el.start_parameter, el.end_parameter, m.angle_offset);
+                // An ELLIPSE's start and end are parameters measured from its major
+                // axis, so a turn of the plane moves the axis and leaves them
+                // where they were: `map_curve`'s planar rotation is what an
+                // ARC's angle needs and an ELLIPSE's parameter must not have
+                // (#89). Only a non-similarity re-parametrises (its offset is
+                // the right rotation of the decomposition, which does move them).
+                let offset = if xf.similarity { 0.0 } else { m.angle_offset };
+                let (mut s, mut e) = sweep(el.start_parameter, el.end_parameter, offset);
                 // A full ellipse is stored as 0 to 2*pi and `sweep` would fold
                 // that to a zero-length arc. Nothing else produces an exactly
                 // empty sweep.
                 if el.start_parameter == el.end_parameter
                     || (el.end_parameter - el.start_parameter).abs() >= TAU
                 {
-                    s = normalize_angle(el.start_parameter + m.angle_offset);
+                    s = normalize_angle(el.start_parameter + offset);
                     e = s + TAU;
                 }
                 // On a similarity the ratio is invariant: use the number the

@@ -89,7 +89,6 @@ run are below, and `tests/tables_doc.rs` holds this section to the file.
 | `self/oracle` | the differences `parity/oracle_invariance.toml` lists as exceptions | `KNOWN` (the verdict) | per row, in that file |
 | `oracle/acadrust` | `text.text` of `acadsharp-ac1014`, `ac1015`, `ac1018` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#111 |
 | `oracle/acadrust` | `text.text` of `acadsharp-ac1032`, `acadsharp-sample-base` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
-| `oracle/acadrust` | `spline.weights.len` of `g13_hatch` | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#67 |
 
 The DXF lane (R5.1) keys its tables `dxf:a/b` (reader against reader on a DXF, the class the same pair has on the DWG), `dxf-dwg:e` (a reader's DXF against its own DWG reading of the same drawing, `BOUNDED` whichever reader it is) and `dxf-ascii-binary:e` (a reader's ASCII against its binary reading, `BOUNDED_TIGHT`: sixteen digits against the raw doubles). acadsharp-rs has no key: its C ABI opens DWG only, so its cells are `EXCLUDED` in the verdict file.
 

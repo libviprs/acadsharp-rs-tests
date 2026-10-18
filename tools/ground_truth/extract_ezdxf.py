@@ -525,9 +525,13 @@ class Extractor:
             self.warn("malformed_geometry", "ELLIPSE", "degenerate_after_transform", here)
             return
         sp, ep = float(e.dxf.start_param), float(e.dxf.end_param)
-        s, en = sweep(sp, ep, m["offset"])
+        # An ELLIPSE's start and end are parameters measured from its major axis,
+        # so a turn of the plane moves the axis and leaves them where they were
+        # (#89). Only a map that is not a similarity re-parametrises the curve.
+        offset = 0.0 if xf.similarity else m["offset"]
+        s, en = sweep(sp, ep, offset)
         if sp == ep or abs(ep - sp) >= TWO_PI:
-            s = normalize_angle(sp + m["offset"])
+            s = normalize_angle(sp + offset)
             en = s + TWO_PI
         ratio = float(e.dxf.ratio) if xf.similarity else m["ratio"]
         self.emit({"record": "ellipse", "view": view, "center": m["center"], "major": m["major"], "ratio": ratio, "start": s, "end": en, "normal": m["normal"]}, here, "ELLIPSE")

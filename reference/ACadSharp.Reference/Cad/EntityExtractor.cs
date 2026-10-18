@@ -312,15 +312,22 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
             return;
         }
 
+        // An ELLIPSE's start and end are parameters measured from its major axis,
+        // so a turn of the plane moves the axis and leaves them where they were.
+        // The planar rotation Map reports is what an ARC's angle needs and an
+        // ELLIPSE's parameter must not have, which is the whole of #89. Off a
+        // similarity the offset is the right rotation of the decomposition, and
+        // that one does re-parametrise the curve.
+        double parameterShift = transform.IsSimilarity ? 0.0 : mapped.AngleOffset;
         (double start, double end) = CurveMapping.Sweep(
-            ellipse.StartParameter, ellipse.EndParameter, mapped.AngleOffset);
+            ellipse.StartParameter, ellipse.EndParameter, parameterShift);
 
         // A full ellipse is stored as 0 to 2*pi, and Sweep would fold that to a
         // zero-length arc. Nothing else can produce an exactly empty sweep.
         if (ellipse.StartParameter == ellipse.EndParameter
             || Math.Abs(ellipse.EndParameter - ellipse.StartParameter) >= CurveMapping.TwoPi)
         {
-            start = CurveMapping.Normalize(ellipse.StartParameter + mapped.AngleOffset);
+            start = CurveMapping.Normalize(ellipse.StartParameter + parameterShift);
             end = start + CurveMapping.TwoPi;
         }
 
@@ -674,7 +681,11 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
                     view,
                     toWorld,
                     Point3.UnitZ,
-                    polyline.Vertices.Select(p => new Point3(p.X, p.Y, p.Z)),
+                    // ACadSharp keeps each vertex's bulge in its Z, and the edge
+                    // lies in the hatch's plane at the hatch's elevation. Passing
+                    // Z through as a coordinate put every vertex of a bulging
+                    // edge at z of 1.0 or -1.0 (#56).
+                    polyline.Vertices.Select(p => new Point3(p.X, p.Y, elevation)),
                     polyline.Bulges,
                     polyline.IsClosed,
                     sink);
@@ -690,6 +701,12 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
                     return;
                 }
 
+                // A hatch edge keeps each weight in its control point's Z, and an edge
+                // that is not rational leaves every one of them zero (a weight of
+                // zero means nothing). Schema 1 says `weights` is empty for a
+                // non-rational curve (#67).
+                List<double> edgeWeights = spline.Weights.Any(w => w != 0.0) ? [.. spline.Weights] : [];
+
                 sink.Add(new SplineRecord(
                     view,
                     spline.Degree,
@@ -697,7 +714,7 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
                     spline.IsPeriodic,
                     control,
                     [.. spline.Knots],
-                    [.. spline.Weights],
+                    edgeWeights,
                     [.. spline.FitPoints.Select(p => toWorld.Apply(new Point3(p.X, p.Y, elevation)))]));
                 return;
             }

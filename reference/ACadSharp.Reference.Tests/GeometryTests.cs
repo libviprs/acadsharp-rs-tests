@@ -382,6 +382,108 @@ public sealed class GeometryTests
         }
     }
 
+    [Fact]
+    public void AnEllipticalArcKeepsItsParametersWhateverWayTheMajorAxisPoints()
+    {
+        // Issue #89. The start and end of an ELLIPSE are parameters measured
+        // from its major axis, so a major axis along +Y does not move them. The
+        // extractor used to add the axis's angle (a quarter turn here) to both.
+        CadDocument document = NewDocument();
+        document.Entities.Add(new Ellipse
+        {
+            Center = XYZ.Zero,
+            MajorAxisEndPoint = new XYZ(0, 3, 0),
+            RadiusRatio = 0.5,
+            StartParameter = 0.5,
+            EndParameter = 2.5,
+        });
+
+        EllipseRecord ellipse = Assert.Single(Records(document).OfType<EllipseRecord>());
+        AssertPoint(new Point3(0, 3, 0), ellipse.MajorAxis);
+        Assert.Equal(0.5, ellipse.Start, Tolerance);
+        Assert.Equal(2.5, ellipse.End, Tolerance);
+    }
+
+    [Fact]
+    public void AnEllipticalArcInATurnedBlockKeepsItsParameters()
+    {
+        CadDocument document = NewDocument();
+        var block = new BlockRecord("arc");
+        block.Entities.Add(new Ellipse
+        {
+            Center = XYZ.Zero,
+            MajorAxisEndPoint = new XYZ(3, 0, 0),
+            RadiusRatio = 0.5,
+            StartParameter = 0.5,
+            EndParameter = 2.5,
+        });
+        document.BlockRecords.Add(block);
+        document.Entities.Add(new Insert(block) { Rotation = Math.PI / 2.0 });
+
+        EllipseRecord ellipse = Assert.Single(Records(document).OfType<EllipseRecord>());
+        AssertPoint(new Point3(0, 3, 0), ellipse.MajorAxis);
+        Assert.Equal(0.5, ellipse.Start, Tolerance);
+        Assert.Equal(2.5, ellipse.End, Tolerance);
+    }
+
+    [Fact]
+    public void ANonRationalHatchSplineHasNoWeights()
+    {
+        // Issue #67. A hatch edge keeps a weight in each control point's Z and
+        // leaves it zero when the edge is not rational. Schema 1 says `weights`
+        // is empty for a non-rational curve.
+        SplineRecord spline = Assert.Single(Records(HatchWithSpline(rational: false)).OfType<SplineRecord>());
+        Assert.Empty(spline.Weights);
+        Assert.Equal(4, spline.ControlPoints.Count);
+    }
+
+    [Fact]
+    public void ARationalHatchSplineKeepsItsWeights()
+    {
+        SplineRecord spline = Assert.Single(Records(HatchWithSpline(rational: true)).OfType<SplineRecord>());
+        Assert.Equal([1.0, 2.0, 2.0, 1.0], spline.Weights);
+    }
+
+    [Fact]
+    public void ABulgingHatchPolylineEdgeLiesAtTheHatchElevationNotAtItsBulge()
+    {
+        // Issue #56. ACadSharp stores a hatch polyline edge's bulge in each
+        // vertex's Z. The extractor used to hand that on as a coordinate, so the
+        // points of a half-circle edge came out at z of 1.0.
+        CadDocument document = NewDocument();
+        var edge = new Hatch.BoundaryPath.Polyline { IsClosed = true };
+        edge.Vertices.AddRange([
+            new XYZ(0, 0, 1.0), new XYZ(2, 0, -1.0), new XYZ(2, 2, 0.0), new XYZ(0, 2, 0.0)]);
+        var path = new Hatch.BoundaryPath();
+        path.Edges.Add(edge);
+        var hatch = new Hatch { Elevation = 0.5 };
+        hatch.Paths.Add(path);
+        document.Entities.Add(hatch);
+
+        PolylineRecord polyline = Assert.Single(Records(document).OfType<PolylineRecord>());
+        Assert.Equal(4, polyline.Points.Count);
+        Assert.All(polyline.Points, p => Assert.Equal(0.5, p.Z, Tolerance));
+        Assert.Equal([1.0, -1.0, 0.0, 0.0], polyline.Bulges);
+    }
+
+    private static CadDocument HatchWithSpline(bool rational)
+    {
+        CadDocument document = NewDocument();
+        var edge = new Hatch.BoundaryPath.Spline { Degree = 3, IsRational = rational };
+        edge.ControlPoints.AddRange([
+            new XYZ(0, 0, rational ? 1.0 : 0.0),
+            new XYZ(1, 2, rational ? 2.0 : 0.0),
+            new XYZ(3, 2, rational ? 2.0 : 0.0),
+            new XYZ(4, 0, rational ? 1.0 : 0.0)]);
+        edge.Knots.AddRange([0, 0, 0, 0, 1, 1, 1, 1]);
+        var path = new Hatch.BoundaryPath();
+        path.Edges.Add(edge);
+        var hatch = new Hatch();
+        hatch.Paths.Add(path);
+        document.Entities.Add(hatch);
+        return document;
+    }
+
     private static CadDocument NewDocument() => new(ACadVersion.AC1032);
 
     private static IReadOnlyList<CanonicalRecord> Records(

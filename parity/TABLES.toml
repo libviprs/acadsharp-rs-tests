@@ -148,17 +148,6 @@ b = "my multi line text for the attrrib"
 reason = "The same attribute."
 issue = "libviprs/libviprs-dep#112"
 
-[[known]]
-pair = "oracle/acadrust"
-fixture = "g13_hatch"
-record_type = "spline"
-field = "weights.len"
-oracle_index = 15
-a = 4
-b = 0
-reason = "A non-rational hatch boundary spline: the oracle emits four weights of 0.0, the schema says weights is empty for a non-rational curve and acadrust follows it. A zero weight is meaningless, so this is the oracle's artefact."
-issue = "libviprs/acadsharp-rs-tests#67"
-
 # ---- ezdxf, reading AutoCAD's own DXF: the ground truth for the three ---------------------------
 
 [[warnings]]
