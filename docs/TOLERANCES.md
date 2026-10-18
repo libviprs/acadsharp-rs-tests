@@ -98,7 +98,6 @@ The DXF lane (R5.1) keys its tables `dxf:a/b` (reader against reader on a DXF, t
 | `dxf:oracle/acadrust`, `dxf:ezdxf/oracle`, `dxf:ezdxf/acadrust` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#27 |
 | `dxf-dwg:oracle`, `dxf-dwg:acadrust` | warnings, `document.format`, `document.maintenance_version` | `EXCLUDED` | libviprs/acadsharp-rs-tests#27 |
 | `dxf-ascii-binary:oracle`, `dxf-ascii-binary:acadrust`, `dxf-ascii-binary:ezdxf` | warnings | `EXCLUDED` | libviprs/acadsharp-rs-tests#27 |
-| `dxf:oracle/acadrust`, `dxf:ezdxf/acadrust` | `document.maintenance_version` | `EXCLUDED` | libviprs/acadsharp-rs-tests#96 |
 | `dxf-ascii-binary:ezdxf`, `dxf:ezdxf/oracle`, `dxf:ezdxf/acadrust` | `text.text` of the four MTEXTs whose paragraph break is `\P` in AutoCAD's binary DXF | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#24 |
 | `dxf-dwg:acadrust` | `text.text` of `dxf-sample-ac1015-ascii`, `-binary` (the MIF escape) | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#111 |
 | `dxf:oracle/acadrust`, `dxf:ezdxf/oracle` | `text.text` of the embedded-MTEXT attribute in `dxf-sample-ac1032-*` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |

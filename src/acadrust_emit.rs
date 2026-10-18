@@ -147,7 +147,14 @@ pub fn extract_as(doc: &CadDocument, format: &str) -> Emission {
     let mut head: Vec<Item> = vec![Item::framing(Record::Document(Document {
         format: format.to_string(),
         acad_version: doc.version.to_string(),
-        maintenance_version: u64::from(doc.maintenance_version),
+        // A DXF header carries $ACADMAINTVER (AutoCAD's build number); a DWG's
+        // file-header byte is the other quantity, and is what the oracle's DWG
+        // reading reports for a DWG (acadsharp-rs-tests#96).
+        maintenance_version: if format == "dxf" {
+            u64::try_from(doc.header.acad_maintenance_version).unwrap_or(0)
+        } else {
+            u64::from(doc.maintenance_version)
+        },
     }))];
 
     for (index, (name, block_name)) in views.iter().enumerate() {
