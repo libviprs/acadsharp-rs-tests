@@ -537,10 +537,11 @@ fn map_curve(center: V3, u: V3, v: V3, to_world: &Xf) -> Mapped {
         };
     }
 
-    // [u v] = R(phi) * diag(s1, s2) * R(theta)^T, the closed-form two by two
+    // [u v] = R(phi) * diag(s1, s2) * R(theta), the closed-form two by two
     // SVD. R(phi)'s columns are the principal directions, the singular values
-    // are the semi-axis lengths, and subtracting theta from the source
-    // parameter re-parametrises the curve onto them.
+    // are the semi-axis lengths, and adding theta to the source parameter
+    // re-parametrises the curve onto them (libviprs/acadsharp-rs-tests#171;
+    // this said R(theta)^T and subtracted).
     let e = (ux + vy) / 2.0;
     let f = (ux - vy) / 2.0;
     let g = (uy + vx) / 2.0;
@@ -585,7 +586,7 @@ fn map_curve(center: V3, u: V3, v: V3, to_world: &Xf) -> Mapped {
         radius: sigma1,
         major,
         ratio,
-        angle_offset: -theta,
+        angle_offset: theta,
         normal,
         degenerate: false,
     }
@@ -1450,7 +1451,10 @@ impl Extractor<'_> {
                 } else {
                     (el.end_angle, el.start_angle)
                 };
-                let (s, e) = sweep(sa, ea, m.angle_offset);
+                // Parameters from the major axis, so a turn of the plane leaves
+                // them where they were (#89 for the entity, #171 for this arm).
+                let offset = if to_world.similarity { 0.0 } else { m.angle_offset };
+                let (s, e) = sweep(sa, ea, offset);
                 let rec = Record::Ellipse(Ellipse {
                     view,
                     center: m.center,

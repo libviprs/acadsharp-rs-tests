@@ -371,7 +371,8 @@ def map_curve(center, u, v, to_world: Xf):
             "offset": math.atan2(uy, ux),
             "normal": normal,
         }
-    # [u v] = R(phi) diag(s1, s2) R(theta)^T, the closed-form 2x2 SVD.
+    # [u v] = R(phi) diag(s1, s2) R(theta), the closed-form 2x2 SVD, so the
+    # source parameter gains theta (libviprs/acadsharp-rs-tests#171).
     e, f = (ux + vy) / 2.0, (ux - vy) / 2.0
     g, h = (uy + vx) / 2.0, (uy - vx) / 2.0
     q, r = math.hypot(e, h), math.hypot(f, g)
@@ -389,7 +390,7 @@ def map_curve(center, u, v, to_world: Xf):
         "radius": s1,
         "major": (s1 * math.cos(phi), s1 * math.sin(phi), 0.0),
         "ratio": ratio,
-        "offset": -theta,
+        "offset": theta,
         "normal": normal,
     }
 

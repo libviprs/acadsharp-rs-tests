@@ -426,6 +426,114 @@ public sealed class GeometryTests
         Assert.Equal(2.5, ellipse.End, Tolerance);
     }
 
+    // Issue #171. Under a non-uniform scale a curve is re-parametrised onto the
+    // principal axes of its image, and the start and end it reports have to land
+    // on the same two points of the drawing the stored ones do. The curve is
+    // turned and then scaled two to one, so the image's axes are neither the
+    // block's nor the world's and the offset is not zero or a quarter turn,
+    // which is what stops a sign slip from hiding behind a symmetry.
+    private const double SkewTurn = 0.5;
+    private const double SkewScaleX = 2.0;
+    private static readonly Point3 SkewInsertAt = new(3, 4, 0);
+
+    // Where the inner block's point (x, y) is in the world: turn it inside the
+    // outer block, then scale the outer block unevenly, then place it. The scale
+    // comes after the turn on purpose: a scale followed by a turn is already in
+    // the form the principal axes take and needs no re-parametrising, so it
+    // would pass with the offset's sign either way (which a first version of
+    // this test did).
+    private static Point3 SkewedPoint(double x, double y)
+    {
+        double c = Math.Cos(SkewTurn);
+        double s = Math.Sin(SkewTurn);
+        return new Point3(
+            SkewInsertAt.X + (SkewScaleX * ((c * x) - (s * y))),
+            SkewInsertAt.Y + (s * x) + (c * y),
+            0);
+    }
+
+    // The point of an ellipse record at parameter t, from the record's own fields.
+    private static Point3 EllipsePoint(EllipseRecord e, double t)
+    {
+        Point3 minorDirection = Geometry.Normalize(Geometry.Cross(e.Normal, e.MajorAxis));
+        Point3 minor = Geometry.Scale(minorDirection, Geometry.Length(e.MajorAxis) * e.Ratio);
+        return Geometry.Add(
+            e.Center,
+            Geometry.Add(Geometry.Scale(e.MajorAxis, Math.Cos(t)), Geometry.Scale(minor, Math.Sin(t))));
+    }
+
+    private static void AssertSamePoint(Point3 expected, Point3 actual, string what)
+    {
+        Assert.True(
+            Math.Abs(expected.X - actual.X) < 1e-9 && Math.Abs(expected.Y - actual.Y) < 1e-9,
+            $"{what}: expected ({expected.X}, {expected.Y}) but the record has ({actual.X}, {actual.Y})");
+    }
+
+    private static CadDocument SkewedBlock(Entity entity)
+    {
+        CadDocument document = NewDocument();
+        var inner = new BlockRecord("inner");
+        inner.Entities.Add(entity);
+        document.BlockRecords.Add(inner);
+        var outer = new BlockRecord("outer");
+        outer.Entities.Add(new Insert(inner) { Rotation = SkewTurn });
+        document.BlockRecords.Add(outer);
+        document.Entities.Add(new Insert(outer)
+        {
+            InsertPoint = new XYZ(SkewInsertAt.X, SkewInsertAt.Y, 0),
+            XScale = SkewScaleX,
+            YScale = 1,
+            ZScale = 1,
+        });
+        return document;
+    }
+
+    [Fact]
+    public void AnArcUnderANonUniformScaleEndsOnTheSamePointsOfTheDrawing()
+    {
+        const double centreX = 1.0;
+        const double centreY = 0.5;
+        const double radius = 2.0;
+        const double start = 0.3;
+        const double end = 1.1;
+        CadDocument document = SkewedBlock(new Arc
+        {
+            Center = new XYZ(centreX, centreY, 0),
+            Radius = radius,
+            StartAngle = start,
+            EndAngle = end,
+        });
+
+        EllipseRecord e = Assert.Single(Records(document).OfType<EllipseRecord>());
+        Point3 StoredAt(double t) =>
+            SkewedPoint(centreX + (radius * Math.Cos(t)), centreY + (radius * Math.Sin(t)));
+        AssertSamePoint(StoredAt(start), EllipsePoint(e, e.Start), "start");
+        AssertSamePoint(StoredAt(end), EllipsePoint(e, e.End), "end");
+    }
+
+    [Fact]
+    public void AnEllipticalArcUnderANonUniformScaleEndsOnTheSamePointsOfTheDrawing()
+    {
+        const double majorX = 3.0;
+        const double ratio = 0.5;
+        const double start = 0.5;
+        const double end = 2.5;
+        CadDocument document = SkewedBlock(new Ellipse
+        {
+            Center = new XYZ(1, 0.5, 0),
+            MajorAxisEndPoint = new XYZ(majorX, 0, 0),
+            RadiusRatio = ratio,
+            StartParameter = start,
+            EndParameter = end,
+        });
+
+        EllipseRecord e = Assert.Single(Records(document).OfType<EllipseRecord>());
+        Point3 StoredAt(double t) =>
+            SkewedPoint(1 + (majorX * Math.Cos(t)), 0.5 + (majorX * ratio * Math.Sin(t)));
+        AssertSamePoint(StoredAt(start), EllipsePoint(e, e.Start), "start");
+        AssertSamePoint(StoredAt(end), EllipsePoint(e, e.End), "end");
+    }
+
     [Fact]
     public void ANonRationalHatchSplineHasNoWeights()
     {
@@ -442,6 +550,35 @@ public sealed class GeometryTests
     {
         SplineRecord spline = Assert.Single(Records(HatchWithSpline(rational: true)).OfType<SplineRecord>());
         Assert.Equal([1.0, 2.0, 2.0, 1.0], spline.Weights);
+    }
+
+    [Fact]
+    public void AHatchEllipseEdgeKeepsItsParametersWhateverWayTheMajorAxisPoints()
+    {
+        // Issue #171, the hatch half of #89. A hatch edge that is an ellipse is
+        // read as the ELLIPSE it converts to, so its start and end are parameters
+        // measured from the major axis and a major axis along -X does not move
+        // them. The edge's arm still added the axis's angle (pi here).
+        CadDocument document = NewDocument();
+        var edge = new Hatch.BoundaryPath.Ellipse
+        {
+            Center = new XY(1, 1),
+            MajorAxisEndPoint = new XY(-3, 0),
+            RadiusRatio = 0.5,
+            StartAngle = 0.5,
+            EndAngle = 2.5,
+            CounterClockWise = true,
+        };
+        var path = new Hatch.BoundaryPath();
+        path.Edges.Add(edge);
+        var hatch = new Hatch();
+        hatch.Paths.Add(path);
+        document.Entities.Add(hatch);
+
+        EllipseRecord ellipse = Assert.Single(Records(document).OfType<EllipseRecord>());
+        AssertPoint(new Point3(-3, 0, 0), ellipse.MajorAxis);
+        Assert.Equal(0.5, ellipse.Start, Tolerance);
+        Assert.Equal(2.5, ellipse.End, Tolerance);
     }
 
     [Fact]

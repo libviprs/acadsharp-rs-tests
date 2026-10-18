@@ -664,7 +664,12 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
 
                 double startAngle = ellipse.CounterClockWise ? ellipse.StartAngle : ellipse.EndAngle;
                 double endAngle = ellipse.CounterClockWise ? ellipse.EndAngle : ellipse.StartAngle;
-                (double start, double end) = CurveMapping.Sweep(startAngle, endAngle, mapped.AngleOffset);
+                // A hatch edge that is an ellipse is read as the ELLIPSE it converts
+                // to, so its angles are parameters from the major axis and a turn of
+                // the plane leaves them where they were (#89 for the entity, #171 for
+                // this arm, which kept adding the axis's angle).
+                double offset = toWorld.IsSimilarity ? 0.0 : mapped.AngleOffset;
+                (double start, double end) = CurveMapping.Sweep(startAngle, endAngle, offset);
                 sink.Add(new EllipseRecord(
                     view,
                     mapped.Center,
