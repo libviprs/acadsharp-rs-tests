@@ -693,8 +693,10 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
 
             case Hatch.BoundaryPath.Spline spline:
             {
+                // The edge lies in the hatch's plane at the hatch's elevation; the Z of a
+                // control point is its weight, not a coordinate (#159, as #56 for a bulge).
                 List<Point3> control =
-                    [.. spline.ControlPoints.Select(p => toWorld.Apply(new Point3(p.X, p.Y, p.Z)))];
+                    [.. spline.ControlPoints.Select(p => toWorld.Apply(new Point3(p.X, p.Y, elevation)))];
                 if (control.Count == 0)
                 {
                     _warnings.Add(WarningCategory.InvalidEntity, "HatchSpline", "no_control_points");
