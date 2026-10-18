@@ -548,13 +548,11 @@ fn every_row_of_every_table_loads_and_a_missing_file_does_not() {
     // And so is one whose bytes are not the frozen ones.
     let mut wrong = fixtures::recordings()[0].clone();
     wrong.sha256 = "0".repeat(64);
-    assert!(
-        wrong
-            .load()
-            .expect_err("wrong sha")
-            .to_string()
-            .contains("sha256")
-    );
+    assert!(wrong
+        .load()
+        .expect_err("wrong sha")
+        .to_string()
+        .contains("sha256"));
 }
 
 #[test]
@@ -648,6 +646,12 @@ fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
             referenced.insert(root.join(file));
         }
     }
+    // A code page drawing and the oracle's reading of it (R5.4).
+    for a in fixtures::authored() {
+        for file in a.files() {
+            referenced.insert(root.join(file));
+        }
+    }
     // The ezdxf ground truths are claimed by their own rows, which carry the
     // hashes (R3.4).
     for g in fixtures::ground_truths() {
@@ -674,7 +678,11 @@ fn nothing_sits_in_the_corpus_without_a_manifest_entry() {
         let name = rel.to_string_lossy().replace('\\', "/");
         let is_doc = matches!(
             name.as_str(),
-            "manifest.toml" | "README.md" | "model1/MANIFEST.toml" | "written_plan.toml"
+            "manifest.toml"
+                | "README.md"
+                | "model1/MANIFEST.toml"
+                | "written_plan.toml"
+                | "codepage_plan.toml"
         ) || (name.starts_with("LICENSE") && name.ends_with(".txt"));
         if is_doc {
             continue;

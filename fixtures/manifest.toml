@@ -4071,6 +4071,902 @@ image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afa
 records = 279
 schema = 1
 
+[[ground_truth]]
+id = "cp-acadrust-1250-dxf-ascii-ac1015"
+input = "cp-acadrust-1250-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c15b0ef58b71deee3b5176cdf5b20512557b87cdcfe657543f8016505e111a96"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "d915c7ed38270f37abb3ef542f8217a1dfde739c2e6426b6d1fecfa7ffc448ad"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1250-dxf-ascii-ac1018"
+input = "cp-acadrust-1250-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "34efa4475c070ca702d7a09322cc8a9b11d5cd0eb7eb3990264e88e0805a7c20"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1250-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "d1f22b6af712850ee8879d7a258efcb9f5d905133bd655e0b08bb5aea45ef5c4"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1251-dxf-ascii-ac1015"
+input = "cp-acadrust-1251-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "dab1cdbd14029373bd0654aba44231743a29cfff4fd163f50ab940f2da4a69ea"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "028082da688d5b6f73aaaed6a9c0e4516f96b5e0b72cc2d7d80571f7c5478562"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1251-dxf-ascii-ac1018"
+input = "cp-acadrust-1251-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "fb25345715c273ec682efc8cc4f8dfa90b748f359d2e32bac47b726901a41a6a"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1251-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "4afe6206ec69b305c4ef734539d18f04d62534a0ee54249be1cd655f0a1e6d47"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1252-dxf-ascii-ac1015"
+input = "cp-acadrust-1252-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ebaa3dd921a5475f3d0bb27cb5adab3c72aa153eac88139c6dbf7c5a7738b83a"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "50bb5394c8a86e012f666f440aa398bb29af0a176eb6838be2c67cc7cd1715b6"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1252-dxf-ascii-ac1018"
+input = "cp-acadrust-1252-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f9f175df93155e85d38df20d34da273d16d1e27b63cb273a66f47a3cd51f0f0f"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1252-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "5b18cd09bbc1a381ac507bd9f1801df4450fdd4311ed7f46f484088c6a0a9a73"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1253-dxf-ascii-ac1015"
+input = "cp-acadrust-1253-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ce4ef6e07aadcf8f10891111205cd3b57ee29485515d0474bdace77a8a5aceef"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "abe7fa7857b2a2ee6adbc0aaa6c2c42e6277de822f30acc5c5fd53034e7d376c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1253-dxf-ascii-ac1018"
+input = "cp-acadrust-1253-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "62c03930bc2545a041520157000da674e248016312885f73bac51914fb8f7857"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1253-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "5401561e666d596285ff2c71d9b1c563abffd911ecffc572124233fc682dd50c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1254-dxf-ascii-ac1015"
+input = "cp-acadrust-1254-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "10cfc2f3965df2103ff33b48ddeab7cb2bef0170d094a7b8c9e95dba628e163b"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "8b02b2f07d1d85715faec48d96925b2bf485e8fa9d071e8153cbc6c5bc0da5de"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1254-dxf-ascii-ac1018"
+input = "cp-acadrust-1254-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "7392762a6ca8eea75620f97bc2c80a749ae56937688a73c80997a84050789c2b"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1254-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6506bd20f25cd3b35b39c8f027a5eeba0239da287828fa2dcbbab80bec61c7ce"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1255-dxf-ascii-ac1015"
+input = "cp-acadrust-1255-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "b48bc2aca9e7ec7c77ba56c5726fc1ac5ee34dd9a505cf22c8976b9a3f2987e3"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "925d1b94b7938958f6e45d24a27be72708a67b6b096c3979b00ec6e76ea48da7"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1255-dxf-ascii-ac1018"
+input = "cp-acadrust-1255-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8bdb20aa9dc5066a25a380c140e65aa6b0dc3862d7c1027db8432b4093d5b3d9"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1255-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "ac2c1e1ab100eef934cc454954d42c364c64932b8a3f371104ea7124bed4d1e7"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1256-dxf-ascii-ac1015"
+input = "cp-acadrust-1256-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "77e744379762c47b2b30620aa6f2aaf6197eef3de36000045e89b9a1c3f5af51"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "dcc253a67fb725103c6c46bae1f22c0e3b8906090b2b34313415e3d800e2f52e"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1256-dxf-ascii-ac1018"
+input = "cp-acadrust-1256-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "0ccd2f4adf9f7d61ec73cc97d8b1faa49dd11f3ed5dad32bd89dfa1e760c6948"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1256-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "d797e289b4ec3646e8d9468e815ceaf3e3a1bd5b130c93d5391ca899d5e16afe"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1257-dxf-ascii-ac1015"
+input = "cp-acadrust-1257-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "fd0a3cd781d9375af53cf1ec7d9e143d29fd9ef69a6b5e09e2eb9805d1ad28a2"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "bafcbd8c00014f18f51b5e3067e039aa034d248f0e47920d55ac7e2755611296"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1257-dxf-ascii-ac1018"
+input = "cp-acadrust-1257-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "0d13023dc0c9495f5cebc8338c77658230faeebf121d94ec1a186f23b9f02755"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1257-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "597b960aa7207b4b7f64b221b9209d33ba69408b5a7ad0119656aa63c332024f"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1258-dxf-ascii-ac1015"
+input = "cp-acadrust-1258-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ebc575fa2f98e4fd88a85180ee8a924fee5a2541b9b1a77ff20970ce8ed2aa0b"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3e11e1790f08dc616cee16eba598a539c11051fca2881ccbbe75bec9634a2a57"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-1258-dxf-ascii-ac1018"
+input = "cp-acadrust-1258-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "72d7fef506f70e2a4a001ee947013d42b0119350804f351f44c2abd0932cfd70"
+sidecar = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-1258-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "380517486ed520a296f95a0bc4b54ab4a3da7d0dc6b64745e0fcc41514d3760d"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-874-dxf-ascii-ac1015"
+input = "cp-acadrust-874-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8afb8326b98f8ad5478cd892753ff51a95bf6dfb366442400879d161f60508fd"
+sidecar = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "0427c8dcc0ba92240fcee9fca013b70ccd34675798cc2a688cdbf6050a957309"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-874-dxf-ascii-ac1018"
+input = "cp-acadrust-874-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "48635266db0c3303565672e471f649f017e3bc4d7bd19393e9ca8be3acf32bf4"
+sidecar = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "aee3b212f138c11b846e077d34e8cf10598cd7c682f696f8e043c9db3eeae837"
+run = "ground_truth/ezdxf/cp-acadrust-874-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "8cf734389b0ecbe51285e1da116a8be6477bd31c6bd611e7e10f85af15d66b26"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 6
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-932-dxf-ascii-ac1015"
+input = "cp-acadrust-932-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "2cb6e608b372ed1e9dff051882c0aa4ee930ac19f864a6e3097573809f636f2d"
+sidecar = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "fde61c18497a793a2dfd899654af9004acf44f0dd113304ee181e1e7a622cd90"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-932-dxf-ascii-ac1018"
+input = "cp-acadrust-932-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "517fce216a8393031be70f616f42b5249f79f7cff7ceb1a1b62369e2353fdebf"
+sidecar = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-932-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "bff8e496356a2afa7246bda9612367417492d0d8f06ff3a2e5b9a0b35933094d"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-936-dxf-ascii-ac1015"
+input = "cp-acadrust-936-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "692c7547fa1c38b20136f2743d2e84093c4e5c9c7d26df5f171e874d6bbd377d"
+sidecar = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "6bc2f3208898e9be413f631485823ec56dbc1e20688cab7aaf5364fdcadd1901"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-936-dxf-ascii-ac1018"
+input = "cp-acadrust-936-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f3fba2273d82b67766d26c4faf4f0e36dd848b3b0393a39c8b701e119f715307"
+sidecar = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-936-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6976c2f6a7cb22cba96d01078a5f5b53077bda029ac005dfa33a4590e0b1bce8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-949-dxf-ascii-ac1015"
+input = "cp-acadrust-949-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f43307de3cb968b3a91c559508c8dfd9366c11c01b6662d87fe1ee6cb00bb95e"
+sidecar = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "4b1b8c12fc920bef51c09d9ba8121d4dec9d3a0907b85d4009a5ffaf415ed495"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-949-dxf-ascii-ac1018"
+input = "cp-acadrust-949-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "9f618cbef5695121b392a8515ee67d982a9118b94549010711a96be07491a948"
+sidecar = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-949-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "7cd2dbfb40825d3df1135c21d38700e96b0bf01c2e3ce32538d1bde3773c247b"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-950-dxf-ascii-ac1015"
+input = "cp-acadrust-950-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "d715098bca1ba2525967ee4052086e364f0301cdb616721144f816b53a1329bf"
+sidecar = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3b3c27e9ee12d07b74651e55ff7fd76057796fb785e4545247681b5ff4be28d0"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadrust-950-dxf-ascii-ac1018"
+input = "cp-acadrust-950-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "b1503688d979e553659f4673719a14637f84238f879bfb327ce7bbabdb1337c2"
+sidecar = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "2d8b6a9524435e82acb8e8fc3fbfd36558ccd1fdb2c9509350bd5f49457f7f9d"
+run = "ground_truth/ezdxf/cp-acadrust-950-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6a5ed72f8bb05fd183b64c0b195bc130845f16b8cd73b8386988b9252239acf5"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1250-dxf-ascii-ac1015"
+input = "cp-acadsharp-1250-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "11886d1db39bf9053eedaf8afe78aece5acf0aea11efc4848327edecb8315e45"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "866f99b357e3878bf9a9bc7950730a20ece6a6507405aa2ab568f82efb3e0d6a"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1250-dxf-ascii-ac1018"
+input = "cp-acadsharp-1250-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "034e465f71cfdfde113af5e0c3d3aaf78189c83be1d5ae568b3a7b3ec4805755"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1250-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "0359b17ec7b7052a87c4f6efa13ed67d1363c736447c57e21c1f97a3968f9cf7"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1251-dxf-ascii-ac1015"
+input = "cp-acadsharp-1251-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ac66d8c1ae437c6b883e128007ef001b99b8b46a5f73335a3e1bf482a7faf074"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "83cc8a972418a201f4ac4b0d17695c798bf0e7c6884d2154e83fc2893673e9ab"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1251-dxf-ascii-ac1018"
+input = "cp-acadsharp-1251-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c5e1101808e79425266aa7f803ebba6d8568a729498841485414c784c41b66f7"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1251-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "a40d14bdf3d94ddc6c80630b9f12ecc313ba5340400e29e8a4d38ebc8f336a57"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1252-dxf-ascii-ac1015"
+input = "cp-acadsharp-1252-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "79040b65bbcb1d28a85401cdaa8e970eeb337401faa06367125830fbd423e8cf"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "edbe567467ed42a86ea1a5843002e36628fc642d69ca5dade07a2cb67fd2df02"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1252-dxf-ascii-ac1018"
+input = "cp-acadsharp-1252-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "e110cdfc4adbf80bfb6c0e31cc1c9199995affab460b182db67db36c2ca6e7f0"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1252-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "753f7c5226cf0378c2e0c99d397d9e1d232ef0f9403876cd168d80d430783b23"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1253-dxf-ascii-ac1015"
+input = "cp-acadsharp-1253-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "dbfb31bc8bc458468e8cabd1b442761f57abf09f2d92df1202b4010897113137"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "89666925825f8f5db2d2b6df3f3d24cb1f6be6b67d1c594836936c48d08b3e89"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1253-dxf-ascii-ac1018"
+input = "cp-acadsharp-1253-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "434eea91fcd3aef253277dab4d4026d6e234d19d22cd96c70438faa3c48eee06"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1253-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "ddd7814ee50049a2855ece89a686239359c9250e3290214c0d004c1554f37b67"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1254-dxf-ascii-ac1015"
+input = "cp-acadsharp-1254-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "db8f2b17165e72d51786a7bb97bab30d569fbc0350546ab4fc4bfe216da25c81"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "43c7879593c37f26aabba31c71f3986a5f79c617ea97a460b24cb5d3b9495910"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1254-dxf-ascii-ac1018"
+input = "cp-acadsharp-1254-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "b421b1fa8af1d45e133790e1235c7b925cb166f772bfde9289ed32724b938fd5"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1254-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "6e5a40f720d9df44871b1d423c17de4165f828fefbfc7282069bc4e000e63044"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1255-dxf-ascii-ac1015"
+input = "cp-acadsharp-1255-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "973759065841bfef62fb6add44e6c3ad5e665ad44ebca6ba01bdf073c498f8aa"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3c863de1d8d57b3b2c9155d325b854c31de49805bbb389ecf065a36e1950203c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1255-dxf-ascii-ac1018"
+input = "cp-acadsharp-1255-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "d442a233687dfecad0a27cd500ae346741685975930d796b7328adf56db3f852"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1255-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "3abc446bbee59d3297d79752303c8a3d2711e760801dd5d12734647ccf7f1601"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1256-dxf-ascii-ac1015"
+input = "cp-acadsharp-1256-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "77997816b350393804c2620533cf29823abf92331325871637e3a357e358d37d"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "fd6cc80e4e275ddbf868a588b23bc2b74bde5a2218cd9c25483999b91ffdf2fe"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1256-dxf-ascii-ac1018"
+input = "cp-acadsharp-1256-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8eda230276c97a5f228ba1e2ff2ea72ce40ea51d71de4b50184dfb8b175ba6fb"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1256-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "e37e9773bae60ae32847f60430aed405cddbbbb2815ac7f03e4dc8e6c9a578f3"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1257-dxf-ascii-ac1015"
+input = "cp-acadsharp-1257-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "f2e9cb1581e754be49935936e424a2d6b2978cf870bc598906f57f951b3307b8"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "3fc9ead6c460e6dc3c83cf7edcd2093270791f03bfb0762ab3aca2f6a1650403"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1257-dxf-ascii-ac1018"
+input = "cp-acadsharp-1257-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c341d79c5ff7ddc408f4be34093dea8c4b68e8578194d4d26993183eb56c810c"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1257-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "575b31cd2ad25bdb8c5a0ef69c579d449ab126b3453a21d88b3058e703ef087c"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1258-dxf-ascii-ac1015"
+input = "cp-acadsharp-1258-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "2210b4dbfab98a0ce7a6bc1901c814ba8d8e4d1f6a518f2a2f9e61e1fc60464f"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "6ad37da00d950fb6fece8ba1f444300e5bb8e26f4dcf6ee24b38c0156944e514"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-1258-dxf-ascii-ac1018"
+input = "cp-acadsharp-1258-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "24685c15bb7c64fc2f49ba3850c04e519cfef95a9a4ff1bbfd1359bae0680f8d"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-1258-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "754f7dfd8ce525648de9a3aa5181935a30097d1e7e8b944d7f502e85ab1d6f73"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-874-dxf-ascii-ac1015"
+input = "cp-acadsharp-874-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "95c8aa0072c0c1d7fd8540edeac527faf0d1a50f942278f310303a7fa38556e8"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "1ad862ce47d7ab917a567258424cc17b07157f63c67c24fcfe884a3f381d3358"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-874-dxf-ascii-ac1018"
+input = "cp-acadsharp-874-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "453d8b12a4aa680434a5eb767f0b6696666c6d7e6734dea2c66f26860626f564"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "fdae8fa90d29a3538b0357a7a7223471b76f4b849dcff831418353dc9782bca8"
+run = "ground_truth/ezdxf/cp-acadsharp-874-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "253e09b3be38322f8001b59b426d08bb1cdb8cf2d45d39a2df1268171927273e"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 7
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-932-dxf-ascii-ac1015"
+input = "cp-acadsharp-932-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "ca893f29c7dc0ae365a6af1842a5025becdf605e351ee44f400a57a43e5d50b5"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "da7d8c1654b229ccae1ff6d9ee6f83b95ec8d556a2e26df373d6b56c5d1a2f11"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-932-dxf-ascii-ac1018"
+input = "cp-acadsharp-932-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c8a23d290ee8e02c793d848be4fec67ed4a1482284010312b7d7a075764386ca"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-932-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "7b40c5d137f70d112bb6f0da6ecab614b635c9d8af34efa2a94b23191ff0c8b8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-936-dxf-ascii-ac1015"
+input = "cp-acadsharp-936-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "c326fb1f144545febaf363b5dad2f678de2951c1256d7a655b64bede724599ea"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "330405fe8f9a4511892824dbec0857faefdb0835fc6a5345df8b23860bde482e"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-936-dxf-ascii-ac1018"
+input = "cp-acadsharp-936-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "8ae09ac5329e78471a8fb6735d963f09f34f9a8499d5e33f1d0bd8fae9ca6aa3"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-936-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "936e5fdef7684ded2971ee96d0a94181bbf7e19b665138087bc1a92a1ce54bf8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-949-dxf-ascii-ac1015"
+input = "cp-acadsharp-949-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "243af06bde6f6642be61f5cc5d3d266428a165e9e335cd19c8500c81b5fdda95"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "555468b585f76c7973c299c842ef3f1ae96ac8edd1aeadbaadbb975dcb63fcc8"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-949-dxf-ascii-ac1018"
+input = "cp-acadsharp-949-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "0d70b95dd13447b5d5bb29b263916f032215c004ec39f5782097e7f566303e23"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-949-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "386326133fd1af60c4908586cee1879a860fd8973d0a05f43088e889e8bf9b45"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-950-dxf-ascii-ac1015"
+input = "cp-acadsharp-950-dxf-ascii-ac1015"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1015.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "fbad03161a264a10686896c08e0d1d8d1ade6b07f4c3ad9cf08b827e883c2f63"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1015.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1015.ezdxf.run.json"
+run_sha256 = "0a1be877e9aba85c6d0f1dff1d84a1c39ee6a1a295455b5a9ea5591320778f95"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
+[[ground_truth]]
+id = "cp-acadsharp-950-dxf-ascii-ac1018"
+input = "cp-acadsharp-950-dxf-ascii-ac1018"
+engine = "ezdxf"
+jsonl = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1018.ezdxf.jsonl.zst"
+jsonl_uncompressed_sha256 = "907c48de61ee0b0092011a8e28335d2af614fe50707092aa2baf9289436dd2d8"
+sidecar = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1018.ezdxf.src.jsonl.zst"
+sidecar_uncompressed_sha256 = "842338b5eac6dd36bfc3d6642c073ed63411773a2d85a4d6a9f9b5fdeeefad8f"
+run = "ground_truth/ezdxf/cp-acadsharp-950-dxf-ascii-ac1018.ezdxf.run.json"
+run_sha256 = "c0b3846a24af6bfebaaa0ff62f7e7f1f860ea93a2a873967df53f9eb3af96059"
+ezdxf_version = "1.4.4"
+requirements_sha256 = "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
+image = "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170"
+records = 8
+schema = 1
+
 # ---- end of the generated ground truths ----
 
 
@@ -5193,3 +6089,2023 @@ dotnet_sdk = "10.0.401"
 reference_schema = 1
 
 # ---- end of the written outputs ----
+
+# ---- authored code page drawings: generated by tools/regenerate_codepage.py, do not edit ----
+
+[[authored]]
+id = "cp-acadrust-1250-dwg-ac1015"
+writer = "acadrust"
+page = 1250
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1250-dwg-ac1015.dwg.zst"
+bytes = 5501
+sha256 = "966801907b688e39102a6f66c2cc5cabd9ffb57eb5356e3ee080491a584e33cd"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1250-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "ac56931ea63b619f9ff3565a9e866b3312083d08d3730b48d332de1fb9457cfd"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1250-dwg-ac1018"
+writer = "acadrust"
+page = 1250
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1250-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "18088d77e3a7305fd30c8206bbf50471c81a50d1ee2e2849f42400188742b039"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1250-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "feca990e01ca768e2c469d29dadd69e6da6faa371634a91d8e35a8bc34ab7fd0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1250-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1250
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1250-dxf-ascii-ac1015.dxf.zst"
+bytes = 44022
+sha256 = "47dbb19613bfdff015c831847621b58bf046b55c8eb5fa45330ed8a79b696b9a"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1250-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6cd430eac4747ecc09d6b6452979bf74ee91f983cf7ad7985c672fa3101cdbd5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1250-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1250
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1250-dxf-ascii-ac1018.dxf.zst"
+bytes = 47402
+sha256 = "2067a22b3fe80d91f4f72cae16344e188f7e55b7498069ade3826329247d4d08"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1250-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0c5ecea58abc06fd3aac886cf3e1558c4570441022d3bd89d9f94f55b0cb42d8"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1251-dwg-ac1015"
+writer = "acadrust"
+page = 1251
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1251-dwg-ac1015.dwg.zst"
+bytes = 5500
+sha256 = "d78990d29e9cc52622428faeef28ff6e05063a77a2efeb1231dc6843c906d099"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1251-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "90e35fbf81d7527caf85846df8bc852612a042e33a9b2b286cbf2e5df07c492d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1251-dwg-ac1018"
+writer = "acadrust"
+page = 1251
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1251-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "75b68dab4b26214269a78ad801a7ec0ba6512a81d1479bf6dc0957f16840c363"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1251-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d7c8071ac73adf6b846ee822252ec9bc4d15167a52d1e52a85631cb67722ab44"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1251-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1251
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1251-dxf-ascii-ac1015.dxf.zst"
+bytes = 44020
+sha256 = "5fa4597947274f1fef89b137de61c7ca0360b7253c7bee2bd28a77937a4b7fe1"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1251-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "e8ffe1bdc75ebf89c77a598ee06f3d1d31d00b90096800f2fbcffa73d08085f0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1251-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1251
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1251-dxf-ascii-ac1018.dxf.zst"
+bytes = 47400
+sha256 = "023c3020f5af10d4c3264a397f23a121ed98a3fe55109a3fc603019156c15f40"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1251-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "5a436d773e10ea0d73743b980143b2ef38eeb163d7a0d0ae3931b7fcb4213c7a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1252-dwg-ac1015"
+writer = "acadrust"
+page = 1252
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1252-dwg-ac1015.dwg.zst"
+bytes = 5490
+sha256 = "100cca7f249daa5e67f1906520854be7cb45d6d96369e1f76602b3c30b536db4"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1252-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c25e193960aed4b7b191f63b32f3aaf0bacaaab78043726992a1e5485f629563"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1252-dwg-ac1018"
+writer = "acadrust"
+page = 1252
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1252-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "1e0908f96c3df77d80429d6a6169f282f64435242702427c9fdb3d104d54bc99"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1252-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "15bf9a9844b006f8143427e2fbca2d01eeede5eb5ca4b835d2ae60cdbc9a2a65"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1252-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1252
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1252-dxf-ascii-ac1015.dxf.zst"
+bytes = 44002
+sha256 = "8ae38c9683d84f9a1daaae171339450c0960247663b0772270e2f4b53d1aa14b"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1252-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "74c1d3ba3d9b47c2681e51db1738590b9b6ef94fbcb9391d6ac457041437f364"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1252-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1252
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1252-dxf-ascii-ac1018.dxf.zst"
+bytes = 47382
+sha256 = "bd9874f0cea8150583e6327000ef42b19bedec1f8a2c944633b75ebd2583f83c"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1252-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "5ab0182ef9603ed92a4c1da4dbe8a92bfa4019b63f6ae65733a40c4eb4fd4a77"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1253-dwg-ac1015"
+writer = "acadrust"
+page = 1253
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1253-dwg-ac1015.dwg.zst"
+bytes = 5499
+sha256 = "19ee28b33a5ec5f2bd060e1865abe55eb0e6ea3c6b364acda2ea22976eee31bb"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1253-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "a741a6a5247a0473f28bc6066a513b3b0e711becb6103accc404b409a1a384fc"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1253-dwg-ac1018"
+writer = "acadrust"
+page = 1253
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1253-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "3738801b8e44b5c0b6b5d658a0b897a5ad48d6bb243c2ff858823c45500aa2de"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1253-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "01e88c69c860ce7623ff99e0c75d6e60b5c4a72c1de3f0947be4b3a0c765b723"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1253-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1253
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1253-dxf-ascii-ac1015.dxf.zst"
+bytes = 44018
+sha256 = "418a2a7e0eb4a36c7e138657124c01d867f48765df0100e707fa114ec7a3741b"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1253-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "9af95762083e2fbe0c27d322f018b13bf93cab2e7768b485cdd6fc24350f05a5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1253-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1253
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1253-dxf-ascii-ac1018.dxf.zst"
+bytes = 47398
+sha256 = "bcb9abcc0509ed6a8746c18379994df880eed6e06016f223381140da1b9a5140"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1253-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "669cdefb3baa154a75fd7d5dc23f93e04812b182bfb947491e878e24ffdc076d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1254-dwg-ac1015"
+writer = "acadrust"
+page = 1254
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1254-dwg-ac1015.dwg.zst"
+bytes = 5488
+sha256 = "1e88b4d65c5a4eaf1962799e461e63b2af949a867319ea3d506e1517a1ffc93d"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1254-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "25ffdbce89f9ffe48b7fe680b2d831d39bbb160fd673975467e45c61ff2f63ad"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1254-dwg-ac1018"
+writer = "acadrust"
+page = 1254
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1254-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "c4e8150772e7a0d0f2233aed20cc945b4c30b5cd208f230a79137b76b7a6b5dd"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1254-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "99e9618351017df7524b95b3abbaec5243894219fc179ee87dbe2a48c6a5ca91"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1254-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1254
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1254-dxf-ascii-ac1015.dxf.zst"
+bytes = 43998
+sha256 = "39a88c38ae021f90a1cb2a2120e3ffec5eadc439f63e0ea55f9e86a4cd090077"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1254-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3f52d9eb9b7807ea74c9c2a54cf8189609ea3ce7f17c137deda23e50099aecb5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1254-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1254
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1254-dxf-ascii-ac1018.dxf.zst"
+bytes = 47378
+sha256 = "513da6f0ca262f8af943b8cef6c5f6ca25b04084c90f7cd117842dce93f762ff"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1254-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "55862bb173c76497907ce640878c636f482a0d6c6742aec6d1b85a2b0cba9f45"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1255-dwg-ac1015"
+writer = "acadrust"
+page = 1255
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1255-dwg-ac1015.dwg.zst"
+bytes = 5489
+sha256 = "5c7521fac7b7569e857063d6aba7e876ae8f3e3410b14ebd166e8fb36ff267e2"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1255-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "44d16473456d43b702800c42d15c0755e90253e0824e21dfad397b197863beaa"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1255-dwg-ac1018"
+writer = "acadrust"
+page = 1255
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1255-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "43badb64e045195e083e8d631048100a8f8a89c90e90f8c67cd8e26e503857e2"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1255-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "957f9f9f5714c22bc6273f570dbfcfdb68d5c848efe25b858dde200952065031"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1255-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1255
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1255-dxf-ascii-ac1015.dxf.zst"
+bytes = 44001
+sha256 = "f6b2cc42b6272d2d7787dc21f2fa352153ab96b08d4272a04ee222a5afc00c33"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1255-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "4c737b135cbfe4897299b6dd3552fbe34831339506b074ba2929ea021022d40e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1255-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1255
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1255-dxf-ascii-ac1018.dxf.zst"
+bytes = 47381
+sha256 = "b4b5d78f041f6d004a496b551b62a8976f50808a4954edddb38d9ae7b054b5dd"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1255-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "17553c517e60a6f25d94676f11fb6c032619ccc4514630a68806c63ba3aca582"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1256-dwg-ac1015"
+writer = "acadrust"
+page = 1256
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1256-dwg-ac1015.dwg.zst"
+bytes = 5489
+sha256 = "923d729f8d8d55d079b0d48df18c48508b6ed0d77d575ad8d9d85bc55a33e38b"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1256-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b8ef5bb1f4db8d50348d1805feb8315454c65c40d20c4969132eeb4704e75c56"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1256-dwg-ac1018"
+writer = "acadrust"
+page = 1256
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1256-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "80f874e707975b03b82bdb0eab65d8bda62be362a62a91b08d36723b49ac8c97"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1256-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "89fd56def133c276ecf713f68beff6f3d22e19f0edaa6f104fba3efeb8c7fcab"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1256-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1256
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1256-dxf-ascii-ac1015.dxf.zst"
+bytes = 44001
+sha256 = "dd2a617fad7553cc0e81ae4f695e82102f3783dda4ab0aea51fb33c4e69ee24a"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1256-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "486163b0f2423a36904fc74292e648f24495b5b5d90fe31cbe4e133a69943610"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1256-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1256
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1256-dxf-ascii-ac1018.dxf.zst"
+bytes = 47381
+sha256 = "8caec278bc246b005fa8caf2f62039876c5aba1abadff41c4bdff47acbd24559"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1256-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "711dcc161f9c8b0afbfca52982b595712a4e98c6cc1a0ed897d9063f2a62e0da"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1257-dwg-ac1015"
+writer = "acadrust"
+page = 1257
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1257-dwg-ac1015.dwg.zst"
+bytes = 5489
+sha256 = "e8776a005d10260924e53b91323075e39ad371d0cec519617553e3ddae340b20"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1257-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "7b2cab88b9160fb64ed10821f13ad144e028ffb813c080e637bb8ea782b9f0bb"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1257-dwg-ac1018"
+writer = "acadrust"
+page = 1257
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1257-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "dd9fb6281c20605e380dc6020324a2e4b183f7ed86f2ef48c722cca0fb1fd1c1"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1257-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c70b573256588681cb497b36e2b119e3bed47e7d8df2aca4407803875a36d4de"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1257-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1257
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1257-dxf-ascii-ac1015.dxf.zst"
+bytes = 44001
+sha256 = "2be6c3f99da3d3783ead733fe12429ce719cf81e75957c61a134c91af383ffa9"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1257-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "db6d9afe59bc9be686084a172d2ca4efe88449d1de330c00828c9a72dcebe3f9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1257-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1257
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1257-dxf-ascii-ac1018.dxf.zst"
+bytes = 47381
+sha256 = "f1d39c8814ec19d14305049e672d599283fe819936ea4afe3a3824f1777049c3"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1257-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b07019252bfeed9021a7234f621b9143483b5213d815c215abe12177dde64693"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1258-dwg-ac1015"
+writer = "acadrust"
+page = 1258
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-1258-dwg-ac1015.dwg.zst"
+bytes = 5488
+sha256 = "c24e9f2a633d5d24193cf0008ddddae9b4d996f5a29df3f897679b645f4dec56"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1258-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "75dac27b68d61887cc6e807a392b3ac7a0091df779b0ff70c09ec02f25c69959"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1258-dwg-ac1018"
+writer = "acadrust"
+page = 1258
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-1258-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "bee01fe9208b09937c021d0dd13610468d3e3e1be9a201d681b0354b0d61db6a"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1258-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "71733530cc2af7df95961be29479ccfa5c35dd1d085284af67eb2d5c723b9d1c"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1258-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 1258
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-1258-dxf-ascii-ac1015.dxf.zst"
+bytes = 43999
+sha256 = "6d709c6f906ff9cbf762becb175098cb665c5eba1e254b07ec95a29caeea4dc4"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1258-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3e1fb6f9dffe0ae401243b0c41843c38b27c7d36a7e0d41515417bba0934474f"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-1258-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 1258
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-1258-dxf-ascii-ac1018.dxf.zst"
+bytes = 47379
+sha256 = "e56714d816c9097559726b9679e65c0679e57d2cd009cb9b1cc0dc2e80ec63d6"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-1258-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "ecdbfe325525891d3911e33771d3e3f9da7be7988eb8d5293ebe8d0dbc0204ad"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-874-dwg-ac1015"
+writer = "acadrust"
+page = 874
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-874-dwg-ac1015.dwg.zst"
+bytes = 5490
+sha256 = "539e9cc586ffbd1d26127c9e41fa62dd4450a36a8647e19ffc4e0033e78e048b"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-874-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f3c547c7d9ac771b177f70d186e859e3b42918995d2f5b67c9b3f648b008a256"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-874-dwg-ac1018"
+writer = "acadrust"
+page = 874
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-874-dwg-ac1018.dwg.zst"
+bytes = 7147
+sha256 = "e424072d6b1850b022e8c1d75f3fbd9b0dc47ae86d221259c59391558656d080"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-874-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "22a089181206258b2f82e9979806dc88abf0007107d434c1e9ad33314870ac7c"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-874-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 874
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-874-dxf-ascii-ac1015.dxf.zst"
+bytes = 44007
+sha256 = "7aff3733af36cb340fba33c01c7c4122a7f8a5e3f00f8e878a11c780f32187cf"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-874-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "ac704e059a90b13ac66dde967df5946a0b399e91e3f986c199dba0a87c272703"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-874-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 874
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-874-dxf-ascii-ac1018.dxf.zst"
+bytes = 47387
+sha256 = "8f840d9de41c8f86c4cbdd4f4116b16ee56b05e9673320224b00e88e443e6aaa"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-874-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "70b107a867add756e4c4adea6d4f478178e7b539cfd1bfd33ea24d07424ec17d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-932-dwg-ac1015"
+writer = "acadrust"
+page = 932
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-932-dwg-ac1015.dwg.zst"
+bytes = 5549
+sha256 = "959c6feff82174c0b32eb302111b686e9d190de32740a3fbc343f3c60db38a87"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-932-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d63589905d1e71453cb5fc3047e7948077d4a3b3a3b46155a680c1c07f50503f"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-932-dwg-ac1018"
+writer = "acadrust"
+page = 932
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-932-dwg-ac1018.dwg.zst"
+bytes = 7179
+sha256 = "d7b15f95e1683ef22961df8001959a90fcdf3c95b5bd64ee103c48cd325124dd"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-932-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3d135c886f51d9c3437f678b749317e6716682e325ee820e50664e4580b62f25"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-932-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 932
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-932-dxf-ascii-ac1015.dxf.zst"
+bytes = 44183
+sha256 = "1f83032cb38f98af39bae041cd39ff0a4140c37dc892d8a3d6025ee84b89a873"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-932-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "ddc023f3b779078af1325f67afeea1a21a22624d0f123d1f747c3336b9d5a9d6"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-932-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 932
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-932-dxf-ascii-ac1018.dxf.zst"
+bytes = 47563
+sha256 = "fbc7f0ade9944d734e9f2afd27f75513c227b33a86ccdfc953b2626ed93fb8cb"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-932-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2e05247974308594c9ffeef9afac47ee2120a2f7c3380ce38a01ff69ce73f93d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-936-dwg-ac1015"
+writer = "acadrust"
+page = 936
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-936-dwg-ac1015.dwg.zst"
+bytes = 5545
+sha256 = "12399b830b4a2cafbe942dfd6d941c6265e502064b1e772931503848616e70ab"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-936-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "fc8d8924f9dbde0256fb898b83e741e20241c1700488e99e4d63ce60b7c1e514"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-936-dwg-ac1018"
+writer = "acadrust"
+page = 936
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-936-dwg-ac1018.dwg.zst"
+bytes = 7179
+sha256 = "bbc0bf0aac24b28b438a0aaf248d1c6a90d5b4a93f78ef4015f30f3ebc079f33"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-936-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "09d7178d54f4dbdb403229b7d614f1e6004d207d786fe61c7db8c40d254f1ff7"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-936-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 936
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-936-dxf-ascii-ac1015.dxf.zst"
+bytes = 44177
+sha256 = "60df95529332c534e36ea617ac2326c2219127eed27a6d677df3e35382963d0a"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-936-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "1433e81a122b9d13dd16e046def9ff88778e1b8748733207c33fcf6a65f226b8"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-936-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 936
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-936-dxf-ascii-ac1018.dxf.zst"
+bytes = 47557
+sha256 = "dac857d0663039478d63df273035d6e6e8c48ce3b83c01128274eb68b0e46445"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-936-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2652d5636c4843989a9d5d0ae96394f77860afbf1d322c2bc637176f55b312a5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-949-dwg-ac1015"
+writer = "acadrust"
+page = 949
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-949-dwg-ac1015.dwg.zst"
+bytes = 5543
+sha256 = "83697f78471bd5542d4c7cdea6a364aaacc702801112498679020ba297794115"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-949-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "ce9f0eeeb11ac592568c2b546a30435943858462bc45da02f66bde4393caafbd"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-949-dwg-ac1018"
+writer = "acadrust"
+page = 949
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-949-dwg-ac1018.dwg.zst"
+bytes = 7179
+sha256 = "031ac957d47b102df9ed6230a826cec4030b312cda63cd4f753ac03ffa1eb7d0"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-949-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6fb10c539d7bb8fea6a5e1822de845b857d5a5ca06f290613977f6c049663df0"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-949-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 949
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-949-dxf-ascii-ac1015.dxf.zst"
+bytes = 44174
+sha256 = "4d15dc7cc2af1d3da6c74c17e5b7cd0b62e4850a5a53055de491266e8034bcfe"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-949-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3bf11dbafa74287ff51284e42b3f71304a098328b47c441c6269d74ec871a775"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-949-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 949
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-949-dxf-ascii-ac1018.dxf.zst"
+bytes = 47554
+sha256 = "9d4bfd9d7622752bb7fee921c717ef1c3dc395f18bb77a2522f33ad9a7712a3e"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-949-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "263bd2e29ac6ec21a88a475438eeeba4703ad117f94a771ca4a1c5cc946ce7df"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-950-dwg-ac1015"
+writer = "acadrust"
+page = 950
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadrust-950-dwg-ac1015.dwg.zst"
+bytes = 5545
+sha256 = "c4713ae36e32bb36748b8ccc009e708c2d47fed933206da751f80f3828dd52de"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-950-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "aaf1c64ed5d4b8b52ec3243964bf872b24de4dafb05125bd6d03afe9a7ff45eb"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-950-dwg-ac1018"
+writer = "acadrust"
+page = 950
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadrust-950-dwg-ac1018.dwg.zst"
+bytes = 7179
+sha256 = "3c5662912338aa86026e9bc57e0c9899fce417463bf607eeb4d39e4667a006b6"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-950-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "5e5818f4f0132a15d4b937f6f4dba1f64d2c5838d744506a21cf07ceb8d8e439"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-950-dxf-ascii-ac1015"
+writer = "acadrust"
+page = 950
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadrust-950-dxf-ascii-ac1015.dxf.zst"
+bytes = 44177
+sha256 = "c1667eb94885bf58347542b63fc34467d74b1113650cd42e6753d2b1a46cfde3"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-950-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "1bcc5b676b663b714733526fcf70d637a5d9a79a66003c8711bccf030cae68d4"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadrust-950-dxf-ascii-ac1018"
+writer = "acadrust"
+page = 950
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadrust-950-dxf-ascii-ac1018.dxf.zst"
+bytes = 47557
+sha256 = "0f457c976c21477ca46e0f7b0c798d30882f626c140c3c6cc535286072377632"
+generated_by = "src/bin/author-acadrust.rs (tools/regenerate_codepage.py)"
+writer_version = "acadrust@49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+reference_jsonl = "authored/cp-acadrust-950-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "11fb5e231f45ef0c5cba6d77c753ba517113b558c2050758d3091859f952bf4b"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1250-dwg-ac1015"
+writer = "acadsharp"
+page = 1250
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1250-dwg-ac1015.dwg.zst"
+bytes = 28206
+sha256 = "91894ca5c0c35f497971303fecf9aa2d26a536bc0a58e7976bebe5067b3a8ccc"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1250-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "557c229273b2302aa9778b2d4b830865bf277ea3388a0a85574a0bfd17119aef"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1250-dwg-ac1018"
+writer = "acadsharp"
+page = 1250
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1250-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "486d0a50511c69101e3ba32b7743317c64929fb853fbb3092e68c084d1fd8f22"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1250-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "fa59dcff3707e13634d5961ec08238c696f655c91e4317da0c81d3db35198343"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1250-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1250
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1250-dxf-ascii-ac1015.dxf.zst"
+bytes = 21947
+sha256 = "f338d7875f1f25e934a9a64aa8a00973e141cc6c2afb6d50c6caf55f66049657"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1250-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "577c7c7c373385de0810eeac841427a2499c5244f2a8007a0e39a1fd143b0d57"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1250-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1250
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1250-dxf-ascii-ac1018.dxf.zst"
+bytes = 22207
+sha256 = "8fb1709346b9d63a47398071d4e02b5589bab4883ad39692328a84ea6510dea3"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1250-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "f2555bb90acd414e0c8165cfb45ce64a07e939000c2da29ae150222ec3d66536"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1251-dwg-ac1015"
+writer = "acadsharp"
+page = 1251
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1251-dwg-ac1015.dwg.zst"
+bytes = 28205
+sha256 = "9b1d62356cdc595c2338d26ee873a72d0b7ab3f98f0d3ca3d425e986b00fc8c4"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1251-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "ceadbdc11723661b3c5a3d54ab1c711909aaacffe18a7b6dae78e4d768c7b361"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1251-dwg-ac1018"
+writer = "acadsharp"
+page = 1251
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1251-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "d181844888b991a5d7e9447ae89207e44366431098b73e546692a0a25fae86be"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1251-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "4c52e993f649d8d1de23c673fbecb48f5d0fe77d824c2fa9c31d080bfcd511cb"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1251-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1251
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1251-dxf-ascii-ac1015.dxf.zst"
+bytes = 21946
+sha256 = "4e9107737ddab03a31cf81a56f0df2e78ee998e2e378b45b5a6b5b0443326b95"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1251-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "bed2141275f9801a395b851dd5b29e6c2033f000641b7a7cb1837a3db4a071f2"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1251-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1251
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1251-dxf-ascii-ac1018.dxf.zst"
+bytes = 22206
+sha256 = "14af1524f7291609b3e73cea49bbf99835ce2a5ef1953e03e30d6f2d14590036"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1251-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "276e0c33d2e48d2a6016c46960994ef269ddb37a318823f15d167fc764c3c95a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1252-dwg-ac1015"
+writer = "acadsharp"
+page = 1252
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1252-dwg-ac1015.dwg.zst"
+bytes = 28195
+sha256 = "7576d713134e6b0a52c3327a02a4bec465f0bee792b03c7f6f04ad5bcd510c45"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1252-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0f401d34b8c3c3932eb18916d74f69f41caec8faa82cc5d79fce65d8f286d6d9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1252-dwg-ac1018"
+writer = "acadsharp"
+page = 1252
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1252-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "cff8e1da43734552a4ad92110d1b55731ad1b1385082a3907d3b236f4e358097"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1252-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "80f6ae2de7c3f314558bb3708bb13625e85c42581985de5acd09b5ec361917eb"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1252-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1252
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1252-dxf-ascii-ac1015.dxf.zst"
+bytes = 21937
+sha256 = "b0108d890f1ca75462ed21e43fe8bb0f2bca2783008522f60d15d02521ad2dc1"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1252-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6502ea6abd32a5192134f0e50decbc36eb3e82c13ece38e72f7162b009ce5c82"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1252-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1252
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1252-dxf-ascii-ac1018.dxf.zst"
+bytes = 22197
+sha256 = "fd12de5b23962a04776550c1a0861af7cfb34446002a7c6ef7f86f639eb716a1"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1252-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "9858eee5ed9a63a85c813265f381244d8c83dde62e5bd8f63f982731f8175f21"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1253-dwg-ac1015"
+writer = "acadsharp"
+page = 1253
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1253-dwg-ac1015.dwg.zst"
+bytes = 28204
+sha256 = "bca466caf109e65abebf14f89774fe499e29d590adc696f892ad876862e9ede6"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1253-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "331473ec2a9dbcdb0f2a30ee1af5eba33784b425b107990c0dd91083da8c9e8f"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1253-dwg-ac1018"
+writer = "acadsharp"
+page = 1253
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1253-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "91235efd611defa8ec4ecdd9ddfb0022bca3f5ffd668873bc5274a27dbb7843f"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1253-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b6608750ca24d63c8a487b1300b6813344811b5dd6e5d5301da4285ea3728895"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1253-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1253
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1253-dxf-ascii-ac1015.dxf.zst"
+bytes = 21945
+sha256 = "49563d1706bf30c9a1a9c0f4151783bc001e944dee39e72661e0b215bca17995"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1253-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c7419084c9078b71b171f2afe100ff887d4aa895c99cf4c1fdc3d8d85e2c81c6"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1253-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1253
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1253-dxf-ascii-ac1018.dxf.zst"
+bytes = 22205
+sha256 = "1cf918fbc2af3480b8918533b6ba4e13e6b5a42eeda96aebbff52e276eeb1c35"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1253-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "7557a0b57f5300e33fe53e00030a85e11ffaf9cd1560587e31b1e460553f78a2"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1254-dwg-ac1015"
+writer = "acadsharp"
+page = 1254
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1254-dwg-ac1015.dwg.zst"
+bytes = 28193
+sha256 = "ef45aa835bb82cd9350a5fa4d62364f7d840005c3b6659ce0d7a99c592f42ecf"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1254-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "5d19ba0ff9d3e67ccf1d858d533d4a8e15b8b6977cf8adf0a456742720a6df87"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1254-dwg-ac1018"
+writer = "acadsharp"
+page = 1254
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1254-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "21f8e433ea4ab5f02e66e542cdac5ed097d2e8118ceb714f0883b88d4d0840f8"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1254-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c9f868b3deffeda9421b33111eddf18588f6a4aa66b7ec6e72fc1747d3177992"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1254-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1254
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1254-dxf-ascii-ac1015.dxf.zst"
+bytes = 21935
+sha256 = "121a491ed454332ed42aeb48907d3209bfa41c360a1e96ef5b8bab00bcd0884e"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1254-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "edd5222bfe04e20ead7403268eae8226197200c551ce81553cb8ad50b0349951"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1254-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1254
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1254-dxf-ascii-ac1018.dxf.zst"
+bytes = 22195
+sha256 = "499c4ca258778003b23761fe3188caac3ee1a60d70ea9b364f5e83e9cfb64783"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1254-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c59c77ef5c07affd00a20060e520a702ac3945e9847136eebb3e38202ba62844"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1255-dwg-ac1015"
+writer = "acadsharp"
+page = 1255
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1255-dwg-ac1015.dwg.zst"
+bytes = 28194
+sha256 = "8f60a43bc3a6bb147fde98cdf2e438d44eee841c7c614e14c4b688e7f1cc4dbb"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1255-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "abc94c03ea8cb4be9138d3cf03fbb8225c0e79fa8d487294b6e5e8990f255584"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1255-dwg-ac1018"
+writer = "acadsharp"
+page = 1255
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1255-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "cf6a85255927f03dc3e8bf3a80d11016744d11aa60b804ca0d2bd4152d5f1279"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1255-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "21f6da0d2fd63a498364a9dbab136a3aa47a7dd21a5af6c4c2c72d9e57c513d4"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1255-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1255
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1255-dxf-ascii-ac1015.dxf.zst"
+bytes = 21936
+sha256 = "c1578635cbeb28825cf350bdfafba32ae7ceed5e8de36e7144690b29ab9801b2"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1255-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "d639825647099a075a3c77520708df4783d9438fe44744805f392b9f5a472ae9"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1255-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1255
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1255-dxf-ascii-ac1018.dxf.zst"
+bytes = 22196
+sha256 = "f5eeee7c25b242ffee9738605dae18db3ca193643e4a1fcb96c6faf781c7eb51"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1255-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "58cb91b58734b11c50c44647edc6368d1168aad2ee37348a829e34fbe84e12d1"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1256-dwg-ac1015"
+writer = "acadsharp"
+page = 1256
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1256-dwg-ac1015.dwg.zst"
+bytes = 28194
+sha256 = "49d30a7e8530a3d99f761a8f4eb62f7c51e54fc25ee7930710e0cb100861550c"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1256-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "65edc578023fb9b9a2eb83a70a9dd34d617d0f9d17a7785f958c28a5a0f40b06"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1256-dwg-ac1018"
+writer = "acadsharp"
+page = 1256
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1256-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "7fd5e4021573bf8066ba3033da7166108e093a6e855b2779aeac0066f3c6defb"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1256-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0ea916b79a994e578b99176579abe1743b107e56356eae728df31a9bc0584869"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1256-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1256
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1256-dxf-ascii-ac1015.dxf.zst"
+bytes = 21936
+sha256 = "cf54f3c73418a39a38cf55329a9367312f95771a1ba0cc7eed2731b6e03e74c4"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1256-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3a25da11d2bb7ce0eb33aebcff432162f54f90a55867c3f84632edba99547a58"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1256-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1256
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1256-dxf-ascii-ac1018.dxf.zst"
+bytes = 22196
+sha256 = "255269f8ca7b8829fd9db0332cea37b1b56ddae436ea3692812a631e5ea33efb"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1256-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b22ed668824c666da82fd2a596a7c9f748df44b0dafe14b1afa9a9a26177de3a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1257-dwg-ac1015"
+writer = "acadsharp"
+page = 1257
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1257-dwg-ac1015.dwg.zst"
+bytes = 28194
+sha256 = "be4dbd57b251afedc86c19bee09f8c0087b212a561c98f334d81bc0fea57ed2f"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1257-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "40bf3b1f33194a41b1b44ec6d7b44291f73446064d8574802c105ca9701eff26"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1257-dwg-ac1018"
+writer = "acadsharp"
+page = 1257
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1257-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "c85f9e74bad211156cc0d9813180ed276b3c3f55fdd961d94fe44b0514193654"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1257-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "6ffbdbbf939435ece67cc3add98b4869e05d7860f4818b34cb68caaafbf7e578"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1257-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1257
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1257-dxf-ascii-ac1015.dxf.zst"
+bytes = 21936
+sha256 = "1ec1864d298cbf3e474da48fe0328706990a6d13c2348745a0b6711d05acb671"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1257-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "0a8b90d0f0d1347870ef1456aa607ad8c920440abec3527bbcbbf6f92a86b558"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1257-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1257
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1257-dxf-ascii-ac1018.dxf.zst"
+bytes = 22196
+sha256 = "d1e63022a0d5c264e9f00d631a613ccfd73559df05abf4de46a594547295d9b4"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1257-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c7bb7e84c0e39a4cc384cbb31d18986a96a93648b8107dbec158fc00dcf41b41"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1258-dwg-ac1015"
+writer = "acadsharp"
+page = 1258
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-1258-dwg-ac1015.dwg.zst"
+bytes = 28203
+sha256 = "c08c3a453576cb492e7b167350f327e2dd534015af1c8e2e3c106acb7fd5ce9f"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1258-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "296ba7e12255ca8100bc576f09c96591f42d45eb5ad1390f59e5d66f20535f28"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1258-dwg-ac1018"
+writer = "acadsharp"
+page = 1258
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-1258-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "a6ee9dcbef6643fedd80919aa7f3f02f42ff88e13558a421842e06b0f8b6f1c8"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1258-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "cc098ea1dc72bea72b8dcb73eba09be8991868d7e7c4a03dba1722bc6ce7ef16"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1258-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 1258
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-1258-dxf-ascii-ac1015.dxf.zst"
+bytes = 21944
+sha256 = "4f9a6ff25386958ac783b5335a27849c8a231fe5de1464f1f0b36a895ea8d2b7"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1258-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "8c41b8879e5db343856cf38cc9f0d3b2cb0765e8bbb6a6e220d4c1d8efcec34d"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-1258-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 1258
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-1258-dxf-ascii-ac1018.dxf.zst"
+bytes = 22204
+sha256 = "cc6b9d1e53c8afc37336d94abd4e77904a4e20e8ed34c7b6fae0fb00f31ef61e"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-1258-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "647eb5d757881c55d2affe93a972b0cb2f3e950be5b53e45c01f573da4168b28"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-874-dwg-ac1015"
+writer = "acadsharp"
+page = 874
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-874-dwg-ac1015.dwg.zst"
+bytes = 28195
+sha256 = "1f61081d663c4e1909cd3d542483e6c89eef9a1953d9d9929b8262c32f6ca4bf"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-874-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c2b335f67bb342fa438fe0009f4e8be955d34f83d397eadcb0d72391e9cdb832"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-874-dwg-ac1018"
+writer = "acadsharp"
+page = 874
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-874-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "9859a39c8a152c4888e3100bc62f81a02a19e479440828e6234f8eb196d9bd1a"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-874-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "288d33a4d16f1002958b2a4adc9949d97f1724d0af4e299989da4ac3e6a7fc21"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-874-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 874
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-874-dxf-ascii-ac1015.dxf.zst"
+bytes = 21936
+sha256 = "5efc49ba8adefeadf6fb298f7d15d407d552d03e3581ea0fedf6872e3b33d799"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-874-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "8277171c84ee742dd93d81ed073ad6e8963fdf915494a8a1f582e200f1cb9f33"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-874-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 874
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-874-dxf-ascii-ac1018.dxf.zst"
+bytes = 22196
+sha256 = "26e231a02f88a5c4ca1d4f36654d1c9a92de2c892649b437b2ae9042f7ec5754"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-874-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "39c7fd505b930f45cd203bb1dd9b91aa4dd115c7501cc8d889cc08a06444f8d3"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-932-dwg-ac1015"
+writer = "acadsharp"
+page = 932
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-932-dwg-ac1015.dwg.zst"
+bytes = 28255
+sha256 = "7a02f67b0dab942c5da8bf317f13e6df0751bcdd6b59ce22ea679e80ced0b38b"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-932-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "93eee511b7eb02e328d12ad950f25090498baf9cd89ee1a8c60221eb9fbb1797"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-932-dwg-ac1018"
+writer = "acadsharp"
+page = 932
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-932-dwg-ac1018.dwg.zst"
+bytes = 22411
+sha256 = "05b0030de07a0c60550c15a410756c8772dc11c8a86368b12abfd587ebe55966"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-932-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "691d1339a44f10bd1e677493b1f96e38c81f2090994af79f1bd8b88d6a737754"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-932-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 932
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-932-dxf-ascii-ac1015.dxf.zst"
+bytes = 22144
+sha256 = "063a8c23b31e4f402c337cbb1013a99d3868be21dbc5168cb9777a8a3bf22bc2"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-932-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c7a721038681812bacf98fea32d325ac4509f886cb3887bbe2ad04b7ce8e2a0b"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-932-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 932
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-932-dxf-ascii-ac1018.dxf.zst"
+bytes = 22404
+sha256 = "b21ba0180299667420eeb61ebd945f046ac2f924753c1aca2cdca069e6eec2d4"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-932-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "ddee4c3714a0df1395f0e69836a7daaeca2164e1f04022c25b3e0d09ea448477"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-936-dwg-ac1015"
+writer = "acadsharp"
+page = 936
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-936-dwg-ac1015.dwg.zst"
+bytes = 28251
+sha256 = "790f270576eaeb8d0e831ee4274992dfb622938821eb1edfbdd06441b9bfc472"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-936-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "aab896a0ed2dd9419a99b5580f3c12bdfafc4e4ef1a6dc66c297175c9eba43e5"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-936-dwg-ac1018"
+writer = "acadsharp"
+page = 936
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-936-dwg-ac1018.dwg.zst"
+bytes = 22379
+sha256 = "edea3a4d59c680f88fb4a8373e84c468191a326a1a3d1e8cd92c43addfce5a9b"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-936-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2cebe456f208433788a5fbd2004574ce1bf7ee77e1134d9fe8fcde072097ac6a"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-936-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 936
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-936-dxf-ascii-ac1015.dxf.zst"
+bytes = 22140
+sha256 = "0a199d3e3e08398d6df00875c64fb9fdb9dddfa7fa3af2a8b7f488630ce1145a"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-936-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c4563158b09ab315ceacfd58dd6b0d034e1b1d6abe8b951841e9329cad4fdc55"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-936-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 936
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-936-dxf-ascii-ac1018.dxf.zst"
+bytes = 22400
+sha256 = "d7d2dfe9b17d7d46ae07ad3070e29c2c0194efdbbe1e37c12ab1947e8b5913ab"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-936-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "c6d30705a077b5af21df6c018c5e501de6f88a3a838757e93cf3467bde9d59f4"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-949-dwg-ac1015"
+writer = "acadsharp"
+page = 949
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-949-dwg-ac1015.dwg.zst"
+bytes = 28254
+sha256 = "80ce4a58630b8ad4e45225d9a0e1c4da0cbe907f8ed8ec8b2505ac31d964f550"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-949-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "2d7445f3b001f5071fab3b10113fd45b54ef63a9d74c7bacdc7da97b6e658dbf"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-949-dwg-ac1018"
+writer = "acadsharp"
+page = 949
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-949-dwg-ac1018.dwg.zst"
+bytes = 22411
+sha256 = "5fe8e78cb5ceca6a2030ac549526bb65f62d20078a568d59fcbd100a01e85388"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-949-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "e310aedf563a6bc226e691403a0aae0e7be6671c468a8ff308f33ac2d8d52100"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-949-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 949
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-949-dxf-ascii-ac1015.dxf.zst"
+bytes = 22143
+sha256 = "6a043f130c2b144b92f60771c3fd77f10521d0ffeaf712bd49597c32dacd839e"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-949-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "8c1f9e2910ffbebcb74c2459db865e7b9a65531551f7856f27f783cb66d75722"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-949-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 949
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-949-dxf-ascii-ac1018.dxf.zst"
+bytes = 22403
+sha256 = "f5bc0d266310667ca24d8537c20b38af4334aab457d41272d259ffbb9f1b4077"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-949-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "3ae8f3f8390b5138ecb8d2480cc117e5a94b352e051a2a04f7fdb9699a53d4be"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-950-dwg-ac1015"
+writer = "acadsharp"
+page = 950
+container = "dwg"
+version = "AC1015"
+file = "authored/cp-acadsharp-950-dwg-ac1015.dwg.zst"
+bytes = 28251
+sha256 = "2b6affe568605660d3c2018f8dfcf038cd07d85089eee400e7a777687b36f40b"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-950-dwg-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "b13fec427a4d148a7c1f9859efe55284a7104541206bbd45c342dd0aa7f714d8"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-950-dwg-ac1018"
+writer = "acadsharp"
+page = 950
+container = "dwg"
+version = "AC1018"
+file = "authored/cp-acadsharp-950-dwg-ac1018.dwg.zst"
+bytes = 22411
+sha256 = "f9044490b95840d442600de83ce4e0a0add969359596d0144521880f80601b9b"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-950-dwg-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "bb70be6335bbed9a6b151d4a59f0db03d57a2aee4b992ef306a24e7cf95b3991"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-950-dxf-ascii-ac1015"
+writer = "acadsharp"
+page = 950
+container = "dxf-ascii"
+version = "AC1015"
+file = "authored/cp-acadsharp-950-dxf-ascii-ac1015.dxf.zst"
+bytes = 22140
+sha256 = "1f2da22443555300ec918eb7b8eaa1db36097757f331989715cf10c06faf5e5e"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-950-dxf-ascii-ac1015.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "74146e5e58e8f2ca420bf6e1d53d8aa6317c627b676c32c4e005e19f95d263a7"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+[[authored]]
+id = "cp-acadsharp-950-dxf-ascii-ac1018"
+writer = "acadsharp"
+page = 950
+container = "dxf-ascii"
+version = "AC1018"
+file = "authored/cp-acadsharp-950-dxf-ascii-ac1018.dxf.zst"
+bytes = 22400
+sha256 = "bc8d0fc7c9cd375bb617d84776a2243e6e83d1a4b8cc35e70a176f321776183f"
+generated_by = "reference/ACadSharp.Reference --author-to (tools/regenerate_codepage.py)"
+writer_version = "ACadSharp 3.7.1"
+reference_jsonl = "authored/cp-acadsharp-950-dxf-ascii-ac1018.reference.jsonl.zst"
+reference_jsonl_uncompressed_sha256 = "158d9e3bd7d9f96456be5747b9982246346134a88b0a03fe800fd482d3bc019e"
+acadsharp_reference_version = "3.7.1"
+acadsharp_reference_commit = "d7dc111023477d8a9fffc2153139459c95b4f345"
+dotnet_sdk = "10.0.401"
+reference_schema = 1
+
+# ---- end of the authored drawings ----

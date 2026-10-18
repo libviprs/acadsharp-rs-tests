@@ -104,3 +104,9 @@ required-features = ["acadrust"]
 name = "rewrite-acadrust"
 path = "src/bin/rewrite-acadrust.rs"
 required-features = ["acadrust"]
+
+# acadrust as the writer of the code page fixtures (R5.4).
+[[bin]]
+name = "author-acadrust"
+path = "src/bin/author-acadrust.rs"
+required-features = ["acadrust"]

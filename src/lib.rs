@@ -13,6 +13,7 @@ pub mod acadrust_emit;
 pub mod acadrust_model1;
 pub mod acadsharp_emit;
 pub mod canonical;
+pub mod codepage;
 pub mod census;
 pub mod compare;
 pub mod digest;

@@ -680,6 +680,86 @@ impl Written {
     }
 }
 
+/// A drawing authored for the code page lane (R5.4): a model space of TEXT entities
+/// in one code page, written by one library as one container at one version. Stored
+/// compressed, hashed uncompressed.
+#[derive(Debug, Clone, Deserialize)]
+pub struct AuthoredDrawing {
+    pub id: String,
+    pub writer: String,
+    pub page: u32,
+    pub container: String,
+    pub version: String,
+    #[serde(default)]
+    pub file: String,
+    #[serde(default)]
+    pub bytes: u64,
+    #[serde(default)]
+    pub sha256: String,
+    #[serde(default)]
+    pub write_failed: Option<String>,
+    pub generated_by: String,
+    pub writer_version: String,
+    #[serde(default)]
+    pub reference_jsonl: Option<String>,
+    #[serde(default)]
+    pub reference_jsonl_uncompressed_sha256: Option<String>,
+    #[serde(default)]
+    pub no_reference: Option<String>,
+    #[serde(default)]
+    pub acadsharp_reference_version: Option<String>,
+    #[serde(default)]
+    pub acadsharp_reference_commit: Option<String>,
+    #[serde(default)]
+    pub dotnet_sdk: Option<String>,
+    #[serde(default)]
+    pub reference_schema: Option<u64>,
+}
+
+impl AuthoredDrawing {
+    /// The drawing as the writer wrote it, verified against the manifest.
+    pub fn load(&self) -> Result<Vec<u8>, FixtureError> {
+        if let Some(why) = &self.write_failed {
+            return Err(FixtureError::NoReference {
+                id: self.id.clone(),
+                what: format!("a drawing (the writer failed: {why})"),
+            });
+        }
+        let data = read_packed(&self.id, &fixture_root().join(&self.file), &self.sha256)?;
+        if data.len() as u64 != self.bytes {
+            return Err(FixtureError::Corrupt {
+                id: self.id.clone(),
+                detail: format!("{} bytes, manifest says {}", data.len(), self.bytes),
+            });
+        }
+        Ok(data)
+    }
+
+    /// The oracle's frozen reading.
+    pub fn load_reference_jsonl(&self) -> Result<Vec<u8>, FixtureError> {
+        let (Some(relative), Some(want)) = (
+            &self.reference_jsonl,
+            &self.reference_jsonl_uncompressed_sha256,
+        ) else {
+            return Err(FixtureError::NoReference {
+                id: self.id.clone(),
+                what: "reference_jsonl".to_string(),
+            });
+        };
+        read_packed(&self.id, &fixture_root().join(relative), want)
+    }
+
+    /// Every file this row claims, relative to `fixtures/`.
+    pub fn files(&self) -> Vec<&str> {
+        let mut f = Vec::new();
+        if !self.file.is_empty() {
+            f.push(self.file.as_str());
+        }
+        f.extend(self.reference_jsonl.as_deref());
+        f
+    }
+}
+
 /// A file the oracle's inputs are adjudicated against: AutoCAD's own DXF twins.
 #[derive(Debug, Clone, Deserialize)]
 pub struct OracleInput {
@@ -900,10 +980,10 @@ impl GroundTruth {
         vec![&self.jsonl, &self.sidecar, &self.run]
     }
 
-    /// Whether this is ezdxf's reading of a round-trip output and not of one of
-    /// AutoCAD's own DXF.
+    /// Whether this is ezdxf's reading of a round-trip output or a code page
+    /// drawing and not of one of AutoCAD's own DXF.
     pub fn is_written(&self) -> bool {
-        self.input.starts_with("w-")
+        self.input.starts_with("w-") || self.input.starts_with("cp-")
     }
 }
 
@@ -920,6 +1000,8 @@ struct Manifest {
     oracle_inputs: Vec<OracleInput>,
     #[serde(default, rename = "written")]
     written: Vec<Written>,
+    #[serde(default, rename = "authored")]
+    authored: Vec<AuthoredDrawing>,
     #[serde(default, rename = "census")]
     censuses: Vec<Census>,
     #[serde(default, rename = "refusal")]
@@ -963,6 +1045,11 @@ pub fn recordings() -> &'static [Recording] {
 /// The DXF twins and other inputs the oracle's output is adjudicated against.
 pub fn oracle_inputs() -> &'static [OracleInput] {
     &manifest().oracle_inputs
+}
+
+/// The code page drawings (R5.4), in manifest order.
+pub fn authored() -> &'static [AuthoredDrawing] {
+    &manifest().authored
 }
 
 /// The round-trip outputs (R5.3), in manifest order.

@@ -187,11 +187,15 @@ class TestVerify(unittest.TestCase):
         manifest = tool.load_manifest()
         have = {r["input"] for r in manifest["ground_truth"]}
         # AutoCAD's DXF twins, and every DXF output of the round-trip matrix that
-        # was written (R5.3): ezdxf is asked to read each one, and says so either way.
+        # was written (R5.3) and every authored code page DXF (R5.4): ezdxf is asked to read each one, and says so either way.
         want = {r["id"] for r in manifest["oracle_input"]} | {
             w["id"]
             for w in manifest.get("written", [])
             if w["container"].startswith("dxf") and not w.get("write_failed")
+        } | {
+            a["id"]
+            for a in manifest.get("authored", [])
+            if a["container"].startswith("dxf")
         }
         self.assertEqual(have, want)
 

@@ -114,10 +114,15 @@ fn run_json_carries_the_version_the_requirements_hash_and_the_image_digest() {
         assert_eq!(run["input"], g.input.as_str());
         let input_sha = match fixtures::oracle_inputs().iter().find(|i| i.id == g.input) {
             Some(i) => i.sha256.as_str(),
-            None => fixtures::written_by_id(&g.input)
-                .unwrap_or_else(|| panic!("{}: no such DXF", g.input))
-                .sha256
-                .as_str(),
+            None => match fixtures::written_by_id(&g.input) {
+                Some(w) => w.sha256.as_str(),
+                None => fixtures::authored()
+                    .iter()
+                    .find(|a| a.id == g.input)
+                    .unwrap_or_else(|| panic!("{}: no such DXF", g.input))
+                    .sha256
+                    .as_str(),
+            },
         };
         assert_eq!(
             run["input_sha256"], input_sha,

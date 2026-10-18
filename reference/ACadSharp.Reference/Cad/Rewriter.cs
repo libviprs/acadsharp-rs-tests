@@ -107,6 +107,84 @@ public static class Rewriter
     }
 
     /// <summary>
+    /// Writes a drawing built from nothing: a model space holding the given texts, in
+    /// the given code page, at the given version (R5.4, acadsharp-rs-tests#30). This is
+    /// how the code page fixtures get made, so what is in the file is the authored
+    /// string and nothing a source drawing carried along.
+    /// </summary>
+    /// <param name="baseDrawing">The empty drawing the texts are added to.</param>
+    /// <param name="output">Where to write.</param>
+    /// <param name="container"><c>dwg</c>, <c>dxf</c> (ASCII) or <c>dxf-binary</c>.</param>
+    /// <param name="version">The target, for example <c>AC1015</c>.</param>
+    /// <param name="codePage">The header's code page string, for example <c>ANSI_1250</c>.</param>
+    /// <param name="texts">One TEXT entity per string, one line apart.</param>
+    /// <returns>Nothing on success, or why not.</returns>
+    public static ExportError? Author(
+        string baseDrawing,
+        string output, string container, string version, string codePage, IReadOnlyList<string> texts)
+    {
+        if (!Containers.Contains(container, StringComparer.Ordinal))
+        {
+            return new ExportError(
+                ExitCode.Usage,
+                $"--as wants one of {string.Join(", ", Containers)}, got {container}");
+        }
+
+        if (!Enum.TryParse(version, ignoreCase: false, out ACadVersion target)
+            || !version.StartsWith("AC10", StringComparison.Ordinal))
+        {
+            return new ExportError(ExitCode.Usage, $"--version wants a version such as AC1015, got {version}");
+        }
+
+        try
+        {
+            // Built on the empty drawing ACadSharp wrote and the suite vendors, and not
+            // on `new CadDocument()`: a document made from nothing carries clock-derived
+            // fields beyond the four dates and the GUID pair, and two writes of it
+            // differed in the AC1018 header. A read-and-rewrite of a file is deterministic.
+            CadDocument document = DwgReader.Read(baseDrawing);
+            document.Header.Version = target;
+            document.Header.CodePage = codePage;
+            document.Header.UniversalCreateDateTime = document.Header.CreateDateTime.ToUniversalTime();
+            document.Header.UniversalUpdateDateTime = document.Header.UpdateDateTime.ToUniversalTime();
+            PinGuid(document.Header, nameof(CadHeader.FingerPrintGuid));
+            PinGuid(document.Header, nameof(CadHeader.VersionGuid));
+            for (int i = 0; i < texts.Count; i++)
+            {
+                document.Entities.Add(new ACadSharp.Entities.TextEntity
+                {
+                    Value = texts[i],
+                    InsertPoint = new CSMath.XYZ(0.0, 10.0 * i, 0.0),
+                    Height = 2.5,
+                });
+            }
+
+            switch (container)
+            {
+                case "dwg":
+                    DwgWriter.Write(output, document);
+                    break;
+                case "dxf":
+                    DxfWriter.Write(output, document, false);
+                    break;
+                default:
+                    DxfWriter.Write(output, document, true);
+                    break;
+            }
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException and not StackOverflowException)
+        {
+            return new ExportError(
+                ExitCode.WriterFailure,
+                string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"{output}: ACadSharp could not author {container} {version}: {ex.GetType().Name}: {ex.Message}"));
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// <c>CadHeader</c> exposes both GUIDs read-only (the constructor draws a
     /// fresh one), so the only way to pin them is through the property's own
     /// setter. Failing to find it is a failure of the run, not something to skip:

@@ -812,13 +812,20 @@ def extract_document(doc, version: str):
     return records, sidecar
 
 
+def scrub(text: str) -> str:
+    """A string ezdxf could not decode can carry lone surrogates (undecodable bytes kept
+    as surrogate escapes), which UTF-8 cannot write. They become U+FFFD, the one
+    character the schema's UTF-8 can say "this byte was not text" with (R5.4)."""
+    return text.encode("utf-16", "surrogatepass").decode("utf-16", "replace")
+
+
 def emit_texts(records, sidecar):
-    jsonl = "".join(render(r) + "\n" for r in records)
+    jsonl = scrub("".join(render(r) + "\n" for r in records))
     src = "".join(
         render_sidecar_line(i, h, r["record"], d) + "\n"
         for i, (r, (h, d)) in enumerate(zip(records, sidecar))
     )
-    return jsonl, src
+    return jsonl, scrub(src)
 
 
 # ------------------------------------------------------------------- inputs ---
@@ -845,6 +852,11 @@ def inputs(manifest: dict) -> list[dict]:
         if w["container"].startswith("dxf") and not w.get("write_failed"):
             rows.append({"id": w["id"], "file": f"written/{w['id']}.dxf",
                          "sha256": w["sha256"], "written": w})
+    # The code page drawings (R5.4), stored: their DXF outputs, likewise.
+    for a in manifest.get("authored", []):
+        if a["container"].startswith("dxf") and not a.get("write_failed"):
+            rows.append({"id": a["id"], "file": f"authored/{a['id']}.dxf",
+                         "sha256": a["sha256"], "written": a})
     return rows
 
 

@@ -462,3 +462,31 @@ second and later layouts, and an MTEXT's attachment and later lines (it becomes 
 TEXT per paragraph). Those cells are `DIFF` by design and their reasons say so. The
 oracle reads two views from the file, `Model` and `Layout1`, which is what ACadSharp
 makes of AutoCAD's own `sample_AC1009` too.
+
+## The code page lane (R5.4)
+
+`fixtures/codepage_plan.toml` lists 14 code page families (1250 to 1258, 874, 932, 936, 949, 950).
+Each gets one drawing of four strings: text the page holds, one it cannot hold (the diameter
+sign in `∅45,6`), the literal `94\U+00B0` (or `THB \U+0E3F`), and for the CJK pages a MIF string.
+Both writers author it as DWG and ASCII DXF at AC1015 and AC1018, so 14 x 2 x 2 x 2 = 112
+drawings, held as `[[authored]]` rows made by `tools/regenerate_codepage.py` (ACadSharp's
+through the oracle with its header GUIDs and clock pinned, built on the vendored empty drawing
+because a new document was nondeterministic at AC1018; acadrust's through `author-acadrust`,
+written twice and compared). The DXF drawings have ezdxf ground truths.
+
+`tests/parity.rs` reads each drawing in every reader that opens its container (acadrust,
+acadsharp-rs and the oracle for DWG; acadrust, the oracle and ezdxf for DXF) and judges the
+authored text, kind by kind: `MATCH`, `DIFF:n` or `COUNT:a/b`. The 336 verdicts are in
+`parity/CODEPAGE_VERDICTS.toml`, each one that is not `MATCH` with a reason and an issue. The
+R12 twin's case is `parity/r12_codepage.toml` (see above).
+
+What the table says: acadrust reads its own DWG back whole, and writes what the page cannot
+hold as the `\U+XXXX` escape, which ACadSharp does not decode (libviprs/acadsharp-rs-tests#151,
+upstream). acadrust's ASCII DXF carries UTF-8 under a legacy page (#152, fork fix with acadrust#9
+and #12). ACadSharp's writer best-fits the unrepresentable character and mangles 949 and 1258
+(#153, upstream), and acadrust's DXF reader decodes ACadSharp's text with the wrong page (#154).
+Nothing in an upstream engine is patched here.
+
+**libviprs-dep#125 (AOT against JIT).** For all 56 DWG drawings the oracle (JIT ACadSharp)
+and acadsharp-rs (the AOT archive) give the same verdict and the same first difference, so
+the AOT path decodes code pages exactly as the JIT build does.
