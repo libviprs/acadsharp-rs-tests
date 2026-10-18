@@ -107,11 +107,13 @@ public static class CurveMapping
                 radius == 0.0);
         }
 
-        // [u v] = R(phi) * diag(s1, s2) * R(theta)^T, the closed-form two by
-        // two singular value decomposition. R(phi)'s columns are the principal
+        // [u v] = R(phi) * diag(s1, s2) * R(theta), the closed-form two by two
+        // singular value decomposition. R(phi)'s columns are the principal
         // directions, the singular values are the semi-axis lengths, and
-        // subtracting theta from the source parameter re-parametrises the curve
-        // onto them.
+        // adding theta to the source parameter re-parametrises the curve onto
+        // them: the point at t is R(phi) diag(s1, s2) (cos(t + theta), sin(t +
+        // theta)). This said R(theta)^T and subtracted theta until #171, which
+        // is right for no input but one whose theta is zero.
         double e = (ux + vy) / 2.0;
         double f = (ux - vy) / 2.0;
         double g = (uy + vx) / 2.0;
@@ -137,7 +139,7 @@ public static class CurveMapping
             return new MappedCurve(false, c, 0.0, major, 0.0, 0.0, normal, true);
         }
 
-        return new MappedCurve(false, c, sigma1, major, ratio, -theta, normal, false);
+        return new MappedCurve(false, c, sigma1, major, ratio, theta, normal, false);
     }
 
     /// <summary>Reduces an angle into <c>[0, 2*pi)</c>.</summary>
