@@ -94,6 +94,42 @@ pub fn rewrite(bytes: &[u8], container: &str, version: &str) -> Result<Vec<u8>, 
     }
 }
 
+/// Build a drawing of TEXT entities in `header_code_page` and write it as
+/// `container` at `version` with acadrust (R5.4). What is in the file is the
+/// authored strings and the code page, whatever acadrust's writer does with them.
+pub fn author(
+    texts: &[String],
+    header_code_page: &str,
+    container: &str,
+    version: &str,
+) -> Result<Vec<u8>, String> {
+    use acadrust::entities::{EntityType, Text};
+    use acadrust::io::dwg::DwgWriter;
+    use acadrust::io::dxf::DxfWriter;
+    use acadrust::types::DxfVersion;
+
+    let target =
+        DxfVersion::parse(version).ok_or_else(|| format!("{version:?} is not a version"))?;
+    let mut doc = CadDocument::new();
+    doc.version = target;
+    doc.header.code_page = header_code_page.to_string();
+    for (i, t) in texts.iter().enumerate() {
+        let at = Vector3::new(0.0, 10.0 * i as f64, 0.0);
+        doc.add_entity(EntityType::Text(Text::with_value(t.clone(), at).with_height(2.5)))
+            .map_err(|e| format!("add_entity: {e}"))?;
+    }
+    match container {
+        "dwg" => DwgWriter::write_to_vec(&doc).map_err(|e| format!("DwgWriter: {e}")),
+        "dxf-ascii" => DxfWriter::new(&doc)
+            .write_to_vec()
+            .map_err(|e| format!("DxfWriter: {e}")),
+        "dxf-binary" => DxfWriter::new_binary(&doc)
+            .write_to_vec()
+            .map_err(|e| format!("DxfWriter (binary): {e}")),
+        other => Err(format!("{other:?} is not a container")),
+    }
+}
+
 /// Emit an already-read document.
 pub fn extract(doc: &CadDocument) -> Emission {
     extract_as(doc, "dwg")

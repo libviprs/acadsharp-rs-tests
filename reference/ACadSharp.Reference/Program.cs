@@ -63,6 +63,22 @@ namespace ACadSharp.Reference
                 return (int)ExitCode.Ok;
             }
 
+            if (options.AuthorTo is { } authorTo)
+            {
+                ExportError? failure = Rewriter.Author(
+                    authorTo, options.RewriteAs!, options.RewriteVersion!, options.CodePage!, options.Texts);
+                if (failure is not null)
+                {
+                    error.WriteLine(failure.Message);
+                    return (int)failure.Code;
+                }
+
+                output.WriteLine(string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"{authorTo}: {options.RewriteAs} {options.RewriteVersion} {options.CodePage} {options.Texts.Count} texts"));
+                return (int)ExitCode.Ok;
+            }
+
             if (options.RewriteTo is { } rewriteTo)
             {
                 ExportError? failure = Rewriter.Rewrite(
@@ -342,7 +358,8 @@ namespace ACadSharp.Reference
                   --no-svg            With --all, skip the SVG artefacts.
                   --summary <path>    Write a JSON census of what was produced.
                   --rewrite-to <path> Read the input and write it again, instead of extracting it.
-                  --as <container>    With --rewrite-to: dwg, dxf (ASCII) or dxf-binary.
+                  --as <container>    With --rewrite-to or --author-to: dwg, dxf (ASCII) or dxf-binary.
+                  --author-to <path>  Write a drawing built from --text strings in --codepage, instead of reading one.
                   --version <ACxxxx>  With --rewrite-to: the version to write.
                   --max-depth <n>     Block nesting limit (default 16).
                   --svg-margin <f>    SVG margin as a fraction of the drawing size (default 0.02).
@@ -394,6 +411,15 @@ namespace ACadSharp.Reference
             /// <summary>Whether to echo reader diagnostics.</summary>
             public bool Verbose { get; init; }
 
+            /// <summary>Where <c>--author-to</c> writes a drawing built from the given texts.</summary>
+            public string? AuthorTo { get; init; }
+
+            /// <summary>The header code page of an authored drawing.</summary>
+            public string? CodePage { get; init; }
+
+            /// <summary>The texts of an authored drawing.</summary>
+            public IReadOnlyList<string> Texts { get; init; } = [];
+
             /// <summary>Where <c>--rewrite-to</c> writes, when it is a rewrite.</summary>
             public string? RewriteTo { get; init; }
 
@@ -419,6 +445,9 @@ namespace ACadSharp.Reference
                 string? summary = null;
                 string? model1Path = null;
                 bool model1All = false;
+                string? authorTo = null;
+                string? codePage = null;
+                var texts = new List<string>();
                 string? rewriteTo = null;
                 string? rewriteAs = null;
                 string? rewriteVersion = null;
@@ -506,6 +535,36 @@ namespace ACadSharp.Reference
                             }
 
                             break;
+
+                        case "--author-to":
+                            authorTo = Next(arg);
+                            if (authorTo is null)
+                            {
+                                return Missing(arg);
+                            }
+
+                            break;
+
+                        case "--codepage":
+                            codePage = Next(arg);
+                            if (codePage is null)
+                            {
+                                return Missing(arg);
+                            }
+
+                            break;
+
+                        case "--text":
+                        {
+                            string? value = Next(arg);
+                            if (value is null)
+                            {
+                                return Missing(arg);
+                            }
+
+                            texts.Add(value);
+                            break;
+                        }
 
                         case "--rewrite-to":
                             rewriteTo = Next(arg);
@@ -605,6 +664,26 @@ namespace ACadSharp.Reference
                 if (args.Length == 0)
                 {
                     return Result.Ok<Options>(new Options { ShowHelp = true });
+                }
+
+                if (authorTo is not null)
+                {
+                    if (codePage is null || rewriteAs is null || rewriteVersion is null || texts.Count == 0
+                        || rewriteTo is not null || input is not null || manifest is not null)
+                    {
+                        return Result.Fail<Options>(
+                            ExitCode.Usage,
+                            "--author-to takes --as, --version, --codepage and at least one --text, and no input");
+                    }
+
+                    return Result.Ok<Options>(new Options
+                    {
+                        AuthorTo = authorTo,
+                        RewriteAs = rewriteAs,
+                        RewriteVersion = rewriteVersion,
+                        CodePage = codePage,
+                        Texts = texts,
+                    });
                 }
 
                 if (rewriteTo is not null)

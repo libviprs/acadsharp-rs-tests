@@ -1,0 +1,117 @@
+# The code page fixtures (R5.4, acadsharp-rs-tests#30): one drawing per code page
+# family, written at AC1015 and AC1018 by both writers, as a DWG and as a pre-2007
+# ASCII DXF (which carries the same bytes and $DWGCODEPAGE).
+#
+# Read by tools/regenerate_codepage.py (which makes the files), src/codepage.rs and
+# tests/codepage.rs. A drawing is a model space of TEXT entities, in this order, and
+# the authored strings are what every reader is compared against, not another reader:
+#
+#   held      characters the page holds
+#   unheld    a character it does not (the writer has to escape it, or lose it)
+#   literal   a literal \U+XXXX escape of a character the page *does* hold: AutoCAD's
+#             own partition (escape what the page cannot hold, leave the rest literal;
+#             handles 634 and 63E of the sample drawing) says it comes back as written
+#   mif       a \M+nXXXX escape (n = 1 Shift-JIS, 2 Big5, 3 KS C 5601, 5 GB 2312), for
+#             the CJK families
+#
+# DOS and ISO pages stay out: acadrust maps most of them to stand-ins
+# (src/io/dxf/code_page.rs), so a DOS row would be a known divergence from day one and
+# belongs with acadrust#9.
+
+versions = ["AC1015", "AC1018"]
+writers = ["acadsharp", "acadrust"]
+containers = ["dwg", "dxf-ascii"]
+
+[[family]]
+page = 1250
+header = "ANSI_1250"
+held = "ĄĆĘŁŃÓŚŹŻ ąćęłńóśźż"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1251
+header = "ANSI_1251"
+held = "АБВГДЕЖЗ абвгдеёжз"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1252
+header = "ANSI_1252"
+held = "ÄÖÜß éèêë"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1253
+header = "ANSI_1253"
+held = "ΑΒΓΔΕΖΗΘ αβγδεζηθ"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1254
+header = "ANSI_1254"
+held = "ĞİŞ ğış"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1255
+header = "ANSI_1255"
+held = "אבגדהוזח"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1256
+header = "ANSI_1256"
+held = "ابتثجحخد"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1257
+header = "ANSI_1257"
+held = "ĀČĒĢĪĶĻŅ"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 1258
+header = "ANSI_1258"
+held = "ĂÂÊÔƠƯĐ"
+literal = "94\\U+00B0"
+
+[[family]]
+page = 874
+header = "ANSI_874"
+held = "กขคงจฉช"
+# Windows-874 holds the baht sign, not the degree sign.
+literal = "THB \\U+0E3F"
+
+[[family]]
+page = 932
+header = "ANSI_932"
+held = "日本語テスト"
+literal = "94\\U+00B0"
+mif = "\\M+193FA"
+
+[[family]]
+page = 936
+header = "ANSI_936"
+held = "中文测试"
+literal = "94\\U+00B0"
+mif = "\\M+5D6D0"
+
+[[family]]
+page = 949
+header = "ANSI_949"
+held = "한국어"
+literal = "94\\U+00B0"
+mif = "\\M+3C7D1"
+
+[[family]]
+page = 950
+header = "ANSI_950"
+held = "中文測試"
+literal = "94\\U+00B0"
+mif = "\\M+2A4A4"
+
+# The same string in every family: a diameter sign followed by 45,6, which no
+# Windows page holds (the sample drawing's own callout).
+[unheld]
+text = "∅45,6"
