@@ -48,7 +48,7 @@ CLAUSES = {
     "rust_moji": ("non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake", [DEP + "111"]),
     "rust_rot": ("four MTEXTs read back with a rotation the source reading does not have", issue("113")),
     "rust_ocs": ("a lightweight polyline in an OCS plane reads back with another normal and elevation", issue("160")),
-    "rust_table": ("the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF", issue("147")),
+    "rust_table": ("the oracle's DXF reading of the ACAD_TABLE at handle 528 has other line ends, text positions and widths than every other reading, as it does on AutoCAD's own DXF twin of this save", issue("94")),
     "overflow": ("ezdxf refuses the DXF ACadSharp writes for a mesh with faces that point nowhere", issue("148")),
     "codepage": ("the code page text of g11_codepage reads back as replacement characters", issue("30")),
     "other": ("a difference no rule has attributed yet", issue("41")),
