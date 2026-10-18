@@ -20,8 +20,8 @@ use std::process::Command;
 
 use acadrust::document::CadDocument;
 use acadrust::entities::{
-    Arc as ArcEntity, AttributeDefinition, AttributeEntity, Circle, EntityType, Face3D, Insert,
-    Line, LwPolyline, MText, Solid, Text, Viewport,
+    Arc as ArcEntity, AttributeDefinition, AttributeEntity, Circle, Ellipse as EllipseEntity,
+    EntityType, Face3D, Insert, Line, LwPolyline, MText, Solid, Text, Viewport,
 };
 use acadrust::tables::BlockRecord;
 use acadrust::types::{DxfVersion, Handle, Vector2, Vector3};
@@ -678,6 +678,59 @@ fn a_circle_in_a_non_uniformly_scaled_block_is_an_ellipse_not_a_lie() {
     assert!((el.ratio - 1.0 / 3.0).abs() < 1e-12, "{}", el.ratio);
 }
 
+/// Issue #89. An elliptical arc's start and end are parameters measured from the
+/// major axis, so turning the major axis does not move them. `parity_ellipse`'s
+/// arc has its major axis along +Y and the generator wrote 0.5 and 2.5.
+#[test]
+fn an_elliptical_arc_keeps_its_parameters_whichever_way_the_major_axis_points() {
+    let mut d = doc();
+    let mut el = EllipseEntity::new();
+    el.major_axis = v(0.0, 3.0, 0.0);
+    el.minor_axis_ratio = 0.5;
+    el.start_parameter = 0.5;
+    el.end_parameter = 2.5;
+    put(&mut d, None, EntityType::Ellipse(el));
+    let e = extract(&d);
+    let Record::Ellipse(got) = e
+        .records
+        .iter()
+        .find(|r| matches!(r, Record::Ellipse(_)))
+        .unwrap()
+    else {
+        panic!()
+    };
+    assert_eq!(got.major, [0.0, 3.0, 0.0]);
+    assert_eq!((got.start, got.end), (0.5, 2.5));
+}
+
+/// The same arc inside a block that is inserted turned a quarter turn: the major
+/// axis comes out along +Y and the parameters are still 0.5 and 2.5.
+#[test]
+fn an_elliptical_arc_in_a_rotated_insert_keeps_its_parameters() {
+    let mut d = doc();
+    let b = block(&mut d, "ARC");
+    let mut el = EllipseEntity::new();
+    el.major_axis = v(3.0, 0.0, 0.0);
+    el.minor_axis_ratio = 0.5;
+    el.start_parameter = 0.5;
+    el.end_parameter = 2.5;
+    put(&mut d, Some(b), EntityType::Ellipse(el));
+    let insert = Insert::new("ARC", v(0.0, 0.0, 0.0)).with_rotation(std::f64::consts::FRAC_PI_2);
+    put(&mut d, None, EntityType::Insert(insert));
+    let e = extract(&d);
+    let Record::Ellipse(got) = e
+        .records
+        .iter()
+        .find(|r| matches!(r, Record::Ellipse(_)))
+        .unwrap()
+    else {
+        panic!()
+    };
+    assert!(got.major[0].abs() < 1e-12 && (got.major[1] - 3.0).abs() < 1e-12, "{:?}", got.major);
+    assert!((got.start - 0.5).abs() < 1e-12, "start {}", got.start);
+    assert!((got.end - 2.5).abs() < 1e-12, "end {}", got.end);
+}
+
 #[test]
 fn an_arc_keeps_its_stored_digits_when_nothing_transforms_it() {
     let mut d = doc();
@@ -723,6 +776,35 @@ fn views_are_ordered_by_tab_order_then_name_and_named_as_the_drawing_names_them(
     );
     assert_eq!(views.len(), 4);
     assert!(views[1..].iter().all(|v| v.2 == "layout"));
+}
+
+/// Issue #90. `parity_viewport` adds two layouts by name (`Plan A`, `Plan B`), so
+/// their block records are called after the layouts and not `*Paper_Space<n>`.
+/// The kind comes from the layout's own name, as the oracle's does: every
+/// layout but Model is a layout.
+#[test]
+fn a_layout_added_by_name_is_a_layout_whatever_its_block_record_is_called() {
+    let kinds = |records: &[Record]| -> Vec<(String, String)> {
+        records
+            .iter()
+            .filter_map(|r| match r {
+                Record::View(v) => Some((v.name.clone(), v.kind.clone())),
+                _ => None,
+            })
+            .collect()
+    };
+    let ours = kinds(&emit_fixture("parity_viewport").records);
+    assert_eq!(
+        ours,
+        kinds(&frozen("parity_viewport")),
+        "acadrust and the oracle must name the same kind for every view"
+    );
+    for name in ["Plan A", "Plan B"] {
+        assert!(
+            ours.contains(&(name.to_string(), "layout".to_string())),
+            "{name} is not a layout in {ours:?}"
+        );
+    }
 }
 
 #[test]
