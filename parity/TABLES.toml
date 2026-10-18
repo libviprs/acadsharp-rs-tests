@@ -358,13 +358,6 @@ field = "maintenance_version"
 reason = "a DXF header does not carry the DWG maintenance version."
 issue = "libviprs/acadsharp-rs-tests#27"
 
-[[exclude]]
-pairs = ["dxf:oracle/acadrust", "dxf:ezdxf/acadrust"]
-record = "document"
-field = "maintenance_version"
-reason = "a DXF header carries $ACADMAINTVER, which the oracle and ezdxf report (329 for the AC1032 saves) and acadrust's DXF reader leaves at 0."
-issue = "libviprs/acadsharp-rs-tests#96"
-
 # The listed divergences of the DXF lane. Each one is a record both sides read and
 # disagree about by exactly the values written here; generated from a run, and
 # the comparator is red on any of them that stops diverging or diverges differently.
@@ -1957,3 +1950,68 @@ b = "this is a really long Mtext^Jbla bla bla bla bla bla bla bla bla bla bla bl
 reason = "ACadSharp 3.7.1 escapes every string it writes the way an ASCII DXF does (DxfStreamWriterBase.Write turns a line feed into ^J, a carriage return into ^M, a tab into ^I and a caret into a caret and a space), including into a binary DXF, where strings are NUL-terminated and carry control characters as they are. Its own reader undoes the escape in both containers, so the oracle reads the line feed back; acadrust follows the binary format and returns the caret form literally. AutoCAD's own binary DXF carries the MTEXT paragraph break as the escape \\P, not ^J."
 issue = "libviprs/acadsharp-rs-tests#109"
 
+[[known]]
+pair = "dxf-dwg:acadrust"
+fixture = "dxf-sample-ac1018-ascii"
+record_type = "text"
+field = "text"
+handles = ["522", "64B"]
+a = "\\U+220545,6"
+b = "∅45,6"
+reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that, and the ASCII and binary files agree). acadrust's DXF reader keeps what the file stores; its DWG reader decodes the escape to the character, so one reader gives two answers for one drawing."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "dxf-dwg:acadrust"
+fixture = "dxf-sample-ac1018-binary"
+record_type = "text"
+field = "text"
+handles = ["522", "64B"]
+a = "\\U+220545,6"
+b = "∅45,6"
+reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that, and the ASCII and binary files agree). acadrust's DXF reader keeps what the file stores; its DWG reader decodes the escape to the character, so one reader gives two answers for one drawing."
+issue = "libviprs/libviprs-dep#111"
+
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1018-binary"
+record_type = "text"
+field = "text"
+handles = ["3EC"]
+a = "this is a Mtext\\Pwith multiple lines in it"
+b = "this is a Mtext\nwith multiple lines in it"
+reason = "AutoCAD's binary DXF stores the MTEXT paragraph break as the escape \\P. ezdxf keeps it as stored; acadrust returns a line feed, as it does for the ASCII twin and the DWG, so they disagree on the binary file only."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1018-binary"
+record_type = "text"
+field = "text"
+handles = ["3F5"]
+a = "this is a Mtext\\Pwith multiple lines in it"
+b = "this is a Mtext\nwith multiple lines in it"
+reason = "AutoCAD's binary DXF stores the MTEXT paragraph break as the escape \\P. ezdxf keeps it as stored; acadrust returns a line feed, as it does for the ASCII twin and the DWG, so they disagree on the binary file only."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1018-binary"
+record_type = "text"
+field = "text"
+handles = ["3F6"]
+a = "this is a Mtext\\Pwith multiple lines in it"
+b = "this is a Mtext\nwith multiple lines in it"
+reason = "AutoCAD's binary DXF stores the MTEXT paragraph break as the escape \\P. ezdxf keeps it as stored; acadrust returns a line feed, as it does for the ASCII twin and the DWG, so they disagree on the binary file only."
+issue = "libviprs/acadsharp-rs-tests#24"
+
+[[known]]
+pair = "dxf:ezdxf/acadrust"
+fixture = "dxf-sample-ac1018-binary"
+record_type = "text"
+field = "text"
+handles = ["779"]
+a = "this is a really long Mtext\\Pbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+b = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+reason = "AutoCAD's binary DXF stores the MTEXT paragraph break as the escape \\P. ezdxf keeps it as stored; acadrust returns a line feed, as it does for the ASCII twin and the DWG, so they disagree on the binary file only."
+issue = "libviprs/acadsharp-rs-tests#24"
