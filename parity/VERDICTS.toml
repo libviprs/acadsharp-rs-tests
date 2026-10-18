@@ -3273,9 +3273,9 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:174"
-reason = "missing from the output: 75 lines, 53 texts, 17 polylines, 12 circles, 9 points, 5 polygons, 2 views; fields that differ: text.text (1)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:3"
+reason = '''missing from the output: 2 views; fields that differ: text.text (1). R13 and R14 have no LAYOUT objects (they came with R2000), so the file holds no layouts and the oracle reads the model space and one paper space, where the source has four views; the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it'''
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/libviprs-dep#111"
 first = "w-acadrust-ac1032-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
 [[row]]
@@ -3292,23 +3292,22 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dwg-ac1014"
 pair = "w-acadrust:acadsharp"
 verdict = "DIFF:206"
-reason = "missing from the output: 88 lines, 69 texts, 24 polylines, 15 circles, 4 views, 3 arcs, 2 splines, 1 ellipses"
+reason = "missing from the output: 88 lines, 69 texts, 24 polylines, 15 circles, 4 views, 3 arcs, 2 splines, 1 ellipses; R13 and R14 have no LAYOUT objects (they came with R2000) and the acadsharp-rs emitter builds its views from the layouts, so it reads no view and nothing under it"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1032-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 view is in A and not in B [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "OPEN_FAILED"
-reason = "the oracle's reading is not schema 1: line 26, field `entity_type`: carriage return; the format is LF only, in text as well"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:3"
+reason = '''missing from the output: 2 views; fields that differ: text.text (1). R13 and R14 have no LAYOUT objects (they came with R2000), so the file holds no layouts and the oracle reads the model space and one paper space, where the source has four views; the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it'''
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/libviprs-dep#111"
+first = "w-acadrust-ac1032-dwg-ac1014 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1014"
 pair = "w-acadrust:version"
-verdict = "OPEN_FAILED"
-reason = "the oracle cannot read it, so nothing independent says its version"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1015"
@@ -3318,17 +3317,17 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:142"
-reason = "missing from the output: 61 lines, 53 texts, 14 polylines, 12 circles; extra in the output: 1 polylines; fields that differ: text.text (1)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:13"
+reason = '''extra in the output: 9 texts, 2 lines, 1 polylines; fields that differ: text.text (1). the shim emits an ATTDEF inside a block where schema 1 skips it, and an insert's ATTRIBs come before the block body on the wire (12 findings, the same ones the shim has on AutoCAD's own twins); the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it'''
+issue = "libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#111"
 first = "w-acadrust-ac1032-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:172"
-reason = "missing from the output: 75 lines, 53 texts, 17 polylines, 12 circles, 9 points, 5 polygons; fields that differ: text.text (1)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:1"
+reason = '''fields that differ: text.text (1). the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it'''
+issue = "libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1032-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
@@ -3344,24 +3343,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:38"
-reason = "missing from the output: 12 texts, 11 lines, 3 circles; extra in the output: 9 texts, 1 polylines, 1 lines; fields that differ: text.text (1)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:13"
+reason = '''extra in the output: 9 texts, 2 lines, 1 polylines; fields that differ: text.text (1). the shim emits an ATTDEF inside a block where schema 1 skips it, and an insert's ATTRIBs come before the block body on the wire (12 findings, the same ones the shim has on AutoCAD's own twins); the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it'''
+issue = "libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#111"
 first = "w-acadrust-ac1032-dwg-ac1018 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "OPEN_FAILED"
-reason = "the oracle's reading is not schema 1: line 276, field `entity_type`: carriage return; the format is LF only, in text as well"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:1"
+reason = '''fields that differ: text.text (1). the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it'''
+issue = "libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dwg-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1018"
 pair = "w-acadrust:version"
-verdict = "OPEN_FAILED"
-reason = "the oracle cannot read it, so nothing independent says its version"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1021"

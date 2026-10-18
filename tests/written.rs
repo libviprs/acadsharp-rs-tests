@@ -23,12 +23,12 @@ const ACADRUST_OUTPUTS: usize = 8 + 9 * 2;
 /// Each DWG output is read by the oracle, acadrust and acadsharp-rs; each DXF
 /// output by the oracle, acadrust and ezdxf.
 const READERS_PER_OUTPUT: usize = 3;
-/// The two outputs whose frozen oracle reading is not schema 1 (acadrust's AC1014
-/// and AC1018 DWGs: ACadSharp's reader emits a warning with garbage in it).
-const DAMAGED_READINGS: [&str; 2] = [
-    "w-acadrust-ac1032-dwg-ac1014",
-    "w-acadrust-ac1032-dwg-ac1018",
-];
+/// Outputs whose frozen oracle reading is not schema 1 (ACadSharp's reader emits a
+/// warning with garbage in it). acadrust's AC1014 and AC1018 DWGs were two, until
+/// the objects of classes the older saves do not register stopped being written as
+/// type 500 (libviprs/acadsharp-rs-tests#112); the list stays so that a new one is
+/// looked at.
+const DAMAGED_READINGS: [&str; 0] = [];
 /// DWG outputs: 6 from ACadSharp and 8 from acadrust.
 const DWG_OUTPUTS: usize = 6 + 8;
 

@@ -23,10 +23,8 @@
 # To bump it: put a libviprs/acadrust `main` commit here, run the suite with the
 # `acadrust` feature against a sibling checkout at that commit, and say below
 # what moved.
-49786e64ad9dcac02f2d14a1d1d3e639ca13880c
-# libviprs/acadrust main @ 2026-10-17, after the header variables the DWG reader read
-# and dropped became fields of HeaderVariables (libviprs/acadrust#36), on top of the
-# datatable, R12 writer and old-DWG class fixes that merged since the last pin. The
-# acadrust exclusions of parity/MODEL1.toml that closes went with this bump. It
-# includes PR #33 (an unsupported DATATABLE cell type costs the object and not the
-# DXF, acadsharp-rs-tests#95, and $ACADMAINTVER read into acad_maintenance_version).
+f53d2c5b768d4145ec240d300875386b3006266d
+# libviprs/acadrust main @ 2026-10-17, after the legacy TABLE cells below R2007 were
+# written the way ACadSharp reads them (the first table that failed ended the model
+# space chain), and the associative objects of a class the older save does not
+# register were left out like the other class objects (libviprs/acadrust#37).
