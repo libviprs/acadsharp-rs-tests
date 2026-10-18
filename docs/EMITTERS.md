@@ -75,20 +75,16 @@ difference with no row is unexplained.
 | acadsharp-ac1018 | text.text | 1 | The same text, the same escape. |
 | acadsharp-ac1032 | text.text | 1 | An `ATTRIB` whose value lives in an embedded MTEXT. The oracle emits an empty string; acadrust emits the MTEXT's value, `my multi line text for the attrrib`, which is what AutoCAD's own DXF twin holds. |
 | acadsharp-sample-base | text.text | 1 | The same attribute. |
-| acadsharp-export-sample | polyline.points | 11 | Eleven lightweight polylines in view 7 whose points the oracle puts at z 1.0 and acadrust at z 0.0. Not adjudicated: acadrust reports an elevation of 0 for them, and no DXF twin exists for this drawing to say which is right. R3.4's ground truth is where this gets settled. |
 | acadsharp-export-sample | spline.periodic | 1 | A closed spline defined by fit points: the oracle says `periodic`, acadrust's flags say closed and not periodic. Not adjudicated, for the same reason. |
-| acadsharp-export-sample | spline.weights | 1 | A non-rational spline with nine control points. The oracle emits nine weights of 0.0; the schema says `weights` is empty for a non-rational curve, which is what acadrust emits. A zero weight is meaningless, so this is the oracle's artefact. |
-| g13_hatch | spline.weights | 1 | The same, on a hatch boundary spline: four weights of 0.0 from the oracle, none from acadrust. |
 | regression_text_zero_height | text. | 2 | A TEXT and an MTEXT of height 0. ACadSharp's writer writes the zero and its reader throws reading it back, so the oracle drops both and says so with two `reader_error` warnings; acadrust reads both and emits `text` records of height 0.0. The oracle is the one that cannot hold them, which is what the fixture pins (`tests/regression_claims.rs`). |
-| parity_viewport | view.kind | 2 | The two layouts the generator adds by name (`Plan A`, `Plan B`). The oracle says `layout`; acadrust says `unknown` for both and `layout` for the default `Layout1`. Tracked in #90; the cause is not investigated: the geometry in each view agrees. |
 
 Two things that are not differences but are limits, because no drawing in the
 corpus exercises them:
 
 - a hatch boundary polyline edge is emitted with its vertices at the hatch's
   elevation and the bulge taken from the vertex's third coordinate (acadrust
-  stores `(x, y, bulge)`); the oracle passes that third coordinate through as a
-  point coordinate, which looks like a defect and has no fixture to show it;
+  stores `(x, y, bulge)`, and so does ACadSharp, which is what the oracle reads now:
+  it used to pass the bulge through as a point coordinate, #56);
 - a hatch boundary spline carries its weights only when it is rational, taken from
   the control points' third coordinate, which is where acadrust's own DWG writer
   puts them.

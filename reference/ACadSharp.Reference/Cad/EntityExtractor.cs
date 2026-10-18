@@ -318,16 +318,16 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
         // ELLIPSE's parameter must not have, which is the whole of #89. Off a
         // similarity the offset is the right rotation of the decomposition, and
         // that one does re-parametrise the curve.
-        double offset = transform.IsSimilarity ? 0.0 : mapped.AngleOffset;
+        double parameterShift = transform.IsSimilarity ? 0.0 : mapped.AngleOffset;
         (double start, double end) = CurveMapping.Sweep(
-            ellipse.StartParameter, ellipse.EndParameter, offset);
+            ellipse.StartParameter, ellipse.EndParameter, parameterShift);
 
         // A full ellipse is stored as 0 to 2*pi, and Sweep would fold that to a
         // zero-length arc. Nothing else can produce an exactly empty sweep.
         if (ellipse.StartParameter == ellipse.EndParameter
             || Math.Abs(ellipse.EndParameter - ellipse.StartParameter) >= CurveMapping.TwoPi)
         {
-            start = CurveMapping.Normalize(ellipse.StartParameter + offset);
+            start = CurveMapping.Normalize(ellipse.StartParameter + parameterShift);
             end = start + CurveMapping.TwoPi;
         }
 
@@ -701,10 +701,11 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
                     return;
                 }
 
-                // A hatch edge keeps each weight in its control point's Z, and a
-                // non-rational edge leaves it zero. Schema 1 says `weights` is
-                // empty for a non-rational curve (#67).
-                List<double> weights = spline.IsRational ? [.. spline.Weights] : [];
+                // A hatch edge keeps each weight in its control point's Z, and an edge
+                // that is not rational leaves every one of them zero (a weight of
+                // zero means nothing). Schema 1 says `weights` is empty for a
+                // non-rational curve (#67).
+                List<double> edgeWeights = spline.Weights.Any(w => w != 0.0) ? [.. spline.Weights] : [];
 
                 sink.Add(new SplineRecord(
                     view,
@@ -713,7 +714,7 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
                     spline.IsPeriodic,
                     control,
                     [.. spline.Knots],
-                    weights,
+                    edgeWeights,
                     [.. spline.FitPoints.Select(p => toWorld.Apply(new Point3(p.X, p.Y, elevation)))]));
                 return;
             }
