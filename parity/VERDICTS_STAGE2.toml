@@ -33,8 +33,8 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:173"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (173 findings)"
+verdict = "DIFF:2"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (2 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1014-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -51,18 +51,18 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1014"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:141"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (141 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:13"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (12 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1014-dwg-ac1014 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:171"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (171 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
-first = "w-acadrust-ac1014-dwg-ac1014 acadrust-oracle: view 0 a#126 A handles 528/571 polygon is in A and not in B [EXACT]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+first = 'w-acadrust-ac1014-dwg-ac1014 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1014"
@@ -77,18 +77,18 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:141"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (141 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:13"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (12 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1014-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:171"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (171 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
-first = "w-acadrust-ac1014-dwg-ac1015 acadrust-oracle: view 0 a#126 A handles 528/571 polygon is in A and not in B [EXACT]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+first = 'w-acadrust-ac1014-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1015"
@@ -270,9 +270,9 @@ first = 'w-acadrust-ac1014-dxf-ascii-ac1012 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-ascii-ac1012 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -296,9 +296,9 @@ first = 'w-acadrust-ac1014-dxf-ascii-ac1014 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-ascii-ac1014 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -322,9 +322,9 @@ first = 'w-acadrust-ac1014-dxf-ascii-ac1015 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-ascii-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -348,9 +348,9 @@ first = 'w-acadrust-ac1014-dxf-ascii-ac1018 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-ascii-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -371,7 +371,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-ascii-ac1021 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1021"
@@ -391,7 +394,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-ascii-ac1024 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1024"
@@ -411,7 +417,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-ascii-ac1027 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1027"
@@ -431,7 +440,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-ascii-ac1032 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-ascii-ac1032"
@@ -483,9 +495,9 @@ first = 'w-acadrust-ac1014-dxf-binary-ac1012 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-binary-ac1012 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -509,9 +521,9 @@ first = 'w-acadrust-ac1014-dxf-binary-ac1014 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-binary-ac1014 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -535,9 +547,9 @@ first = 'w-acadrust-ac1014-dxf-binary-ac1015 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-binary-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -561,9 +573,9 @@ first = 'w-acadrust-ac1014-dxf-binary-ac1018 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1014-dxf-binary-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -584,7 +596,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-binary-ac1021 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1021"
@@ -604,7 +619,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-binary-ac1024 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1024"
@@ -624,7 +642,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-binary-ac1027 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1027"
@@ -644,7 +665,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1014-dxf-binary-ac1032 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1014-dxf-binary-ac1032"
@@ -666,8 +690,8 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-ac1015-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:173"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (173 findings)"
+verdict = "DIFF:2"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (2 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1015-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -692,8 +716,8 @@ first = "w-acadrust-ac1015-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 view i
 [[row]]
 fixture = "w-acadrust-ac1015-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:173"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (173 findings)"
+verdict = "DIFF:2"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (2 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1015-dwg-ac1014 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -710,18 +734,18 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:141"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (141 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:13"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (12 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1015-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:171"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (171 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
-first = "w-acadrust-ac1015-dwg-ac1015 acadrust-oracle: view 0 a#126 A handles 528/571 polygon is in A and not in B [EXACT]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+first = 'w-acadrust-ac1015-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1015-dwg-ac1015"
@@ -903,9 +927,9 @@ first = 'w-acadrust-ac1015-dxf-ascii-ac1012 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-ascii-ac1012 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -929,9 +953,9 @@ first = 'w-acadrust-ac1015-dxf-ascii-ac1014 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-ascii-ac1014 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -955,9 +979,9 @@ first = 'w-acadrust-ac1015-dxf-ascii-ac1015 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-ascii-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -981,9 +1005,9 @@ first = 'w-acadrust-ac1015-dxf-ascii-ac1018 acadrust-ezdxf: view 0 a#99 b#99 A h
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-ascii-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -1004,7 +1028,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-ascii-ac1021 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1021"
@@ -1024,7 +1051,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-ascii-ac1024 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1024"
@@ -1044,7 +1074,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-ascii-ac1027 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1027"
@@ -1064,7 +1097,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-ascii-ac1032 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-ascii-ac1032"
@@ -1116,9 +1152,9 @@ first = 'w-acadrust-ac1015-dxf-binary-ac1012 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-binary-ac1012 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -1142,9 +1178,9 @@ first = 'w-acadrust-ac1015-dxf-binary-ac1014 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-binary-ac1014 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -1168,9 +1204,9 @@ first = 'w-acadrust-ac1015-dxf-binary-ac1015 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-binary-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -1194,9 +1230,9 @@ first = 'w-acadrust-ac1015-dxf-binary-ac1018 acadrust-ezdxf: view 0 a#99 b#99 A 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:1"
-reason = "non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
-issue = "libviprs/libviprs-dep#111"
+verdict = "DIFF:25"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings); non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#147, libviprs/libviprs-dep#111"
 first = 'w-acadrust-ac1015-dxf-binary-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "âˆ…45,6" [EXACT]'
 
 [[row]]
@@ -1217,7 +1253,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-binary-ac1021 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1021"
@@ -1237,7 +1276,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-binary-ac1024 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1024"
@@ -1257,7 +1299,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-binary-ac1027 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1027"
@@ -1277,7 +1322,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "DIFF:24"
+reason = "the geometry of the ACAD_TABLE entities reads back with other extents and text widths from acadrust's ASCII DXF (41 findings)"
+issue = "libviprs/acadsharp-rs-tests#147"
+first = "w-acadrust-ac1015-dxf-binary-ac1032 acadrust-oracle: view 0 a#126 b#126 A handles 528/571 polygon.points[2].x: 877.4603384729468 vs 778.3742753239231 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
 
 [[row]]
 fixture = "w-acadrust-ac1015-dxf-binary-ac1032"
@@ -1299,8 +1347,8 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-ac1018-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:173"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (173 findings)"
+verdict = "DIFF:2"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (2 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1018-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -1325,8 +1373,8 @@ first = "w-acadrust-ac1018-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 view i
 [[row]]
 fixture = "w-acadrust-ac1018-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:173"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (173 findings)"
+verdict = "DIFF:2"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (2 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1018-dwg-ac1014 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -1343,18 +1391,18 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1018-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:141"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (141 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:13"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (12 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1018-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1018-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:171"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (171 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
-first = "w-acadrust-ac1018-dwg-ac1015 acadrust-oracle: view 0 a#126 A handles 528/571 polygon is in A and not in B [EXACT]"
+verdict = "KNOWN:1"
+reason = "every difference of the cell is listed as known (parity/TABLES.toml)"
+issue = "libviprs/acadsharp-rs-tests#106, libviprs/acadsharp-rs-tests#108"
+first = 'w-acadrust-ac1018-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1018-dwg-ac1015"
@@ -2016,8 +2064,8 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-ac1021-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:174"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (174 findings)"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1021-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -2042,8 +2090,8 @@ first = "w-acadrust-ac1021-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 view i
 [[row]]
 fixture = "w-acadrust-ac1021-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:174"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (174 findings)"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1021-dwg-ac1014 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -2060,16 +2108,16 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1021-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:142"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (142 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:14"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (13 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1021-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1021-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:172"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (172 findings)"
+verdict = "DIFF:1"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = 'w-acadrust-ac1021-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
@@ -2733,8 +2781,8 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-ac1024-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:174"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (174 findings)"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1024-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -2759,8 +2807,8 @@ first = "w-acadrust-ac1024-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 view i
 [[row]]
 fixture = "w-acadrust-ac1024-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:174"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (174 findings)"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1024-dwg-ac1014 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -2777,16 +2825,16 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1024-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:142"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (142 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:14"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (13 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1024-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1024-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:172"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (172 findings)"
+verdict = "DIFF:1"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = 'w-acadrust-ac1024-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
@@ -2803,16 +2851,16 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1024-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:39"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (38 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+verdict = "DIFF:14"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (13 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1024-dwg-ac1018 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1024-dwg-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:27"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (27 findings)"
+verdict = "DIFF:1"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = 'w-acadrust-ac1024-dwg-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
@@ -3450,8 +3498,8 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:174"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (174 findings)"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-ac1027-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -3476,16 +3524,15 @@ first = "w-acadrust-ac1027-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 view i
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "OPEN_FAILED"
-reason = "the oracle's reading is not schema 1: line 26, field `entity_type`: carriage return; the format is LF only, in text as well"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
+first = "w-acadrust-ac1027-dwg-ac1014 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1014"
 pair = "w-acadrust:version"
-verdict = "OPEN_FAILED"
-reason = "the oracle cannot read it, so nothing independent says its version"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1015"
@@ -3495,16 +3542,16 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:142"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (142 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "DIFF:14"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (13 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1027-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:172"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (172 findings)"
+verdict = "DIFF:1"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = 'w-acadrust-ac1027-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
@@ -3521,24 +3568,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:39"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (38 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+verdict = "DIFF:14"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (13 findings); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112, libviprs/acadsharp-rs-tests#114"
 first = "w-acadrust-ac1027-dwg-ac1018 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "OPEN_FAILED"
-reason = "the oracle's reading is not schema 1: line 276, field `entity_type`: carriage return; the format is LF only, in text as well"
+verdict = "DIFF:1"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112"
+first = 'w-acadrust-ac1027-dwg-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1018"
 pair = "w-acadrust:version"
-verdict = "OPEN_FAILED"
-reason = "the oracle cannot read it, so nothing independent says its version"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-ac1027-dwg-ac1021"
@@ -5792,7 +5838,9 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1012"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1012"
@@ -5804,515 +5852,716 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1012"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1014"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1014"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:3"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
-issue = "libviprs/acadsharp-rs-tests#112"
-first = "w-acadrust-g13_bad_extents-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 view is in A and not in B [EXACT]"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1014"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1015"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1015"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1018"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1018"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1021"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1021"
 pair = "w-acadrust:acadsharp"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1021"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1024"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1024"
 pair = "w-acadrust:acadsharp"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1024"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1027"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1027"
 pair = "w-acadrust:acadsharp"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1027"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1032"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1032"
 pair = "w-acadrust:acadsharp"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dwg-ac1032"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1009"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1009"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1009"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1009"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1012"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1012"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1012"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1014"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1014"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1014"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1015"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1015"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1015"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1018"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1018"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1018"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1021"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1021"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1021"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1024"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1024"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1024"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1027"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1027"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1027"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1032"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1032"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-ascii-ac1032"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1009"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1009"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1009"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1009"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1012"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1012"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1012"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1014"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1014"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1014"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1015"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1015"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1015"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1018"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1018"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1018"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1021"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1021"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1021"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1021"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1024"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1024"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1024"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1024"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1027"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1027"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1027"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1027"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1032"
 pair = "w-acadrust:acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1032"
 pair = "w-acadrust:ezdxf"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1032"
 pair = "w-acadrust:oracle"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_bad_extents-dxf-binary-ac1032"
 pair = "w-acadrust:version"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "acadrust did not read the source g13_bad_extents, so there is no reference: exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
+issue = "libviprs/acadsharp-rs-tests#41"
 
 [[row]]
 fixture = "w-acadrust-g13_circle-dwg-ac1012"
@@ -26312,8 +26561,8 @@ issue = "libviprs/acadsharp-rs-tests#28"
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1012"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:174"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (174 findings)"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-sample-base-dwg-ac1012 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
@@ -26338,16 +26587,15 @@ first = "w-acadrust-sample-base-dwg-ac1014 acadrust-acadsharp: a#1 A handles 0 v
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1014"
 pair = "w-acadrust:oracle"
-verdict = "OPEN_FAILED"
-reason = "the oracle's reading is not schema 1: line 26, field `entity_type`: carriage return; the format is LF only, in text as well"
+verdict = "DIFF:3"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (3 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
+first = "w-acadrust-sample-base-dwg-ac1014 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1014"
 pair = "w-acadrust:version"
-verdict = "OPEN_FAILED"
-reason = "the oracle cannot read it, so nothing independent says its version"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1015"
@@ -26357,16 +26605,16 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1015"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:142"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (142 findings)"
+verdict = "DIFF:13"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (13 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-sample-base-dwg-ac1015 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1015"
 pair = "w-acadrust:oracle"
-verdict = "DIFF:172"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (172 findings)"
+verdict = "DIFF:1"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = 'w-acadrust-sample-base-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
@@ -26383,24 +26631,23 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1018"
 pair = "w-acadrust:acadsharp"
-verdict = "DIFF:38"
-reason = "acadrust's DWG writer loses most of the drawing below AC1021 (38 findings)"
+verdict = "DIFF:13"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (13 findings)"
 issue = "libviprs/acadsharp-rs-tests#112"
 first = "w-acadrust-sample-base-dwg-ac1018 acadrust-acadsharp: view 0 b#30 B handles 422 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1018"
 pair = "w-acadrust:oracle"
-verdict = "OPEN_FAILED"
-reason = "the oracle's reading is not schema 1: line 276, field `entity_type`: carriage return; the format is LF only, in text as well"
+verdict = "DIFF:1"
+reason = "acadrust's DWG writer loses most of the drawing below AC1021 (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#112"
+first = 'w-acadrust-sample-base-dwg-ac1018 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1018"
 pair = "w-acadrust:version"
-verdict = "OPEN_FAILED"
-reason = "the oracle cannot read it, so nothing independent says its version"
-issue = "libviprs/acadsharp-rs-tests#112"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-sample-base-dwg-ac1021"
@@ -35681,8 +35928,8 @@ verdict = "MATCH"
 fixture = "w-acadsharp-g13_hatch-dwg-ac1014"
 pair = "w-acadsharp:acadsharp"
 verdict = "DIFF:1"
-reason = "ACadSharp's AC1014 DWG is damaged: the readers that open it find fewer records than the source has (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#107"
+reason = "ACadSharp's AC1014 DWG is damaged: the readers that open it find fewer records than the source has (1 finding); a divergence the reader carries on the source is gone (the multiline attribute's embedded MTEXT) (1 finding)"
+issue = "libviprs/acadsharp-rs-tests#107, libviprs/acadsharp-rs-tests#114"
 first = "w-acadsharp-g13_hatch-dwg-ac1014 oracle-acadsharp: view 0 a#15 spline is in A and not in B [EXACT]"
 
 [[row]]
