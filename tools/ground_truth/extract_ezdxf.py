@@ -841,6 +841,11 @@ def inputs(manifest: dict) -> list[dict]:
         if w["container"].startswith("dxf") and not w.get("write_failed"):
             rows.append({"id": w["id"], "file": f"written/{w['id']}.dxf",
                          "sha256": w["sha256"], "written": w})
+    # The code page drawings (R5.4), stored: their DXF outputs, likewise.
+    for a in manifest.get("authored", []):
+        if a["container"].startswith("dxf") and not a.get("write_failed"):
+            rows.append({"id": a["id"], "file": f"authored/{a['id']}.dxf",
+                         "sha256": a["sha256"], "written": a})
     return rows
 
 
