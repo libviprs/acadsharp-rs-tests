@@ -871,3 +871,42 @@ fixtures = [
 ]
 reason = "AutoCAD named the anonymous copy of the dynamic block *U17 in these DXF twins and my-dynamic-block in the DWG saves, so each file holds one of the two"
 issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- known: layout plot settings
+[[known]]
+names = [
+  "layout/*.plot_flags", "layout/*.rotation", "layout/*.scale_type", "layout/*.shade_plot_resolution",
+  "layout/*.plot_type"
+]
+pairs = ["dxf-dwg:acadrust", "ezdxf/acadrust", "oracle/acadrust"]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii", "dxf-sample-ac1024-ascii",
+  "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "acadrust's DXF reader leaves the plot flags, rotation, scale type, shade plot resolution and the plot type of Model at 0 (the codes stay in raw_plot_settings_codes), where its DWG reader and the other two readers hold 688, 1, 16, 2 and 5"
+issue = "libviprs/acadsharp-rs-tests#162"
+
+# ---- known: layout plot settings
+[[known]]
+names = [
+  "layout/*.page_name", "layout/*.plot_flags"
+]
+pairs = ["dxf-dwg:oracle", "ezdxf/oracle", "oracle/acadrust"]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii", "dxf-sample-ac1024-ascii",
+  "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "ACadSharp's DXF reader keeps its class defaults where the DXF holds a value: none_device for the empty page setup name and 688 for the plot flags of Model (the file holds 11952)"
+issue = "libviprs/acadsharp-rs-tests#162"
+
+# ---- known: layout plot settings
+[[known]]
+names = [
+  "layout/*.shade_plot_dpi"
+]
+pairs = ["dxf-dwg:acadrust", "ezdxf/acadrust", "ezdxf/oracle", "oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "dxf-sample-ac1015-ascii"
+]
+reason = "R14 and R2000 files write no shade plot DPI (78): ACadSharp defaults it to 300, acadrust to 0 in its DXF reader and 300 in its DWG reader, and ezdxf has none for the version"
+issue = "libviprs/acadsharp-rs-tests#162"

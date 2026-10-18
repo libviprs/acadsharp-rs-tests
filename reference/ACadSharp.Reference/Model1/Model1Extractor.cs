@@ -83,11 +83,69 @@ public static class Model1Extractor
         Dictionary<object, string> owners = ExtractDictionaries(document, records);
         ExtractXData(document, records, owners);
         ExtractBlockRecords(document, records);
+        ExtractLayouts(document, records);
         return records;
     }
 
     private static string Point3(CSMath.XYZ p) =>
         "[" + NumericFormatting.Real(p.X) + "," + NumericFormatting.Real(p.Y) + "," + NumericFormatting.Real(p.Z) + "]";
+
+    private static string Point2(CSMath.XY p) =>
+        "[" + NumericFormatting.Real(p.X) + "," + NumericFormatting.Real(p.Y) + "]";
+
+    private static void ExtractLayouts(CadDocument document, List<Model1Record> records)
+    {
+        // The same list the view records of schema 1 are made from, so the two
+        // streams describe the same layouts.
+        foreach (ACadSharp.Objects.Layout layout in document.Layouts)
+        {
+            string name = layout.Name ?? string.Empty;
+            string Text(string? value) => NumericFormatting.Quoted(NumericFormatting.NormalizeLineEndings(value));
+            records.Add(Model1Record.Of(
+                "layout",
+                name,
+                ("name", NumericFormatting.Quoted(name)),
+                ("tab_order", NumericFormatting.Whole(layout.TabOrder)),
+                ("flags", NumericFormatting.Whole((long)layout.LayoutFlags)),
+                ("min_limits", Point2(layout.MinLimits)),
+                ("max_limits", Point2(layout.MaxLimits)),
+                ("insertion_base", Point3(layout.InsertionBasePoint)),
+                ("min_extents", Point3(layout.MinExtents)),
+                ("max_extents", Point3(layout.MaxExtents)),
+                ("elevation", NumericFormatting.Real(layout.Elevation)),
+                ("ucs_origin", Point3(layout.Origin)),
+                ("ucs_x_axis", Point3(layout.XAxis)),
+                ("ucs_y_axis", Point3(layout.YAxis)),
+                ("ucs_ortho_type", NumericFormatting.Whole((long)layout.UcsOrthographicType)),
+                ("block_record", NumericFormatting.Quoted(layout.AssociatedBlock?.Name ?? string.Empty)),
+                ("page_name", Text(layout.PageName)),
+                ("printer_name", Text(layout.SystemPrinterName)),
+                ("paper_size", Text(layout.PaperSize)),
+                ("plot_view_name", Text(layout.PlotViewName)),
+                ("style_sheet", Text(layout.StyleSheet)),
+                ("margin_left", NumericFormatting.Real(layout.UnprintableMargin.Left)),
+                ("margin_bottom", NumericFormatting.Real(layout.UnprintableMargin.Bottom)),
+                ("margin_right", NumericFormatting.Real(layout.UnprintableMargin.Right)),
+                ("margin_top", NumericFormatting.Real(layout.UnprintableMargin.Top)),
+                ("paper_width", NumericFormatting.Real(layout.PaperWidth)),
+                ("paper_height", NumericFormatting.Real(layout.PaperHeight)),
+                ("plot_origin", "[" + NumericFormatting.Real(layout.PlotOriginX) + "," + NumericFormatting.Real(layout.PlotOriginY) + "]"),
+                ("plot_window_min", "[" + NumericFormatting.Real(layout.WindowLowerLeftX) + "," + NumericFormatting.Real(layout.WindowLowerLeftY) + "]"),
+                ("plot_window_max", "[" + NumericFormatting.Real(layout.WindowUpperLeftX) + "," + NumericFormatting.Real(layout.WindowUpperLeftY) + "]"),
+                ("scale_numerator", NumericFormatting.Real(layout.NumeratorScale)),
+                ("scale_denominator", NumericFormatting.Real(layout.DenominatorScale)),
+                ("plot_flags", NumericFormatting.Whole((long)layout.Flags)),
+                ("paper_units", NumericFormatting.Whole((long)layout.PaperUnits)),
+                ("rotation", NumericFormatting.Whole((long)layout.PaperRotation)),
+                ("plot_type", NumericFormatting.Whole((long)layout.PlotType)),
+                ("scale_type", NumericFormatting.Whole((long)layout.ScaledFit)),
+                ("shade_plot_mode", NumericFormatting.Whole((long)layout.ShadePlotMode)),
+                ("shade_plot_resolution", NumericFormatting.Whole((long)layout.ShadePlotResolutionMode)),
+                ("shade_plot_dpi", NumericFormatting.Whole(layout.ShadePlotDPI)),
+                ("standard_scale", NumericFormatting.Real(layout.StandardScale)),
+                ("paper_image_origin", "[" + NumericFormatting.Real(layout.PaperImageOriginX) + "," + NumericFormatting.Real(layout.PaperImageOriginY) + "]")));
+        }
+    }
 
     private static void ExtractBlockRecords(CadDocument document, List<Model1Record> records)
     {

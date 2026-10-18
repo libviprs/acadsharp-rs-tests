@@ -1239,3 +1239,95 @@ fn one_entity_removed_from_a_block_is_red_and_names_the_block() {
     assert_eq!(after.red().len(), before_red + 1, "{}", after.first());
     assert!(after.red().iter().any(|f| f.key == key), "{key}");
 }
+
+/// acadrust's own `layout` records name the layouts its schema 1 `view`
+/// records name, in the same order, on every file it reads.
+#[test]
+fn acadrusts_layout_records_and_view_records_agree() {
+    let Some(run) = gate(the_run().as_ref().map_err(String::clone)) else {
+        return;
+    };
+    let mut checked = 0;
+    for (id, stream) in &run.rust {
+        let Ok(records) = stream else { continue };
+        let path = acadsharp_rs_tests::emit::output_paths(&out_dir(), id, "acadrust")[0].clone();
+        let views = {
+            let text = std::fs::read_to_string(&path)
+                .unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+            let mut v: Vec<(u64, String)> = Vec::new();
+            for line in text.lines() {
+                let j: serde_json::Value = serde_json::from_str(line).unwrap();
+                if j["record"] == "view" {
+                    v.push((
+                        j["index"].as_u64().unwrap(),
+                        j["name"].as_str().unwrap().to_string(),
+                    ));
+                }
+            }
+            v.sort();
+            v.into_iter().map(|(_, n)| n).collect::<Vec<_>>()
+        };
+        let mut layouts: Vec<(i64, String)> = records
+            .iter()
+            .filter_map(|r| match r {
+                Record::Entry(e) if e.kind == "layout" => match e.get("tab_order") {
+                    Some(Value::Int(t)) => Some((*t, e.name.clone())),
+                    _ => None,
+                },
+                _ => None,
+            })
+            .collect();
+        layouts.sort_by(|a, b| (a.0, a.1.as_bytes()).cmp(&(b.0, b.1.as_bytes())));
+        let layouts: Vec<String> = layouts.into_iter().map(|(_, n)| n).collect();
+        assert_eq!(layouts, views, "acadrust {id}");
+        checked += 1;
+    }
+    assert!(checked >= 7, "only {checked} acadrust streams checked");
+}
+
+/// The layout control: `paper_width` changed in a scratch copy of a twin's
+/// stream turns that file's row red, and the finding names the layout.
+#[test]
+fn one_changed_paper_width_is_red_and_names_the_layout() {
+    let rules = model1::committed_rules().unwrap();
+    let id = "dxf-sample-ac1032-ascii";
+    let ez = model1::load_frozen("ezdxf", id).unwrap();
+    let mut oracle = model1::load_frozen("oracle", id).unwrap();
+    fn side<'a>(engine: &'static str, id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: id,
+            records,
+        }
+    }
+    let before_red = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", id, &ez),
+        &side("oracle", id, &oracle),
+        &rules,
+    )
+    .red()
+    .len();
+    let mut changed = None;
+    for r in &mut oracle {
+        let Record::Entry(e) = r else { continue };
+        if e.kind != "layout" || e.name == "Model" || changed.is_some() {
+            continue;
+        }
+        let Some(Value::Double(w)) = e.get("paper_width").cloned() else {
+            continue;
+        };
+        e.set("paper_width", Value::Double(w + 10.0));
+        changed = Some(e.name.clone());
+    }
+    let name = changed.expect("a paper layout");
+    let after = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", id, &ez),
+        &side("oracle", id, &oracle),
+        &rules,
+    );
+    let key = format!("layout/{name}.paper_width");
+    assert_eq!(after.red().len(), before_red + 1, "{}", after.first());
+    assert!(after.red().iter().any(|f| f.key == key), "{key}");
+}

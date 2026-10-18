@@ -251,6 +251,52 @@ const BLOCK_RECORD: Schema = Schema {
     ],
 };
 
+/// The layout's own fields, then the plot settings it inherits.
+const LAYOUT: Schema = Schema {
+    kind: "layout",
+    fields: &[
+        ("tab_order", Ty::Int),
+        ("flags", Ty::Int),
+        ("min_limits", Ty::Point2),
+        ("max_limits", Ty::Point2),
+        ("insertion_base", Ty::Point3),
+        ("min_extents", Ty::Point3),
+        ("max_extents", Ty::Point3),
+        ("elevation", Ty::Double),
+        ("ucs_origin", Ty::Point3),
+        ("ucs_x_axis", Ty::Point3),
+        ("ucs_y_axis", Ty::Point3),
+        ("ucs_ortho_type", Ty::Int),
+        ("block_record", Ty::Str),
+        ("page_name", Ty::Str),
+        ("printer_name", Ty::Str),
+        ("paper_size", Ty::Str),
+        ("plot_view_name", Ty::Str),
+        ("style_sheet", Ty::Str),
+        ("margin_left", Ty::Double),
+        ("margin_bottom", Ty::Double),
+        ("margin_right", Ty::Double),
+        ("margin_top", Ty::Double),
+        ("paper_width", Ty::Double),
+        ("paper_height", Ty::Double),
+        ("plot_origin", Ty::Point2),
+        ("plot_window_min", Ty::Point2),
+        ("plot_window_max", Ty::Point2),
+        ("scale_numerator", Ty::Double),
+        ("scale_denominator", Ty::Double),
+        ("plot_flags", Ty::Int),
+        ("paper_units", Ty::Int),
+        ("rotation", Ty::Int),
+        ("plot_type", Ty::Int),
+        ("scale_type", Ty::Int),
+        ("shade_plot_mode", Ty::Int),
+        ("shade_plot_resolution", Ty::Int),
+        ("shade_plot_dpi", Ty::Int),
+        ("standard_scale", Ty::Double),
+        ("paper_image_origin", Ty::Point2),
+    ],
+};
+
 /// One `(group code, value)` pair of an xdata list or an XRECORD: the code is
 /// always written beside the value, and the written form of the value is the one
 /// [`value_form`] gives for that code.
@@ -284,6 +330,7 @@ pub const SCHEMAS: &[Schema] = &[
     XDATA,
     XRECORD,
     BLOCK_RECORD,
+    LAYOUT,
 ];
 
 /// The written form of a value, decided by its group code. One table for xdata

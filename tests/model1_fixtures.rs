@@ -261,3 +261,80 @@ fn a_block_nobody_inserts_is_still_a_record_and_an_anonymous_one_keeps_its_name(
         );
     }
 }
+
+/// The names of the `view` records of a schema 1 stream, in view order.
+pub fn view_names(jsonl: &[u8]) -> Vec<String> {
+    let text = String::from_utf8(jsonl.to_vec()).unwrap();
+    let mut views: Vec<(u64, String)> = Vec::new();
+    for line in text.lines() {
+        let v: serde_json::Value = serde_json::from_str(line).unwrap();
+        if v["record"] == "view" {
+            views.push((
+                v["index"].as_u64().unwrap(),
+                v["name"].as_str().unwrap().to_string(),
+            ));
+        }
+    }
+    views.sort();
+    views.into_iter().map(|(_, n)| n).collect()
+}
+
+/// The layouts of a model-1 stream in tab order (then name), the order the
+/// schema 1 `view` records use.
+pub fn layouts_in_tab_order(records: &[Record]) -> Vec<String> {
+    let mut layouts: Vec<(i64, String)> = records
+        .iter()
+        .filter_map(|r| match r {
+            Record::Entry(e) if e.kind == "layout" => match e.get("tab_order") {
+                Some(Value::Int(t)) => Some((*t, e.name.clone())),
+                _ => None,
+            },
+            _ => None,
+        })
+        .collect();
+    layouts.sort_by(|a, b| (a.0, a.1.as_bytes()).cmp(&(b.0, b.1.as_bytes())));
+    layouts.into_iter().map(|(_, n)| n).collect()
+}
+
+#[test]
+fn the_layout_records_and_the_view_records_name_the_same_layouts_in_the_same_order() {
+    use acadsharp_rs_tests::fixtures;
+    // The new stream and the old one describe one object here, so they must
+    // agree with each other inside one emitter before any reader is held
+    // against another.
+    let mut checked = 0;
+    for s in SAVES {
+        let views = view_names(&fixtures::by_id(s).unwrap().load_reference_jsonl().unwrap());
+        let layouts = layouts_in_tab_order(&model1::load_frozen("oracle", s).unwrap());
+        assert!(!layouts.is_empty(), "oracle {s}: no layout records");
+        assert_eq!(layouts, views, "oracle {s}");
+        checked += 1;
+    }
+    for t in TWINS {
+        let input = fixtures::oracle_inputs()
+            .iter()
+            .find(|o| o.id == t)
+            .unwrap();
+        let views = view_names(&input.load_reference_jsonl().unwrap());
+        let layouts = layouts_in_tab_order(&model1::load_frozen("oracle", t).unwrap());
+        assert_eq!(layouts, views, "oracle {t}");
+        let gt = fixtures::ground_truth(t).unwrap();
+        let views = view_names(&gt.load_jsonl().unwrap());
+        let layouts = layouts_in_tab_order(&model1::load_frozen("ezdxf", t).unwrap());
+        assert_eq!(layouts, views, "ezdxf {t}");
+        checked += 2;
+    }
+    assert_eq!(checked, 7 + 12);
+}
+
+#[test]
+fn every_file_has_the_model_layout_and_the_ac1014_save_has_four() {
+    for s in SAVES {
+        let layouts = layouts_in_tab_order(&model1::load_frozen("oracle", s).unwrap());
+        assert_eq!(layouts.first().map(String::as_str), Some("Model"), "{s}");
+    }
+    // The frozen AC1014 output has four view records (the issue text counted three),
+    // so ACadSharp finds all four LAYOUT objects in that R14 file.
+    let l = layouts_in_tab_order(&model1::load_frozen("oracle", "acadsharp-ac1014").unwrap());
+    assert_eq!(l, ["Model", "Layout1", "Layout2", "MyLayout"]);
+}
