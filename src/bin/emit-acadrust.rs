@@ -111,10 +111,17 @@ fn main() -> ExitCode {
     // model-1 (docs/MODEL_1.md): the header variables, in a file beside the others.
     // A round-trip output (stdin) is judged on schema 1 alone: a writer's damaged file
     // can fail the model-1 render, and that must not turn a good schema 1 reading into
-    // a refusal (R5.3). A fixture or a twin still fails the run on it.
+    // a refusal (R5.3). A file the model-1 stream is compared on (one with frozen
+    // ground truth) still fails the run on it. Any other fixture is judged on schema 1
+    // alone: g13_bad_extents holds NaN extents, which the stream refuses, and nothing
+    // reads its model-1 file (libviprs/acadsharp-rs-tests#165).
+    let compared = acadsharp_rs_tests::model1::frozen_files()
+        .map(|files| files.iter().any(|f| f.id == id))
+        // a manifest that cannot be read is not a reason to stop holding anyone to it
+        .unwrap_or(true);
     let model1 = match acadsharp_rs_tests::acadrust_model1::render(&bytes, is_dxf) {
         Ok(t) => Some(t),
-        Err(e) if args.stdin_as.is_some() => {
+        Err(e) if args.stdin_as.is_some() || !compared => {
             eprintln!("emit-acadrust: {id}: model-1 skipped: {e}");
             None
         }

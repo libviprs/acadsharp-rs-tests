@@ -1593,3 +1593,32 @@ fn the_code_page_lane_agrees_with_the_committed_verdicts() {
             .join("\n  ")
     );
 }
+
+/// libviprs/acadsharp-rs-tests#165: `g13_bad_extents` is a drawing whose extents
+/// are NaN, so its model-1 render is refused. The model-1 stream is only compared
+/// for the files with frozen ground truth, so for any other fixture that refusal
+/// must not turn a good schema 1 reading into a failed run.
+#[test]
+fn issue_165_a_model1_refusal_without_frozen_truth_keeps_the_schema_1_reading() {
+    let fx = fixtures::by_id("g13_bad_extents").unwrap();
+    let out = out_dir().join("issue-165");
+    let _ = std::fs::remove_dir_all(&out);
+    let got = gate(
+        require(),
+        emit(
+            env!("CARGO_BIN_EXE_emit-acadrust"),
+            "acadrust",
+            &fx.id,
+            &out,
+        ),
+    );
+    let Some(got) = got else { return };
+    assert!(
+        matches!(got, Emitted::Ok(_)),
+        "emit-acadrust must read g13_bad_extents; its model-1 refusal is not a failed reading"
+    );
+    assert!(
+        !acadsharp_rs_tests::model1::output_path(&out, &fx.id, "acadrust").exists(),
+        "no model-1 file is written for a fixture the model-1 stream is not compared on"
+    );
+}
