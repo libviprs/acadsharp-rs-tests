@@ -9,7 +9,7 @@
 # verdicts and `first` from the run, keeps the reason and issue of every row
 # whose key it finds, and leaves the rest blank, which the test then refuses.
 # There is no `arch` key on a row: verdicts are arch-independent by contract,
-# and the 
+# and the [[run]] tables list the runs that confirmed that.
 
 [[run]]
 arch = "x86_64"
@@ -53,7 +53,7 @@ pair = "oracle/acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#111"
-first = "acadsharp-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+first = 'acadsharp-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
 
 [[row]]
 fixture = "acadsharp-ac1014"
@@ -67,17 +67,17 @@ first = "acadsharp-ac1014 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellip
 fixture = "acadsharp-ac1014"
 pair = "self/acadrust"
 verdict = "DIFF:70"
-reason = "AC1014 stores table names upper-cased, so a text style reads STANDARD where later saves read Standard (69 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)"
+reason = '''AC1014 stores table names upper-cased, so a text style reads STANDARD where later saves read Standard (69 findings); an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
-first = "acadsharp-ac1014 acadrust-acadrust: view 0 a#42 b#42 A handles 3B9 B handles 3B9 text.style: \"custom_text_style\" vs \"CUSTOM_TEXT_STYLE\" [EXACT]"
+first = 'acadsharp-ac1014 acadrust-acadrust: view 0 a#42 b#42 A handles 3B9 B handles 3B9 text.style: "custom_text_style" vs "CUSTOM_TEXT_STYLE" [EXACT]'
 
 [[row]]
 fixture = "acadsharp-ac1014"
 pair = "self/acadsharp"
 verdict = "DIFF:7"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (3 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/libviprs-dep#150, libviprs/libviprs-dep#111"
-first = "acadsharp-ac1014 acadsharp-acadsharp: view 0 a#27 b#27 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'acadsharp-ac1014 acadsharp-acadsharp: view 0 a#27 b#27 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "acadsharp-ac1014"
@@ -101,7 +101,7 @@ pair = "oracle/acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#111"
-first = "acadsharp-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+first = 'acadsharp-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
 
 [[row]]
 fixture = "acadsharp-ac1015"
@@ -115,17 +115,17 @@ first = "acadsharp-ac1015 oracle-acadsharp: view 0 a#19 b#13 B handles 321 ellip
 fixture = "acadsharp-ac1015"
 pair = "self/acadrust"
 verdict = "DIFF:7"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/libviprs-dep#150"
-first = "acadsharp-ac1015 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'acadsharp-ac1015 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "acadsharp-ac1015"
 pair = "self/acadsharp"
 verdict = "DIFF:8"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/libviprs-dep#150, libviprs/libviprs-dep#111"
-first = "acadsharp-ac1015 acadsharp-acadsharp: view 0 a#27 b#27 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'acadsharp-ac1015 acadsharp-acadsharp: view 0 a#27 b#27 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "acadsharp-ac1015"
@@ -149,7 +149,7 @@ pair = "oracle/acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#111"
-first = "acadsharp-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+first = 'acadsharp-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
 
 [[row]]
 fixture = "acadsharp-ac1018"
@@ -332,7 +332,7 @@ pair = "oracle/acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#112"
-first = "acadsharp-ac1032 oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: \"\" vs \"my multi line text for the attrrib\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112"
+first = 'acadsharp-ac1032 oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: "" vs "my multi line text for the attrrib" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112'
 
 [[row]]
 fixture = "acadsharp-ac1032"
@@ -581,7 +581,7 @@ pair = "oracle/acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#112"
-first = "acadsharp-sample-base oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: \"\" vs \"my multi line text for the attrrib\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112"
+first = 'acadsharp-sample-base oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: "" vs "my multi line text for the attrrib" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112'
 
 [[row]]
 fixture = "acadsharp-sample-base"
@@ -1171,7 +1171,7 @@ pair = "dxf-dwg:acadrust"
 verdict = "COUNT:2247/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-ascii acadrust-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-ascii acadrust-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-ascii"
@@ -1186,7 +1186,7 @@ pair = "dxf-dwg:oracle"
 verdict = "COUNT:2243/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2243 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-ascii oracle-oracle: a#0 b#0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-ascii oracle-oracle: a#0 b#0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-ascii"
@@ -1199,7 +1199,7 @@ pair = "dxf:ezdxf/oracle"
 verdict = "DIFF:226"
 reason = "the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names"
 issue = "libviprs/acadsharp-rs-tests#130"
-first = "dxf-sample-ac1009-ascii ezdxf-oracle: view 0 a#837 b#837 A handles 3CF text.style: \"Standard\" vs \"STANDARD\" [EXACT]"
+first = 'dxf-sample-ac1009-ascii ezdxf-oracle: view 0 a#837 b#837 A handles 3CF text.style: "Standard" vs "STANDARD" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-ascii"
@@ -1207,7 +1207,7 @@ pair = "dxf:oracle/acadrust"
 verdict = "DIFF:226"
 reason = "the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names"
 issue = "libviprs/acadsharp-rs-tests#130"
-first = "dxf-sample-ac1009-ascii oracle-acadrust: view 0 a#837 b#837 B handles 3CF text.style: \"STANDARD\" vs \"Standard\" [EXACT]"
+first = 'dxf-sample-ac1009-ascii oracle-acadrust: view 0 a#837 b#837 B handles 3CF text.style: "STANDARD" vs "Standard" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-ascii"
@@ -1215,7 +1215,7 @@ pair = "ezdxf/acadrust"
 verdict = "COUNT:2247/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-ascii ezdxf-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-ascii ezdxf-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-ascii"
@@ -1223,7 +1223,7 @@ pair = "ezdxf/acadsharp"
 verdict = "COUNT:1862/219"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 1862 records against the AC1015 DWG's 219. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-ascii ezdxf-acadsharp: a#0 b#0 A handles 0 B handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-ascii ezdxf-acadsharp: a#0 b#0 A handles 0 B handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-ascii"
@@ -1231,7 +1231,7 @@ pair = "ezdxf/oracle"
 verdict = "COUNT:2247/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-ascii ezdxf-oracle: a#0 b#0 A handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-ascii ezdxf-oracle: a#0 b#0 A handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1239,7 +1239,7 @@ pair = "dxf-dwg:acadrust"
 verdict = "COUNT:2247/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-binary acadrust-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-binary acadrust-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1254,7 +1254,7 @@ pair = "dxf-dwg:oracle"
 verdict = "COUNT:2243/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2243 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-binary oracle-oracle: a#0 b#0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-binary oracle-oracle: a#0 b#0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1262,7 +1262,7 @@ pair = "dxf:ezdxf/acadrust"
 verdict = "DIFF:1"
 reason = "the diameter callout's raw byte 0xD8: ezdxf decodes it as Windows-1252 (Ø) and acadrust as UTF-8 for a binary DXF (U+FFFD); the R12 file declares no code page (parity/r12_codepage.toml)"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-binary ezdxf-acadrust: view 0 a#897 b#897 A handles 522/64B/2CDE B handles 522/64B/2CDE text.text: \"Ø45,6\" vs \"�45,6\" [EXACT]"
+first = 'dxf-sample-ac1009-binary ezdxf-acadrust: view 0 a#897 b#897 A handles 522/64B/2CDE B handles 522/64B/2CDE text.text: "Ø45,6" vs "�45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1270,7 +1270,7 @@ pair = "dxf:ezdxf/oracle"
 verdict = "DIFF:226"
 reason = "the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names"
 issue = "libviprs/acadsharp-rs-tests#130"
-first = "dxf-sample-ac1009-binary ezdxf-oracle: view 0 a#837 b#837 A handles 3CF text.style: \"Standard\" vs \"STANDARD\" [EXACT]"
+first = 'dxf-sample-ac1009-binary ezdxf-oracle: view 0 a#837 b#837 A handles 3CF text.style: "Standard" vs "STANDARD" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1278,7 +1278,7 @@ pair = "dxf:oracle/acadrust"
 verdict = "DIFF:226"
 reason = "the oracle returns the text style STANDARD for 226 texts where ezdxf and acadrust return Standard: ACadSharp's reader upper-cases R12 table names"
 issue = "libviprs/acadsharp-rs-tests#130"
-first = "dxf-sample-ac1009-binary oracle-acadrust: view 0 a#837 b#837 B handles 3CF text.style: \"STANDARD\" vs \"Standard\" [EXACT]"
+first = 'dxf-sample-ac1009-binary oracle-acadrust: view 0 a#837 b#837 B handles 3CF text.style: "STANDARD" vs "Standard" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1286,7 +1286,7 @@ pair = "ezdxf/acadrust"
 verdict = "COUNT:2247/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-binary ezdxf-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-binary ezdxf-acadrust: a#0 b#0 A handles 0 B handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1294,7 +1294,7 @@ pair = "ezdxf/acadsharp"
 verdict = "COUNT:1862/219"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 1862 records against the AC1015 DWG's 219. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-binary ezdxf-acadsharp: a#0 b#0 A handles 0 B handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-binary ezdxf-acadsharp: a#0 b#0 A handles 0 B handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1009-binary"
@@ -1302,7 +1302,7 @@ pair = "ezdxf/oracle"
 verdict = "COUNT:2247/297"
 reason = "AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader"
 issue = "libviprs/acadsharp-rs-tests#28"
-first = "dxf-sample-ac1009-binary ezdxf-oracle: a#0 b#0 A handles 0 document.acad_version: \"AC1009\" vs \"AC1015\" [EXACT]"
+first = 'dxf-sample-ac1009-binary ezdxf-oracle: a#0 b#0 A handles 0 document.acad_version: "AC1009" vs "AC1015" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1015"
@@ -1325,7 +1325,7 @@ pair = "dxf-dwg:acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1015-ascii acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+first = 'dxf-sample-ac1015-ascii acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
 
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
@@ -1369,7 +1369,7 @@ pair = "ezdxf/acadrust"
 verdict = "DIFF:1"
 reason = "saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
 issue = "libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1015-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [EXACT]"
+first = 'dxf-sample-ac1015-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
@@ -1390,7 +1390,7 @@ pair = "dxf-dwg:acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1015-binary acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+first = 'dxf-sample-ac1015-binary acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
 
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
@@ -1434,7 +1434,7 @@ pair = "ezdxf/acadrust"
 verdict = "DIFF:1"
 reason = "saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
 issue = "libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1015-binary ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [EXACT]"
+first = 'dxf-sample-ac1015-binary ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
@@ -1460,7 +1460,7 @@ pair = "dxf-ascii-binary:ezdxf"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1018 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1018 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1018"
@@ -1473,7 +1473,7 @@ pair = "dxf-dwg:acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1018-ascii acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+first = 'dxf-sample-ac1018-ascii acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
@@ -1517,7 +1517,7 @@ pair = "ezdxf/acadrust"
 verdict = "DIFF:1"
 reason = "saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
 issue = "libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1018-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [EXACT]"
+first = 'dxf-sample-ac1018-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
@@ -1538,7 +1538,7 @@ pair = "dxf-dwg:acadrust"
 verdict = "KNOWN:1"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1018-binary acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: \"\\\\U+220545,6\" vs \"∅45,6\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111"
+first = 'dxf-sample-ac1018-binary acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
 
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
@@ -1561,7 +1561,7 @@ pair = "dxf:ezdxf/acadrust"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1018-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1018-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
@@ -1583,15 +1583,15 @@ first = "dxf-sample-ac1018-binary oracle-acadrust: view 0 a#126 b#126 B handles 
 fixture = "dxf-sample-ac1018-binary"
 pair = "ezdxf/acadrust"
 verdict = "DIFF:5"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "dxf-sample-ac1018-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1018-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
 pair = "ezdxf/acadsharp"
 verdict = "DIFF:56"
-reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+reason = '''the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)'''
 issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
 first = "dxf-sample-ac1018-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
 
@@ -1599,9 +1599,9 @@ first = "dxf-sample-ac1018-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 32
 fixture = "dxf-sample-ac1018-binary"
 pair = "ezdxf/oracle"
 verdict = "DIFF:4"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+reason = 'an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1018-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1018-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1021"
@@ -1614,7 +1614,7 @@ pair = "dxf-ascii-binary:ezdxf"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1021 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1021 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1021"
@@ -1706,7 +1706,7 @@ pair = "dxf:ezdxf/acadrust"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1021-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1021-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1021-binary"
@@ -1728,15 +1728,15 @@ first = "dxf-sample-ac1021-binary oracle-acadrust: view 0 a#126 b#126 B handles 
 fixture = "dxf-sample-ac1021-binary"
 pair = "ezdxf/acadrust"
 verdict = "DIFF:4"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+reason = 'an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1021-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1021-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1021-binary"
 pair = "ezdxf/acadsharp"
 verdict = "DIFF:56"
-reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+reason = '''the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)'''
 issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
 first = "dxf-sample-ac1021-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
 
@@ -1744,9 +1744,9 @@ first = "dxf-sample-ac1021-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 32
 fixture = "dxf-sample-ac1021-binary"
 pair = "ezdxf/oracle"
 verdict = "DIFF:4"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+reason = 'an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1021-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1021-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1024"
@@ -1759,7 +1759,7 @@ pair = "dxf-ascii-binary:ezdxf"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1024 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1024 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1024"
@@ -1851,7 +1851,7 @@ pair = "dxf:ezdxf/acadrust"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1024-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1024-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1024-binary"
@@ -1873,15 +1873,15 @@ first = "dxf-sample-ac1024-binary oracle-acadrust: view 0 a#126 b#126 B handles 
 fixture = "dxf-sample-ac1024-binary"
 pair = "ezdxf/acadrust"
 verdict = "DIFF:4"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+reason = 'an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1024-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1024-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1024-binary"
 pair = "ezdxf/acadsharp"
 verdict = "DIFF:56"
-reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)"
+reason = '''the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings)'''
 issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57"
 first = "dxf-sample-ac1024-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
 
@@ -1889,9 +1889,9 @@ first = "dxf-sample-ac1024-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 32
 fixture = "dxf-sample-ac1024-binary"
 pair = "ezdxf/oracle"
 verdict = "DIFF:4"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)"
+reason = 'an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings)'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1024-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1024-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1027"
@@ -1904,7 +1904,7 @@ pair = "dxf-ascii-binary:ezdxf"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1027 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1027 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1027"
@@ -2008,7 +2008,7 @@ pair = "dxf:ezdxf/acadrust"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1027-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1027-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1027-binary"
@@ -2030,15 +2030,15 @@ first = "dxf-sample-ac1027-binary oracle-acadrust: view 0 a#126 b#126 B handles 
 fixture = "dxf-sample-ac1027-binary"
 pair = "ezdxf/acadrust"
 verdict = "DIFF:5"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150"
-first = "dxf-sample-ac1027-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1027-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1027-binary"
 pair = "ezdxf/acadsharp"
 verdict = "DIFF:57"
-reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+reason = '''the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (11 findings); an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)'''
 issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#57, libviprs/libviprs-dep#150"
 first = "dxf-sample-ac1027-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
 
@@ -2046,9 +2046,9 @@ first = "dxf-sample-ac1027-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 32
 fixture = "dxf-sample-ac1027-binary"
 pair = "ezdxf/oracle"
 verdict = "DIFF:5"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150"
-first = "dxf-sample-ac1027-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1027-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1032"
@@ -2061,7 +2061,7 @@ pair = "dxf-ascii-binary:ezdxf"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1032 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1032 ezdxf-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1032"
@@ -2165,7 +2165,7 @@ pair = "dxf:ezdxf/acadrust"
 verdict = "KNOWN:4"
 reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "dxf-sample-ac1032-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24"
+first = 'dxf-sample-ac1032-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
 
 [[row]]
 fixture = "dxf-sample-ac1032-binary"
@@ -2187,15 +2187,15 @@ first = "dxf-sample-ac1032-binary oracle-acadrust: view 0 a#126 b#126 B handles 
 fixture = "dxf-sample-ac1032-binary"
 pair = "ezdxf/acadrust"
 verdict = "DIFF:5"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150"
-first = "dxf-sample-ac1032-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1032-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1032-binary"
 pair = "ezdxf/acadsharp"
 verdict = "DIFF:57"
-reason = "the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (10 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (5 findings); an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)"
+reason = '''the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (10 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (5 findings); an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the shim writes a full ellipse as 0..2pi where the oracle keeps the stored start (2 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (2 findings)'''
 issue = "libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#112, libviprs/acadsharp-rs-tests#24, libviprs/acadsharp-rs-tests#57, libviprs/libviprs-dep#150"
 first = "dxf-sample-ac1032-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 321 B handles 321 ellipse.start: 3.141592653589793 vs 0.0 (abs 3.141592653589793e0, rel 1e0) [ANGLE]"
 
@@ -2203,9 +2203,9 @@ first = "dxf-sample-ac1032-binary ezdxf-acadsharp: view 0 a#19 b#13 A handles 32
 fixture = "dxf-sample-ac1032-binary"
 pair = "ezdxf/oracle"
 verdict = "DIFF:6"
-reason = "an MTEXT paragraph break is the escape \\P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (1 finding)"
+reason = '''an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings); the oracle reads the AC1027 and AC1032 spline as two fit points and nothing else, where AutoCAD's own DXF holds four control points and eight knots (the readers disagree across saves, or with ezdxf) (3 findings); the multiline block attribute (handle 79D) is dropped or placed differently at AC1032, where its text lives in an embedded MTEXT (1 finding)'''
 issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#150, libviprs/libviprs-dep#112"
-first = "dxf-sample-ac1032-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: \"this is a Mtext\\\\Pwith multiple lines in it\" vs \"this is a Mtext\\nwith multiple lines in it\" [EXACT]"
+first = 'dxf-sample-ac1032-binary ezdxf-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "g11_codepage"
@@ -2562,7 +2562,7 @@ pair = "acadsharp/acadrust"
 verdict = "DIFF:1"
 reason = "acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
-first = "g13_nonuniform acadsharp-acadrust: view 0 a#3 b#3 A handles 4C B handles 4D/4C record kind differs: \"circle\" vs \"ellipse\" [EXACT]"
+first = 'g13_nonuniform acadsharp-acadrust: view 0 a#3 b#3 A handles 4C B handles 4D/4C record kind differs: "circle" vs "ellipse" [EXACT]'
 
 [[row]]
 fixture = "g13_nonuniform"
@@ -2575,7 +2575,7 @@ pair = "oracle/acadsharp"
 verdict = "DIFF:1"
 reason = "under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
-first = "g13_nonuniform oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: \"ellipse\" vs \"circle\" [EXACT]"
+first = 'g13_nonuniform oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
 fixture = "g13_ocs_mirror"
@@ -2604,7 +2604,7 @@ pair = "acadsharp/acadrust"
 verdict = "DIFF:1"
 reason = "kept on purpose, the oracle is the one that is wrong: the oblique circle (extrusion 1,2,2) is a circle, and the oracle and emit-acadrust, which ports it, decide that by comparing two square roots for exact equality, which misses on the last bit and writes an ellipse of ratio 1.0000000000000002; the shim's circle is the right record (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
-first = "g13_ocs_plane acadsharp-acadrust: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: \"circle\" vs \"ellipse\" [EXACT]"
+first = 'g13_ocs_plane acadsharp-acadrust: view 0 a#6 b#6 A handles 4C B handles 4C record kind differs: "circle" vs "ellipse" [EXACT]'
 
 [[row]]
 fixture = "g13_ocs_plane"
@@ -2617,7 +2617,7 @@ pair = "oracle/acadsharp"
 verdict = "DIFF:1"
 reason = "kept on purpose, the oracle is the one that is wrong: the oblique circle (extrusion 1,2,2) is a circle, and the oracle and emit-acadrust, which ports it, decide that by comparing two square roots for exact equality, which misses on the last bit and writes an ellipse of ratio 1.0000000000000002; the shim's circle is the right record (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
-first = "g13_ocs_plane oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: \"ellipse\" vs \"circle\" [EXACT]"
+first = 'g13_ocs_plane oracle-acadsharp: view 0 a#6 b#6 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
 fixture = "g13_ocs_rotated"
@@ -2640,7 +2640,7 @@ pair = "acadsharp/acadrust"
 verdict = "DIFF:1"
 reason = "acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
-first = "g13_ocs_skew acadsharp-acadrust: view 0 a#3 b#3 A handles 4C B handles 52/51/4C record kind differs: \"circle\" vs \"ellipse\" [EXACT]"
+first = 'g13_ocs_skew acadsharp-acadrust: view 0 a#3 b#3 A handles 4C B handles 52/51/4C record kind differs: "circle" vs "ellipse" [EXACT]'
 
 [[row]]
 fixture = "g13_ocs_skew"
@@ -2653,7 +2653,7 @@ pair = "oracle/acadsharp"
 verdict = "DIFF:1"
 reason = "under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding)"
 issue = "libviprs/acadsharp-rs-tests#64"
-first = "g13_ocs_skew oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: \"ellipse\" vs \"circle\" [EXACT]"
+first = 'g13_ocs_skew oracle-acadsharp: view 0 a#3 b#3 B handles 4C record kind differs: "ellipse" vs "circle" [EXACT]'
 
 [[row]]
 fixture = "g13_point"
@@ -3141,7 +3141,7 @@ pair = "acadsharp/acadrust"
 verdict = "DIFF:2"
 reason = "acadrust reports the two layouts added by name (Plan A, Plan B) as view kind unknown where the oracle and the shim say layout (2 findings)"
 issue = "libviprs/acadsharp-rs-tests#90"
-first = "parity_viewport acadsharp-acadrust: a#2 b#2 A handles 0 B handles 0 view.kind: \"layout\" vs \"unknown\" [EXACT]"
+first = 'parity_viewport acadsharp-acadrust: a#2 b#2 A handles 0 B handles 0 view.kind: "layout" vs "unknown" [EXACT]'
 
 [[row]]
 fixture = "parity_viewport"
@@ -3149,7 +3149,7 @@ pair = "oracle/acadrust"
 verdict = "DIFF:2"
 reason = "acadrust reports the two layouts added by name (Plan A, Plan B) as view kind unknown where the oracle and the shim say layout (2 findings)"
 issue = "libviprs/acadsharp-rs-tests#90"
-first = "parity_viewport oracle-acadrust: a#2 b#2 B handles 0 view.kind: \"layout\" vs \"unknown\" [EXACT]"
+first = 'parity_viewport oracle-acadrust: a#2 b#2 B handles 0 view.kind: "layout" vs "unknown" [EXACT]'
 
 [[row]]
 fixture = "parity_viewport"
@@ -3344,7 +3344,7 @@ pair = "w-acadrust:oracle"
 verdict = "DIFF:172"
 reason = "missing from the output: 75 lines, 53 texts, 17 polylines, 12 circles, 9 points, 5 polygons; fields that differ: text.text (1)"
 issue = "libviprs/acadsharp-rs-tests#112"
-first = "w-acadrust-ac1032-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: \"∅45,6\" vs \"\\\\U+220545,6\" [EXACT]"
+first = 'w-acadrust-ac1032-dwg-ac1015 acadrust-oracle: view 0 a#99 b#99 A handles 522/64B text.text: "∅45,6" vs "\\U+220545,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dwg-ac1015"
@@ -3473,322 +3473,316 @@ verdict = "MATCH"
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-ascii-ac1009"
 pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1009 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1009"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1009 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1009"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1009 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1009"
-pair = "w-acadrust:version"
-verdict = "DIFF:1"
-reason = "acadrust wrote an AC1012 file when asked for AC1009 (its outputs for the two versions are byte-identical in the same container), and the oracle reads it as AC1012"
+verdict = "DIFF:101"
+reason = '''the drawing is written in the R12 layout, which has no form for the ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE, TOLERANCE, LEADER, XLINE, RAY, MESH, WIPEOUT, IMAGE, underlay and ACIS entities, so they are left out together with what they draw, and keeps one paper space, so two layouts are left out; an MTEXT is written as one TEXT per paragraph, which loses its attachment (text.halign, text.valign), the lines after the first and the \A1; code of a dimension text (101 findings)'''
 issue = "libviprs/acadsharp-rs-tests#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1009 wrote AC1009, the oracle reads \"AC1012\""
+first = "w-acadrust-ac1032-dxf-ascii-ac1009 acadrust-acadrust: a#3 A handles 0 view is in A and not in B [EXACT]"
 
 [[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1012 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1009"
 pair = "w-acadrust:ezdxf"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1012 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1012 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1014 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1014 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1014 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1015 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1015 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1015 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1018 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1018 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-ascii-ac1018 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1021 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1021 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1021 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1024 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1024 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1024 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1027 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1027 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1027 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1032 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1032 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-ascii-ac1032 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
-pair = "w-acadrust:version"
-verdict = "MATCH"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
-pair = "w-acadrust:acadrust"
-verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1009 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
-pair = "w-acadrust:ezdxf"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1009 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
-pair = "w-acadrust:oracle"
-verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1009 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
-
-[[row]]
-fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
-pair = "w-acadrust:version"
-verdict = "DIFF:1"
-reason = "acadrust wrote an AC1012 file when asked for AC1009 (its outputs for the two versions are byte-identical in the same container), and the oracle reads it as AC1012"
+verdict = "DIFF:101"
+reason = '''the drawing is written in the R12 layout, which has no form for the ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE, TOLERANCE, LEADER, XLINE, RAY, MESH, WIPEOUT, IMAGE, underlay and ACIS entities, so they are left out together with what they draw, and keeps one paper space, so two layouts are left out; an MTEXT is written as one TEXT per paragraph, which loses its attachment (text.halign, text.valign), the lines after the first and the \A1; code of a dimension text (101 findings)'''
 issue = "libviprs/acadsharp-rs-tests#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1009 wrote AC1009, the oracle reads \"AC1012\""
+first = "w-acadrust-ac1032-dxf-ascii-ac1009 acadrust-ezdxf: a#3 A handles 0 view is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1009"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:155"
+reason = '''the drawing is written in the R12 layout, which has no form for the ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE, TOLERANCE, LEADER, XLINE, RAY, MESH, WIPEOUT, IMAGE, underlay and ACIS entities, so they are left out together with what they draw, and keeps one paper space, so two layouts are left out; an MTEXT is written as one TEXT per paragraph, which loses its attachment (text.halign, text.valign), the lines after the first and the \A1; code of a dimension text, counted against the oracle's own reading of the source, which has more records than the other two (155 findings)'''
+issue = "libviprs/acadsharp-rs-tests#111"
+first = "w-acadrust-ac1032-dxf-ascii-ac1009 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1009"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1012 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1012 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1012 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1012"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1014 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1014 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1014 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1014"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1015 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1015 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1015 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1015"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1018 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1018 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:5"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1018 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1018"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1021 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1021 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1021 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1021"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1024 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1024 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1024 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1024"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1027 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1027 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1027 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1027"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:4"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1032 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1032 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:4"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-ascii-ac1032 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-ascii-ac1032"
+pair = "w-acadrust:version"
+verdict = "MATCH"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
+pair = "w-acadrust:acadrust"
+verdict = "DIFF:101"
+reason = '''the drawing is written in the R12 layout, which has no form for the ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE, TOLERANCE, LEADER, XLINE, RAY, MESH, WIPEOUT, IMAGE, underlay and ACIS entities, so they are left out together with what they draw, and keeps one paper space, so two layouts are left out; an MTEXT is written as one TEXT per paragraph, which loses its attachment (text.halign, text.valign), the lines after the first and the \A1; code of a dimension text (101 findings)'''
+issue = "libviprs/acadsharp-rs-tests#111"
+first = "w-acadrust-ac1032-dxf-binary-ac1009 acadrust-acadrust: a#3 A handles 0 view is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
+pair = "w-acadrust:ezdxf"
+verdict = "DIFF:101"
+reason = '''the drawing is written in the R12 layout, which has no form for the ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE, TOLERANCE, LEADER, XLINE, RAY, MESH, WIPEOUT, IMAGE, underlay and ACIS entities, so they are left out together with what they draw, and keeps one paper space, so two layouts are left out; an MTEXT is written as one TEXT per paragraph, which loses its attachment (text.halign, text.valign), the lines after the first and the \A1; code of a dimension text (101 findings)'''
+issue = "libviprs/acadsharp-rs-tests#111"
+first = "w-acadrust-ac1032-dxf-binary-ac1009 acadrust-ezdxf: a#3 A handles 0 view is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
+pair = "w-acadrust:oracle"
+verdict = "DIFF:155"
+reason = '''the drawing is written in the R12 layout, which has no form for the ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE, TOLERANCE, LEADER, XLINE, RAY, MESH, WIPEOUT, IMAGE, underlay and ACIS entities, so they are left out together with what they draw, and keeps one paper space, so two layouts are left out; an MTEXT is written as one TEXT per paragraph, which loses its attachment (text.halign, text.valign), the lines after the first and the \A1; code of a dimension text, counted against the oracle's own reading of the source, which has more records than the other two (155 findings)'''
+issue = "libviprs/acadsharp-rs-tests#111"
+first = "w-acadrust-ac1032-dxf-binary-ac1009 acadrust-oracle: a#3 A handles 0 view is in A and not in B [EXACT]"
+
+[[row]]
+fixture = "w-acadrust-ac1032-dxf-binary-ac1009"
+pair = "w-acadrust:version"
+verdict = "MATCH"
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1012"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1012 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1012 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1012"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1012 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1012 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1012"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1012 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1012 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1012"
@@ -3799,25 +3793,25 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dxf-binary-ac1014"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1014 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1014 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1014"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1014 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1014 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1014"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1014 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1014 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1014"
@@ -3828,25 +3822,25 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dxf-binary-ac1015"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1015 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1015 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1015"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1015 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1015 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1015"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1015 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1015 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1015"
@@ -3857,25 +3851,25 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dxf-binary-ac1018"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1018 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1018 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1018"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1018 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1018 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1018"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:5"
-reason = "fields that differ: text.rotation (4), text.text (5). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
-first = "w-acadrust-ac1032-dxf-binary-ac1018 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111"
+first = 'w-acadrust-ac1032-dxf-binary-ac1018 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1018"
@@ -3886,25 +3880,25 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dxf-binary-ac1021"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1021 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1021 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1021"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1021 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1021 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1021"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1021 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1021 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1021"
@@ -3915,25 +3909,25 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dxf-binary-ac1024"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1024 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1024 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1024"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1024 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1024 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1024"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1024 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1024 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1024"
@@ -3944,25 +3938,25 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dxf-binary-ac1027"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1027 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1027 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1027"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1027 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1027 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1027"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1027 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1027 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1027"
@@ -3973,25 +3967,25 @@ verdict = "MATCH"
 fixture = "w-acadrust-ac1032-dxf-binary-ac1032"
 pair = "w-acadrust:acadrust"
 verdict = "DIFF:4"
-reason = "fields that differ: text.text (4). the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
+reason = 'fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'
 issue = "libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1032 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext\\\\Pwith multiple lines in it\" [EXACT]"
+first = 'w-acadrust-ac1032-dxf-binary-ac1032 acadrust-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1032"
 pair = "w-acadrust:ezdxf"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1032 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1032 acadrust-ezdxf: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1032"
 pair = "w-acadrust:oracle"
 verdict = "DIFF:4"
-reason = "fields that differ: text.rotation (4), text.text (4). four MTEXTs read back with a rotation the source reading does not have, in both independent readers; the MTEXT paragraph break reads back as \\P, where the source reading has a line feed"
-issue = "libviprs/acadsharp-rs-tests#113, libviprs/acadsharp-rs-tests#24"
-first = "w-acadrust-ac1032-dxf-binary-ac1032 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.rotation: 0.0 vs 6.2317977026228 (abs 5.138760455678604e-2, rel 8.24603220594891e-3) [ANGLE]"
+reason = '''fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed'''
+issue = "libviprs/acadsharp-rs-tests#24"
+first = 'w-acadrust-ac1032-dxf-binary-ac1032 acadrust-oracle: view 0 a#46 b#46 A handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext\\Pwith multiple lines in it" [EXACT]'
 
 [[row]]
 fixture = "w-acadrust-ac1032-dxf-binary-ac1032"
@@ -4004,7 +3998,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:13"
 reason = "fields that differ: text.style (12); a divergence the reader carries on the source is gone. AC1014 stores table names upper-cased"
 issue = "libviprs/acadsharp-rs-tests#107, libviprs/acadsharp-rs-tests#114, libviprs/acadsharp-rs-tests#24"
-first = "w-acadsharp-ac1032-dwg-ac1014 oracle-acadrust: view 0 a#42 b#42 B handles 3B9 text.style: \"custom_text_style\" vs \"Standard\" [EXACT]"
+first = 'w-acadsharp-ac1032-dwg-ac1014 oracle-acadrust: view 0 a#42 b#42 B handles 3B9 text.style: "custom_text_style" vs "Standard" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1014"
@@ -4033,7 +4027,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/acadsharp-rs-tests#108, libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dwg-ac1015 oracle-acadrust: view 0 a#99 b#98 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dwg-ac1015 oracle-acadrust: view 0 a#99 b#98 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1015"
@@ -4049,7 +4043,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/acadsharp-rs-tests#108, libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dwg-ac1015 oracle-oracle: view 0 a#99 b#98 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dwg-ac1015 oracle-oracle: view 0 a#99 b#98 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1015"
@@ -4062,7 +4056,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dwg-ac1018 oracle-acadrust: view 0 a#99 b#98 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dwg-ac1018 oracle-acadrust: view 0 a#99 b#98 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1018"
@@ -4078,7 +4072,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dwg-ac1018 oracle-oracle: view 0 a#99 b#98 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dwg-ac1018 oracle-oracle: view 0 a#99 b#98 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1018"
@@ -4091,7 +4085,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dwg-ac1024 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dwg-ac1024 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1024"
@@ -4120,7 +4114,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dwg-ac1027 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dwg-ac1027 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1027"
@@ -4146,7 +4140,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "KNOWN:1"
 reason = "the divergences the reader carries on the source (R4.1) still hold after the round trip, and nothing else differs"
 issue = "libviprs/libviprs-dep#112"
-first = "w-acadsharp-ac1032-dwg-ac1032 oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: \"\" vs \"my multi line text for the attrrib\" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112"
+first = 'w-acadsharp-ac1032-dwg-ac1032 oracle-acadrust: view 0 a#180 b#180 B handles 79C/79D text.text: "" vs "my multi line text for the attrrib" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#112'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dwg-ac1032"
@@ -4172,7 +4166,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1012 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1012 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1012"
@@ -4180,7 +4174,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1012 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1012 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1012"
@@ -4188,7 +4182,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1012 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1012 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1012"
@@ -4201,7 +4195,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1014"
@@ -4209,7 +4203,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1014 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1014 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1014"
@@ -4217,7 +4211,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1014 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1014 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1014"
@@ -4230,7 +4224,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1015"
@@ -4238,7 +4232,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1015 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1015 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1015"
@@ -4246,7 +4240,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1015 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1015 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1015"
@@ -4259,7 +4253,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1018"
@@ -4267,7 +4261,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1018 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1018 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1018"
@@ -4275,7 +4269,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1018 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1018 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1018"
@@ -4288,7 +4282,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1021 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1021 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1021"
@@ -4317,7 +4311,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1024 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1024 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1024"
@@ -4346,7 +4340,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1027 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1027 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1027"
@@ -4383,7 +4377,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "KNOWN:54"
 reason = "the divergences the reader carries on the source (R4.1) still hold after the round trip, and nothing else differs"
 issue = "libviprs/libviprs-dep#112"
-first = "w-acadsharp-ac1032-dxf-ascii-ac1032 oracle-ezdxf: view 0 a#180 b#153 B handles 79C/79D text.text: \"\" vs \"my multi line text for the attrrib\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-ascii-ac1032 oracle-ezdxf: view 0 a#180 b#153 B handles 79C/79D text.text: "" vs "my multi line text for the attrrib" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-ascii-ac1032"
@@ -4404,7 +4398,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-binary-ac1012 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"�45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1012 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
@@ -4412,7 +4406,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1012 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1012 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
@@ -4420,7 +4414,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1012 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1012 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
@@ -4433,7 +4427,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-binary-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"�45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
@@ -4441,7 +4435,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1014 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1014 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
@@ -4449,7 +4443,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1014 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1014 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
@@ -4462,7 +4456,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-binary-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"�45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
@@ -4470,7 +4464,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1015 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1015 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
@@ -4478,7 +4472,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1015 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1015 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
@@ -4491,7 +4485,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-binary-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"�45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
@@ -4499,7 +4493,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1018 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1018 oracle-ezdxf: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
@@ -4507,7 +4501,7 @@ pair = "w-acadsharp:oracle"
 verdict = "DIFF:1"
 reason = "fields that differ: text.text (1). the diameter callout ∅45,6 reads back as 'Ø45,6', the character the code page of that version best-fits it to"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30"
-first = "w-acadsharp-ac1032-dxf-binary-ac1018 oracle-oracle: view 0 a#99 b#99 text.text: \"∅45,6\" vs \"Ø45,6\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1018 oracle-oracle: view 0 a#99 b#99 text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
@@ -4520,7 +4514,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-binary-ac1021 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1021 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1021"
@@ -4549,7 +4543,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-binary-ac1024 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1024 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1024"
@@ -4578,7 +4572,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:1"
 reason = "a divergence the reader carries on the source is gone"
 issue = "libviprs/acadsharp-rs-tests#114"
-first = "w-acadsharp-ac1032-dxf-binary-ac1027 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A \"\" vs B \"my multi line text for the attrrib\" was listed)"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1027 oracle-acadrust: view 0 a#180 text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "" vs B "my multi line text for the attrrib" was listed)'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1027"
@@ -4607,7 +4601,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "KNOWN:58"
 reason = "the divergences the reader carries on the source (R4.1) still hold after the round trip, and nothing else differs"
 issue = "libviprs/libviprs-dep#112"
-first = "w-acadsharp-ac1032-dxf-binary-ac1032 oracle-acadrust: view 0 a#46 b#46 B handles 3EC text.text: \"this is a Mtext\\nwith multiple lines in it\" vs \"this is a Mtext^Jwith multiple lines in it\" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#109"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1032 oracle-acadrust: view 0 a#46 b#46 B handles 3EC text.text: "this is a Mtext\nwith multiple lines in it" vs "this is a Mtext^Jwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#109'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1032"
@@ -4615,7 +4609,7 @@ pair = "w-acadsharp:ezdxf"
 verdict = "KNOWN:54"
 reason = "the divergences the reader carries on the source (R4.1) still hold after the round trip, and nothing else differs"
 issue = "libviprs/libviprs-dep#112"
-first = "w-acadsharp-ac1032-dxf-binary-ac1032 oracle-ezdxf: view 0 a#180 b#153 B handles 79C/79D text.text: \"\" vs \"my multi line text for the attrrib\" [EXACT]"
+first = 'w-acadsharp-ac1032-dxf-binary-ac1032 oracle-ezdxf: view 0 a#180 b#153 B handles 79C/79D text.text: "" vs "my multi line text for the attrrib" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1032"

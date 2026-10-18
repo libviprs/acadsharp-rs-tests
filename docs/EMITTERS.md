@@ -456,3 +456,13 @@ DWG. No decision-grade file exists: LibreDWG's R13 sample has no origin written 
 LibreDWG-written file would be a second regression-grade dialect, not AutoCAD's. So AC1012 DWG stays
 regression grade, with that one file, until someone has an AutoCAD-written R13 drawing with a
 licence.
+
+### What an R12 output can and cannot say
+
+acadrust writes AC1009 in the R12 layout (libviprs/acadsharp-rs-tests#111), so the
+`w-acadrust-*-ac1009` outputs lose what R12 has no form for: the entities that came
+after it (ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE and the rest), the
+second and later layouts, and an MTEXT's attachment and later lines (it becomes one
+TEXT per paragraph). Those cells are `DIFF` by design and their reasons say so. The
+oracle reads two views from the file, `Model` and `Layout1`, which is what ACadSharp
+makes of AutoCAD's own `sample_AC1009` too.
