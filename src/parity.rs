@@ -360,7 +360,10 @@ pub fn validate(m: &Manifest, crate_root: &Path) -> Vec<String> {
             }
         }
 
-        for (who, p) in [("acadsharp-rs", Provider::Acadsharp), ("acadrust", Provider::Acadrust)] {
+        for (who, p) in [
+            ("acadsharp-rs", Provider::Acadsharp),
+            ("acadrust", Provider::Acadrust),
+        ] {
             let status = f.status_for(p);
             let evidence = f.evidence_for(p);
             let exclusion = f.exclusion_for(p);
@@ -437,8 +440,9 @@ fn unresolved(e: &str, crate_root: &Path) -> Option<String> {
     match kind {
         "fixture" => (!fixture_ids().contains(rest))
             .then(|| "names a fixture that is not a row of fixtures/manifest.toml.".to_string()),
-        "path" => (!crate_root.join(rest).exists())
-            .then(|| "is a path that does not exist.".to_string()),
+        "path" => {
+            (!crate_root.join(rest).exists()).then(|| "is a path that does not exist.".to_string())
+        }
         "verdict" => {
             let Some((fixture, pair)) = rest.split_once('@') else {
                 return Some("is not verdict:<fixture>@<pair>.".into());
@@ -463,7 +467,9 @@ fn unresolved(e: &str, crate_root: &Path) -> Option<String> {
             };
             let bytes = match fx.load_reference_jsonl() {
                 Ok(b) => b,
-                Err(err) => return Some(format!("cannot read {fixture}'s canonical reading: {err}")),
+                Err(err) => {
+                    return Some(format!("cannot read {fixture}'s canonical reading: {err}"));
+                }
             };
             let needle = format!("\"record\":\"{record}\"");
             (!String::from_utf8_lossy(&bytes).contains(&needle)).then(|| {

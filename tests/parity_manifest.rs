@@ -450,7 +450,10 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
 // ---------------------------------------------------------------------------
 
 fn with_evidence(ev: &str) -> String {
-    GOOD.replace(r#"evidence = ["path:Cargo.toml"]"#, &format!("evidence = [{ev}]"))
+    GOOD.replace(
+        r#"evidence = ["path:Cargo.toml"]"#,
+        &format!("evidence = [{ev}]"),
+    )
 }
 
 #[test]
@@ -480,10 +483,14 @@ fn validate_refuses_a_record_of_a_fixture_nothing_compares() {
 #[test]
 fn validate_refuses_a_verdict_row_that_does_not_exist() {
     assert_eq!(
-        problems_for(&with_evidence(r#""verdict:acadsharp-ac1032@oracle/acadrust""#)),
+        problems_for(&with_evidence(
+            r#""verdict:acadsharp-ac1032@oracle/acadrust""#
+        )),
         ""
     );
-    let p = problems_for(&with_evidence(r#""verdict:acadsharp-ac1032@oracle/nobody""#));
+    let p = problems_for(&with_evidence(
+        r#""verdict:acadsharp-ac1032@oracle/nobody""#,
+    ));
     assert!(p.contains("not a row of parity/VERDICTS.toml"), "{p}");
     let p = problems_for(&with_evidence(r#""verdict:acadsharp-ac1032""#));
     assert!(p.contains("verdict:<fixture>@<pair>"), "{p}");
@@ -556,7 +563,11 @@ fn every_applicable_row_of_the_real_manifest_is_accounted_for() {
         assert_eq!(b.applicable, applicable, "{p:?}");
         assert_eq!(b.evidenced, evidenced, "{p:?}");
         assert_eq!(b.excluded, excluded, "{p:?}");
-        assert_eq!(b.evidenced + b.excluded, b.applicable, "{p:?}: every row is accounted for");
+        assert_eq!(
+            b.evidenced + b.excluded,
+            b.applicable,
+            "{p:?}: every row is accounted for"
+        );
     }
 }
 
