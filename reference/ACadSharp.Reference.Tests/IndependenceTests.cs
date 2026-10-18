@@ -105,7 +105,17 @@ public sealed class IndependenceTests
     public void TheCorpusIsTheSevenVersionsTheManifestClaims()
     {
         IReadOnlyList<(string Id, string Path)> fixtures = RepoLayout.Fixtures();
-        Assert.Equal(7, fixtures.Count);
+
+        // The corpus has grown past the seven version samples (#20 and after),
+        // so the count is not the claim. The claim is that each of the seven
+        // versions is still in it, once, and that no row points at a missing file.
+        string[] versions = ["AC1014", "AC1015", "AC1018", "AC1021", "AC1024", "AC1027", "AC1032"];
+        foreach (string version in versions)
+        {
+            Assert.Single(fixtures, fixture => fixture.Id == "acadsharp-" + version.ToLowerInvariant());
+        }
+
+        Assert.Equal(fixtures.Count, fixtures.Select(fixture => fixture.Id).Distinct().Count());
         Assert.All(fixtures, fixture =>
             Assert.True(File.Exists(fixture.Path), $"{fixture.Id}: {fixture.Path} is missing"));
     }
