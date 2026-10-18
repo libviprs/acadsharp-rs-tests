@@ -46,6 +46,7 @@ CLAUSES = {
     "r12": ("an AC1009 (R12) file has no place for this record, this text alignment or this text formatting, and the lowering is not on R3.4's list yet", issue("24")),
     "rust_text_p": ("the MTEXT paragraph break reads back as \\P, where the source reading has a line feed", issue("24")),
     "rust_moji": ("non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake", [DEP + "111"]),
+    "rust_mif": ("the callout's MIF escape \\U+2205 is kept as the file stores it by the readers that follow the schema's text field, and decoded by acadrust's DXF reader as its DWG reader does", [DEP + "111"]),
     "rust_rot": ("four MTEXTs read back with a rotation the source reading does not have", issue("113")),
     "rust_ocs": ("a lightweight polyline in an OCS plane reads back with another normal and elevation", issue("160")),
     "rust_table": ("the oracle's DXF reading of the ACAD_TABLE at handle 528 has other line ends, text positions and widths than every other reading, as it does on AutoCAD's own DXF twin of this save", issue("94")),
@@ -79,6 +80,8 @@ def classify(fx: str, pair: str, body: str) -> str:
         if field == "text.text":
             if "âˆ" in body or "Ã" in body:
                 return "rust_moji"
+            if "U+2205" in body:
+                return "rust_mif"
             if ver == "ac1009":
                 return "r12"
             if "\\\\P" in body:
@@ -232,6 +235,8 @@ def main() -> int:
                 iss += issue("108")
             if "dxf-binary" in fx and pair.endswith("acadrust"):
                 iss += issue("109")
+            if any("libviprs-dep#111" in b for b in cells.get((fx, pair), [])):
+                iss += [DEP + "111"]
         else:
             reason = "; ".join(clauses) if clauses else "differences the comparator lists in the run"
             iss = issues or issue("41")
