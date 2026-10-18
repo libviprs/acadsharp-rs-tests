@@ -1,4 +1,4 @@
-//! `rewrite-acadrust --out <dir> [--only <id>]`: acadrust as a writer (R5.3).
+//! `rewrite-acadrust --out <dir> [--stage one|two] [--only <id>]`: acadrust as a writer (R5.3).
 //!
 //! For every output of the plan whose writer is acadrust, reads the source
 //! fixture, writes it again at the plan's version and container, and does it a
@@ -26,11 +26,13 @@ use sha2::{Digest, Sha256};
 fn main() -> ExitCode {
     let mut out = None;
     let mut only = Vec::new();
+    let mut stages: Vec<String> = Vec::new();
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
             "--out" => out = args.next().map(PathBuf::from),
             "--only" => only.extend(args.next()),
+            "--stage" => stages.extend(args.next()),
             other => {
                 eprintln!("rewrite-acadrust: I do not know the argument {other:?}");
                 return ExitCode::from(2);
@@ -38,7 +40,7 @@ fn main() -> ExitCode {
         }
     }
     let Some(out) = out else {
-        eprintln!("usage: rewrite-acadrust --out <dir> [--only <id>]");
+        eprintln!("usage: rewrite-acadrust --out <dir> [--stage one|two] [--only <id>]");
         return ExitCode::from(2);
     };
     if let Err(e) = std::fs::create_dir_all(&out) {
@@ -46,7 +48,10 @@ fn main() -> ExitCode {
         return ExitCode::from(1);
     }
     let mut attempted = 0usize;
-    for stage in ["one", "two"] {
+    if stages.is_empty() {
+        stages.push("one".to_string());
+    }
+    for stage in &stages {
         for o in written::outputs(stage)
             .into_iter()
             .filter(|o| o.writer == "acadrust")

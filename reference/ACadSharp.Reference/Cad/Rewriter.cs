@@ -19,6 +19,11 @@ namespace ACadSharp.Reference.Cad;
 /// </remarks>
 public static class Rewriter
 {
+    private static DateTime PinIfFromTheClock(DateTime time) =>
+        Math.Abs((DateTime.Now - time).TotalDays) < 1
+            ? new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Local)
+            : time;
+
     /// <summary>What both header GUIDs are set to before writing.</summary>
     public const string PinnedGuid = "{5ACAD5A0-0000-4000-8000-000000000001}";
 
@@ -77,6 +82,16 @@ public static class Rewriter
             // The same goes for the universal create and update times: the
             // constructor takes the clock's, the writer writes them, and the
             // source's own (local) times are what the drawing says.
+            // An older save does not store its own create and update times, so
+            // the header constructor's clock is what the writer would stamp.
+            // A time within a day of now cannot be a fixture's own, so it is
+            // pinned too, and a stored time is left exactly as the drawing says.
+            document.Header.CreateDateTime = PinIfFromTheClock(document.Header.CreateDateTime);
+            document.Header.UpdateDateTime = PinIfFromTheClock(document.Header.UpdateDateTime);
+            // The summary info of an AC1018+ DWG carries two more dates, and a
+            // save with no summary section gets the constructor's clock for both.
+            document.SummaryInfo.CreatedDate = PinIfFromTheClock(document.SummaryInfo.CreatedDate);
+            document.SummaryInfo.ModifiedDate = PinIfFromTheClock(document.SummaryInfo.ModifiedDate);
             document.Header.UniversalCreateDateTime = document.Header.CreateDateTime.ToUniversalTime();
             document.Header.UniversalUpdateDateTime = document.Header.UpdateDateTime.ToUniversalTime();
             PinGuid(document.Header, nameof(CadHeader.FingerPrintGuid));

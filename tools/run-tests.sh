@@ -8,6 +8,11 @@
 #   tools/run-tests.sh --verdicts-base REF
 #                                    also hold the parity verdicts to REF's copy of
 #                                    parity/VERDICTS.toml (a git ref of this checkout)
+#   tools/run-tests.sh --stage-two DIR
+#                                    the nightly: run only the ignored round-trip test of
+#                                    stage two (libviprs/acadsharp-rs-tests#41) against
+#                                    DIR, which tools/stage_two.py made. Selected by
+#                                    target (`--test parity`), never crate-wide.
 #
 # There is a fourth form, `--in-container`, which is the second half of the
 # default one: it runs inside the container, fetches the native archive into
@@ -78,6 +83,7 @@ EXEC=()
 NATIVE_TGZ="${ACADSHARP_NATIVE_TGZ:-}"
 VERDICTS_BASE_REF=""
 VERDICTS_BASE_FILE="${PARITY_VERDICTS_BASE:-}"
+STAGE_TWO_DIR=""
 
 usage() {
   sed -n '2,/^set -euo pipefail$/p' "$0" | sed '$d; s/^# \{0,1\}//' >&2
@@ -118,6 +124,9 @@ while [ $# -gt 0 ]; do
     --verdicts-base-file)
       [ $# -ge 2 ] || misuse "--verdicts-base-file needs a path"
       VERDICTS_BASE_FILE="$2"; shift ;;
+    --stage-two)
+      [ $# -ge 2 ] || misuse "--stage-two needs the directory tools/stage_two.py made"
+      STAGE_TWO_DIR="$2"; shift ;;
     --dep-commit)
       [ $# -ge 2 ] || misuse "--dep-commit needs a sha"
       export ACADSHARP_VIPRS_DEP_COMMIT="$2"; shift ;;
@@ -231,6 +240,12 @@ cargo_lines() {
   fi
   decide_locked
   set -x
+  if [ -n "$STAGE_TWO_DIR" ]; then
+    # The nightly's only line: one ignored test of one target. Never a crate-wide
+    # `--ignored`, which would also run whatever else somebody marks slow.
+    ROUNDTRIP_STAGE_TWO_DIR="$STAGE_TWO_DIR" cargo test "${LOCKED[@]}" --features acadrust --test parity -- --ignored --exact roundtrip_stage_two --nocapture
+    return
+  fi
   # Every line runs, and the script fails if any did: a red first line must not
   # hide the parity lane behind it (a push whose only red test is early would
   # otherwise never show the moved verdict the gate exists to show).

@@ -79,9 +79,15 @@ def output_id(writer: str, source: str, container: str, version: str) -> str:
     return f"w-{writer}-{short}-{container}-{version.lower()}"
 
 
-def outputs(plan: dict) -> list[dict]:
+def outputs(plan: dict, stage_name: str | None = None) -> list[dict]:
+    """The planned outputs. By default the committed stages' (the `[[written]]`
+    rows); `stage_name` names one stage whatever it commits."""
     result = []
-    for stage in plan["stage"].values():
+    for name, stage in plan["stage"].items():
+        if stage_name is None and not stage.get("committed"):
+            continue
+        if stage_name is not None and name != stage_name:
+            continue
         for source in stage["sources"]:
             for writer, spec in plan["writer"].items():
                 for version in spec.get("dwg", []):

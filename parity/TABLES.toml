@@ -2137,3 +2137,202 @@ a = true
 b = false
 reason = "A hatch boundary spline edge. ACadSharp 3.7.1 builds the shim's spline from BoundaryPath.Spline.ToEntity(), which sets IsClosed = true whatever the edge says, and a hatch edge has no closed flag in the file. The oracle and acadrust report false."
 issue = "libviprs/acadsharp-rs-tests#65"
+
+
+# ---- the same two tables in the seven saves of stage two (R5.3.1, #41) -------------------------
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1014-dxf-ascii-ac1012", "w-acadsharp-ac1014-dxf-ascii-ac1014", "w-acadsharp-ac1014-dxf-ascii-ac1015", "w-acadsharp-ac1014-dxf-ascii-ac1018", "w-acadsharp-ac1014-dxf-ascii-ac1021", "w-acadsharp-ac1014-dxf-ascii-ac1024", "w-acadsharp-ac1014-dxf-ascii-ac1027", "w-acadsharp-ac1014-dxf-ascii-ac1032", "w-acadsharp-ac1014-dxf-binary-ac1012", "w-acadsharp-ac1014-dxf-binary-ac1014", "w-acadsharp-ac1014-dxf-binary-ac1015", "w-acadsharp-ac1014-dxf-binary-ac1018", "w-acadsharp-ac1014-dxf-binary-ac1021", "w-acadsharp-ac1014-dxf-binary-ac1024", "w-acadsharp-ac1014-dxf-binary-ac1027", "w-acadsharp-ac1014-dxf-binary-ac1032", "w-acadsharp-ac1015-dxf-ascii-ac1012", "w-acadsharp-ac1015-dxf-ascii-ac1014", "w-acadsharp-ac1015-dxf-ascii-ac1015", "w-acadsharp-ac1015-dxf-ascii-ac1018", "w-acadsharp-ac1015-dxf-ascii-ac1021", "w-acadsharp-ac1015-dxf-ascii-ac1024", "w-acadsharp-ac1015-dxf-ascii-ac1027", "w-acadsharp-ac1015-dxf-ascii-ac1032", "w-acadsharp-ac1015-dxf-binary-ac1012", "w-acadsharp-ac1015-dxf-binary-ac1014", "w-acadsharp-ac1015-dxf-binary-ac1015", "w-acadsharp-ac1015-dxf-binary-ac1018", "w-acadsharp-ac1015-dxf-binary-ac1021", "w-acadsharp-ac1015-dxf-binary-ac1024", "w-acadsharp-ac1015-dxf-binary-ac1027", "w-acadsharp-ac1015-dxf-binary-ac1032", "w-acadsharp-ac1018-dxf-ascii-ac1012", "w-acadsharp-ac1018-dxf-ascii-ac1014", "w-acadsharp-ac1018-dxf-ascii-ac1015", "w-acadsharp-ac1018-dxf-ascii-ac1018", "w-acadsharp-ac1018-dxf-ascii-ac1021", "w-acadsharp-ac1018-dxf-ascii-ac1024", "w-acadsharp-ac1018-dxf-ascii-ac1027", "w-acadsharp-ac1018-dxf-ascii-ac1032", "w-acadsharp-ac1018-dxf-binary-ac1012", "w-acadsharp-ac1018-dxf-binary-ac1014", "w-acadsharp-ac1018-dxf-binary-ac1015", "w-acadsharp-ac1018-dxf-binary-ac1018", "w-acadsharp-ac1018-dxf-binary-ac1021", "w-acadsharp-ac1018-dxf-binary-ac1024", "w-acadsharp-ac1018-dxf-binary-ac1027", "w-acadsharp-ac1018-dxf-binary-ac1032", "w-acadsharp-ac1021-dxf-ascii-ac1012", "w-acadsharp-ac1021-dxf-ascii-ac1014", "w-acadsharp-ac1021-dxf-ascii-ac1015", "w-acadsharp-ac1021-dxf-ascii-ac1018", "w-acadsharp-ac1021-dxf-ascii-ac1021", "w-acadsharp-ac1021-dxf-ascii-ac1024", "w-acadsharp-ac1021-dxf-ascii-ac1027", "w-acadsharp-ac1021-dxf-ascii-ac1032", "w-acadsharp-ac1021-dxf-binary-ac1012", "w-acadsharp-ac1021-dxf-binary-ac1014", "w-acadsharp-ac1021-dxf-binary-ac1015", "w-acadsharp-ac1021-dxf-binary-ac1018", "w-acadsharp-ac1021-dxf-binary-ac1021", "w-acadsharp-ac1021-dxf-binary-ac1024", "w-acadsharp-ac1021-dxf-binary-ac1027", "w-acadsharp-ac1021-dxf-binary-ac1032", "w-acadsharp-ac1024-dxf-ascii-ac1012", "w-acadsharp-ac1024-dxf-ascii-ac1014", "w-acadsharp-ac1024-dxf-ascii-ac1015", "w-acadsharp-ac1024-dxf-ascii-ac1018", "w-acadsharp-ac1024-dxf-ascii-ac1021", "w-acadsharp-ac1024-dxf-ascii-ac1024", "w-acadsharp-ac1024-dxf-ascii-ac1027", "w-acadsharp-ac1024-dxf-ascii-ac1032", "w-acadsharp-ac1024-dxf-binary-ac1012", "w-acadsharp-ac1024-dxf-binary-ac1014", "w-acadsharp-ac1024-dxf-binary-ac1015", "w-acadsharp-ac1024-dxf-binary-ac1018", "w-acadsharp-ac1024-dxf-binary-ac1021", "w-acadsharp-ac1024-dxf-binary-ac1024", "w-acadsharp-ac1024-dxf-binary-ac1027", "w-acadsharp-ac1024-dxf-binary-ac1032", "w-acadsharp-ac1027-dxf-ascii-ac1012", "w-acadsharp-ac1027-dxf-ascii-ac1014", "w-acadsharp-ac1027-dxf-ascii-ac1015", "w-acadsharp-ac1027-dxf-ascii-ac1018", "w-acadsharp-ac1027-dxf-ascii-ac1021", "w-acadsharp-ac1027-dxf-ascii-ac1024", "w-acadsharp-ac1027-dxf-ascii-ac1027", "w-acadsharp-ac1027-dxf-ascii-ac1032", "w-acadsharp-ac1027-dxf-binary-ac1012", "w-acadsharp-ac1027-dxf-binary-ac1014", "w-acadsharp-ac1027-dxf-binary-ac1015", "w-acadsharp-ac1027-dxf-binary-ac1018", "w-acadsharp-ac1027-dxf-binary-ac1021", "w-acadsharp-ac1027-dxf-binary-ac1024", "w-acadsharp-ac1027-dxf-binary-ac1027", "w-acadsharp-ac1027-dxf-binary-ac1032", "w-acadsharp-sample-base-dxf-ascii-ac1012", "w-acadsharp-sample-base-dxf-ascii-ac1014", "w-acadsharp-sample-base-dxf-ascii-ac1015", "w-acadsharp-sample-base-dxf-ascii-ac1018", "w-acadsharp-sample-base-dxf-ascii-ac1021", "w-acadsharp-sample-base-dxf-ascii-ac1024", "w-acadsharp-sample-base-dxf-ascii-ac1027", "w-acadsharp-sample-base-dxf-ascii-ac1032", "w-acadsharp-sample-base-dxf-binary-ac1012", "w-acadsharp-sample-base-dxf-binary-ac1014", "w-acadsharp-sample-base-dxf-binary-ac1015", "w-acadsharp-sample-base-dxf-binary-ac1018", "w-acadsharp-sample-base-dxf-binary-ac1021", "w-acadsharp-sample-base-dxf-binary-ac1024", "w-acadsharp-sample-base-dxf-binary-ac1027", "w-acadsharp-sample-base-dxf-binary-ac1032"]
+record_type = "polygon"
+oracle_indices = [126]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1014-dwg-ac1018", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1018", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1018", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1018", "w-acadsharp-ac1024-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018"]
+record_type = "polygon"
+oracle_indices = [126]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1014-dxf-ascii-ac1012", "w-acadsharp-ac1014-dxf-ascii-ac1014", "w-acadsharp-ac1014-dxf-ascii-ac1015", "w-acadsharp-ac1014-dxf-ascii-ac1018", "w-acadsharp-ac1014-dxf-ascii-ac1021", "w-acadsharp-ac1014-dxf-ascii-ac1024", "w-acadsharp-ac1014-dxf-ascii-ac1027", "w-acadsharp-ac1014-dxf-ascii-ac1032", "w-acadsharp-ac1014-dxf-binary-ac1012", "w-acadsharp-ac1014-dxf-binary-ac1014", "w-acadsharp-ac1014-dxf-binary-ac1015", "w-acadsharp-ac1014-dxf-binary-ac1018", "w-acadsharp-ac1014-dxf-binary-ac1021", "w-acadsharp-ac1014-dxf-binary-ac1024", "w-acadsharp-ac1014-dxf-binary-ac1027", "w-acadsharp-ac1014-dxf-binary-ac1032", "w-acadsharp-ac1015-dxf-ascii-ac1012", "w-acadsharp-ac1015-dxf-ascii-ac1014", "w-acadsharp-ac1015-dxf-ascii-ac1015", "w-acadsharp-ac1015-dxf-ascii-ac1018", "w-acadsharp-ac1015-dxf-ascii-ac1021", "w-acadsharp-ac1015-dxf-ascii-ac1024", "w-acadsharp-ac1015-dxf-ascii-ac1027", "w-acadsharp-ac1015-dxf-ascii-ac1032", "w-acadsharp-ac1015-dxf-binary-ac1012", "w-acadsharp-ac1015-dxf-binary-ac1014", "w-acadsharp-ac1015-dxf-binary-ac1015", "w-acadsharp-ac1015-dxf-binary-ac1018", "w-acadsharp-ac1015-dxf-binary-ac1021", "w-acadsharp-ac1015-dxf-binary-ac1024", "w-acadsharp-ac1015-dxf-binary-ac1027", "w-acadsharp-ac1015-dxf-binary-ac1032", "w-acadsharp-ac1018-dxf-ascii-ac1012", "w-acadsharp-ac1018-dxf-ascii-ac1014", "w-acadsharp-ac1018-dxf-ascii-ac1015", "w-acadsharp-ac1018-dxf-ascii-ac1018", "w-acadsharp-ac1018-dxf-ascii-ac1021", "w-acadsharp-ac1018-dxf-ascii-ac1024", "w-acadsharp-ac1018-dxf-ascii-ac1027", "w-acadsharp-ac1018-dxf-ascii-ac1032", "w-acadsharp-ac1018-dxf-binary-ac1012", "w-acadsharp-ac1018-dxf-binary-ac1014", "w-acadsharp-ac1018-dxf-binary-ac1015", "w-acadsharp-ac1018-dxf-binary-ac1018", "w-acadsharp-ac1018-dxf-binary-ac1021", "w-acadsharp-ac1018-dxf-binary-ac1024", "w-acadsharp-ac1018-dxf-binary-ac1027", "w-acadsharp-ac1018-dxf-binary-ac1032", "w-acadsharp-ac1021-dxf-ascii-ac1012", "w-acadsharp-ac1021-dxf-ascii-ac1014", "w-acadsharp-ac1021-dxf-ascii-ac1015", "w-acadsharp-ac1021-dxf-ascii-ac1018", "w-acadsharp-ac1021-dxf-ascii-ac1021", "w-acadsharp-ac1021-dxf-ascii-ac1024", "w-acadsharp-ac1021-dxf-ascii-ac1027", "w-acadsharp-ac1021-dxf-ascii-ac1032", "w-acadsharp-ac1021-dxf-binary-ac1012", "w-acadsharp-ac1021-dxf-binary-ac1014", "w-acadsharp-ac1021-dxf-binary-ac1015", "w-acadsharp-ac1021-dxf-binary-ac1018", "w-acadsharp-ac1021-dxf-binary-ac1021", "w-acadsharp-ac1021-dxf-binary-ac1024", "w-acadsharp-ac1021-dxf-binary-ac1027", "w-acadsharp-ac1021-dxf-binary-ac1032", "w-acadsharp-ac1024-dxf-ascii-ac1012", "w-acadsharp-ac1024-dxf-ascii-ac1014", "w-acadsharp-ac1024-dxf-ascii-ac1015", "w-acadsharp-ac1024-dxf-ascii-ac1018", "w-acadsharp-ac1024-dxf-ascii-ac1021", "w-acadsharp-ac1024-dxf-ascii-ac1024", "w-acadsharp-ac1024-dxf-ascii-ac1027", "w-acadsharp-ac1024-dxf-ascii-ac1032", "w-acadsharp-ac1024-dxf-binary-ac1012", "w-acadsharp-ac1024-dxf-binary-ac1014", "w-acadsharp-ac1024-dxf-binary-ac1015", "w-acadsharp-ac1024-dxf-binary-ac1018", "w-acadsharp-ac1024-dxf-binary-ac1021", "w-acadsharp-ac1024-dxf-binary-ac1024", "w-acadsharp-ac1024-dxf-binary-ac1027", "w-acadsharp-ac1024-dxf-binary-ac1032", "w-acadsharp-ac1027-dxf-ascii-ac1012", "w-acadsharp-ac1027-dxf-ascii-ac1014", "w-acadsharp-ac1027-dxf-ascii-ac1015", "w-acadsharp-ac1027-dxf-ascii-ac1018", "w-acadsharp-ac1027-dxf-ascii-ac1021", "w-acadsharp-ac1027-dxf-ascii-ac1024", "w-acadsharp-ac1027-dxf-ascii-ac1027", "w-acadsharp-ac1027-dxf-ascii-ac1032", "w-acadsharp-ac1027-dxf-binary-ac1012", "w-acadsharp-ac1027-dxf-binary-ac1014", "w-acadsharp-ac1027-dxf-binary-ac1015", "w-acadsharp-ac1027-dxf-binary-ac1018", "w-acadsharp-ac1027-dxf-binary-ac1021", "w-acadsharp-ac1027-dxf-binary-ac1024", "w-acadsharp-ac1027-dxf-binary-ac1027", "w-acadsharp-ac1027-dxf-binary-ac1032", "w-acadsharp-sample-base-dxf-ascii-ac1012", "w-acadsharp-sample-base-dxf-ascii-ac1014", "w-acadsharp-sample-base-dxf-ascii-ac1015", "w-acadsharp-sample-base-dxf-ascii-ac1018", "w-acadsharp-sample-base-dxf-ascii-ac1021", "w-acadsharp-sample-base-dxf-ascii-ac1024", "w-acadsharp-sample-base-dxf-ascii-ac1027", "w-acadsharp-sample-base-dxf-ascii-ac1032", "w-acadsharp-sample-base-dxf-binary-ac1012", "w-acadsharp-sample-base-dxf-binary-ac1014", "w-acadsharp-sample-base-dxf-binary-ac1015", "w-acadsharp-sample-base-dxf-binary-ac1018", "w-acadsharp-sample-base-dxf-binary-ac1021", "w-acadsharp-sample-base-dxf-binary-ac1024", "w-acadsharp-sample-base-dxf-binary-ac1027", "w-acadsharp-sample-base-dxf-binary-ac1032"]
+record_type = "text"
+oracle_indices = [127, 128, 129, 130, 131, 132, 133, 134, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 225]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1014-dwg-ac1018", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1018", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1018", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1018", "w-acadsharp-ac1024-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018"]
+record_type = "text"
+oracle_indices = [127, 128, 129, 130, 131, 132, 133, 134, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 225]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadsharp"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1014-dwg-ac1018", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1018", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1018", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1018", "w-acadsharp-ac1024-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018"]
+record_type = "text"
+oracle_indices = [127, 128, 129, 130, 131, 132, 133, 134, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 225]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1014-dxf-ascii-ac1012", "w-acadsharp-ac1014-dxf-ascii-ac1014", "w-acadsharp-ac1014-dxf-ascii-ac1015", "w-acadsharp-ac1014-dxf-ascii-ac1018", "w-acadsharp-ac1014-dxf-ascii-ac1021", "w-acadsharp-ac1014-dxf-ascii-ac1024", "w-acadsharp-ac1014-dxf-ascii-ac1027", "w-acadsharp-ac1014-dxf-ascii-ac1032", "w-acadsharp-ac1014-dxf-binary-ac1012", "w-acadsharp-ac1014-dxf-binary-ac1014", "w-acadsharp-ac1014-dxf-binary-ac1015", "w-acadsharp-ac1014-dxf-binary-ac1018", "w-acadsharp-ac1014-dxf-binary-ac1021", "w-acadsharp-ac1014-dxf-binary-ac1024", "w-acadsharp-ac1014-dxf-binary-ac1027", "w-acadsharp-ac1014-dxf-binary-ac1032", "w-acadsharp-ac1015-dxf-ascii-ac1012", "w-acadsharp-ac1015-dxf-ascii-ac1014", "w-acadsharp-ac1015-dxf-ascii-ac1015", "w-acadsharp-ac1015-dxf-ascii-ac1018", "w-acadsharp-ac1015-dxf-ascii-ac1021", "w-acadsharp-ac1015-dxf-ascii-ac1024", "w-acadsharp-ac1015-dxf-ascii-ac1027", "w-acadsharp-ac1015-dxf-ascii-ac1032", "w-acadsharp-ac1015-dxf-binary-ac1012", "w-acadsharp-ac1015-dxf-binary-ac1014", "w-acadsharp-ac1015-dxf-binary-ac1015", "w-acadsharp-ac1015-dxf-binary-ac1018", "w-acadsharp-ac1015-dxf-binary-ac1021", "w-acadsharp-ac1015-dxf-binary-ac1024", "w-acadsharp-ac1015-dxf-binary-ac1027", "w-acadsharp-ac1015-dxf-binary-ac1032", "w-acadsharp-ac1018-dxf-ascii-ac1012", "w-acadsharp-ac1018-dxf-ascii-ac1014", "w-acadsharp-ac1018-dxf-ascii-ac1015", "w-acadsharp-ac1018-dxf-ascii-ac1018", "w-acadsharp-ac1018-dxf-ascii-ac1021", "w-acadsharp-ac1018-dxf-ascii-ac1024", "w-acadsharp-ac1018-dxf-ascii-ac1027", "w-acadsharp-ac1018-dxf-ascii-ac1032", "w-acadsharp-ac1018-dxf-binary-ac1012", "w-acadsharp-ac1018-dxf-binary-ac1014", "w-acadsharp-ac1018-dxf-binary-ac1015", "w-acadsharp-ac1018-dxf-binary-ac1018", "w-acadsharp-ac1018-dxf-binary-ac1021", "w-acadsharp-ac1018-dxf-binary-ac1024", "w-acadsharp-ac1018-dxf-binary-ac1027", "w-acadsharp-ac1018-dxf-binary-ac1032", "w-acadsharp-ac1021-dxf-ascii-ac1012", "w-acadsharp-ac1021-dxf-ascii-ac1014", "w-acadsharp-ac1021-dxf-ascii-ac1015", "w-acadsharp-ac1021-dxf-ascii-ac1018", "w-acadsharp-ac1021-dxf-ascii-ac1021", "w-acadsharp-ac1021-dxf-ascii-ac1024", "w-acadsharp-ac1021-dxf-ascii-ac1027", "w-acadsharp-ac1021-dxf-ascii-ac1032", "w-acadsharp-ac1021-dxf-binary-ac1012", "w-acadsharp-ac1021-dxf-binary-ac1014", "w-acadsharp-ac1021-dxf-binary-ac1015", "w-acadsharp-ac1021-dxf-binary-ac1018", "w-acadsharp-ac1021-dxf-binary-ac1021", "w-acadsharp-ac1021-dxf-binary-ac1024", "w-acadsharp-ac1021-dxf-binary-ac1027", "w-acadsharp-ac1021-dxf-binary-ac1032", "w-acadsharp-ac1024-dxf-ascii-ac1012", "w-acadsharp-ac1024-dxf-ascii-ac1014", "w-acadsharp-ac1024-dxf-ascii-ac1015", "w-acadsharp-ac1024-dxf-ascii-ac1018", "w-acadsharp-ac1024-dxf-ascii-ac1021", "w-acadsharp-ac1024-dxf-ascii-ac1024", "w-acadsharp-ac1024-dxf-ascii-ac1027", "w-acadsharp-ac1024-dxf-ascii-ac1032", "w-acadsharp-ac1024-dxf-binary-ac1012", "w-acadsharp-ac1024-dxf-binary-ac1014", "w-acadsharp-ac1024-dxf-binary-ac1015", "w-acadsharp-ac1024-dxf-binary-ac1018", "w-acadsharp-ac1024-dxf-binary-ac1021", "w-acadsharp-ac1024-dxf-binary-ac1024", "w-acadsharp-ac1024-dxf-binary-ac1027", "w-acadsharp-ac1024-dxf-binary-ac1032", "w-acadsharp-ac1027-dxf-ascii-ac1012", "w-acadsharp-ac1027-dxf-ascii-ac1014", "w-acadsharp-ac1027-dxf-ascii-ac1015", "w-acadsharp-ac1027-dxf-ascii-ac1018", "w-acadsharp-ac1027-dxf-ascii-ac1021", "w-acadsharp-ac1027-dxf-ascii-ac1024", "w-acadsharp-ac1027-dxf-ascii-ac1027", "w-acadsharp-ac1027-dxf-ascii-ac1032", "w-acadsharp-ac1027-dxf-binary-ac1012", "w-acadsharp-ac1027-dxf-binary-ac1014", "w-acadsharp-ac1027-dxf-binary-ac1015", "w-acadsharp-ac1027-dxf-binary-ac1018", "w-acadsharp-ac1027-dxf-binary-ac1021", "w-acadsharp-ac1027-dxf-binary-ac1024", "w-acadsharp-ac1027-dxf-binary-ac1027", "w-acadsharp-ac1027-dxf-binary-ac1032", "w-acadsharp-sample-base-dxf-ascii-ac1012", "w-acadsharp-sample-base-dxf-ascii-ac1014", "w-acadsharp-sample-base-dxf-ascii-ac1015", "w-acadsharp-sample-base-dxf-ascii-ac1018", "w-acadsharp-sample-base-dxf-ascii-ac1021", "w-acadsharp-sample-base-dxf-ascii-ac1024", "w-acadsharp-sample-base-dxf-ascii-ac1027", "w-acadsharp-sample-base-dxf-ascii-ac1032", "w-acadsharp-sample-base-dxf-binary-ac1012", "w-acadsharp-sample-base-dxf-binary-ac1014", "w-acadsharp-sample-base-dxf-binary-ac1015", "w-acadsharp-sample-base-dxf-binary-ac1018", "w-acadsharp-sample-base-dxf-binary-ac1021", "w-acadsharp-sample-base-dxf-binary-ac1024", "w-acadsharp-sample-base-dxf-binary-ac1027", "w-acadsharp-sample-base-dxf-binary-ac1032"]
+record_type = "line"
+oracle_indices = [135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1014-dwg-ac1018", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1018", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1018", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1018", "w-acadsharp-ac1024-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018"]
+record_type = "line"
+oracle_indices = [135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadsharp"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1014-dwg-ac1018", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1018", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1018", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1018", "w-acadsharp-ac1024-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018"]
+record_type = "line"
+oracle_indices = [135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust", "w-acadsharp:ezdxf"]
+fixtures = ["w-acadsharp-ac1014-dxf-ascii-ac1012", "w-acadsharp-ac1014-dxf-ascii-ac1014", "w-acadsharp-ac1014-dxf-ascii-ac1015", "w-acadsharp-ac1014-dxf-ascii-ac1018", "w-acadsharp-ac1014-dxf-ascii-ac1021", "w-acadsharp-ac1014-dxf-ascii-ac1024", "w-acadsharp-ac1014-dxf-ascii-ac1027", "w-acadsharp-ac1014-dxf-ascii-ac1032", "w-acadsharp-ac1014-dxf-binary-ac1012", "w-acadsharp-ac1014-dxf-binary-ac1014", "w-acadsharp-ac1014-dxf-binary-ac1015", "w-acadsharp-ac1014-dxf-binary-ac1018", "w-acadsharp-ac1014-dxf-binary-ac1021", "w-acadsharp-ac1014-dxf-binary-ac1024", "w-acadsharp-ac1014-dxf-binary-ac1027", "w-acadsharp-ac1014-dxf-binary-ac1032", "w-acadsharp-ac1015-dxf-ascii-ac1012", "w-acadsharp-ac1015-dxf-ascii-ac1014", "w-acadsharp-ac1015-dxf-ascii-ac1015", "w-acadsharp-ac1015-dxf-ascii-ac1018", "w-acadsharp-ac1015-dxf-ascii-ac1021", "w-acadsharp-ac1015-dxf-ascii-ac1024", "w-acadsharp-ac1015-dxf-ascii-ac1027", "w-acadsharp-ac1015-dxf-ascii-ac1032", "w-acadsharp-ac1015-dxf-binary-ac1012", "w-acadsharp-ac1015-dxf-binary-ac1014", "w-acadsharp-ac1015-dxf-binary-ac1015", "w-acadsharp-ac1015-dxf-binary-ac1018", "w-acadsharp-ac1015-dxf-binary-ac1021", "w-acadsharp-ac1015-dxf-binary-ac1024", "w-acadsharp-ac1015-dxf-binary-ac1027", "w-acadsharp-ac1015-dxf-binary-ac1032", "w-acadsharp-ac1018-dxf-ascii-ac1012", "w-acadsharp-ac1018-dxf-ascii-ac1014", "w-acadsharp-ac1018-dxf-ascii-ac1015", "w-acadsharp-ac1018-dxf-ascii-ac1018", "w-acadsharp-ac1018-dxf-ascii-ac1021", "w-acadsharp-ac1018-dxf-ascii-ac1024", "w-acadsharp-ac1018-dxf-ascii-ac1027", "w-acadsharp-ac1018-dxf-ascii-ac1032", "w-acadsharp-ac1018-dxf-binary-ac1012", "w-acadsharp-ac1018-dxf-binary-ac1014", "w-acadsharp-ac1018-dxf-binary-ac1015", "w-acadsharp-ac1018-dxf-binary-ac1018", "w-acadsharp-ac1018-dxf-binary-ac1021", "w-acadsharp-ac1018-dxf-binary-ac1024", "w-acadsharp-ac1018-dxf-binary-ac1027", "w-acadsharp-ac1018-dxf-binary-ac1032", "w-acadsharp-ac1021-dxf-ascii-ac1012", "w-acadsharp-ac1021-dxf-ascii-ac1014", "w-acadsharp-ac1021-dxf-ascii-ac1015", "w-acadsharp-ac1021-dxf-ascii-ac1018", "w-acadsharp-ac1021-dxf-ascii-ac1021", "w-acadsharp-ac1021-dxf-ascii-ac1024", "w-acadsharp-ac1021-dxf-ascii-ac1027", "w-acadsharp-ac1021-dxf-ascii-ac1032", "w-acadsharp-ac1021-dxf-binary-ac1012", "w-acadsharp-ac1021-dxf-binary-ac1014", "w-acadsharp-ac1021-dxf-binary-ac1015", "w-acadsharp-ac1021-dxf-binary-ac1018", "w-acadsharp-ac1021-dxf-binary-ac1021", "w-acadsharp-ac1021-dxf-binary-ac1024", "w-acadsharp-ac1021-dxf-binary-ac1027", "w-acadsharp-ac1021-dxf-binary-ac1032", "w-acadsharp-ac1024-dxf-ascii-ac1012", "w-acadsharp-ac1024-dxf-ascii-ac1014", "w-acadsharp-ac1024-dxf-ascii-ac1015", "w-acadsharp-ac1024-dxf-ascii-ac1018", "w-acadsharp-ac1024-dxf-ascii-ac1021", "w-acadsharp-ac1024-dxf-ascii-ac1024", "w-acadsharp-ac1024-dxf-ascii-ac1027", "w-acadsharp-ac1024-dxf-ascii-ac1032", "w-acadsharp-ac1024-dxf-binary-ac1012", "w-acadsharp-ac1024-dxf-binary-ac1014", "w-acadsharp-ac1024-dxf-binary-ac1015", "w-acadsharp-ac1024-dxf-binary-ac1018", "w-acadsharp-ac1024-dxf-binary-ac1021", "w-acadsharp-ac1024-dxf-binary-ac1024", "w-acadsharp-ac1024-dxf-binary-ac1027", "w-acadsharp-ac1024-dxf-binary-ac1032", "w-acadsharp-ac1027-dxf-ascii-ac1012", "w-acadsharp-ac1027-dxf-ascii-ac1014", "w-acadsharp-ac1027-dxf-ascii-ac1015", "w-acadsharp-ac1027-dxf-ascii-ac1018", "w-acadsharp-ac1027-dxf-ascii-ac1021", "w-acadsharp-ac1027-dxf-ascii-ac1024", "w-acadsharp-ac1027-dxf-ascii-ac1027", "w-acadsharp-ac1027-dxf-ascii-ac1032", "w-acadsharp-ac1027-dxf-binary-ac1012", "w-acadsharp-ac1027-dxf-binary-ac1014", "w-acadsharp-ac1027-dxf-binary-ac1015", "w-acadsharp-ac1027-dxf-binary-ac1018", "w-acadsharp-ac1027-dxf-binary-ac1021", "w-acadsharp-ac1027-dxf-binary-ac1024", "w-acadsharp-ac1027-dxf-binary-ac1027", "w-acadsharp-ac1027-dxf-binary-ac1032", "w-acadsharp-sample-base-dxf-ascii-ac1012", "w-acadsharp-sample-base-dxf-ascii-ac1014", "w-acadsharp-sample-base-dxf-ascii-ac1015", "w-acadsharp-sample-base-dxf-ascii-ac1018", "w-acadsharp-sample-base-dxf-ascii-ac1021", "w-acadsharp-sample-base-dxf-ascii-ac1024", "w-acadsharp-sample-base-dxf-ascii-ac1027", "w-acadsharp-sample-base-dxf-ascii-ac1032", "w-acadsharp-sample-base-dxf-binary-ac1012", "w-acadsharp-sample-base-dxf-binary-ac1014", "w-acadsharp-sample-base-dxf-binary-ac1015", "w-acadsharp-sample-base-dxf-binary-ac1018", "w-acadsharp-sample-base-dxf-binary-ac1021", "w-acadsharp-sample-base-dxf-binary-ac1024", "w-acadsharp-sample-base-dxf-binary-ac1027", "w-acadsharp-sample-base-dxf-binary-ac1032"]
+record_type = "circle"
+oracle_indices = [224, 226, 227]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1014-dwg-ac1018", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1018", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1018", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1018", "w-acadsharp-ac1024-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018"]
+record_type = "circle"
+oracle_indices = [224, 226, 227]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+[[known_missing]]
+pairs = ["w-acadsharp:acadsharp"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1014-dwg-ac1018", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1018", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1018", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1018", "w-acadsharp-ac1024-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018"]
+record_type = "circle"
+oracle_indices = [224, 226, 227]
+reason = "ACadSharp 3.7.1 does not write an ACAD_TABLE entity. Its DXF writer lists TableEntity among the entities it does not implement (DxfSectionWriterBase.Entities.cs, isEntitySupported), and its DWG writer does the same for every version before AC1024 (DwgObjectWriter.cs, isEntitySupported, TableEntity when !R2010Plus). The geometry of the drawing's two tables (53 records, oracle indices 126 to 152 and 213 to 238) is not in the output, and every reader agrees it is absent. This save is the same drawing as sample_AC1032.dwg."
+issue = "libviprs/acadsharp-rs-tests#106"
+
+
+# ---- the AC1015 tail and the spline in the saves of stage two (#108, #41) -------------------------
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1015"]
+record_type = "text"
+oracle_indices = [183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 201, 209, 240, 242, 246, 259, 274, 284, 290, 292]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1015"]
+record_type = "circle"
+oracle_indices = [200, 243, 244, 288, 293, 294, 295, 296]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1015"]
+record_type = "polyline"
+oracle_indices = [196, 198, 239, 241, 245, 247, 248, 253, 254, 255, 256, 257, 258, 289, 291]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1015"]
+record_type = "point"
+oracle_indices = [210, 211, 212, 275, 276, 277, 285, 286, 287]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1015"]
+record_type = "polygon"
+oracle_indices = [207, 208, 282, 283]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1014-dwg-ac1015", "w-acadsharp-ac1015-dwg-ac1015", "w-acadsharp-ac1018-dwg-ac1015", "w-acadsharp-ac1021-dwg-ac1015", "w-acadsharp-ac1024-dwg-ac1015"]
+record_type = "line"
+oracle_indices = [199, 202, 203, 204, 205, 206, 249, 250, 251, 252, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 278, 279, 280, 281]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1015"]
+record_type = "text"
+oracle_indices = [183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 201, 209, 240, 242, 246, 259, 274, 284, 290, 292]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1015"]
+record_type = "circle"
+oracle_indices = [200, 243, 244, 288, 293, 294, 295, 296]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1015"]
+record_type = "polyline"
+oracle_indices = [196, 198, 239, 241, 245, 247, 248, 253, 254, 255, 256, 257, 258, 289, 291]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1015"]
+record_type = "point"
+oracle_indices = [210, 211, 212, 275, 276, 277, 285, 286, 287]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1015"]
+record_type = "polygon"
+oracle_indices = [207, 208, 282, 283]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle"]
+fixtures = ["w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1015"]
+record_type = "line"
+oracle_indices = [199, 202, 203, 204, 205, 206, 249, 250, 251, 252, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 278, 279, 280, 281]
+reason = "ACadSharp 3.7.1 reads its own AC1015 DWG without the model space records from the source's 183rd on, and acadsharp-rs, which embeds the same reader, loses them too. acadrust reads the same file and has them, and ACadSharp reads AutoCAD's own AC1015 save whole. So either the writer leaves the AC1015 file in a state only acadrust tolerates or the reader cannot follow it; which side breaks it is not established here (see the issue)."
+issue = "libviprs/acadsharp-rs-tests#108"
+
+[[known_missing]]
+pairs = ["w-acadsharp:oracle", "w-acadsharp:acadrust"]
+fixtures = ["w-acadsharp-ac1027-dwg-ac1015", "w-acadsharp-ac1027-dwg-ac1018", "w-acadsharp-ac1027-dwg-ac1024", "w-acadsharp-sample-base-dwg-ac1015", "w-acadsharp-sample-base-dwg-ac1018", "w-acadsharp-sample-base-dwg-ac1024"]
+record_type = "spline"
+oracle_indices = [52]
+reason = "The spline (oracle index 52) is not in the DWG ACadSharp 3.7.1 writes at AC1015, AC1018 or AC1024, and the oracle and acadrust agree it is absent; AC1027 and AC1032 keep it. The cause is not established."
+issue = "libviprs/acadsharp-rs-tests#108"
+
