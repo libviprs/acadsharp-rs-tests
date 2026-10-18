@@ -2004,3 +2004,136 @@ a = "this is a really long Mtext\\Pbla bla bla bla bla bla bla bla bla bla bla b
 b = "this is a really long Mtext\nbla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
 reason = "AutoCAD's binary DXF stores the MTEXT paragraph break as the escape \\P. ezdxf keeps it as stored; acadrust returns a line feed, as it does for the ASCII twin and the DWG, so they disagree on the binary file only."
 issue = "libviprs/acadsharp-rs-tests#24"
+
+# ---- records one side lacks, and why that is settled --------------------------------------------
+
+[[known_records]]
+pair = "oracle/acadrust"
+fixture = "regression_text_zero_height"
+record_type = "text"
+only_in = "b"
+count = 2
+reason = "A TEXT and an MTEXT of height 0. ACadSharp 3.7.1 writes the zero and then throws reading it back, so the oracle drops both (and says so with two reader_error warnings) while acadrust reads them and emits text records of height 0.0, which is what the generator wrote. The loss is in ACadSharp's reader, upstream and not ours; tests/regression_claims.rs pins it."
+issue = "libviprs/acadsharp-rs-tests#78"
+
+[[known_records]]
+pair = "acadsharp/acadrust"
+fixture = "regression_text_zero_height"
+record_type = "text"
+only_in = "b"
+count = 2
+reason = "The same two zero-height texts: the shim is ACadSharp underneath, so it loses them where acadrust does not."
+issue = "libviprs/acadsharp-rs-tests#78"
+
+[[known_records]]
+pair = "ezdxf/oracle"
+fixture = "dxf-blockpolarparameter"
+record_type = "line"
+only_in = "b"
+count = 4
+reason = "The DXF twin AutoCAD wrote does not hold four lines the DWG holds (handles 411 and 412 inside the insert at 254, 3FE and 3FF inside the insert at 299; none occurs anywhere in BLOCKPOLARPARAMETER.dxf). The oracle and acadrust reading the same DXF draw what ezdxf draws, so no reader is wrong: the two files are not the same drawing."
+issue = "libviprs/acadsharp-rs-tests#79"
+
+[[known_records]]
+pair = "ezdxf/acadsharp"
+fixture = "dxf-blockpolarparameter"
+record_type = "line"
+only_in = "b"
+count = 4
+reason = "The DXF twin AutoCAD wrote does not hold four lines the DWG holds (handles 411 and 412 inside the insert at 254, 3FE and 3FF inside the insert at 299; none occurs anywhere in BLOCKPOLARPARAMETER.dxf). The oracle and acadrust reading the same DXF draw what ezdxf draws, so no reader is wrong: the two files are not the same drawing."
+issue = "libviprs/acadsharp-rs-tests#79"
+
+[[known_records]]
+pair = "ezdxf/acadrust"
+fixture = "dxf-blockpolarparameter"
+record_type = "line"
+only_in = "b"
+count = 4
+reason = "The DXF twin AutoCAD wrote does not hold four lines the DWG holds (handles 411 and 412 inside the insert at 254, 3FE and 3FF inside the insert at 299; none occurs anywhere in BLOCKPOLARPARAMETER.dxf). The oracle and acadrust reading the same DXF draw what ezdxf draws, so no reader is wrong: the two files are not the same drawing."
+issue = "libviprs/acadsharp-rs-tests#79"
+
+[[known_records]]
+pair = "dxf-dwg:oracle"
+fixture = "dxf-blockpolarparameter"
+record_type = "line"
+only_in = "b"
+count = 4
+reason = "The DXF twin AutoCAD wrote does not hold four lines the DWG holds (handles 411 and 412 inside the insert at 254, 3FE and 3FF inside the insert at 299; none occurs anywhere in BLOCKPOLARPARAMETER.dxf). The oracle and acadrust reading the same DXF draw what ezdxf draws, so no reader is wrong: the two files are not the same drawing."
+issue = "libviprs/acadsharp-rs-tests#79"
+
+[[known_records]]
+pair = "dxf-dwg:acadrust"
+fixture = "dxf-blockpolarparameter"
+record_type = "line"
+only_in = "b"
+count = 4
+reason = "The DXF twin AutoCAD wrote does not hold four lines the DWG holds (handles 411 and 412 inside the insert at 254, 3FE and 3FF inside the insert at 299; none occurs anywhere in BLOCKPOLARPARAMETER.dxf). The oracle and acadrust reading the same DXF draw what ezdxf draws, so no reader is wrong: the two files are not the same drawing."
+issue = "libviprs/acadsharp-rs-tests#79"
+
+# ---- splines: the closed and periodic flags (#65) --------------------------------------------------
+
+[[known]]
+pair = "oracle/acadrust"
+fixture = "acadsharp-export-sample"
+record_type = "spline"
+field = "periodic"
+oracle_index = 180
+a = true
+b = false
+reason = "A fit-point spline whose DWG flags1 carry the closed bit (flags1 is 13) and no periodic bit. ACadSharp 3.7.1 derives periodic from that closed bit for a spline built from fit points (Spline.IsPeriodic, the MethodFitPoints branch), and acadrust reports the periodic bit the file does not hold. The DWG stores no periodic bit for a fit-point spline, so nothing in the file settles it: the oracle keeps what ACadSharp says."
+issue = "libviprs/acadsharp-rs-tests#65"
+
+[[known]]
+pair = "oracle/acadsharp"
+fixture = "acadsharp-export-sample"
+record_type = "spline"
+field = "periodic"
+oracle_index = 180
+a = true
+b = false
+reason = "A fit-point spline whose DWG flags1 carry the closed bit (flags1 is 13) and no periodic bit. ACadSharp 3.7.1 derives periodic from that closed bit for a spline built from fit points (Spline.IsPeriodic, the MethodFitPoints branch), and acadrust reports the periodic bit the file does not hold. The DWG stores no periodic bit for a fit-point spline, so nothing in the file settles it: the oracle keeps what ACadSharp says."
+issue = "libviprs/acadsharp-rs-tests#65"
+
+[[known]]
+pair = "oracle/acadsharp"
+fixture = "acadsharp-export-sample"
+record_type = "spline"
+field = "closed"
+oracle_index = 185
+a = false
+b = true
+reason = "A hatch boundary spline edge. ACadSharp 3.7.1 builds the shim's spline from BoundaryPath.Spline.ToEntity(), which sets IsClosed = true whatever the edge says, and a hatch edge has no closed flag in the file. The oracle and acadrust report false."
+issue = "libviprs/acadsharp-rs-tests#65"
+
+[[known]]
+pair = "acadsharp/acadrust"
+fixture = "acadsharp-export-sample"
+record_type = "spline"
+field = "closed"
+handles = ["AA8"]
+a = true
+b = false
+reason = "A hatch boundary spline edge. ACadSharp 3.7.1 builds the shim's spline from BoundaryPath.Spline.ToEntity(), which sets IsClosed = true whatever the edge says, and a hatch edge has no closed flag in the file. The oracle and acadrust report false."
+issue = "libviprs/acadsharp-rs-tests#65"
+
+[[known]]
+pair = "oracle/acadsharp"
+fixture = "g13_hatch"
+record_type = "spline"
+field = "closed"
+oracle_index = 15
+a = false
+b = true
+reason = "A hatch boundary spline edge. ACadSharp 3.7.1 builds the shim's spline from BoundaryPath.Spline.ToEntity(), which sets IsClosed = true whatever the edge says, and a hatch edge has no closed flag in the file. The oracle and acadrust report false."
+issue = "libviprs/acadsharp-rs-tests#65"
+
+[[known]]
+pair = "acadsharp/acadrust"
+fixture = "g13_hatch"
+record_type = "spline"
+field = "closed"
+handles = ["4C"]
+a = true
+b = false
+reason = "A hatch boundary spline edge. ACadSharp 3.7.1 builds the shim's spline from BoundaryPath.Spline.ToEntity(), which sets IsClosed = true whatever the edge says, and a hatch edge has no closed flag in the file. The oracle and acadrust report false."
+issue = "libviprs/acadsharp-rs-tests#65"

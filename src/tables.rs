@@ -39,6 +39,15 @@
 //! oracle_indices = [126, 127]   # indices in the oracle's stream of the source
 //! reason = "..."
 //! issue = "..."
+//!
+//! [[known_records]]     # whole records one side has and the other lacks, settled
+//! pair = "oracle/acadrust"
+//! fixture = "regression_text_zero_height"
+//! record_type = "text"
+//! only_in = "b"           # the side that has them
+//! count = 2               # exactly this many: one more or fewer is red
+//! reason = "..."
+//! issue = "..."
 //! ```
 //!
 //! Pairs are written `a/b` in the order the verdict file uses.
@@ -49,7 +58,7 @@ use serde::Deserialize;
 
 use crate::compare::{
     BOUNDED, BOUNDED_TIGHT, Class, ClassTable, Engine, Exclusion, KnownDivergence, KnownMissing,
-    Pair, RecordKey, Scope, Val, WarningRow,
+    KnownRecords, Pair, RecordKey, Scope, Val, WarningRow,
 };
 
 const TABLES: &str = include_str!("../parity/TABLES.toml");
@@ -192,6 +201,20 @@ struct MissingRow {
     issue: String,
 }
 
+#[derive(Debug, Deserialize)]
+struct KnownRecordsRow {
+    pair: String,
+    fixture: String,
+    record_type: String,
+    /// `"a"` or `"b"`: the side that has the records the other lacks.
+    only_in: String,
+    count: usize,
+    #[serde(default)]
+    reason: String,
+    #[serde(default)]
+    issue: String,
+}
+
 #[derive(Debug, Default, Deserialize)]
 struct File {
     #[serde(default)]
@@ -202,6 +225,8 @@ struct File {
     exclude: Vec<ExcludeRow>,
     #[serde(default)]
     known: Vec<KnownRow>,
+    #[serde(default)]
+    known_records: Vec<KnownRecordsRow>,
 }
 
 fn val(v: &toml::Value) -> Result<Val, String> {
@@ -319,6 +344,38 @@ pub fn load(text: &str) -> Result<BTreeMap<String, ClassTable>, String> {
             }
         }
     }
+    for k in &file.known_records {
+        let t = tables.get_mut(&k.pair).ok_or_else(|| {
+            format!(
+                "a known_records row names {}, which has no warnings row",
+                k.pair
+            )
+        })?;
+        let only_in_b = match k.only_in.as_str() {
+            "a" => false,
+            "b" => true,
+            other => {
+                return Err(format!(
+                    "the known_records row {} {} has only_in = {other:?}, which is not \"a\" or \"b\"",
+                    k.fixture, k.record_type
+                ));
+            }
+        };
+        if k.count == 0 {
+            return Err(format!(
+                "the known_records row {} {} has a count of zero: delete the row instead",
+                k.fixture, k.record_type
+            ));
+        }
+        t.known_records.push(KnownRecords {
+            fixture: k.fixture.clone(),
+            record_type: k.record_type.clone(),
+            only_in_b,
+            count: k.count,
+            reason: k.reason.clone(),
+            issue: k.issue.clone(),
+        });
+    }
     for t in tables.values() {
         t.validate()
             .map_err(|e| format!("{}: {e}", pair_name(t.pair)))?;
@@ -399,5 +456,29 @@ mod tests {
     fn a_known_missing_row_on_a_pair_whose_a_side_is_not_the_oracle_is_refused() {
         let text = "[[warnings]]\npair = \"w-acadrust:oracle\"\ncompare = false\nreason = \"r\"\nissue = \"i#1\"\n\n[[known_missing]]\npairs=[\"w-acadrust:oracle\"]\nfixtures=[\"f\"]\nrecord_type=\"line\"\noracle_indices=[3]\nreason=\"r\"\nissue=\"i#2\"\n";
         assert!(load(text).unwrap_err().contains("not the oracle"));
+    }
+
+    #[test]
+    fn a_known_records_row_names_a_side_and_a_count() {
+        let row = |extra: &str| {
+            format!(
+                "{W}\n[[known_records]]\npair=\"oracle/acadrust\"\nfixture=\"f\"\nrecord_type=\"text\"\nreason=\"r\"\nissue=\"i#1\"\n{extra}"
+            )
+        };
+        let ok = load(&row("only_in = \"b\"\ncount = 2\n")).unwrap();
+        let k = &ok["oracle/acadrust"].known_records;
+        assert_eq!(k.len(), 1);
+        assert!(k[0].only_in_b);
+        assert_eq!(k[0].count, 2);
+        assert!(
+            load(&row("only_in = \"both\"\ncount = 2\n"))
+                .unwrap_err()
+                .contains("only_in")
+        );
+        assert!(
+            load(&row("only_in = \"b\"\ncount = 0\n"))
+                .unwrap_err()
+                .contains("count of zero")
+        );
     }
 }

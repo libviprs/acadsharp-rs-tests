@@ -531,25 +531,25 @@ verdict = "MATCH"
 [[row]]
 fixture = "acadsharp-export-sample"
 pair = "acadsharp/acadrust"
-verdict = "DIFF:41"
-reason = "acadrust agrees with the oracle where the shim differs: the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66, libviprs/acadsharp-rs-tests#65"
+verdict = "DIFF:40"
+reason = "acadrust agrees with the oracle where the shim differs: the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings)"
+issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66"
 first = "acadsharp-export-sample acadsharp-acadrust: view 0 b#24 B handles 347 polyline is in B and not in A [EXACT]"
 
 [[row]]
 fixture = "acadsharp-export-sample"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
-reason = "three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding)"
+verdict = "KNOWN:1"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#65"
-first = "acadsharp-export-sample oracle-acadrust: view 7 a#180 b#180 B handles A7F spline.periodic: true vs false [EXACT]"
+first = "acadsharp-export-sample oracle-acadrust: view 7 a#180 b#180 B handles A7F spline.periodic: true vs false [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#65"
 
 [[row]]
 fixture = "acadsharp-export-sample"
 pair = "oracle/acadsharp"
-verdict = "DIFF:42"
-reason = "the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (2 findings)"
-issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66, libviprs/acadsharp-rs-tests#65"
+verdict = "DIFF:40"
+reason = "the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings)"
+issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66"
 first = "acadsharp-export-sample oracle-acadsharp: view 0 a#24 polyline is in A and not in B [EXACT]"
 
 [[row]]
@@ -876,10 +876,10 @@ verdict = "MATCH"
 [[row]]
 fixture = "dxf-blockpolarparameter"
 pair = "dxf-dwg:acadrust"
-verdict = "DIFF:4"
-reason = "the DXF twin holds four lines the DWG draws (handles 411 and 412 in the insert at 254, 3FE and 3FF in the insert at 299, none of which occurs in the DXF); the oracle and acadrust agree on that, and ezdxf over the same DXF draws the same lines as they do"
+verdict = "KNOWN:4"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#79"
-first = "dxf-blockpolarparameter acadrust-acadrust: view 0 b#6 B handles 254/411 line is in B and not in A [EXACT]"
+first = "dxf-blockpolarparameter acadrust-acadrust: view 0 b#6 B handles 254/411 line is in B and not in A [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#79"
 
 [[row]]
 fixture = "dxf-blockpolarparameter"
@@ -891,10 +891,10 @@ issue = "libviprs/acadsharp-rs-tests#27"
 [[row]]
 fixture = "dxf-blockpolarparameter"
 pair = "dxf-dwg:oracle"
-verdict = "DIFF:4"
-reason = "the DXF twin holds four lines the DWG draws (handles 411 and 412 in the insert at 254, 3FE and 3FF in the insert at 299, none of which occurs in the DXF); the oracle and acadrust agree on that, and ezdxf over the same DXF draws the same lines as they do"
+verdict = "KNOWN:4"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#79"
-first = "dxf-blockpolarparameter oracle-oracle: view 0 b#6 line is in B and not in A [EXACT]"
+first = "dxf-blockpolarparameter oracle-oracle: view 0 b#6 line is in B and not in A [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#79"
 
 [[row]]
 fixture = "dxf-blockpolarparameter"
@@ -914,26 +914,26 @@ verdict = "MATCH"
 [[row]]
 fixture = "dxf-blockpolarparameter"
 pair = "ezdxf/acadrust"
-verdict = "DIFF:4"
-reason = "ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings)"
+verdict = "KNOWN:4"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#79"
-first = "dxf-blockpolarparameter ezdxf-acadrust: view 0 b#6 B handles 254/411 line is in B and not in A [EXACT]"
+first = "dxf-blockpolarparameter ezdxf-acadrust: view 0 b#6 B handles 254/411 line is in B and not in A [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#79"
 
 [[row]]
 fixture = "dxf-blockpolarparameter"
 pair = "ezdxf/acadsharp"
-verdict = "DIFF:4"
-reason = "ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings)"
+verdict = "KNOWN:4"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#79"
-first = "dxf-blockpolarparameter ezdxf-acadsharp: view 0 b#6 B handles 411 line is in B and not in A [EXACT]"
+first = "dxf-blockpolarparameter ezdxf-acadsharp: view 0 b#6 B handles 411 line is in B and not in A [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#79"
 
 [[row]]
 fixture = "dxf-blockpolarparameter"
 pair = "ezdxf/oracle"
-verdict = "DIFF:4"
-reason = "ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings)"
+verdict = "KNOWN:4"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#79"
-first = "dxf-blockpolarparameter ezdxf-oracle: view 0 b#6 line is in B and not in A [EXACT]"
+first = "dxf-blockpolarparameter ezdxf-oracle: view 0 b#6 line is in B and not in A [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#79"
 
 [[row]]
 fixture = "dxf-blockrotationparameter"
@@ -2395,8 +2395,8 @@ verdict = "MATCH"
 fixture = "g13_hatch"
 pair = "acadsharp/acadrust"
 verdict = "COUNT:4/16"
-reason = "acadrust agrees with the oracle where the shim differs: a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#59, libviprs/acadsharp-rs-tests#65"
+reason = "acadrust agrees with the oracle where the shim differs: a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings)"
+issue = "libviprs/acadsharp-rs-tests#59"
 first = "g13_hatch acadsharp-acadrust: view 0 b#3 B handles 49 line is in B and not in A [EXACT]"
 
 [[row]]
@@ -2408,8 +2408,8 @@ verdict = "MATCH"
 fixture = "g13_hatch"
 pair = "oracle/acadsharp"
 verdict = "COUNT:16/4"
-reason = "a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding)"
-issue = "libviprs/acadsharp-rs-tests#59, libviprs/acadsharp-rs-tests#65"
+reason = "a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings)"
+issue = "libviprs/acadsharp-rs-tests#59"
 first = "g13_hatch oracle-acadsharp: view 0 a#3 line is in A and not in B [EXACT]"
 
 [[row]]
@@ -3225,18 +3225,18 @@ verdict = "MATCH"
 [[row]]
 fixture = "regression_text_zero_height"
 pair = "acadsharp/acadrust"
-verdict = "DIFF:2"
-reason = "acadrust agrees with the oracle where the shim differs: acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings)"
+verdict = "KNOWN:2"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#78"
-first = "regression_text_zero_height acadsharp-acadrust: view 0 b#3 B handles 49 text is in B and not in A [EXACT]"
+first = "regression_text_zero_height acadsharp-acadrust: view 0 b#3 B handles 49 text is in B and not in A [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#78"
 
 [[row]]
 fixture = "regression_text_zero_height"
 pair = "oracle/acadrust"
-verdict = "DIFF:2"
-reason = "acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings)"
+verdict = "KNOWN:2"
+reason = "listed in parity/TABLES.toml"
 issue = "libviprs/acadsharp-rs-tests#78"
-first = "regression_text_zero_height oracle-acadrust: view 0 b#3 B handles 49 text is in B and not in A [EXACT]"
+first = "regression_text_zero_height oracle-acadrust: view 0 b#3 B handles 49 text is in B and not in A [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#78"
 
 [[row]]
 fixture = "regression_text_zero_height"

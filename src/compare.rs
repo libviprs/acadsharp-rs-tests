@@ -224,6 +224,22 @@ pub struct KnownMissing {
     pub issue: String,
 }
 
+/// Records one side draws and the other does not, where the reason is known and
+/// settled: the whole record is absent from one stream, so there is no field to
+/// list a `KnownDivergence` against. The row says how many, and the count has to
+/// be exact: one more is a new difference, one fewer a row that has gone stale.
+#[derive(Debug, Clone, PartialEq)]
+pub struct KnownRecords {
+    pub fixture: String,
+    pub record_type: String,
+    /// Whether the records are in side B and missing from side A (otherwise the
+    /// other way round).
+    pub only_in_b: bool,
+    pub count: usize,
+    pub reason: String,
+    pub issue: String,
+}
+
 /// A disagreement no ground truth settles: listed, not scored.
 #[derive(Debug, Clone, PartialEq)]
 pub struct DualOracle {
@@ -252,6 +268,7 @@ pub struct ClassTable {
     pub excluded: Vec<Exclusion>,
     pub known: Vec<KnownDivergence>,
     pub known_missing: Vec<KnownMissing>,
+    pub known_records: Vec<KnownRecords>,
     pub dual_oracle: Vec<DualOracle>,
 }
 
@@ -293,6 +310,7 @@ impl ClassTable {
             excluded: Vec::new(),
             known: Vec::new(),
             known_missing: Vec::new(),
+            known_records: Vec::new(),
             dual_oracle: Vec::new(),
         }
     }
@@ -329,6 +347,16 @@ impl ClassTable {
         for k in &self.known_missing {
             need(
                 &format!("KNOWN_MISSING row {} of {}", k.record_type, k.fixture),
+                &k.reason,
+                &k.issue,
+            )?;
+        }
+        for k in &self.known_records {
+            need(
+                &format!(
+                    "KNOWN_DIVERGENCE row for {} {} records of {}",
+                    k.count, k.record_type, k.fixture
+                ),
                 &k.reason,
                 &k.issue,
             )?;
@@ -1205,6 +1233,54 @@ impl Run<'_> {
                         self.report.findings.push(f);
                     }
                 }
+            }
+        }
+        for row in self
+            .table
+            .known_records
+            .iter()
+            .filter(|k| k.fixture == self.fixture)
+        {
+            let want = if row.only_in_b {
+                FindingKind::OnlyInB
+            } else {
+                FindingKind::OnlyInA
+            };
+            let hits: Vec<usize> = self
+                .report
+                .findings
+                .iter()
+                .enumerate()
+                .filter(|(_, f)| {
+                    f.kind == want
+                        && f.disposition == Disposition::Open
+                        && f.record_type == row.record_type
+                })
+                .map(|(at, _)| at)
+                .collect();
+            let exact = hits.len() == row.count;
+            for &at in &hits {
+                let f = &mut self.report.findings[at];
+                f.class = Class::KnownDivergence;
+                f.disposition = if exact {
+                    Disposition::Known {
+                        issue: row.issue.clone(),
+                    }
+                } else {
+                    Disposition::KnownMoved
+                };
+            }
+            if hits.is_empty() {
+                let mut f = self.finding(
+                    FindingKind::StaleKnownRow,
+                    None,
+                    None,
+                    &row.record_type,
+                    String::new(),
+                );
+                f.class = Class::KnownDivergence;
+                f.disposition = Disposition::KnownVanished;
+                self.report.findings.push(f);
             }
         }
         for row in self

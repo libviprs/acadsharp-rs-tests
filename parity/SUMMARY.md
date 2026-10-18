@@ -16,20 +16,20 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | pair | rows | MATCH | KNOWN | DIFF | COUNT | OPEN_FAILED | EXCLUDED | DUAL_ORACLE |
 |---|---|---|---|---|---|---|---|---|
-| `acadsharp/acadrust` | 87 | 64 | 0 | 19 | 3 | 1 | 0 | 0 |
+| `acadsharp/acadrust` | 87 | 64 | 1 | 18 | 3 | 1 | 0 | 0 |
 | `dxf-ascii-binary:acadrust` | 7 | 6 | 0 | 1 | 0 | 0 | 0 | 0 |
 | `dxf-ascii-binary:ezdxf` | 7 | 1 | 5 | 1 | 0 | 0 | 0 | 0 |
 | `dxf-ascii-binary:oracle` | 7 | 6 | 0 | 1 | 0 | 0 | 0 | 0 |
-| `dxf-dwg:acadrust` | 25 | 14 | 8 | 1 | 2 | 0 | 0 | 0 |
+| `dxf-dwg:acadrust` | 25 | 14 | 9 | 0 | 2 | 0 | 0 | 0 |
 | `dxf-dwg:acadsharp` | 25 | 0 | 0 | 0 | 0 | 0 | 25 | 0 |
-| `dxf-dwg:oracle` | 25 | 10 | 0 | 13 | 2 | 0 | 0 | 0 |
+| `dxf-dwg:oracle` | 25 | 10 | 1 | 12 | 2 | 0 | 0 | 0 |
 | `dxf:ezdxf/acadrust` | 26 | 20 | 5 | 1 | 0 | 0 | 0 | 0 |
 | `dxf:ezdxf/oracle` | 26 | 12 | 0 | 14 | 0 | 0 | 0 | 0 |
 | `dxf:oracle/acadrust` | 26 | 12 | 0 | 14 | 0 | 0 | 0 | 0 |
-| `ezdxf/acadrust` | 25 | 12 | 0 | 11 | 2 | 0 | 0 | 0 |
-| `ezdxf/acadsharp` | 25 | 9 | 0 | 14 | 2 | 0 | 0 | 0 |
-| `ezdxf/oracle` | 25 | 15 | 0 | 8 | 2 | 0 | 0 | 0 |
-| `oracle/acadrust` | 87 | 80 | 5 | 2 | 0 | 0 | 0 | 0 |
+| `ezdxf/acadrust` | 25 | 12 | 1 | 10 | 2 | 0 | 0 | 0 |
+| `ezdxf/acadsharp` | 25 | 9 | 1 | 13 | 2 | 0 | 0 | 0 |
+| `ezdxf/oracle` | 25 | 15 | 1 | 7 | 2 | 0 | 0 | 0 |
+| `oracle/acadrust` | 87 | 80 | 7 | 0 | 0 | 0 | 0 | 0 |
 | `oracle/acadsharp` | 87 | 65 | 0 | 18 | 3 | 1 | 0 | 0 |
 | `self/acadrust` | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 |
 | `self/acadsharp` | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 |
@@ -59,10 +59,10 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `acadsharp-ac1027` | DIFF:51 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#66 | acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (1 finding) |
 | `acadsharp-ac1032` | DIFF:51 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#66 | acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings) |
 | `acadsharp-blockvisibilityparameter` | DIFF:8 | libviprs/acadsharp-rs-tests#60 | acadrust agrees with the oracle where the shim differs: the shim draws entities the drawing marks invisible (8 findings) |
-| `acadsharp-export-sample` | DIFF:41 | libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66, libviprs/acadsharp-rs-tests#65 | acadrust agrees with the oracle where the shim differs: the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding) |
+| `acadsharp-export-sample` | DIFF:40 | libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66 | acadrust agrees with the oracle where the shim differs: the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings) |
 | `acadsharp-sample-base` | DIFF:51 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#66 | acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings) |
 | `g13_dimension_deep` | OPEN_FAILED | libviprs/acadsharp-rs-tests#68 | exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; kept on purpose: max_block_depth is a limit the caller sets (64 by default) and the ABI makes passing it a terminal LIMIT_EXCEEDED, never a truncated stream; the fixture nests three thousand dimensions, which is the input that bound is for; schema 1's 16 levels is the oracle's own format rule (a warning, then carry on) and a different layer, so the two are not meant to agree on a hostile drawing; the row stays OPEN_FAILED with this written next to it |
-| `g13_hatch` | COUNT:4/16 | libviprs/acadsharp-rs-tests#59, libviprs/acadsharp-rs-tests#65 | acadrust agrees with the oracle where the shim differs: a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding) |
+| `g13_hatch` | COUNT:4/16 | libviprs/acadsharp-rs-tests#59 | acadrust agrees with the oracle where the shim differs: a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings) |
 | `g13_mirrored_bulge` | DIFF:1 | libviprs/acadsharp-rs-tests#63 | acadrust agrees with the oracle where the shim differs: a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (4 findings) |
 | `g13_nonuniform` | DIFF:1 | libviprs/acadsharp-rs-tests#64 | acadrust agrees with the oracle where the shim differs: under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding) |
 | `g13_ocs_mirror` | DIFF:3 | libviprs/acadsharp-rs-tests#63 | acadrust agrees with the oracle where the shim differs: a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (11 findings) |
@@ -73,7 +73,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `parity_hatch` | DIFF:3 | libviprs/acadsharp-rs-tests#59 | acadrust agrees with the oracle where the shim differs: a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the three loop records on one side (3 findings) |
 | `parity_text` | DIFF:1 | libviprs/acadsharp-rs-tests#54 | an insert's ATTRIBs come before the block body on the wire and after it in schema 1, so the one line and the attribute text swap places (1 finding) |
 | `regression_hatch_loops` | DIFF:3 | libviprs/acadsharp-rs-tests#55 | acadrust agrees with the oracle where the shim differs: the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (3 findings) |
-| `regression_text_zero_height` | DIFF:2 | libviprs/acadsharp-rs-tests#78 | acadrust agrees with the oracle where the shim differs: acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings) |
+| `regression_text_zero_height` | KNOWN:2 | libviprs/acadsharp-rs-tests#78 | listed in parity/TABLES.toml |
 
 ### `dxf-ascii-binary:acadrust`
 
@@ -102,7 +102,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
-| `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | the DXF twin holds four lines the DWG draws (handles 411 and 412 in the insert at 254, 3FE and 3FF in the insert at 299, none of which occurs in the DXF); the oracle and acadrust agree on that, and ezdxf over the same DXF draws the same lines as they do |
+| `dxf-blockpolarparameter` | KNOWN:4 | libviprs/acadsharp-rs-tests#79 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1009-ascii` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1009-binary` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1015-ascii` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
@@ -148,7 +148,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
-| `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | the DXF twin holds four lines the DWG draws (handles 411 and 412 in the insert at 254, 3FE and 3FF in the insert at 299, none of which occurs in the DXF); the oracle and acadrust agree on that, and ezdxf over the same DXF draws the same lines as they do |
+| `dxf-blockpolarparameter` | KNOWN:4 | libviprs/acadsharp-rs-tests#79 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1009-ascii` | COUNT:2243/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2243 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1009-binary` | COUNT:2243/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2243 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1015-ascii` | DIFF:24 | libviprs/acadsharp-rs-tests#94 | the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other |
@@ -217,7 +217,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
-| `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings) |
+| `dxf-blockpolarparameter` | KNOWN:4 | libviprs/acadsharp-rs-tests#79 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1009-ascii` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1009-binary` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1015-ascii` | DIFF:1 | libviprs/libviprs-dep#111 | saves before 2007 keep text in the code page's MIF form, which acadrust resolves and the others leave as the escape (1 finding) |
@@ -235,7 +235,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
-| `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings) |
+| `dxf-blockpolarparameter` | KNOWN:4 | libviprs/acadsharp-rs-tests#79 | listed in parity/TABLES.toml |
 | `dxf-blockvisibilityparameter` | DIFF:8 | libviprs/acadsharp-rs-tests#55 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (8 findings) |
 | `dxf-sample-ac1009-ascii` | COUNT:1862/219 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 1862 records against the AC1015 DWG's 219. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1009-binary` | COUNT:1862/219 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 1862 records against the AC1015 DWG's 219. The lowering is the file's, and the same in every reader |
@@ -256,7 +256,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
-| `dxf-blockpolarparameter` | DIFF:4 | libviprs/acadsharp-rs-tests#79 | ezdxf's reading of the DXF twin lacks four lines that the three DWG readers draw (4 findings) |
+| `dxf-blockpolarparameter` | KNOWN:4 | libviprs/acadsharp-rs-tests#79 | listed in parity/TABLES.toml |
 | `dxf-sample-ac1009-ascii` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1009-binary` | COUNT:2247/297 | libviprs/acadsharp-rs-tests#28 | AutoCAD lowered the drawing to write R12, which has no LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, HATCH, dimension or table: it explodes them into plain lines, polylines and texts, so the R12 file reads as 2247 records against the AC1015 DWG's 297. The lowering is the file's, and the same in every reader |
 | `dxf-sample-ac1018-binary` | DIFF:4 | libviprs/acadsharp-rs-tests#24 | an MTEXT paragraph break is the escape \P in the DXF (and in saves before 2007) and a line feed in the later DWGs: the format cannot carry the same thing (4 findings) |
@@ -275,9 +275,9 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `acadsharp-ac1015` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
 | `acadsharp-ac1018` | KNOWN:1 | libviprs/libviprs-dep#111 | listed in parity/TABLES.toml |
 | `acadsharp-ac1032` | KNOWN:1 | libviprs/libviprs-dep#112 | listed in parity/TABLES.toml |
-| `acadsharp-export-sample` | DIFF:1 | libviprs/acadsharp-rs-tests#65 | three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding) |
+| `acadsharp-export-sample` | KNOWN:1 | libviprs/acadsharp-rs-tests#65 | listed in parity/TABLES.toml |
 | `acadsharp-sample-base` | KNOWN:1 | libviprs/libviprs-dep#112 | listed in parity/TABLES.toml |
-| `regression_text_zero_height` | DIFF:2 | libviprs/acadsharp-rs-tests#78 | acadrust writes text records for a zero-height text that the oracle and the shim skip (2 findings) |
+| `regression_text_zero_height` | KNOWN:2 | libviprs/acadsharp-rs-tests#78 | listed in parity/TABLES.toml |
 
 ### `oracle/acadsharp`
 
@@ -291,10 +291,10 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `acadsharp-ac1027` | DIFF:51 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#66 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (13 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings) |
 | `acadsharp-ac1032` | DIFF:51 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#66 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings) |
 | `acadsharp-blockvisibilityparameter` | DIFF:8 | libviprs/acadsharp-rs-tests#60 | the shim draws entities the drawing marks invisible (8 findings) |
-| `acadsharp-export-sample` | DIFF:42 | libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66, libviprs/acadsharp-rs-tests#65 | the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (2 findings) |
+| `acadsharp-export-sample` | DIFF:40 | libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66 | the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings) |
 | `acadsharp-sample-base` | DIFF:51 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#66 | the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (38 findings); the shim emits an ATTDEF inside a block where schema 1 skips it (and an insert's ATTRIBs come before the block body on the wire) (12 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (2 findings) |
 | `g13_dimension_deep` | OPEN_FAILED | libviprs/acadsharp-rs-tests#68 | exit 1: emit-acadsharp: g13_dimension_deep: view 0: the decode hit a bound set in Limits; kept on purpose: max_block_depth is a limit the caller sets (64 by default) and the ABI makes passing it a terminal LIMIT_EXCEEDED, never a truncated stream; the fixture nests three thousand dimensions, which is the input that bound is for; schema 1's 16 levels is the oracle's own format rule (a warning, then carry on) and a different layer, so the two are not meant to agree on a hostile drawing; the row stays OPEN_FAILED with this written next to it |
-| `g13_hatch` | COUNT:16/4 | libviprs/acadsharp-rs-tests#59, libviprs/acadsharp-rs-tests#65 | a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings); three readers disagree on the closed or periodic flag of a spline and nobody has read the raw bits (1 finding) |
+| `g13_hatch` | COUNT:16/4 | libviprs/acadsharp-rs-tests#59 | a hatch boundary is one wire Polygon per loop (the kind is excluded) against one record per edge in the oracle, which leaves the edge records on one side (12 findings) |
 | `g13_mirrored_bulge` | DIFF:1 | libviprs/acadsharp-rs-tests#63 | a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (4 findings) |
 | `g13_nonuniform` | DIFF:1 | libviprs/acadsharp-rs-tests#64 | under a non-uniform insert scale the wire keeps the circle and warns, schema 1 and acadrust write an ellipse (1 finding) |
 | `g13_ocs_mirror` | DIFF:3 | libviprs/acadsharp-rs-tests#63 | a mirrored insert is reflected on the wire and kept as a mirrored normal in the oracle: the same curve spelled two ways (11 findings) |
