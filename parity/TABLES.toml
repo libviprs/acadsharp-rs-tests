@@ -2335,3 +2335,2250 @@ a = "\\U+220545,6"
 b = "∅45,6"
 reason = "The drawing stores the MIF escape \\U+220545,6 (AutoCAD's own DXF twin holds exactly that). ezdxf keeps what the file stores, as the schema says the text field does; acadrust decodes the escape to the character in its DXF reader now as it does in its DWG reader, so the two readers of acadrust agree and the other readers keep the escape."
 issue = "libviprs/libviprs-dep#111"
+
+# ---- a clockwise hatch arc and a heavy polyline's elevation in stage two (#159, #160) --------------
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1012"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1012"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1014"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1014"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1015"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1015"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1018"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1018"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1021"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1021"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1024"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1024"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1027"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1027"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1032"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-ascii-ac1032"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1012"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1012"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1014"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1014"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1015"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1015"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1018"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1018"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1021"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1021"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1024"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1024"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1027"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1027"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1032"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_hatch-dxf-binary-ac1032"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1015"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1018"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1021"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1024"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1027"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-ascii-ac1032"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1015"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1018"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1021"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1024"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1027"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:oracle"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:acadrust"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[0].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[1].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadrust:ezdxf"
+fixture = "w-acadrust-g13_ocs_plane-dxf-binary-ac1032"
+record_type = "polyline"
+field = "points[2].z"
+handles = ["4D"]
+a = 0.0
+b = 2.0
+reason = "acadrust writes a heavy 2D polyline as an LWPOLYLINE from AC1015 (down-save), and an LWPOLYLINE keeps its elevation as the z of its points, where the readers of the source drawing give a heavy polyline the z of its vertices (0.0) and not its elevation (2.0). The curve is the same; the readings of the two forms differ by that convention, in every reader. The DXF form below AC1015 stays heavy and agrees with the source."
+issue = "libviprs/acadsharp-rs-tests#160"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1012"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1014"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1015"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1018"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1021"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1024"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1027"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-ascii-ac1032"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1012"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1014"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1015"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1018"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1021"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1024"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1027"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:acadrust"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
+record_type = "arc"
+field = "start"
+handles = ["4B"]
+a = 4.71238898038469
+b = 1.5707963267948966
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
+[[known]]
+pair = "w-acadsharp:ezdxf"
+fixture = "w-acadsharp-g13_hatch-dxf-binary-ac1032"
+record_type = "arc"
+field = "end"
+handles = ["4B"]
+a = 7.853981633974483
+b = 4.71238898038469
+reason = "AutoCAD stores the start and end angle of a clockwise hatch arc edge as 360 minus each (ezdxf's ArcEdge says so, and acadrust writes and reads it that way since libviprs/acadrust#40). ACadSharp 3.7.1 writes the raw angles into a DXF and reads them raw, so its own files round trip and every reader that follows AutoCAD sees the other half of the circle, and ACadSharp reads a file that follows AutoCAD as the other half. The oracle's reading of the source DWG, which holds the true angles, is the reference."
+issue = "libviprs/acadsharp-rs-tests#159"
+
