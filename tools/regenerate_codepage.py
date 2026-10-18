@@ -210,6 +210,7 @@ def command_regenerate(args: argparse.Namespace) -> int:
                           "-c", "Release", "--no-restore", "-v", "q"], what="dotnet build")
         for sub in ("gen1", "gen2", "files", "read"):
             (staging / sub).mkdir()
+        base = f"fixtures/{[f for f in manifest['fixture'] if f['id'] == 'acadsharp-empty'][0]['file']}"
         rows = []
         for o in wanted:
             rid, ext = o["id"], o["ext"]
@@ -220,7 +221,7 @@ def command_regenerate(args: argparse.Namespace) -> int:
                 row["writer_version"] = f"ACadSharp {acadsharp}"
                 failure = None
                 for n in ("gen1", "gen2"):
-                    cmd = ["--author-to", f"{mount}/{n}/{rid}.{ext}", "--as", ORACLE_AS[o["container"]],
+                    cmd = [base, "--author-to", f"{mount}/{n}/{rid}.{ext}", "--as", ORACLE_AS[o["container"]],
                            "--version", o["version"], "--codepage", o["family"]["header"]]
                     for t in texts_of(o["family"], plan):
                         cmd += ["--text", t]

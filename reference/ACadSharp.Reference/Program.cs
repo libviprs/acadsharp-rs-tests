@@ -66,7 +66,7 @@ namespace ACadSharp.Reference
             if (options.AuthorTo is { } authorTo)
             {
                 ExportError? failure = Rewriter.Author(
-                    authorTo, options.RewriteAs!, options.RewriteVersion!, options.CodePage!, options.Texts);
+                    options.Input!, authorTo, options.RewriteAs!, options.RewriteVersion!, options.CodePage!, options.Texts);
                 if (failure is not null)
                 {
                     error.WriteLine(failure.Message);
@@ -359,7 +359,7 @@ namespace ACadSharp.Reference
                   --summary <path>    Write a JSON census of what was produced.
                   --rewrite-to <path> Read the input and write it again, instead of extracting it.
                   --as <container>    With --rewrite-to or --author-to: dwg, dxf (ASCII) or dxf-binary.
-                  --author-to <path>  Write a drawing built from --text strings in --codepage, instead of reading one.
+                  --author-to <path>  Add the --text strings to the input (an empty drawing) in --codepage and write that.
                   --version <ACxxxx>  With --rewrite-to: the version to write.
                   --max-depth <n>     Block nesting limit (default 16).
                   --svg-margin <f>    SVG margin as a fraction of the drawing size (default 0.02).
@@ -669,15 +669,16 @@ namespace ACadSharp.Reference
                 if (authorTo is not null)
                 {
                     if (codePage is null || rewriteAs is null || rewriteVersion is null || texts.Count == 0
-                        || rewriteTo is not null || input is not null || manifest is not null)
+                        || rewriteTo is not null || input is null || manifest is not null)
                     {
                         return Result.Fail<Options>(
                             ExitCode.Usage,
-                            "--author-to takes --as, --version, --codepage and at least one --text, and no input");
+                            "--author-to takes the base drawing, --as, --version, --codepage and at least one --text");
                     }
 
                     return Result.Ok<Options>(new Options
                     {
+                        Input = input,
                         AuthorTo = authorTo,
                         RewriteAs = rewriteAs,
                         RewriteVersion = rewriteVersion,

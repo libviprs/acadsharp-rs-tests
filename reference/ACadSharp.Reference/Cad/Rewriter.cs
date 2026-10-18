@@ -112,6 +112,7 @@ public static class Rewriter
     /// how the code page fixtures get made, so what is in the file is the authored
     /// string and nothing a source drawing carried along.
     /// </summary>
+    /// <param name="baseDrawing">The empty drawing the texts are added to.</param>
     /// <param name="output">Where to write.</param>
     /// <param name="container"><c>dwg</c>, <c>dxf</c> (ASCII) or <c>dxf-binary</c>.</param>
     /// <param name="version">The target, for example <c>AC1015</c>.</param>
@@ -119,6 +120,7 @@ public static class Rewriter
     /// <param name="texts">One TEXT entity per string, one line apart.</param>
     /// <returns>Nothing on success, or why not.</returns>
     public static ExportError? Author(
+        string baseDrawing,
         string output, string container, string version, string codePage, IReadOnlyList<string> texts)
     {
         if (!Containers.Contains(container, StringComparer.Ordinal))
@@ -136,14 +138,15 @@ public static class Rewriter
 
         try
         {
-            var document = new CadDocument();
+            // Built on the empty drawing ACadSharp wrote and the suite vendors, and not
+            // on `new CadDocument()`: a document made from nothing carries clock-derived
+            // fields beyond the four dates and the GUID pair, and two writes of it
+            // differed in the AC1018 header. A read-and-rewrite of a file is deterministic.
+            CadDocument document = DwgReader.Read(baseDrawing);
             document.Header.Version = target;
             document.Header.CodePage = codePage;
-            DateTime fixedTime = new(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            document.Header.CreateDateTime = fixedTime;
-            document.Header.UpdateDateTime = fixedTime;
-            document.Header.UniversalCreateDateTime = fixedTime;
-            document.Header.UniversalUpdateDateTime = fixedTime;
+            document.Header.UniversalCreateDateTime = document.Header.CreateDateTime.ToUniversalTime();
+            document.Header.UniversalUpdateDateTime = document.Header.UpdateDateTime.ToUniversalTime();
             PinGuid(document.Header, nameof(CadHeader.FingerPrintGuid));
             PinGuid(document.Header, nameof(CadHeader.VersionGuid));
             for (int i = 0; i < texts.Count; i++)
