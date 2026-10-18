@@ -438,7 +438,7 @@ acadrust = { status = "not_applicable", reason = "tests ACadSharp's ACIS SAT tex
 path = "IO/DXF/DxfReaderTests.cs"
 status = "not_applicable"
 reason = "DXF, and the crate opens only DWG"
-acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1 compares it against its own DWG reading and the oracle's)", evidence = ["verdict:dxf-sample-ac1015@dxf-ascii-binary:acadrust", "verdict:dxf-sample-ac1018@dxf-dwg:acadrust"] }
+acadrust = { status = "differential", reason = "acadrust reads DXF (R5.1 compares it against its own DWG reading and the oracle's)", evidence = ["verdict:dxf-sample-ac1015@dxf-ascii-binary:acadrust", "verdict:dxf-blockalignmentparameter@dxf-dwg:acadrust"] }
 
 [[test_file]]
 path = "IO/DXF/DxfWriterSingleObjectTests.cs"

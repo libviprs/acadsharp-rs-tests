@@ -400,10 +400,13 @@ fn the_rows_that_are_wrong_for_acadrust_carry_an_override() {
             r["path"]
         );
     }
+    // And one per native_conformance row that model-1 holds for acadrust (R5.6): the
+    // table, dictionary, xdata and header suites, which acadsharp-rs's C ABI cannot reach.
+    const MODEL1_ROWS: usize = 15;
     assert_eq!(
         over,
-        16 + mirrored.len(),
-        "nine DXF rows and seven writer rows, and one per mirrored row"
+        16 + mirrored.len() + MODEL1_ROWS,
+        "nine DXF rows and seven writer rows, one per mirrored row, and the model-1 rows"
     );
 
     for p in [
