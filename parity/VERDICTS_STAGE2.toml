@@ -11,6 +11,13 @@
 # There is no `arch` key on a row: verdicts are arch-independent by contract,
 # and the [[run]] tables list the runs that confirmed that.
 
+[[run]]
+arch = "x86_64"
+archive = "3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...)"
+acadsharp_rs = "f23f37bd453e02e660ef655faa381c45509d8ac1"
+acadrust = "49786e64ad9dcac02f2d14a1d1d3e639ca13880c"
+date = "2026-10-18"
+
 [[row]]
 fixture = "w-acadrust-ac1014-dwg-ac1012"
 pair = "w-acadrust:acadrust"

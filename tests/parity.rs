@@ -1658,7 +1658,7 @@ fn the_code_page_lane_agrees_with_the_committed_verdicts() {
 
 // ---- the round-trip lane, stage two: the nightly (R5.3.1) ---------------------------------
 //
-// One more `#[ignore]` function in this file, selected by `tools/run-tests.sh
+// One more ignored function in this file, selected by `tools/run-tests.sh
 // --stage-two <dir>` and by nothing else: the default `cargo test` and the PR gate
 // never run it, and `tests/stage_two_policy.rs` holds the selector to the target.
 // Its outputs are not in the repository. `tools/stage_two.py` makes them and every
