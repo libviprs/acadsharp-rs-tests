@@ -1599,7 +1599,7 @@ fn the_code_page_lane_agrees_with_the_committed_verdicts() {
 /// for the files with frozen ground truth, so for any other fixture that refusal
 /// must not turn a good schema 1 reading into a failed run.
 #[test]
-fn issue_165_a_model1_refusal_on_a_fixture_with_no_model1_ground_truth_does_not_fail_its_schema_1_reading() {
+fn issue_165_a_model1_refusal_without_frozen_truth_keeps_the_schema_1_reading() {
     let fx = fixtures::by_id("g13_bad_extents").unwrap();
     let out = out_dir().join("issue-165");
     let _ = std::fs::remove_dir_all(&out);
