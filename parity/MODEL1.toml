@@ -742,3 +742,132 @@ names = [
 pairs = ["dxf-dwg:oracle", "dxf-dwg:acadrust"]
 reason = "AutoCAD wrote the DWG and its DXF twin at different moments: the handles in ACDB_RECOMPOSE_DATA, the save information in ACAD_LAST_SAVED_VERSION_INFO and the ACAD extended data AutoCAD writes on annotation entities are per save; ezdxf agrees with the oracle on the DXF and acadrust with the oracle on the DWG"
 issue = "libviprs/acadsharp-rs-tests#31"
+
+# ---- known: block records
+[[known]]
+names = [
+  "block_record/*.explodable", "block_record/*.scale_uniformly"
+]
+pairs = ["ezdxf/oracle", "oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii"
+]
+reason = "these files do not write 280 and 281 for a block record; ACadSharp then keeps explodable false and scale uniformly true where ezdxf and acadrust default to true and false"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- known: block records
+[[known]]
+names = [
+  "block_record/*.flags"
+]
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
+reason = "ACadSharp's DWG reader leaves the has-attributes bit (2) of the BLOCK flags at 0 on *Model_Space, MyBlock and my_block_v2, where the DXF twins hold 2 for all three readers"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- known: block records
+[[known]]
+names = [
+  "block_record/*.preview_bytes"
+]
+pairs = ["dxf-dwg:oracle", "ezdxf/oracle", "oracle/acadrust"]
+reason = "the preview bitmap is 4136 bytes in the DWG and in the DXF: ACadSharp's DXF reader keeps only the last 310 chunk (72 bytes), acadrust's DXF reader drops it and ezdxf keeps none"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- known: block records
+[[known]]
+names = [
+  "block_record/*.preview_bytes", "block_record/*.description"
+]
+pairs = ["dxf-dwg:acadrust"]
+reason = "acadrust's DXF reader drops the 310 preview and the BLOCK description that its DWG reader reads"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- known: block records
+[[known]]
+names = [
+  "block_record/*.description"
+]
+pairs = ["ezdxf/acadrust", "oracle/acadrust"]
+reason = "acadrust's DXF reader drops the BLOCK description (4) that ezdxf and ACadSharp read"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- known: block records
+[[known]]
+names = [
+  "block_record/*.layout"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014"
+]
+reason = "acadrust leaves the layout of the four space records empty on the AC1014 save, where ACadSharp names Model, MyLayout, Layout1 and Layout2"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- known: block records
+[[known]]
+names = [
+  "block_record/*D*.entity_count"
+]
+pairs = ["dxf-dwg:acadrust", "oracle/acadrust"]
+reason = "acadrust's DWG reader numbers the anonymous blocks again, so a name that both readers hold is a different block on each side (the missing and invented names are the excluded rows)"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- excluded: acadrust, anonymous blocks
+[[excluded]]
+engine = "acadrust"
+names = [
+  "block_record/*D10", "block_record/*D11", "block_record/*D14", "block_record/*D22", "block_record/*D23",
+  "block_record/*T16", "block_record/*T9", "block_record/*U18", "block_record/*U19", "block_record/*U25",
+  "block_record/my-dynamic-block"
+]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021", "acadsharp-ac1024",
+  "acadsharp-ac1027", "acadsharp-ac1032"
+]
+reason = "acadrust's DWG reader numbers the anonymous blocks again from *D, *D0, *D1 and so on, so the names AutoCAD stored are not there"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- excluded: oracle, anonymous blocks
+[[excluded]]
+engine = "oracle"
+names = [
+  "block_record/*D", "block_record/*D0", "block_record/*D1", "block_record/*D2", "block_record/*D9",
+  "block_record/*T", "block_record/*T0", "block_record/*U", "block_record/*U0", "block_record/*U1",
+  "block_record/*U2"
+]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021", "acadsharp-ac1024",
+  "acadsharp-ac1027", "acadsharp-ac1032"
+]
+reason = "names acadrust's DWG reader invents when it numbers the anonymous blocks again; the oracle holds the names AutoCAD stored"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- excluded: acadrust DXF twin, invented names
+[[excluded]]
+engine = "acadrust"
+names = [
+  "block_record/*D", "block_record/*D0", "block_record/*D1", "block_record/*D2", "block_record/*D9",
+  "block_record/*T", "block_record/*T0", "block_record/*U", "block_record/*U0", "block_record/*U1",
+  "block_record/*U2", "block_record/*D10", "block_record/*D11", "block_record/*D14", "block_record/*D22",
+  "block_record/*D23", "block_record/*T16", "block_record/*T9", "block_record/*U17", "block_record/*U18",
+  "block_record/*U19", "block_record/*U25"
+]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii", "dxf-sample-ac1024-ascii",
+  "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+]
+reason = "the DWG-against-DXF pair of acadrust holds the stored names on the DXF side and the numbered-again names on the DWG side (both sides carry the twin's id), so each side lacks the other's anonymous blocks"
+issue = "libviprs/acadsharp-rs-tests#123"
+
+# ---- excluded: oracle, dynamic block name
+[[excluded]]
+engine = "oracle"
+names = [
+  "block_record/*U17", "block_record/my-dynamic-block"
+]
+fixtures = [
+  "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021",
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii", "dxf-sample-ac1021-ascii"
+]
+reason = "AutoCAD named the anonymous copy of the dynamic block *U17 in these DXF twins and my-dynamic-block in the DWG saves, so each file holds one of the two"
+issue = "libviprs/acadsharp-rs-tests#123"

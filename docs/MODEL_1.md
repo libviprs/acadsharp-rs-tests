@@ -29,6 +29,7 @@ side is `tools/model1.py`.
 | `dictionary` | this document | the path of entry keys from the root |
 | `xdata` | this document | the owner, a vertical bar, the application name |
 | `xrecord` | this document | the dictionary path that reaches it |
+| `block_record` | this document | the entry name |
 
 The rest of the table kinds (`linetype`, `textstyle`, `dimstyle`,
 `block_record`, `layout`), `dictionary`, and `xdata` with `xrecord` are each
@@ -413,6 +414,43 @@ entry's own key included), with `cloning` (280) and the entries in stored order.
   280 back when the document came from a DXF (libviprs/acadsharp-rs-tests#133).
 - **An entry whose code a reader cannot type** is dropped by ACadSharp's XRECORD
   reader, which notifies, and kept by acadrust as an unknown value.
+
+## `block_record`
+
+```json
+{"model":1,"record":"block_record","name":"*D3","flags":1,"base_point":[0.0,0.0,0.0],"xref_path":"","description":"","units":0,"explodable":true,"scale_uniformly":false,"entity_count":9,"layout":"","preview_bytes":0}
+```
+
+One record per BLOCK_RECORD entry, keyed by the block's name. Model and paper
+space are in it, and so are the anonymous blocks (`*A`, `*D`, `*T`, `*U`) under
+their stored names. Schema 1 resolves every insert, so a block nobody inserts
+shows up nowhere in it; this table is where both readers say what the drawing
+defines. The fields are by DXF code:
+
+| field | code | meaning |
+|---|---|---|
+| `flags` | 70 on the BLOCK entity | the bit field as stored: 1 anonymous, 2 has attributes, 4 xref, 8 xref overlay, 16 externally dependent |
+| `base_point` | 10, 20, 30 | the BLOCK entity's base point |
+| `xref_path` | 1 | empty for a block that is not an xref |
+| `description` | 4 | the BLOCK entity's comment |
+| `units` | 70 on the record | the insertion units |
+| `explodable` | 280 | |
+| `scale_uniformly` | 281 | |
+| `entity_count` | | the entities the block owns |
+| `layout` | 340 | the **name** of the layout, empty for a block that has none |
+| `preview_bytes` | 310 | the length of the preview bitmap, never the bitmap |
+
+- `entity_count` is the raw owned count: invisible entities and the markers
+  schema 1 skips are in it, and the BLOCK and ENDBLK pair is not. For
+  `*Model_Space` it is the model-space census R3.4 fixed (163 in every save),
+  which `tests/model1_fixtures.rs` holds every stream to.
+- Space names are `*Model_Space` and `*Paper_Space` from AC1015 on and upper
+  case in AC1014. The record carries the stored spelling.
+- A code the file does not write is the default the document gives: flags 0,
+  base point (0, 0, 0), empty strings, units 0, explodable `true`, scale
+  uniformly `false`, no preview.
+- The xref "unloaded" bit (the BLOCK entity's 71) is not a field. None of the
+  thirteen files has an xref.
 
 ## Comparing
 

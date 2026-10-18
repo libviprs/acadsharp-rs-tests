@@ -82,7 +82,37 @@ public static class Model1Extractor
         ExtractDimensionStyles(document, records);
         Dictionary<object, string> owners = ExtractDictionaries(document, records);
         ExtractXData(document, records, owners);
+        ExtractBlockRecords(document, records);
         return records;
+    }
+
+    private static string Point3(CSMath.XYZ p) =>
+        "[" + NumericFormatting.Real(p.X) + "," + NumericFormatting.Real(p.Y) + "," + NumericFormatting.Real(p.Z) + "]";
+
+    private static void ExtractBlockRecords(CadDocument document, List<Model1Record> records)
+    {
+        foreach (BlockRecord block in document.BlockRecords)
+        {
+            string name = block.Name ?? string.Empty;
+            // The BLOCK entity holds the flags, the base point, the path and the
+            // comment; the record holds the rest. Both can be absent in a
+            // document built by hand, and a record says what the reader found.
+            var entity = block.BlockEntity;
+            records.Add(Model1Record.Of(
+                "block_record",
+                name,
+                ("name", NumericFormatting.Quoted(name)),
+                ("flags", NumericFormatting.Whole(entity is null ? 0 : (long)entity.Flags)),
+                ("base_point", Point3(entity?.BasePoint ?? CSMath.XYZ.Zero)),
+                ("xref_path", NumericFormatting.Quoted(NumericFormatting.NormalizeLineEndings(entity?.XRefPath))),
+                ("description", NumericFormatting.Quoted(NumericFormatting.NormalizeLineEndings(entity?.Comments))),
+                ("units", NumericFormatting.Whole((long)block.Units)),
+                ("explodable", block.IsExplodable ? "true" : "false"),
+                ("scale_uniformly", block.CanScale ? "true" : "false"),
+                ("entity_count", NumericFormatting.Whole(block.Entities.Count)),
+                ("layout", NumericFormatting.Quoted(block.Layout?.Name ?? string.Empty)),
+                ("preview_bytes", NumericFormatting.Whole(block.Preview?.Length ?? 0))));
+        }
     }
 
     private static void ExtractHeader(CadDocument document, List<Model1Record> records)

@@ -235,6 +235,22 @@ const DICTIONARY: Schema = Schema {
     ],
 };
 
+const BLOCK_RECORD: Schema = Schema {
+    kind: "block_record",
+    fields: &[
+        ("flags", Ty::Int),
+        ("base_point", Ty::Point3),
+        ("xref_path", Ty::Str),
+        ("description", Ty::Str),
+        ("units", Ty::Int),
+        ("explodable", Ty::Bool),
+        ("scale_uniformly", Ty::Bool),
+        ("entity_count", Ty::Int),
+        ("layout", Ty::Str),
+        ("preview_bytes", Ty::Int),
+    ],
+};
+
 /// One `(group code, value)` pair of an xdata list or an XRECORD: the code is
 /// always written beside the value, and the written form of the value is the one
 /// [`value_form`] gives for that code.
@@ -260,7 +276,14 @@ const XRECORD: Schema = Schema {
 /// Every kind with a record, in `docs/MODEL_1.md`. One `const` per kind above
 /// and one name here, so a new kind never touches the others.
 pub const SCHEMAS: &[Schema] = &[
-    LAYER, LINETYPE, TEXTSTYLE, DIMSTYLE, DICTIONARY, XDATA, XRECORD,
+    LAYER,
+    LINETYPE,
+    TEXTSTYLE,
+    DIMSTYLE,
+    DICTIONARY,
+    XDATA,
+    XRECORD,
+    BLOCK_RECORD,
 ];
 
 /// The written form of a value, decided by its group code. One table for xdata
