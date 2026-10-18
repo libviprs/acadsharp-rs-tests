@@ -167,7 +167,7 @@ these is hidden by an exclusion; each is a `DIFF` or `COUNT` and the
 | text anchor | `acadsharp-ac1032` (1.72 off in y), `export-sample` | the insertion point | the alignment point for anything but left/baseline | acadsharp-rs-tests#66 |
 | non-uniform insert scale | `g13_nonuniform`, `g13_ocs_plane`, `g13_ocs_skew` | keeps the circle, warning 106; no transform on the wire | an `ellipse` | acadsharp-rs-tests#64 |
 | mirrored insert | `g13_ocs_mirror`, `g13_mirrored_bulge` | reflects the geometry, normal stays +Z | keeps `nz: -1` and the OCS coordinates | acadsharp-rs-tests#63 |
-| full ellipse | one per save, 14 in `export-sample` | start 0, end 2pi | the stored start (pi, 3pi) | acadsharp-rs-tests#57 |
+| full ellipse | one per save, 14 in `export-sample` | start 0, end 2pi | the stored start (pi, 3pi) | acadsharp-rs-tests#57, gone: the oracle added the angle of the major axis to an ellipse's parameters, which the wire (rightly) did not, and its #89 fix removed that; a full ellipse now reads the same on both sides |
 | invisible entities | `acadsharp-blockvisibilityparameter` (8 records) | drawn | skipped | acadsharp-rs-tests#60 |
 | mesh edges | `g13_polyface_mesh`, `g13_polygon_mesh` | polylines (viprs.1 predates libviprs-dep#82) | a warning | acadsharp-rs-tests#62 |
 | block depth | `g13_dimension_deep` | the decode stops at `max_block_depth`, a terminal `LIMIT_EXCEEDED` | warns and carries on | kept on purpose, see below (acadsharp-rs-tests#68) |
