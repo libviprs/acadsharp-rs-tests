@@ -1252,12 +1252,16 @@ fn acadrusts_layout_records_and_view_records_agree() {
         let Ok(records) = stream else { continue };
         let path = acadsharp_rs_tests::emit::output_paths(&out_dir(), id, "acadrust")[0].clone();
         let views = {
-            let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+            let text = std::fs::read_to_string(&path)
+                .unwrap_or_else(|e| panic!("{}: {e}", path.display()));
             let mut v: Vec<(u64, String)> = Vec::new();
             for line in text.lines() {
                 let j: serde_json::Value = serde_json::from_str(line).unwrap();
                 if j["record"] == "view" {
-                    v.push((j["index"].as_u64().unwrap(), j["name"].as_str().unwrap().to_string()));
+                    v.push((
+                        j["index"].as_u64().unwrap(),
+                        j["name"].as_str().unwrap().to_string(),
+                    ));
                 }
             }
             v.sort();
