@@ -10,8 +10,8 @@ mod support;
 use acadsharp_rs_tests::canonical::Sidecar;
 use acadsharp_rs_tests::compare::{
     BOUNDED, BOUNDED_TIGHT, Class, ClassTable, Disposition, DualOracle, Engine, Exclusion,
-    FieldKind, FindingKind, KnownDivergence, Pair, RecordKey, Scope, TableError, Val, WarningRow,
-    compare,
+    FieldKind, FindingKind, KnownDivergence, KnownRecords, Pair, RecordKey, Scope, TableError, Val,
+    WarningRow, compare,
 };
 use support::*;
 
@@ -1053,4 +1053,115 @@ fn a_cell_whose_every_difference_is_listed_or_explained_counts_both_kinds_as_kno
     .unwrap();
     // one record explained by the caller, one listed in the table: two, not one
     assert_eq!(j.verdict, Verdict::Known(2), "{}", j.first);
+}
+
+// ---- records one side lacks, settled (#78, #79) ---------------------------------
+
+fn known_extra(count: usize, only_in_b: bool, record_type: &str) -> KnownRecords {
+    KnownRecords {
+        fixture: "fixture".into(),
+        record_type: record_type.into(),
+        only_in_b,
+        count,
+        reason: "the other reader throws on this record".into(),
+        issue: "libviprs/acadsharp-rs-tests#78".into(),
+    }
+}
+
+fn with_known_records(k: KnownRecords) -> ClassTable {
+    let mut t = loose();
+    t.known_records.push(k);
+    t
+}
+
+#[test]
+fn records_one_side_lacks_are_not_red_when_the_row_counts_them_exactly() {
+    let mut b = base();
+    b.push(extra_line());
+    b.push(extra_line());
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&b),
+        &with_known_records(known_extra(2, true, "line")),
+    )
+    .unwrap();
+    assert_eq!(report.findings.len(), 2, "{:?}", report.findings);
+    for f in &report.findings {
+        assert_eq!(f.kind, FindingKind::OnlyInB);
+        assert_eq!(f.class, Class::KnownDivergence);
+        assert_eq!(
+            f.disposition,
+            Disposition::Known {
+                issue: "libviprs/acadsharp-rs-tests#78".into()
+            }
+        );
+    }
+    assert!(report.is_match());
+}
+
+#[test]
+fn one_more_record_than_the_row_counts_is_red() {
+    let mut b = base();
+    b.push(extra_line());
+    b.push(extra_line());
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&b),
+        &with_known_records(known_extra(1, true, "line")),
+    )
+    .unwrap();
+    assert!(!report.is_match());
+    assert!(
+        report
+            .findings
+            .iter()
+            .all(|f| f.disposition == Disposition::KnownMoved && f.is_red())
+    );
+}
+
+#[test]
+fn a_row_for_records_that_have_gone_is_red_and_asks_to_be_tightened() {
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&base()),
+        &with_known_records(known_extra(2, true, "line")),
+    )
+    .unwrap();
+    let f = only(&report);
+    assert_eq!(f.kind, FindingKind::StaleKnownRow);
+    assert_eq!(f.disposition, Disposition::KnownVanished);
+    assert!(!report.is_match());
+}
+
+#[test]
+fn a_row_for_the_other_side_does_not_hide_a_record() {
+    let mut b = base();
+    b.push(extra_line());
+    let report = compare(
+        "fixture",
+        &stream(&base()),
+        &stream(&b),
+        &with_known_records(known_extra(1, false, "line")),
+    )
+    .unwrap();
+    assert!(!report.is_match());
+    assert!(
+        report
+            .findings
+            .iter()
+            .any(|f| f.kind == FindingKind::OnlyInB && f.disposition == Disposition::Open)
+    );
+}
+
+#[test]
+fn a_known_records_row_with_no_reason_is_refused() {
+    let mut k = known_extra(1, true, "line");
+    k.reason = String::new();
+    assert!(matches!(
+        with_known_records(k).validate(),
+        Err(TableError::NoReason(_))
+    ));
 }

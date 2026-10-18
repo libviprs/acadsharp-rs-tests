@@ -75,8 +75,8 @@ difference with no row is unexplained.
 | acadsharp-ac1018 | text.text | 1 | The same text, the same escape. |
 | acadsharp-ac1032 | text.text | 1 | An `ATTRIB` whose value lives in an embedded MTEXT. The oracle emits an empty string; acadrust emits the MTEXT's value, `my multi line text for the attrrib`, which is what AutoCAD's own DXF twin holds. |
 | acadsharp-sample-base | text.text | 1 | The same attribute. |
-| acadsharp-export-sample | spline.periodic | 1 | A closed spline defined by fit points: the oracle says `periodic`, acadrust's flags say closed and not periodic. Not adjudicated, for the same reason. |
-| regression_text_zero_height | text. | 2 | A TEXT and an MTEXT of height 0. ACadSharp's writer writes the zero and its reader throws reading it back, so the oracle drops both and says so with two `reader_error` warnings; acadrust reads both and emits `text` records of height 0.0. The oracle is the one that cannot hold them, which is what the fixture pins (`tests/regression_claims.rs`). |
+
+Two differences are listed in `parity/TABLES.toml` and not here, because the comparator holds them as known and not red: the two zero-height texts of `regression_text_zero_height` (ACadSharp writes the zero and then throws reading it back, so the oracle drops both and says so with two `reader_error` warnings while acadrust reads them as height 0.0, #78), and the periodic flag of the closed fit-point spline at handle A7F in `acadsharp-export-sample` (ACadSharp derives it from the closed bit and the DWG stores no periodic bit for a fit-point spline, #65).
 
 Two things that are not differences but are limits, because no drawing in the
 corpus exercises them:

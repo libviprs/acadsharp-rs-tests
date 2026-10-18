@@ -89,6 +89,9 @@ run are below, and `tests/tables_doc.rs` holds this section to the file.
 | `self/oracle` | the differences `parity/oracle_invariance.toml` lists as exceptions | `KNOWN` (the verdict) | per row, in that file |
 | `oracle/acadrust` | `text.text` of `acadsharp-ac1014`, `ac1015`, `ac1018` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#111 |
 | `oracle/acadrust` | `text.text` of `acadsharp-ac1032`, `acadsharp-sample-base` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
+| `oracle/acadrust`, `acadsharp/acadrust` | the two `text` records of `regression_text_zero_height` that only acadrust draws (`known_records`: whole records, counted exactly) | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#78 |
+| `oracle/acadrust`, `oracle/acadsharp` | `spline.periodic` of the fit-point spline at handle A7F in `acadsharp-export-sample` | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#65 |
+| `oracle/acadsharp`, `acadsharp/acadrust` | `spline.closed` of the hatch boundary spline edges of `acadsharp-export-sample` (AA8) and `g13_hatch` (4C) | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#65 |
 
 The DXF lane (R5.1) keys its tables `dxf:a/b` (reader against reader on a DXF, the class the same pair has on the DWG), `dxf-dwg:e` (a reader's DXF against its own DWG reading of the same drawing, `BOUNDED` whichever reader it is) and `dxf-ascii-binary:e` (a reader's ASCII against its binary reading, `BOUNDED_TIGHT`: sixteen digits against the raw doubles). acadsharp-rs has no key: its C ABI opens DWG only, so its cells are `EXCLUDED` in the verdict file.
 
@@ -100,6 +103,7 @@ The DXF lane (R5.1) keys its tables `dxf:a/b` (reader against reader on a DXF, t
 | `dxf-ascii-binary:ezdxf`, `dxf:ezdxf/oracle`, `dxf:ezdxf/acadrust` | `text.text` of the four MTEXTs whose paragraph break is `\P` in AutoCAD's binary DXF | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#24 |
 | `dxf-dwg:acadrust` | `text.text` of `dxf-sample-ac1015-ascii`, `-binary` (the MIF escape) | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#111 |
 | `dxf:oracle/acadrust`, `dxf:ezdxf/oracle` | `text.text` of the embedded-MTEXT attribute in `dxf-sample-ac1032-*` | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#112 |
+| `ezdxf/oracle`, `ezdxf/acadsharp`, `ezdxf/acadrust`, `dxf-dwg:oracle`, `dxf-dwg:acadrust` | the four `line` records of `dxf-blockpolarparameter` that the DWG holds and its DXF twin does not (`known_records`) | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#79 |
 | `dxf-dwg:oracle`, `dxf-dwg:acadrust` | the spline's `control_points.len`, `knots.len`, `fit_points.len` from AC1027 | `KNOWN_DIVERGENCE` | libviprs/libviprs-dep#150 |
 
 The round-trip lane (R5.3) keys its tables `w-<writer>:<reader>`: a reader's reading of a drawing a writer wrote, held against the writer's own reading of the source (the oracle for ACadSharp, acadrust for acadrust). The class is the one the same two engines have on the DWG. A finding is explained, and counts as `KNOWN`, when it is a difference R3.4's invariance list names for that version (ACadSharp's rewrites, judged against the oracle's reference) or one the reader already has against the same reference record on the source itself (R4.1's verdict for the pair, inherited); anything else a round trip adds is the writer's.
