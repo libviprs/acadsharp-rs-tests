@@ -539,8 +539,8 @@ verdict = "MATCH"
 fixture = "acadsharp-export-sample"
 pair = "acadsharp/acadrust"
 verdict = "DIFF:40"
-reason = "acadrust agrees with the oracle where the shim differs: the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings)"
-issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66"
+reason = "acadrust agrees with the oracle where the shim differs: three ellipses in view 7 sit in a block the oracle takes through its non-uniform-scale path, which re-parametrises them onto the image's principal axes, where the wire passes the stored parameters through with a warning, so the start and end differ (6 findings; not the full-ellipse start of #57, which the oracle's #89 fix removed, but the non-uniform insert scale of #64); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings)"
+issue = "libviprs/acadsharp-rs-tests#64, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66"
 first = "acadsharp-export-sample acadsharp-acadrust: view 0 b#24 B handles 347 polyline is in B and not in A [EXACT]"
 
 [[row]]
@@ -555,8 +555,8 @@ first = "acadsharp-export-sample oracle-acadrust: view 7 a#180 b#180 B handles A
 fixture = "acadsharp-export-sample"
 pair = "oracle/acadsharp"
 verdict = "DIFF:40"
-reason = "the shim and the oracle describe three ellipses made from a circle or an arc under a non-uniform scale with a different start and end (6 findings); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings)"
-issue = "libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66"
+reason = "three ellipses in view 7 sit in a block the oracle takes through its non-uniform-scale path, which re-parametrises them onto the image's principal axes, where the wire passes the stored parameters through with a warning, so the start and end differ (6 findings; not the full-ellipse start of #57, which the oracle's #89 fix removed, but the non-uniform insert scale of #64); the shim's flattener skips the inserts inside a dimension's block, so the arrowhead geometry is missing from the wire (23 findings); wire 2 anchors a text at its insertion point where schema 1 uses the alignment point (21 findings)"
+issue = "libviprs/acadsharp-rs-tests#64, libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#66"
 first = "acadsharp-export-sample oracle-acadsharp: view 0 a#24 polyline is in A and not in B [EXACT]"
 
 [[row]]
