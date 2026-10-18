@@ -43,6 +43,7 @@ CLAUSES = {
     "hatch": ("a hatch boundary spline reads back with weights and z the oracle's source reading lacks (its zero weights are the oracle's artefact), and ezdxf reads a boundary arc's angles another way",
               issue("67", "89")),
     "rust_dwg": ("acadrust's DWG writer loses most of the drawing below AC1021", issue("112")),
+    "r12": ("an AC1009 (R12) file has no place for this record, this text alignment or this text formatting, and the lowering is not on R3.4's list yet", issue("24")),
     "rust_text_p": ("the MTEXT paragraph break reads back as \\P, where the source reading has a line feed", issue("24")),
     "rust_moji": ("non-ASCII text is written as UTF-8 into a file whose code page is not, so it reads back as mojibake", [DEP + "111"]),
     "rust_rot": ("four MTEXTs read back with a rotation the source reading does not have", issue("113")),
@@ -73,9 +74,13 @@ def classify(fx: str, pair: str, body: str) -> str:
     if rust:
         if dwg:
             return "rust_dwg"
+        if ver == "ac1009" and (ins_a or ins_b or field in ("text.halign", "text.valign")):
+            return "r12"
         if field == "text.text":
             if "âˆ" in body or "Ã" in body:
                 return "rust_moji"
+            if ver == "ac1009":
+                return "r12"
             if "\\\\P" in body:
                 return "rust_text_p"
             return "other"
