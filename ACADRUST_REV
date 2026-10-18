@@ -23,7 +23,7 @@
 # To bump it: put a libviprs/acadrust `main` commit here, run the suite with the
 # `acadrust` feature against a sibling checkout at that commit, and say below
 # what moved.
-97745114f9ef4b0ec69469cbf8f6ea08b7a8deac
+72af48970e306ef1d50dd751b227df2b4fc3fb99
 # libviprs/acadrust main @ 2026-10-17, after the legacy TABLE cells below R2007 were
 # written the way ACadSharp reads them (the first table that failed ended the model
 # space chain), and the associative objects of a class the older save does not
@@ -31,3 +31,6 @@
 # Moved to libviprs/acadrust main @ 2026-10-17, PR #38: a pre-2007 DXF is written and read in
 # the code page its header names, with MIF escapes for what the page cannot hold, and the page
 # counts when $DWGCODEPAGE comes before $ACADVER (acadsharp-rs-tests#152, #154).
+# Moved to libviprs/acadrust main @ 2026-10-18, PRs #39, #40, #41: the DXF writer keeps the
+# extrusion of a heavy 2D polyline (acadsharp-rs-tests#160), and a clockwise hatch arc edge is
+# stored with the complementary angles AutoCAD writes, written and read (#159).

@@ -693,8 +693,10 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
 
             case Hatch.BoundaryPath.Spline spline:
             {
+                // The edge lies in the hatch's plane at the hatch's elevation; the Z of a
+                // control point is its weight, not a coordinate (#159, as #56 for a bulge).
                 List<Point3> control =
-                    [.. spline.ControlPoints.Select(p => toWorld.Apply(new Point3(p.X, p.Y, p.Z)))];
+                    [.. spline.ControlPoints.Select(p => toWorld.Apply(new Point3(p.X, p.Y, elevation)))];
                 if (control.Count == 0)
                 {
                     _warnings.Add(WarningCategory.InvalidEntity, "HatchSpline", "no_control_points");
@@ -705,7 +707,10 @@ public sealed class EntityExtractor(WarningCollector warnings, BlockResolver res
                 // that is not rational leaves every one of them zero (a weight of
                 // zero means nothing). Schema 1 says `weights` is empty for a
                 // non-rational curve (#67).
-                List<double> edgeWeights = spline.Weights.Any(w => w != 0.0) ? [.. spline.Weights] : [];
+                // The rational flag says whether there are any: ACadSharp's DXF reader gives
+                // a non-rational edge weights of 1.0 where its DWG reader leaves zeros (#159).
+                List<double> edgeWeights =
+                    spline.IsRational && spline.Weights.Any(w => w != 0.0) ? [.. spline.Weights] : [];
 
                 sink.Add(new SplineRecord(
                     view,

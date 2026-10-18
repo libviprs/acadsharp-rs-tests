@@ -123,6 +123,8 @@ ACadSharp's writers are an upstream project, so what they get wrong is pinned he
 | `w-acadsharp:acadrust` | what acadrust reads of the AC1014 DWG that ACadSharp and acadsharp-rs cannot open | `KNOWN_MISSING` | libviprs/acadsharp-rs-tests#107 |
 | `w-acadsharp:oracle`, `:acadrust` | the model space tail of the AC1015 DWG from record 183 (oracle only), and the spline at AC1015, AC1018 and AC1024 | `KNOWN_MISSING` | libviprs/acadsharp-rs-tests#108 |
 | `w-acadsharp:acadrust` | `text.text` of the four MTEXTs in the binary DXFs, `^J` for a line feed | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#109 |
+| `w-acadsharp:acadrust`, `w-acadsharp:ezdxf`, `w-acadrust:oracle` | `arc.start` and `arc.end` of the clockwise hatch arc of `g13_hatch` in every DXF: ACadSharp writes and reads the raw angles, AutoCAD (and ezdxf, and acadrust since libviprs/acadrust#40) the complementary ones | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#159 |
+| `w-acadrust:acadrust`, `w-acadrust:ezdxf`, `w-acadrust:oracle` | `polyline.points[].z` of the heavy polyline of `g13_ocs_plane` in every DXF from AC1015, where acadrust's LWPOLYLINE down-save keeps the elevation as z and the readers of the source give a heavy polyline its vertices' z | `KNOWN_DIVERGENCE` | libviprs/acadsharp-rs-tests#160 |
 
 Everything else the run finds that no row lists is a `DIFF` or a `COUNT` in
 `parity/VERDICTS.toml`, with an issue, and is debt rather than an exception.

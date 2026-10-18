@@ -219,7 +219,10 @@ would then have to agree with.
 {"schema":1,"record":"spline","view":0,"degree":3,"closed":false,"periodic":false,"control_points":[[0.0,0.0,0.0]],"knots":[0.0],"weights":[],"fit_points":[]}
 ```
 
-`weights` is empty for a non-rational curve and `fit_points` for one with none.
+`weights` is empty for a non-rational curve and `fit_points` for one with none. What
+says a curve is rational is the library's own flag (`IsRational` in ACadSharp, `is_rational`
+in acadrust) and not the weights it happens to hold: a reader may fill in a default of 1.0 for
+a curve whose flag is off, and that is still a non-rational curve with no weights.
 Affine maps commute with the rational B-spline basis, so control and fit points
 move under a block transform and degree, knots and weights do not.
 

@@ -466,6 +466,39 @@ public sealed class GeometryTests
         Assert.Equal([1.0, -1.0, 0.0, 0.0], polyline.Bulges);
     }
 
+    [Fact]
+    public void AHatchSplineLiesAtTheHatchElevationNotAtItsWeight()
+    {
+        // Issue #159. A hatch edge keeps each control point's weight in its Z, the
+        // way a polyline edge keeps its bulge (#56), and the extractor handed that
+        // on as a coordinate: a rational edge came out at z of 1.0 and 2.0, and a
+        // DXF read of a non-rational one (whose weights default to 1) at z of 1.0
+        // where the DWG read of the same drawing had 0.0.
+        CadDocument document = HatchWithSpline(rational: true);
+        ((Hatch)document.Entities.Single()).Elevation = 0.5;
+        SplineRecord spline = Assert.Single(Records(document).OfType<SplineRecord>());
+        Assert.Equal(4, spline.ControlPoints.Count);
+        Assert.All(spline.ControlPoints, p => Assert.Equal(0.5, p.Z, Tolerance));
+        Assert.Equal([1.0, 2.0, 2.0, 1.0], spline.Weights);
+    }
+
+    [Fact]
+    public void ANonRationalHatchSplineHasNoWeightsWhateverTheReaderFilledIn()
+    {
+        // Issue #159. ACadSharp's DXF reader gives the weights of an edge whose
+        // rational flag is 0 the default of 1.0, where its DWG reader leaves them
+        // zero. The flag is what says whether the curve is rational.
+        CadDocument document = HatchWithSpline(rational: false);
+        var edge = (Hatch.BoundaryPath.Spline)((Hatch)document.Entities.Single()).Paths[0].Edges[0];
+        for (int i = 0; i < edge.ControlPoints.Count; i++)
+        {
+            edge.ControlPoints[i] = new XYZ(edge.ControlPoints[i].X, edge.ControlPoints[i].Y, 1.0);
+        }
+
+        SplineRecord spline = Assert.Single(Records(document).OfType<SplineRecord>());
+        Assert.Empty(spline.Weights);
+    }
+
     private static CadDocument HatchWithSpline(bool rational)
     {
         CadDocument document = NewDocument();
