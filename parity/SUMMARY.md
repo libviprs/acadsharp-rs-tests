@@ -37,8 +37,8 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `w-acadrust:acadrust` | 26 | 8 | 0 | 18 | 0 | 0 | 0 | 0 |
 | `w-acadrust:acadsharp` | 8 | 0 | 0 | 7 | 0 | 1 | 0 | 0 |
 | `w-acadrust:ezdxf` | 18 | 0 | 0 | 18 | 0 | 0 | 0 | 0 |
-| `w-acadrust:oracle` | 26 | 4 | 0 | 20 | 0 | 2 | 0 | 0 |
-| `w-acadrust:version` | 26 | 24 | 0 | 0 | 0 | 2 | 0 | 0 |
+| `w-acadrust:oracle` | 26 | 4 | 0 | 22 | 0 | 0 | 0 | 0 |
+| `w-acadrust:version` | 26 | 26 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `w-acadsharp:acadrust` | 22 | 0 | 3 | 19 | 0 | 0 | 0 | 0 |
 | `w-acadsharp:acadsharp` | 6 | 0 | 0 | 5 | 0 | 1 | 0 | 0 |
 | `w-acadsharp:ezdxf` | 16 | 0 | 8 | 8 | 0 | 0 | 0 | 0 |
@@ -367,9 +367,9 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | fixture | verdict | issue | reason |
 |---|---|---|---|
 | `w-acadrust-ac1032-dwg-ac1012` | OPEN_FAILED | libviprs/acadsharp-rs-tests#28 | exit 1: emit-acadsharp: w-acadrust-ac1032-dwg-ac1012: acadsharp-rs could not open this file: this build does not read that drawing format, it reads AC10xx versions 1014 to 1032 (acadsharp-rs does not read AC1012 DWG, so R5.2's AC1012 DWG column has a reader fewer than the issue assumed) (acadsharp-rs does not read AC1012 DWG, so R5.2's AC1012 DWG column has a reader fewer than the issue assumed) |
-| `w-acadrust-ac1032-dwg-ac1014` | DIFF:206 | libviprs/acadsharp-rs-tests#112 | missing from the output: 88 lines, 69 texts, 24 polylines, 15 circles, 4 views, 3 arcs, 2 splines, 1 ellipses |
-| `w-acadrust-ac1032-dwg-ac1015` | DIFF:142 | libviprs/acadsharp-rs-tests#112 | missing from the output: 61 lines, 53 texts, 14 polylines, 12 circles; extra in the output: 1 polylines; fields that differ: text.text (1) |
-| `w-acadrust-ac1032-dwg-ac1018` | DIFF:38 | libviprs/acadsharp-rs-tests#112 | missing from the output: 12 texts, 11 lines, 3 circles; extra in the output: 9 texts, 1 polylines, 1 lines; fields that differ: text.text (1) |
+| `w-acadrust-ac1032-dwg-ac1014` | DIFF:206 | libviprs/acadsharp-rs-tests#112 | missing from the output: 88 lines, 69 texts, 24 polylines, 15 circles, 4 views, 3 arcs, 2 splines, 1 ellipses; R13 and R14 have no LAYOUT objects (they came with R2000) and the acadsharp-rs emitter builds its views from the layouts, so it reads no view and nothing under it |
+| `w-acadrust-ac1032-dwg-ac1015` | DIFF:13 | libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#111 | extra in the output: 9 texts, 2 lines, 1 polylines; fields that differ: text.text (1). the shim emits an ATTDEF inside a block where schema 1 skips it, and an insert's ATTRIBs come before the block body on the wire (12 findings, the same ones the shim has on AutoCAD's own twins); the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it |
+| `w-acadrust-ac1032-dwg-ac1018` | DIFF:13 | libviprs/acadsharp-rs-tests#54, libviprs/libviprs-dep#111 | extra in the output: 9 texts, 2 lines, 1 polylines; fields that differ: text.text (1). the shim emits an ATTDEF inside a block where schema 1 skips it, and an insert's ATTRIBs come before the block body on the wire (12 findings, the same ones the shim has on AutoCAD's own twins); the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it |
 | `w-acadrust-ac1032-dwg-ac1021` | DIFF:12 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66 | extra in the output: 9 texts, 2 lines, 1 polylines. the extra records are the ones the shim already emits for the source (R4.1) |
 | `w-acadrust-ac1032-dwg-ac1024` | DIFF:12 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66 | extra in the output: 9 texts, 2 lines, 1 polylines. the extra records are the ones the shim already emits for the source (R4.1) |
 | `w-acadrust-ac1032-dwg-ac1027` | DIFF:12 | libviprs/acadsharp-rs-tests#55, libviprs/acadsharp-rs-tests#54, libviprs/acadsharp-rs-tests#57, libviprs/acadsharp-rs-tests#66 | extra in the output: 9 texts, 2 lines, 1 polylines. the extra records are the ones the shim already emits for the source (R4.1) |
@@ -402,10 +402,10 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 
 | fixture | verdict | issue | reason |
 |---|---|---|---|
-| `w-acadrust-ac1032-dwg-ac1012` | DIFF:174 | libviprs/acadsharp-rs-tests#112 | missing from the output: 75 lines, 53 texts, 17 polylines, 12 circles, 9 points, 5 polygons, 2 views; fields that differ: text.text (1) |
-| `w-acadrust-ac1032-dwg-ac1014` | OPEN_FAILED | libviprs/acadsharp-rs-tests#112 | the oracle's reading is not schema 1: line 26, field `entity_type`: carriage return; the format is LF only, in text as well |
-| `w-acadrust-ac1032-dwg-ac1015` | DIFF:172 | libviprs/acadsharp-rs-tests#112 | missing from the output: 75 lines, 53 texts, 17 polylines, 12 circles, 9 points, 5 polygons; fields that differ: text.text (1) |
-| `w-acadrust-ac1032-dwg-ac1018` | OPEN_FAILED | libviprs/acadsharp-rs-tests#112 | the oracle's reading is not schema 1: line 276, field `entity_type`: carriage return; the format is LF only, in text as well |
+| `w-acadrust-ac1032-dwg-ac1012` | DIFF:3 | libviprs/acadsharp-rs-tests#112, libviprs/libviprs-dep#111 | missing from the output: 2 views; fields that differ: text.text (1). R13 and R14 have no LAYOUT objects (they came with R2000), so the file holds no layouts and the oracle reads the model space and one paper space, where the source has four views; the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it |
+| `w-acadrust-ac1032-dwg-ac1014` | DIFF:3 | libviprs/acadsharp-rs-tests#112, libviprs/libviprs-dep#111 | missing from the output: 2 views; fields that differ: text.text (1). R13 and R14 have no LAYOUT objects (they came with R2000), so the file holds no layouts and the oracle reads the model space and one paper space, where the source has four views; the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it |
+| `w-acadrust-ac1032-dwg-ac1015` | DIFF:1 | libviprs/libviprs-dep#111 | fields that differ: text.text (1). the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it |
+| `w-acadrust-ac1032-dwg-ac1018` | DIFF:1 | libviprs/libviprs-dep#111 | fields that differ: text.text (1). the diameter callout reads back as the escape \U+2205 where the source reading has the character, the spelling this version's code page gives it |
 | `w-acadrust-ac1032-dxf-ascii-ac1009` | DIFF:155 | libviprs/acadsharp-rs-tests#111 | the drawing is written in the R12 layout, which has no form for the ACAD_TABLE, MULTILEADER, MLINE, HATCH, ELLIPSE, SPLINE, TOLERANCE, LEADER, XLINE, RAY, MESH, WIPEOUT, IMAGE, underlay and ACIS entities, so they are left out together with what they draw, and keeps one paper space, so two layouts are left out; an MTEXT is written as one TEXT per paragraph, which loses its attachment (text.halign, text.valign), the lines after the first and the \A1; code of a dimension text, counted against the oracle's own reading of the source, which has more records than the other two (155 findings) |
 | `w-acadrust-ac1032-dxf-ascii-ac1012` | DIFF:5 | libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111 | fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed |
 | `w-acadrust-ac1032-dxf-ascii-ac1014` | DIFF:5 | libviprs/acadsharp-rs-tests#24, libviprs/libviprs-dep#111 | fields that differ: text.text (5). the diameter callout ∅45,6 reads back as 'âˆ…45,6': the UTF-8 bytes of ∅ decoded as Windows-1252; the MTEXT paragraph break reads back as \P, where the source reading has a line feed |
@@ -424,13 +424,6 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | `w-acadrust-ac1032-dxf-binary-ac1024` | DIFF:4 | libviprs/acadsharp-rs-tests#24 | fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed |
 | `w-acadrust-ac1032-dxf-binary-ac1027` | DIFF:4 | libviprs/acadsharp-rs-tests#24 | fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed |
 | `w-acadrust-ac1032-dxf-binary-ac1032` | DIFF:4 | libviprs/acadsharp-rs-tests#24 | fields that differ: text.text (4). the MTEXT paragraph break reads back as \P, where the source reading has a line feed |
-
-### `w-acadrust:version`
-
-| fixture | verdict | issue | reason |
-|---|---|---|---|
-| `w-acadrust-ac1032-dwg-ac1014` | OPEN_FAILED | libviprs/acadsharp-rs-tests#112 | the oracle cannot read it, so nothing independent says its version |
-| `w-acadrust-ac1032-dwg-ac1018` | OPEN_FAILED | libviprs/acadsharp-rs-tests#112 | the oracle cannot read it, so nothing independent says its version |
 
 ### `w-acadsharp:acadrust`
 
