@@ -1329,10 +1329,8 @@ verdict = "MATCH"
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "KNOWN:1"
-reason = "listed in parity/TABLES.toml"
-issue = "libviprs/libviprs-dep#111"
-first = 'dxf-sample-ac1015-ascii acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1015-ascii acadrust-acadrust: text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "\\U+220545,6" vs B "∅45,6" was listed)'
 
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
@@ -1352,7 +1350,8 @@ first = "dxf-sample-ac1015-ascii oracle-oracle: view 0 a#126 b#126 polygon.point
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
 pair = "dxf:ezdxf/acadrust"
-verdict = "MATCH"
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1015-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
@@ -1365,10 +1364,8 @@ first = "dxf-sample-ac1015-ascii ezdxf-oracle: view 0 a#126 b#126 A handles 528/
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
 pair = "dxf:oracle/acadrust"
-verdict = "DIFF:24"
-reason = "the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other"
-issue = "libviprs/acadsharp-rs-tests#94"
-first = "dxf-sample-ac1015-ascii oracle-acadrust: view 0 a#126 b#126 B handles 528/571 polygon.points[2].x: 778.374275323923 vs 877.4603384729467 (abs 9.908606314902363e1, rel 1.1292369444465619e-1) [BOUNDED]"
+verdict = "DIFF:25"
+first = 'dxf-sample-ac1015-ascii oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
@@ -1394,10 +1391,8 @@ verdict = "MATCH"
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
 pair = "dxf-dwg:acadrust"
-verdict = "KNOWN:1"
-reason = "listed in parity/TABLES.toml"
-issue = "libviprs/libviprs-dep#111"
-first = 'dxf-sample-ac1015-binary acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1015-binary acadrust-acadrust: text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "\\U+220545,6" vs B "∅45,6" was listed)'
 
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
@@ -1417,7 +1412,8 @@ first = "dxf-sample-ac1015-binary oracle-oracle: view 0 a#126 b#126 polygon.poin
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
 pair = "dxf:ezdxf/acadrust"
-verdict = "MATCH"
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1015-binary ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
@@ -1430,10 +1426,8 @@ first = "dxf-sample-ac1015-binary ezdxf-oracle: view 0 a#126 b#126 A handles 528
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
 pair = "dxf:oracle/acadrust"
-verdict = "DIFF:24"
-reason = "the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other"
-issue = "libviprs/acadsharp-rs-tests#94"
-first = "dxf-sample-ac1015-binary oracle-acadrust: view 0 a#126 b#126 B handles 528/571 polygon.points[2].x: 778.3742753239231 vs 877.4603384729468 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
+verdict = "DIFF:25"
+first = 'dxf-sample-ac1015-binary oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1015-binary"
@@ -1477,10 +1471,8 @@ verdict = "MATCH"
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "KNOWN:1"
-reason = "listed in parity/TABLES.toml"
-issue = "libviprs/libviprs-dep#111"
-first = 'dxf-sample-ac1018-ascii acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1018-ascii acadrust-acadrust: text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "\\U+220545,6" vs B "∅45,6" was listed)'
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
@@ -1500,7 +1492,8 @@ first = "dxf-sample-ac1018-ascii oracle-oracle: view 0 a#126 b#126 polygon.point
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "dxf:ezdxf/acadrust"
-verdict = "MATCH"
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1018-ascii ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
@@ -1513,10 +1506,8 @@ first = "dxf-sample-ac1018-ascii ezdxf-oracle: view 0 a#126 b#126 A handles 528/
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "dxf:oracle/acadrust"
-verdict = "DIFF:24"
-reason = "the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other"
-issue = "libviprs/acadsharp-rs-tests#94"
-first = "dxf-sample-ac1018-ascii oracle-acadrust: view 0 a#126 b#126 B handles 528/571 polygon.points[2].x: 778.374275323923 vs 877.4603384729467 (abs 9.908606314902363e1, rel 1.1292369444465619e-1) [BOUNDED]"
+verdict = "DIFF:25"
+first = 'dxf-sample-ac1018-ascii oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
@@ -1542,10 +1533,8 @@ verdict = "MATCH"
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
 pair = "dxf-dwg:acadrust"
-verdict = "KNOWN:1"
-reason = "listed in parity/TABLES.toml"
-issue = "libviprs/libviprs-dep#111"
-first = 'dxf-sample-ac1018-binary acadrust-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [KNOWN_DIVERGENCE] known, libviprs/libviprs-dep#111'
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1018-binary acadrust-acadrust: text.text [KNOWN_DIVERGENCE] the listed divergence is gone: tighten the row (A "\\U+220545,6" vs B "∅45,6" was listed)'
 
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
@@ -1565,10 +1554,8 @@ first = "dxf-sample-ac1018-binary oracle-oracle: view 0 a#126 b#126 polygon.poin
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
 pair = "dxf:ezdxf/acadrust"
-verdict = "KNOWN:4"
-reason = "listed in parity/TABLES.toml"
-issue = "libviprs/acadsharp-rs-tests#24"
-first = 'dxf-sample-ac1018-binary ezdxf-acadrust: view 0 a#46 b#46 A handles 3EC B handles 3EC text.text: "this is a Mtext\\Pwith multiple lines in it" vs "this is a Mtext\nwith multiple lines in it" [KNOWN_DIVERGENCE] known, libviprs/acadsharp-rs-tests#24'
+verdict = "DIFF:1"
+first = 'dxf-sample-ac1018-binary ezdxf-acadrust: view 0 a#99 b#99 A handles 522/64B B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
@@ -1581,10 +1568,8 @@ first = "dxf-sample-ac1018-binary ezdxf-oracle: view 0 a#126 b#126 A handles 528
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
 pair = "dxf:oracle/acadrust"
-verdict = "DIFF:24"
-reason = "the oracle's DXF reading of the ACAD_TABLE at handle 528 differs from every other reading of the drawing: 15 line ends, 8 line starts, 8 text positions and widths, and one polygon in the table's block (24 records). acadrust and ezdxf over the same DXF, and the oracle over the DWG, agree with each other"
-issue = "libviprs/acadsharp-rs-tests#94"
-first = "dxf-sample-ac1018-binary oracle-acadrust: view 0 a#126 b#126 B handles 528/571 polygon.points[2].x: 778.3742753239231 vs 877.4603384729468 (abs 9.908606314902363e1, rel 1.1292369444465618e-1) [BOUNDED]"
+verdict = "DIFF:25"
+first = 'dxf-sample-ac1018-binary oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "\\U+220545,6" vs "∅45,6" [EXACT]'
 
 [[row]]
 fixture = "dxf-sample-ac1018-binary"
@@ -2262,12 +2247,14 @@ verdict = "MATCH"
 [[row]]
 fixture = "g13_bad_extents"
 pair = "acadsharp/acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
 
 [[row]]
 fixture = "g13_bad_extents"
 pair = "oracle/acadrust"
-verdict = "MATCH"
+verdict = "OPEN_FAILED"
+reason = "exit 1: emit-acadrust: g13_bad_extents: model-1: refusing to encode the non-finite value NaN in `value`; a canonical record cannot carry NaN or an infinity"
 
 [[row]]
 fixture = "g13_bad_extents"
@@ -4388,7 +4375,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = 'w-acadsharp-ac1032-dxf-binary-ac1012 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
+first = 'w-acadsharp-ac1032-dxf-binary-ac1012 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1012"
@@ -4417,7 +4404,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = 'w-acadsharp-ac1032-dxf-binary-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
+first = 'w-acadsharp-ac1032-dxf-binary-ac1014 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1014"
@@ -4446,7 +4433,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = 'w-acadsharp-ac1032-dxf-binary-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
+first = 'w-acadsharp-ac1032-dxf-binary-ac1015 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1015"
@@ -4475,7 +4462,7 @@ pair = "w-acadsharp:acadrust"
 verdict = "DIFF:2"
 reason = "fields that differ: text.text (1); a divergence the reader carries on the source is gone. the diameter callout ∅45,6 reads back as '�45,6', a byte the reader could not decode"
 issue = "libviprs/libviprs-dep#111, libviprs/acadsharp-rs-tests#30, libviprs/acadsharp-rs-tests#114"
-first = 'w-acadsharp-ac1032-dxf-binary-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "�45,6" [EXACT]'
+first = 'w-acadsharp-ac1032-dxf-binary-ac1018 oracle-acadrust: view 0 a#99 b#99 B handles 522/64B text.text: "∅45,6" vs "Ø45,6" [EXACT]'
 
 [[row]]
 fixture = "w-acadsharp-ac1032-dxf-binary-ac1018"
