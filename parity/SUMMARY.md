@@ -11,7 +11,7 @@ a test fails when this file is not exactly what the generator writes. Do not edi
 | aarch64 | 3.7.1-viprs.1 (acadsharp-linux-arm64.tgz, sha256 dd938ef9...) | `f23f37bd453e02e660ef655faa381c45509d8ac1` | `39a11909acf56747f22c7309a0681bef8e6b61b8` | 2026-10-16 |
 | x86_64 | 3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...) | `f23f37bd453e02e660ef655faa381c45509d8ac1` | `39a11909acf56747f22c7309a0681bef8e6b61b8` | 2026-10-16 |
 | aarch64 | 3.7.1-viprs.1 (acadsharp-linux-arm64.tgz, sha256 dd938ef9...) | `f23f37bd453e02e660ef655faa381c45509d8ac1` | `39a11909acf56747f22c7309a0681bef8e6b61b8` | 2026-10-16 |
-| x86_64 | 3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...); stage two of the round-trip matrix, 2,304 outputs and 9,216 cells (parity/VERDICTS_STAGE2.toml), tools/stage_two.py on MARS | `f23f37bd453e02e660ef655faa381c45509d8ac1` | `49786e64ad9dcac02f2d14a1d1d3e639ca13880c` | 2026-10-18 |
+| x86_64 | 3.7.1-viprs.1 (acadsharp-linux-x64.tgz, sha256 4cbdbbdd...); stage two of the round-trip matrix, 2,304 outputs and 9,216 cells (parity/VERDICTS_STAGE2.toml), tools/stage_two.py on MARS | `f23f37bd453e02e660ef655faa381c45509d8ac1` | `f53d2c5b768d4145ec240d300875386b3006266d` | 2026-10-18 |
 
 ## Tally by pair
 
