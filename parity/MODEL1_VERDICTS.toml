@@ -11,66 +11,66 @@
 [[row]]
 fixture = "acadsharp-ac1014"
 pair = "oracle/acadrust"
-verdict = "DIFF:3"
+verdict = "KNOWN:280"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#128, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $CELTYPE "BYLAYER" vs "ByLayer" [Red]'
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#128, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $3DDWFPREC 0.0 vs 2.0 [Known]"
 
 [[row]]
 fixture = "acadsharp-ac1015"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
+verdict = "KNOWN:121"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $DIMSTYLE "custom_style_ltypes" vs "Standard" [Red]'
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $3DDWFPREC 0.0 vs 2.0 [Known]"
 
 [[row]]
 fixture = "acadsharp-ac1018"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
+verdict = "KNOWN:118"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $DIMSTYLE "custom_style_ltypes" vs "Standard" [Red]'
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $3DDWFPREC 0.0 vs 2.0 [Known]"
 
 [[row]]
 fixture = "acadsharp-ac1021"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
+verdict = "KNOWN:67"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $DIMSTYLE "custom_style_ltypes" vs "Standard" [Red]'
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
 
 [[row]]
 fixture = "acadsharp-ac1024"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
+verdict = "KNOWN:67"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $DIMSTYLE "custom_style_ltypes" vs "Standard" [Red]'
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
 
 [[row]]
 fixture = "acadsharp-ac1027"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
+verdict = "KNOWN:67"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $DIMSTYLE "custom_style_ltypes" vs "Standard" [Red]'
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
 
 [[row]]
 fixture = "acadsharp-ac1032"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
+verdict = "KNOWN:67"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $DIMSTYLE "custom_style_ltypes" vs "Standard" [Red]'
+issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $CELWEIGHT 29 vs -1 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "DIFF:2"
+verdict = "KNOWN:171"
 reason = "listed in parity/MODEL1.toml"
 issue = "libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
-first = 'header $DIMBLK "BoxBlank" vs "" [Red]'
+first = 'header $HANDSEED "154D" vs "10F7" [Known]'
 
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
@@ -99,17 +99,17 @@ first = 'header $HANDSEED "154D" vs "1551" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1015-ascii"
 pair = "oracle/acadrust"
-verdict = "KNOWN:212"
+verdict = "KNOWN:217"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
-first = 'header $HANDSEED "1551" vs "154D" [Known]'
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
+first = "header $3DDWFPREC 0.0 vs 2.0 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "dxf-dwg:acadrust"
 verdict = "DIFF:12"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#122"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
 first = "header dimstyle/Annotative.$DIMFXL 1.0 vs 0.0 [Red]"
 
 [[row]]
@@ -123,9 +123,9 @@ first = "header $CECOLOR 193 vs -1 [Known]"
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "ezdxf/acadrust"
-verdict = "KNOWN:96"
+verdict = "KNOWN:97"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#137"
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#137"
 first = "header $XCLIPFRAME type bool vs int [Known]"
 
 [[row]]
@@ -139,18 +139,18 @@ first = 'header $HANDSEED "1484" vs "1488" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1018-ascii"
 pair = "oracle/acadrust"
-verdict = "DIFF:8"
+verdict = "KNOWN:214"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
-first = "header $LENSLENGTH 0.0 vs 50.0 [Red]"
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
+first = "header $3DDWFPREC 0.0 vs 2.0 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1021-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "DIFF:2"
+verdict = "KNOWN:92"
 reason = "listed in parity/MODEL1.toml"
 issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
-first = 'header $DIMBLK "BoxBlank" vs "" [Red]'
+first = "header $CECOLOR 193 vs -1 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1021-ascii"
@@ -179,18 +179,18 @@ first = 'header $HANDSEED "13D0" vs "13D4" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1021-ascii"
 pair = "oracle/acadrust"
-verdict = "DIFF:1"
+verdict = "KNOWN:149"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
-first = "header $XCLIPFRAME 0 vs 2 [Red]"
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
+first = "header $DIMUNIT 2 vs 0 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1024-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "DIFF:2"
+verdict = "KNOWN:106"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
-first = 'header $DIMBLK "BoxBlank" vs "" [Red]'
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
+first = "header $CECOLOR 193 vs -1 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1024-ascii"
@@ -219,18 +219,18 @@ first = 'header $HANDSEED "1367" vs "136B" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1024-ascii"
 pair = "oracle/acadrust"
-verdict = "KNOWN:148"
+verdict = "KNOWN:149"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
-first = 'header $HANDSEED "136B" vs "1367" [Known]'
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
+first = "header $DIMUNIT 2 vs 0 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1027-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "DIFF:2"
+verdict = "KNOWN:106"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
-first = 'header $DIMBLK "BoxBlank" vs "" [Red]'
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
+first = "header $CECOLOR 193 vs -1 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1027-ascii"
@@ -259,18 +259,18 @@ first = 'header $HANDSEED "1308" vs "130C" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1027-ascii"
 pair = "oracle/acadrust"
-verdict = "KNOWN:149"
+verdict = "KNOWN:150"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
-first = 'header $HANDSEED "130C" vs "1308" [Known]'
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116, libviprs/acadsharp-rs-tests#137"
+first = "header $DIMUNIT 2 vs 0 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1032-ascii"
 pair = "dxf-dwg:acadrust"
-verdict = "DIFF:2"
+verdict = "KNOWN:96"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
-first = 'header $DIMBLK "BoxBlank" vs "" [Red]'
+issue = "libviprs/acadsharp-rs-tests#100, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#31, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#122"
+first = "header $CECOLOR 193 vs -1 [Known]"
 
 [[row]]
 fixture = "dxf-sample-ac1032-ascii"
@@ -299,7 +299,7 @@ first = 'header $HANDSEED "12DC" vs "12E0" [Known]'
 [[row]]
 fixture = "dxf-sample-ac1032-ascii"
 pair = "oracle/acadrust"
-verdict = "KNOWN:55"
+verdict = "KNOWN:56"
 reason = "listed in parity/MODEL1.toml"
-issue = "libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
-first = 'header $HANDSEED "12E0" vs "12DC" [Known]'
+issue = "libviprs/acadsharp-rs-tests#102, libviprs/acadsharp-rs-tests#99, libviprs/acadsharp-rs-tests#101, libviprs/acadsharp-rs-tests#123, libviprs/acadsharp-rs-tests#124, libviprs/acadsharp-rs-tests#125, libviprs/acadsharp-rs-tests#122, libviprs/acadsharp-rs-tests#116"
+first = "header $DIMUNIT 2 vs 0 [Known]"
