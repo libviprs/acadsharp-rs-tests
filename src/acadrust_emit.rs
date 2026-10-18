@@ -1451,7 +1451,10 @@ impl Extractor<'_> {
                 } else {
                     (el.end_angle, el.start_angle)
                 };
-                let (s, e) = sweep(sa, ea, m.angle_offset);
+                // Parameters from the major axis, so a turn of the plane leaves
+                // them where they were (#89 for the entity, #171 for this arm).
+                let offset = if to_world.similarity { 0.0 } else { m.angle_offset };
+                let (s, e) = sweep(sa, ea, offset);
                 let rec = Record::Ellipse(Ellipse {
                     view,
                     center: m.center,
