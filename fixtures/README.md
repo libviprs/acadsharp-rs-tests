@@ -222,11 +222,11 @@ clear step 1. Do not add them.
 
 ## Size, and when this moves to LFS
 
-About 49 MiB in all (51.5 MB): the 26 DXF twins are 25 MB of it, the drawings 12 MB,
+About 52.8 MiB in all (55.4 MB, after the code page drawings; see the threshold below): the 26 DXF twins are 25 MB of it, the drawings 12 MB,
 the census files 1.2 MB, the references under `expected/` 3 MB (the oracle's
 readings of the DXF twins included), the ezdxf ground truths 3.5 MB, and the 22
 outputs ACadSharp wrote for the round-trip matrix with the readings of all 48 under
-`written/` 4 MB. Plain git handles that, and LFS would buy nothing but a second thing
+`written/` 4 MB, and the 112 code page drawings with their readings under `authored/` 1.5 MB. Plain git handles that, and LFS would buy nothing but a second thing
 to configure in CI and a second way for a checkout to arrive without its fixtures.
 Vendoring all of it is what keeps `fixture_integrity.rs` from needing the network or
 skipping.
@@ -236,7 +236,7 @@ without .NET, so they are stored, and acadrust's (14 MB) are not, because its wr
 deterministic and the test makes them. Stage two of the matrix (libviprs/acadsharp-rs-tests#41)
 must not store its outputs here; it has about fifty sources.
 
-**The threshold is 50 MB total.** The number was written without saying which megabyte; this counts it in MiB (49.2 MiB now, 51.5 MB in decimal), and the PR that moved the tree past 50 decimal MB says so. Past that, move the drawings to git LFS rather
+**The threshold is 50 MB total, and the tree is past it.** The code page drawings (R5.4, libviprs/acadsharp-rs-tests#30) took it from 49.2 MiB to 52.8 MiB. The rule below says to ask first whether the DXF twins (25 MB) need vendoring at all before moving anything to LFS, so I have left that question open for a person rather than moving files in a fixtures PR. The number was written without saying which megabyte; this counts it in MiB (49.2 MiB now, 51.5 MB in decimal), and the PR that moved the tree past 50 decimal MB says so. Past that, move the drawings to git LFS rather
 than letting clone times creep, and ask first whether the DXF twins need to be
 vendored at all. Writing the number down here so nobody has to
 rediscover it by arguing about it: below 50 MB, plain git, no discussion.
