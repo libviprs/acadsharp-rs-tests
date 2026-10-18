@@ -23,11 +23,10 @@
 # To bump it: put a libviprs/acadrust `main` commit here, run the suite with the
 # `acadrust` feature against a sibling checkout at that commit, and say below
 # what moved.
-6a7ec01e9645c4183ec484d89c529b865024bf7f
-# libviprs/acadrust main @ 2026-10-17, after the DWG header started resolving the
-# current text style, linetype, dimension style and the dimension arrow blocks to
-# names, and the DXF reader took the bool $XCLIPFRAME (libviprs/acadrust#31). The
-# header rows of parity/MODEL1.toml that fix removed went with this bump.
-# Moved to libviprs/acadrust main @ 2026-10-18, PR #33: an unsupported DATATABLE cell type
-# costs the object and not the DXF (acadsharp-rs-tests#95), and $ACADMAINTVER is read into
-# header.acad_maintenance_version (#96).
+49786e64ad9dcac02f2d14a1d1d3e639ca13880c
+# libviprs/acadrust main @ 2026-10-17, after the header variables the DWG reader read
+# and dropped became fields of HeaderVariables (libviprs/acadrust#36), on top of the
+# datatable, R12 writer and old-DWG class fixes that merged since the last pin. The
+# acadrust exclusions of parity/MODEL1.toml that closes went with this bump. It
+# includes PR #33 (an unsupported DATATABLE cell type costs the object and not the
+# DXF, acadsharp-rs-tests#95, and $ACADMAINTVER read into acad_maintenance_version).
