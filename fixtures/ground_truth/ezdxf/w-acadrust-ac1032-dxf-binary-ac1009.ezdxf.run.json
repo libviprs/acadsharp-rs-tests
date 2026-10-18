@@ -1,12 +1,12 @@
 {
-  "dxf_version": "AC1015",
+  "dxf_version": "AC1009",
   "engine": "ezdxf",
   "ezdxf_version": "1.4.4",
   "image": "python:3.14-slim@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170",
   "input": "w-acadrust-ac1032-dxf-binary-ac1009",
   "input_file": "written/w-acadrust-ac1032-dxf-binary-ac1009.dxf",
-  "input_sha256": "9c371471037ffbf763cc47018345fd10a8172a1699e5dbc0c8d0a7d0de2aa114",
+  "input_sha256": "af858e2f76e351949ae4ad36d5fba4421f96f691f029b5cc45ce6db74a7103f6",
   "python": "3.14.8",
-  "records": 337,
+  "records": 222,
   "requirements_sha256": "1657793b07eaf155dc41a82c081d25e84a1bc1940e71283889e94de8ba668366"
 }

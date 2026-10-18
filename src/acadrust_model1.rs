@@ -256,6 +256,49 @@ pub fn header_records(doc: &CadDocument) -> Vec<Record> {
     put("$DIMTZIN", i(h.dim_tolerance_zero_suppression.into()));
     put("$DIMUPT", b(h.dim_user_positioned_text));
     put("$DIMZIN", i(h.dim_zero_suppression.into()));
+
+    // ---- the variables the fork's header did not hold before (#102) ----
+    put("$ACADVER", s(doc.version.as_str()));
+    put("$3DDWFPREC", d(h.dwf_3d_precision));
+    put("$CSHADOW", i(h.cast_shadow.into()));
+    put("$DGNFRAME", i(h.dgn_frame.into()));
+    put("$DWFFRAME", i(h.dwf_frame.into()));
+    put("$LIGHTGLYPHDISPLAY", i(h.light_glyph_display.into()));
+    put("$TILEMODELIGHTSYNCH", i(h.tile_model_light_synch.into()));
+    put("$PELLIPSE", b(h.polyline_ellipse));
+    put("$PSOLHEIGHT", d(h.polysolid_height));
+    put("$PSOLWIDTH", d(h.polysolid_width));
+    put("$UNITMODE", i(h.unit_mode.into()));
+    put("$INTERFERECOLOR", i(color(&h.interfere_color)));
+    put("$PUCSBASE", s(&h.paper_ucs_base));
+    put("$DIMALTMZF", d(h.dim_alt_mzf));
+    put("$DIMALTMZS", s(&h.dim_alt_mzs));
+    put("$DIMMZF", d(h.dim_mzf));
+    put("$DIMMZS", s(&h.dim_mzs));
+    put("$DIMARCSYM", i(h.dim_arc_symbol.into()));
+    // The third integer of the R2000 dimension block is $DIMAZIN; the fork's
+    // field for it is named for the alternate units it was first taken for.
+    put("$DIMAZIN", i(h.dim_alt_zero_suppression.into()));
+    put("$DIMFIT", i(h.dim_fit_r13.into()));
+    put("$DIMFXL", d(h.dim_fixed_ext_length));
+    put("$DIMFXLON", b(h.dim_fixed_ext_length_on));
+    put("$DIMJOGANG", d(h.dim_jog_angle));
+    put("$DIMTFILL", i(h.dim_text_fill.into()));
+    put("$DIMTFILLCLR", i(color(&h.dim_text_fill_color)));
+    put("$DIMTXTDIRECTION", b(h.dim_text_direction));
+    put("$DIMUNIT", i(h.dim_unit.into()));
+    for (k, name) in ["TOP", "BOTTOM", "LEFT", "RIGHT", "FRONT", "BACK"]
+        .iter()
+        .enumerate()
+    {
+        put(&format!("$UCSORG{name}"), p3(&h.ucs_ortho_origins[k]));
+        put(&format!("$PUCSORG{name}"), p3(&h.paper_ucs_ortho_origins[k]));
+    }
+    // Handles in the DWG, names in the DXF: the fork's readers resolve both to a name.
+    put("$DIMTXSTY", s(&h.dim_text_style_name));
+    put("$DIMLTYPE", s(&h.dim_linetype_name));
+    put("$DIMLTEX1", s(&h.dim_linetype1_name));
+    put("$DIMLTEX2", s(&h.dim_linetype2_name));
     out
 }
 

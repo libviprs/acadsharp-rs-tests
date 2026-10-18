@@ -83,7 +83,7 @@ issue = "libviprs/acadsharp-rs-tests#99"
 names = [
   "$DIMLTEX1", "$DIMLTEX2", "$DIMLTYPE"
 ]
-pairs = ["dxf-dwg:oracle"]
+pairs = ["dxf-dwg:oracle", "oracle/acadrust"]
 reason = "DwgHeaderReader.cs:806-811 reads the three dimension linetype handles into DwgHeaderHandlesCollection and nothing resolves them into the header, so ACadSharp reports the default ByBlock where the DXF twin holds BATTING, TRACKS and ZIGZAG"
 issue = "libviprs/acadsharp-rs-tests#99"
 
@@ -101,7 +101,7 @@ issue = "libviprs/acadsharp-rs-tests#99"
 names = [
   "$DIMALTMZF", "$DIMMZF"
 ]
-pairs = ["dxf-dwg:oracle"]
+pairs = ["dxf-dwg:acadrust", "dxf-dwg:oracle"]
 reason = "the AutoCAD DXF of R2010 and later does not write them (ezdxf's skipped list), so ACadSharp's DXF reader reports its default 0.0 where its DWG reader reports the 100.0 the DWG stores; the DWG is the authority, and neither reader is wrong"
 issue = "libviprs/acadsharp-rs-tests#101"
 
@@ -161,7 +161,8 @@ names = [
 ]
 pairs = ["oracle/acadrust"]
 fixtures = [
-  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "dxf-sample-ac1015-ascii"
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "dxf-sample-ac1015-ascii",
+  "dxf-sample-ac1018-ascii"
 ]
 reason = "both DWG header readers read these only in the R2007 block, and the AutoCAD DXF of AC1015 and AC1018 does not write them, so for AC1014 to AC1018 the file does not store them and ACadSharp (0, 0.0) and acadrust (50.0, pi/2, 1, 7, -8000) each report their own defaults; compared only from AC1021"
 issue = "libviprs/acadsharp-rs-tests#101"
@@ -181,13 +182,54 @@ issue = "libviprs/acadsharp-rs-tests#101"
 # ---- known: version default
 [[known]]
 names = [
+  "$3DDWFPREC", "$PSOLHEIGHT", "$PSOLWIDTH"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "acadsharp-ac1018", "dxf-sample-ac1015-ascii",
+  "dxf-sample-ac1018-ascii"
+]
+reason = "both DWG header readers read these only in the R2007 block, and the AutoCAD DXF of AC1015 and AC1018 does not write them, so for AC1014 to AC1018 the file does not store them and ACadSharp (0.0) and acadrust (2.0, 0.25) each report their own defaults; compared only from AC1021"
+issue = "libviprs/acadsharp-rs-tests#102"
+
+# ---- known: version default
+[[known]]
+names = [
+  "$INTERFERECOLOR"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1014", "acadsharp-ac1015", "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii"
+]
+reason = "the interference colour is read from the R2007 block and the AutoCAD DXF of AC1015 and AC1018 does not write it, so for these the file does not store it and ACadSharp (1) and acadrust (257) each report their own default; the AC1018 DWG agrees only by coincidence, because ACadSharp's R2004 branch assigns the intersection colour to it (see $INTERFERECOLOR above)"
+issue = "libviprs/acadsharp-rs-tests#102"
+
+# ---- known: version default
+[[known]]
+names = [
+  "$DIMUNIT"
+]
+pairs = ["oracle/acadrust"]
+fixtures = [
+  "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021", "acadsharp-ac1024",
+  "acadsharp-ac1027", "acadsharp-ac1032", "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii",
+  "dxf-sample-ac1021-ascii", "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii",
+  "dxf-sample-ac1032-ascii"
+]
+reason = "$DIMUNIT is an R13 variable that R2000 replaced by $DIMLUNIT: both DWG header readers read it for R13 and R14 only, and none of the AutoCAD DXF twins writes it, so no file of AC1015 or later stores it and ACadSharp (2) and acadrust (0) each report their own default; AC1014 stores it and agrees"
+issue = "libviprs/acadsharp-rs-tests#102"
+
+# ---- known: version default
+[[known]]
+names = [
   "$OSMODE"
 ]
 pairs = ["oracle/acadrust"]
 fixtures = [
   "acadsharp-ac1015", "acadsharp-ac1018", "acadsharp-ac1021", "acadsharp-ac1024",
-  "acadsharp-ac1027", "acadsharp-ac1032", "dxf-sample-ac1015-ascii", "dxf-sample-ac1021-ascii",
-  "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii", "dxf-sample-ac1032-ascii"
+  "acadsharp-ac1027", "acadsharp-ac1032", "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii",
+  "dxf-sample-ac1021-ascii", "dxf-sample-ac1024-ascii", "dxf-sample-ac1027-ascii",
+  "dxf-sample-ac1032-ascii"
 ]
 reason = "both DWG header readers read the object snap mode only for R13 and R14, and none of the AutoCAD DXF twins writes it, so no file of AC1015 or later stores it and ACadSharp (4133) and acadrust (0) each report their own default; AC1014 stores it and agrees"
 issue = "libviprs/acadsharp-rs-tests#101"
@@ -311,34 +353,27 @@ issue = "libviprs/acadsharp-rs-tests#122"
 [[excluded]]
 engine = "acadrust"
 names = [
-  "$3DDWFPREC", "$CSHADOW", "$DGNFRAME", "$DIMALTMZF", "$DIMALTMZS", "$DIMARCSYM", "$DIMAZIN",
-  "$DIMFIT", "$DIMFXL", "$DIMFXLON", "$DIMJOGANG", "$DIMMZF", "$DIMMZS", "$DIMTFILL",
-  "$DIMTFILLCLR", "$DIMTXTDIRECTION", "$DIMUNIT", "$DWFFRAME", "$INTERFERECOLOR",
-  "$LIGHTGLYPHDISPLAY", "$PELLIPSE", "$PSOLHEIGHT", "$PSOLWIDTH", "$PUCSBASE", "$PUCSORGBACK",
-  "$PUCSORGBOTTOM", "$PUCSORGFRONT", "$PUCSORGLEFT", "$PUCSORGRIGHT", "$PUCSORGTOP",
-  "$REALWORLDSCALE", "$TDUCREATE", "$TDUUPDATE", "$TILEMODELIGHTSYNCH", "$UCSORGBACK",
-  "$UCSORGBOTTOM", "$UCSORGFRONT", "$UCSORGLEFT", "$UCSORGRIGHT", "$UCSORGTOP", "$UNITMODE"
+  "$REALWORLDSCALE", "$TDUCREATE", "$TDUUPDATE"
 ]
-reason = "acadrust's HeaderVariables has no field for it"
+reason = "decided: no DWG header slot holds $REALWORLDSCALE, and acadrust's readers keep the local dates only ($TDUCREATE and $TDUUPDATE are the universal-time twins of $TDCREATE and $TDUPDATE, which ACadSharp sets to the time of the read and the oracle does not write), so there is no value for acadrust to hold"
 issue = "libviprs/acadsharp-rs-tests#102"
 
 # ---- excluded: acadrust, handle
 [[excluded]]
 engine = "acadrust"
 names = [
-  "$DIMLTEX1", "$DIMLTEX2", "$DIMLTYPE", "$DIMTXSTY", "$PUCSORTHOREF", "$PUCSORTHOVIEW",
-  "$UCSORTHOREF", "$UCSORTHOVIEW"
+  "$PUCSORTHOREF", "$PUCSORTHOVIEW", "$UCSORTHOREF", "$UCSORTHOVIEW"
 ]
-reason = "acadrust holds it only as a handle, and the adapter does not resolve handles to names yet"
+reason = "acadrust holds the UCS table entry of an orthographic view only as a handle and the DXF reader as nothing a record can carry; ACadSharp has no property for it either, so it is the DXF twin's ezdxf against nobody"
 issue = "libviprs/acadsharp-rs-tests#102"
 
 # ---- excluded: acadrust, doc
 [[excluded]]
 engine = "acadrust"
 names = [
-  "$ACADMAINTVER", "$ACADVER"
+  "$ACADMAINTVER"
 ]
-reason = "acadrust keeps it on the document, not in HeaderVariables"
+reason = "decided: acadrust's header holds the DXF value only (0 for a DWG, whose header has none), while ACadSharp reports the maintenance byte of the DWG file header, which is a different quantity; the adapter writes $ACADVER from the document and leaves this one out"
 issue = "libviprs/acadsharp-rs-tests#102"
 
 # ---- excluded: oracle, nothing
@@ -418,6 +453,18 @@ fixtures = [
 ]
 reason = "the AutoCAD DXF of this version does not write it (or, for $TDCREATE, ezdxf stamps it with the time of the read and tools/model1.py leaves it out)"
 issue = "libviprs/acadsharp-rs-tests#31"
+
+# ---- excluded: ezdxf, not written by the DXF of these versions
+[[excluded]]
+engine = "ezdxf"
+names = [
+  "$TILEMODELIGHTSYNCH"
+]
+fixtures = [
+  "dxf-sample-ac1015-ascii", "dxf-sample-ac1018-ascii"
+]
+reason = "the AutoCAD DXF of this version does not write it (the oracle has no property for it, so acadrust's default of 1 is the only other value)"
+issue = "libviprs/acadsharp-rs-tests#102"
 
 # ---- excluded: ezdxf, not written by the DXF of these versions
 [[excluded]]
