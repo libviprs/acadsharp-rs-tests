@@ -1409,7 +1409,8 @@ fn judge_texts(page: &str, kinds: &[&str], authored: &[String], got: &[String]) 
         Some(&i) => (
             Verdict::Diff(bad.len()).to_string(),
             format!(
-                "{page} {}: authored {:?} ({}) came back {:?} ({})",
+                "{page} [{}] {}: authored {:?} ({}) came back {:?} ({})",
+                bad.iter().map(|&j| kinds[j]).collect::<Vec<_>>().join(","),
                 kinds[i],
                 authored[i],
                 cp(&authored[i]),
