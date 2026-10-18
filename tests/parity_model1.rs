@@ -1189,3 +1189,53 @@ fn the_handle_valued_dimstyle_fields_of_standard_are_names_the_tables_carry() {
         }
     }
 }
+
+/// The block_record control: one entity removed from a block in a scratch copy
+/// of a twin's stream turns that file's row red, and the finding names the block.
+#[test]
+fn one_entity_removed_from_a_block_is_red_and_names_the_block() {
+    let rules = model1::committed_rules().unwrap();
+    let id = "dxf-sample-ac1032-ascii";
+    let ez = model1::load_frozen("ezdxf", id).unwrap();
+    let mut oracle = model1::load_frozen("oracle", id).unwrap();
+    fn side<'a>(engine: &'static str, id: &'a str, records: &'a [Record]) -> Side<'a> {
+        Side {
+            engine,
+            fixture: id,
+            records,
+        }
+    }
+    let before_red = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", id, &ez),
+        &side("oracle", id, &oracle),
+        &rules,
+    )
+    .red()
+    .len();
+    let mut changed = None;
+    for r in &mut oracle {
+        let Record::Entry(e) = r else { continue };
+        if e.kind != "block_record" || changed.is_some() {
+            continue;
+        }
+        let Some(Value::Int(n)) = e.get("entity_count").cloned() else {
+            continue;
+        };
+        if n < 2 {
+            continue;
+        }
+        e.set("entity_count", Value::Int(n - 1));
+        changed = Some(e.name.clone());
+    }
+    let name = changed.expect("a block that owns at least two entities");
+    let after = compare(
+        "ezdxf/oracle",
+        &side("ezdxf", id, &ez),
+        &side("oracle", id, &oracle),
+        &rules,
+    );
+    let key = format!("block_record/{name}.entity_count");
+    assert_eq!(after.red().len(), before_red + 1, "{}", after.first());
+    assert!(after.red().iter().any(|f| f.key == key), "{key}");
+}

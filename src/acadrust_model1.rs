@@ -855,6 +855,52 @@ pub fn xdata_records(doc: &CadDocument, tree: &DictionaryTree) -> Vec<Record> {
     out
 }
 
+/// One `block_record` record per BLOCK_RECORD entry (docs/MODEL_1.md). The flags
+/// are rebuilt from what acadrust holds as typed data (1 anonymous, 2 attributes,
+/// 4 xref, 8 overlay, 16 externally dependent). The entity count is the handles
+/// the block owns, which leaves the BLOCK and ENDBLK pair out because acadrust
+/// keeps those apart. The layout is resolved from its handle to the name.
+pub fn block_record_records(doc: &CadDocument) -> Vec<Record> {
+    use acadrust::objects::ObjectType;
+    doc.block_records
+        .iter()
+        .map(|b| {
+            let f = &b.flags;
+            let flags = i64::from(f.anonymous)
+                | (i64::from(f.has_attributes) << 1)
+                | (i64::from(f.is_xref) << 2)
+                | (i64::from(f.is_xref_overlay) << 3)
+                | (i64::from(f.is_external) << 4);
+            let layout = doc
+                .objects
+                .values()
+                .find_map(|o| match o {
+                    ObjectType::Layout(l) if !b.layout.is_null() && l.handle == b.layout => {
+                        Some(l.name.clone())
+                    }
+                    _ => None,
+                })
+                .unwrap_or_default();
+            Record::Entry(Entry::new(
+                "block_record",
+                b.name.clone(),
+                vec![
+                    Value::Int(flags),
+                    Value::Point3([b.base_point.x, b.base_point.y, b.base_point.z]),
+                    Value::Str(b.xref_path.replace("\r\n", "\n").replace('\r', "\n")),
+                    Value::Str(b.description.replace("\r\n", "\n").replace('\r', "\n")),
+                    Value::Int(i64::from(b.units)),
+                    Value::Bool(b.explodable),
+                    Value::Bool(b.scale_uniformly),
+                    Value::Int(b.entity_handles.len() as i64),
+                    Value::Str(layout),
+                    Value::Int(b.preview_data.len() as i64),
+                ],
+            ))
+        })
+        .collect()
+}
+
 /// What `emit-acadrust` writes beside the schema 1 stream.
 pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     let mut all = header_records(doc);
@@ -866,6 +912,7 @@ pub fn model1_records(doc: &CadDocument) -> Vec<Record> {
     all.extend(xdata_records(doc, &tree));
     all.extend(tree.dictionaries);
     all.extend(tree.xrecords);
+    all.extend(block_record_records(doc));
     all
 }
 

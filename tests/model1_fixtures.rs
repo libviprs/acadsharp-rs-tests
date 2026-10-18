@@ -178,3 +178,86 @@ fn every_file_has_the_three_fixed_linetypes_and_one_complex_one_is_compared() {
     });
     assert!(complex, "no compared file holds a complex linetype");
 }
+
+/// The seven saves, and the six twins with the save each one is the twin of.
+const TWIN_OF: [(&str, &str); 6] = [
+    ("dxf-sample-ac1015-ascii", "acadsharp-ac1015"),
+    ("dxf-sample-ac1018-ascii", "acadsharp-ac1018"),
+    ("dxf-sample-ac1021-ascii", "acadsharp-ac1021"),
+    ("dxf-sample-ac1024-ascii", "acadsharp-ac1024"),
+    ("dxf-sample-ac1027-ascii", "acadsharp-ac1027"),
+    ("dxf-sample-ac1032-ascii", "acadsharp-ac1032"),
+];
+
+fn entity_count(records: &[Record], name: &str) -> Option<i64> {
+    records.iter().find_map(|r| match r {
+        Record::Entry(e) if e.kind == "block_record" && e.name.eq_ignore_ascii_case(name) => {
+            match e.get("entity_count") {
+                Some(Value::Int(n)) => Some(*n),
+                _ => None,
+            }
+        }
+        _ => None,
+    })
+}
+
+#[test]
+fn every_file_defines_both_spaces_and_model_space_owns_the_censused_entities() {
+    use acadsharp_rs_tests::census::Census;
+    // Model space is tied to a ground truth neither reader produced: AutoCAD's
+    // own census lists 163 model-space entities in every save (R3.4), so a
+    // reader that owns another number has lost or invented entities.
+    let mut streams: Vec<(String, &str, Vec<Record>)> = Vec::new();
+    for s in SAVES {
+        streams.push((
+            format!("oracle {s}"),
+            s,
+            model1::load_frozen("oracle", s).unwrap(),
+        ));
+    }
+    for (t, save) in TWIN_OF {
+        streams.push((
+            format!("oracle {t}"),
+            save,
+            model1::load_frozen("oracle", t).unwrap(),
+        ));
+        streams.push((
+            format!("ezdxf {t}"),
+            save,
+            model1::load_frozen("ezdxf", t).unwrap(),
+        ));
+    }
+    for (label, save, records) in &streams {
+        let census = Census::for_fixture(save).unwrap().model_space.len() as i64;
+        assert_eq!(
+            entity_count(records, "*Model_Space"),
+            Some(census),
+            "{label}: *Model_Space does not own the censused entities"
+        );
+        assert!(
+            entity_count(records, "*Paper_Space").is_some(),
+            "{label}: no *Paper_Space record"
+        );
+    }
+}
+
+#[test]
+fn a_block_nobody_inserts_is_still_a_record_and_an_anonymous_one_keeps_its_name() {
+    // Schema 1 resolves every insert, so this table is the only place a block
+    // that nothing inserts, or an anonymous one, shows up at all.
+    for t in TWINS {
+        let records = model1::load_frozen("oracle", t).unwrap();
+        let blocks: Vec<&str> = records
+            .iter()
+            .filter(|r| r.kind() == "block_record")
+            .map(Record::key)
+            .collect();
+        assert!(blocks.len() > 2, "{t}: only {blocks:?}");
+        assert!(
+            blocks
+                .iter()
+                .any(|n| n.starts_with("*D") || n.starts_with("*U") || n.starts_with("*T")),
+            "{t}: no anonymous block among {blocks:?}"
+        );
+    }
+}

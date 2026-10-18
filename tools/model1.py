@@ -649,6 +649,49 @@ def xdata_lines(doc, owners) -> list[tuple[str, str, str]]:
     return out
 
 
+def point3(v) -> str:
+    return "[" + ",".join(real(float(c)) for c in (v[0], v[1], v[2])) + "]"
+
+
+def block_record_lines(doc) -> list[tuple[str, str, str]]:
+    """One `block_record` record per BLOCK_RECORD entry, keyed by name (docs/MODEL_1.md).
+
+    The flags, base point, path and description are on the BLOCK entity, the
+    rest on the record. `entity_count` is the entities the block owns, the BLOCK
+    and ENDBLK pair left out. A code the file does not write is the default the
+    document gives, and the layout is the name of the LAYOUT the record's 340
+    points at (empty for a block that has none). ezdxf keeps no preview bitmap,
+    so `preview_bytes` is 0 here and the rules list the difference.
+    """
+    out = []
+    for r in doc.block_records:
+        d = r.dxf
+        name = d.name
+        b = r.block.dxf if r.block is not None else None
+        layout = ""
+        handle = d.get("layout", "0")
+        if handle not in ("", "0"):
+            target = doc.entitydb.get(handle)
+            if target is not None and target.dxf.hasattr("name"):
+                layout = target.dxf.name
+        base = b.get("base_point", (0.0, 0.0, 0.0)) if b is not None else (0.0, 0.0, 0.0)
+        fields = [
+            ("name", quote(name)),
+            ("flags", str(int(b.get("flags", 0)) if b is not None else 0)),
+            ("base_point", point3(base)),
+            ("xref_path", quote(normalize_newlines(str(b.get("xref_path", ""))) if b is not None else "")),
+            ("description", quote(normalize_newlines(str(b.get("description", ""))) if b is not None else "")),
+            ("units", str(int(d.get("units", 0)))),
+            ("explodable", "true" if int(d.get("explode", 1)) != 0 else "false"),
+            ("scale_uniformly", "true" if int(d.get("scale", 0)) != 0 else "false"),
+            ("entity_count", str(len(r.entity_space))),
+            ("layout", quote(layout)),
+            ("preview_bytes", "0"),
+        ]
+        out.append(line("block_record", name, fields))
+    return out
+
+
 def command_extract_ezdxf(args) -> int:
     import ezdxf  # only here: `freeze` and `verify` must run without it
 
@@ -667,6 +710,7 @@ def command_extract_ezdxf(args) -> int:
         tree, owners = dictionary_tree(doc)
         text = encode(
             records + layer_lines(doc) + linetype_lines(doc) + textstyle_lines(doc) + dimstyle_lines(doc) + tree + xdata_lines(doc, owners)
+            + block_record_lines(doc)
         )
         (out / f"{rid}.ezdxf.model1.jsonl").write_text(text, encoding="utf-8", newline="\n")
         (out / f"{rid}.ezdxf.model1.skipped").write_text("".join(n + "\n" for n in skipped), encoding="utf-8", newline="\n")
